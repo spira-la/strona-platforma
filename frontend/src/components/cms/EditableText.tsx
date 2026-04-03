@@ -126,8 +126,10 @@ export function EditableText({
     : React.Children.toArray(children).map((c) => (typeof c === 'string' ? c : '')).join('');
 
   // When the field has no CMS content, fall back to: placeholder → children text → fieldPath
+  // Also treat empty/whitespace-only strings as "no content" so the placeholder shows instead of blank space
   const fallback = placeholder ?? (childrenText || undefined) ?? resolvedValue;
-  const displayContent = resolvedValue === fieldPath ? fallback : resolvedValue;
+  const hasNoContent = resolvedValue === fieldPath || resolvedValue.trim() === '';
+  const displayContent = hasNoContent ? fallback : resolvedValue;
 
   // -------------------------------------------------------------------------
   // Admin edit mode — active textarea

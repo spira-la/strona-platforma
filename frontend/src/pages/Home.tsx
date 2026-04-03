@@ -38,7 +38,7 @@ function HeroSection() {
       {/* Background image */}
       <div className="absolute inset-0" aria-hidden="true">
         <ParallaxImage
-          src="https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=2070&auto=format&fit=crop"
+          src="https://images.unsplash.com/photo-1744192876531-f00759ed9c57?q=80&w=2070&auto=format&fit=crop"
           alt=""
           speed={0.15}
           className="w-full h-full"
@@ -569,6 +569,14 @@ function TestimonialsSection() {
             id="testimonials-heading"
             className="font-['Playfair_Display'] text-[2rem] md:text-[2.25rem] font-bold text-[#2D2D2D] leading-[1.15] tracking-[-0.5px] text-center"
             placeholder="CO MÓWIĄ OSOBY, Z KTÓRYMI PRACUJĘ"
+          />
+
+          <EditableText
+            section="testimonials"
+            fieldPath="description"
+            as="p"
+            className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7] max-w-[640px] text-center"
+            placeholder="Każda historia jest wyjątkowa — ale łączy je jedno: odwaga, by zajrzeć w głąb siebie."
           />
         </ScrollReveal>
 
