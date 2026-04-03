@@ -47,39 +47,13 @@ jobs:
             git reset --hard origin/dev
 
   # ------------------------------------------------------------------
-  # Build and push backend Docker image to GHCR
-  # ------------------------------------------------------------------
-  build-backend-image:
-    needs:
-      - detect-changes
-      - git-sync
-    if: needs.detect-changes.outputs.backend == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_PAT }}
-
-      - uses: docker/build-push-action@v5
-        with:
-          context: ./backend
-          file: ./backend/Dockerfile
-          push: true
-          tags: ghcr.io/perseusoft/spirala-be:dev
-
-  # ------------------------------------------------------------------
-  # Pull latest backend image and restart the container on the server
+  # Build backend on server and restart container
   # ------------------------------------------------------------------
   deploy-backend:
     needs:
       - detect-changes
       - git-sync
-      - build-backend-image
-    if: always() && needs.git-sync.result == 'success'
+    if: needs.detect-changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: appleboy/ssh-action@v1.0.3
@@ -90,16 +64,23 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             cd ${{ secrets.SPIRALA_APP_DIR }}/backend
-            echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            docker pull ghcr.io/perseusoft/spirala-be:dev || true
+            docker compose -f docker-compose.dev.yml build --no-cache
             docker compose -f docker-compose.dev.yml up -d --force-recreate --remove-orphans
-            sleep 5
-            curl -sf http://localhost:45002/api/health || echo "WARNING: backend health check failed"
+            # Health check with retries
+            for i in $(seq 1 15); do
+              if curl -sf http://localhost:45002/api/health > /dev/null 2>&1; then
+                echo "Backend healthy (attempt $i)"
+                exit 0
+              fi
+              echo "Waiting for backend... (attempt $i/15)"
+              sleep 2
+            done
+            echo "WARNING: backend health check failed after 30s"
 
   # ------------------------------------------------------------------
-  # Build frontend on server and restart the nginx container
+  # Build frontend on server and restart nginx container
   # ------------------------------------------------------------------
-  build-frontend:
+  deploy-frontend:
     needs:
       - detect-changes
       - git-sync
@@ -128,7 +109,7 @@ jobs:
   cleanup:
     needs:
       - deploy-backend
-      - build-frontend
+      - deploy-frontend
     if: always()
     runs-on: ubuntu-latest
     steps:
