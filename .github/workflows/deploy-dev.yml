@@ -65,7 +65,7 @@ jobs:
           script: |
             cd ${{ secrets.SPIRALA_APP_DIR }}/backend
             docker compose -f docker-compose.dev.yml build --no-cache
-            docker compose -f docker-compose.dev.yml up -d --force-recreate --remove-orphans
+            docker compose -f docker-compose.dev.yml up -d --force-recreate
             # Health check with retries
             for i in $(seq 1 15); do
               if curl -sf http://localhost:45002/api/health > /dev/null 2>&1; then
@@ -99,7 +99,7 @@ jobs:
             npm run build:dev
             cd ${{ secrets.SPIRALA_APP_DIR }}
             docker compose -f docker-compose.dev.yml build --no-cache
-            docker compose -f docker-compose.dev.yml up -d --force-recreate --remove-orphans
+            docker compose -f docker-compose.dev.yml up -d --force-recreate
             sleep 3
             curl -sf http://localhost:45000/health || echo "WARNING: frontend health check failed"
 
