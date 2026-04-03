@@ -1,0 +1,54 @@
+services:
+  spirala-be:
+    image: ghcr.io/perseusoft/spirala-be:latest
+    container_name: spirala-be
+    ports:
+      - "45003:3000"
+    env_file:
+      - .env.production
+    environment:
+      NODE_ENV: production
+      ENABLE_SWAGGER: "false"
+      REDIS_URL: redis://spirala-redis:6379
+    restart: unless-stopped
+    networks:
+      - spirala-prod-network
+    depends_on:
+      spirala-redis:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  spirala-redis:
+    image: redis:7-alpine
+    container_name: spirala-redis
+    ports:
+      - "45011:6379"
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    restart: unless-stopped
+    networks:
+      - spirala-prod-network
+    volumes:
+      - spirala-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+volumes:
+  spirala-redis-data:
+
+networks:
+  spirala-prod-network:
+    name: spirala-prod-network

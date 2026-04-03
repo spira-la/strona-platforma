@@ -1,0 +1,143 @@
+name: Deploy Prod
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  # ------------------------------------------------------------------
+  # Detect which parts of the monorepo changed
+  # ------------------------------------------------------------------
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      frontend: ${{ steps.filter.outputs.frontend }}
+      backend: ${{ steps.filter.outputs.backend }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            frontend:
+              - 'frontend/**'
+              - 'Dockerfile'
+              - 'nginx/**'
+              - 'docker-compose.prod.yml'
+            backend:
+              - 'backend/**'
+
+  # ------------------------------------------------------------------
+  # Sync the server to the latest commit on main
+  # ------------------------------------------------------------------
+  git-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: ${{ secrets.SERVER_PORT }}
+          script: |
+            cd ${{ secrets.SPIRALA_APP_DIR_PROD }}
+            git fetch --all --prune --force
+            git reset --hard origin/main
+
+  # ------------------------------------------------------------------
+  # Build and push backend Docker image to GHCR (production tag)
+  # ------------------------------------------------------------------
+  build-backend-image:
+    needs:
+      - detect-changes
+      - git-sync
+    if: needs.detect-changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_PAT }}
+
+      - uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: ghcr.io/perseusoft/spirala-be:latest
+
+  # ------------------------------------------------------------------
+  # Pull latest backend image and restart the container on the server
+  # ------------------------------------------------------------------
+  deploy-backend:
+    needs:
+      - detect-changes
+      - git-sync
+      - build-backend-image
+    if: always() && needs.git-sync.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: ${{ secrets.SERVER_PORT }}
+          script: |
+            cd ${{ secrets.SPIRALA_APP_DIR_PROD }}/backend
+            echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            docker pull ghcr.io/perseusoft/spirala-be:latest || true
+            docker compose -f docker-compose.yml up -d --force-recreate --remove-orphans
+            sleep 5
+            curl -sf http://localhost:45003/api/health || echo "WARNING: backend health check failed"
+
+  # ------------------------------------------------------------------
+  # Build frontend on server and restart the nginx container
+  # ------------------------------------------------------------------
+  build-frontend:
+    needs:
+      - detect-changes
+      - git-sync
+    if: needs.detect-changes.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: ${{ secrets.SERVER_PORT }}
+          script: |
+            cd ${{ secrets.SPIRALA_APP_DIR_PROD }}/frontend
+            npm ci
+            npm run build
+            cd ${{ secrets.SPIRALA_APP_DIR_PROD }}
+            docker compose -f docker-compose.prod.yml build --no-cache
+            docker compose -f docker-compose.prod.yml up -d --force-recreate --remove-orphans
+            sleep 3
+            curl -sf http://localhost:45001/health || echo "WARNING: frontend health check failed"
+
+  # ------------------------------------------------------------------
+  # Clean up dangling images to reclaim disk space
+  # ------------------------------------------------------------------
+  cleanup:
+    needs:
+      - deploy-backend
+      - build-frontend
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: ${{ secrets.SERVER_PORT }}
+          script: |
+            docker image prune -af --filter "until=24h"
+            docker builder prune -af --filter "until=24h"

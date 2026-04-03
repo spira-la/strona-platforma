@@ -1,0 +1,31 @@
+# =====================================================================
+# Spirala — Cloudflare Tunnel containers
+#
+# MANUAL use only — NOT part of the CI/CD pipeline.
+# Start once on the server and leave running.
+# Managed separately from application deployments.
+#
+# Usage:
+#   cp .env.example .env
+#   # Fill in TUNNEL_TOKEN_PROD and TUNNEL_TOKEN_DEV
+#   docker compose -f docker-compose.tunnel.yml up -d
+# =====================================================================
+
+services:
+  tunnel-spirala-prod:
+    image: cloudflare/cloudflared:latest
+    container_name: tunnel-spirala-prod
+    command: tunnel run
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN_PROD}
+    restart: unless-stopped
+    network_mode: host
+
+  tunnel-spirala-dev:
+    image: cloudflare/cloudflared:latest
+    container_name: tunnel-spirala-dev
+    command: tunnel run
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN_DEV}
+    restart: unless-stopped
+    network_mode: host

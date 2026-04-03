@@ -1,0 +1,29 @@
+services:
+  spirala-fe-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner-prebuilt
+    container_name: spirala-fe-dev
+    ports:
+      - "45000:80"
+    volumes:
+      - ./frontend/dist:/usr/share/nginx/html:ro
+    restart: unless-stopped
+    networks:
+      - spirala-dev-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+networks:
+  spirala-dev-network:
+    name: spirala-dev-network
