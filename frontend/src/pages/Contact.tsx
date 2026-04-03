@@ -29,10 +29,7 @@ const contactSchema = z.object({
     .max(20, 'Numer telefonu jest za dlugi')
     .optional()
     .or(z.literal('')),
-  subject: z.enum(
-    ['coaching', 'terapia', 'strona', 'wspolpraca', 'inne'],
-    { errorMap: () => ({ message: 'Wybierz temat wiadomosci' }) }
-  ),
+  subject: z.enum(['coaching', 'terapia', 'strona', 'wspolpraca', 'inne'], { message: 'Wybierz temat wiadomosci' }),
   message: z
     .string()
     .min(10, 'Wiadomosc musi miec co najmniej 10 znakow')

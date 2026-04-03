@@ -25,8 +25,6 @@ interface ScrollRevealProps {
   distance?: number;
   /** Extra className on the wrapper */
   className?: string;
-  /** HTML tag to render. Default: 'div' */
-  as?: keyof React.JSX.IntrinsicElements;
   /** Intersection Observer threshold. Default: 0.12 */
   threshold?: number;
 }
@@ -78,7 +76,6 @@ export function ScrollReveal({
   duration = 1200,
   distance = 20,
   className,
-  as: Tag = 'div',
   threshold = 0.12,
 }: ScrollRevealProps) {
   const { ref, isVisible } = useScrollReveal<HTMLDivElement>({ threshold });
@@ -97,9 +94,9 @@ export function ScrollReveal({
   };
 
   return (
-    <Tag ref={ref} className={className} style={style}>
+    <div ref={ref} className={className} style={style}>
       {children}
-    </Tag>
+    </div>
   );
 }
 

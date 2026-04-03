@@ -25,6 +25,7 @@ export function EditableText({
   section,
   fieldPath,
   as: Tag = 'span',
+  id,
   className,
   placeholder,
   children,
@@ -166,6 +167,7 @@ export function EditableText({
     return React.createElement(
       Tag,
       {
+        id,
         className: `relative cursor-pointer rounded transition-[outline,box-shadow] outline outline-1 outline-transparent hover:outline-[#B8963E]/70 hover:shadow-[0_0_0_3px_rgba(184,150,62,0.12)] ${resolvedClassName ?? ''}`,
         onClick: startEditing,
         title: `Edit: ${section} → ${fieldPath}`,
@@ -186,10 +188,10 @@ export function EditableText({
   // Read-only mode
   // -------------------------------------------------------------------------
   if (render) {
-    return React.createElement(Tag, { className: resolvedClassName }, render(displayContent));
+    return React.createElement(Tag, { id, className: resolvedClassName }, render(displayContent));
   }
 
-  return React.createElement(Tag, { className: resolvedClassName }, displayContent);
+  return React.createElement(Tag, { id, className: resolvedClassName }, displayContent);
 }
 
 export default EditableText;

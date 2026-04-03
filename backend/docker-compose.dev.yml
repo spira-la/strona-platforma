@@ -1,6 +1,9 @@
 services:
   spirala-be-dev:
-    image: ghcr.io/perseusoft/spirala-be:dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: spirala-be-dev:latest
     container_name: spirala-be-dev
     ports:
       - "45002:3000"
