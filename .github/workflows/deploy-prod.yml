@@ -120,5 +120,6 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            docker image prune -af --filter "until=24h"
+            # Prune only dangling (untagged) images — safe for running containers
+            docker image prune -f
             docker builder prune -af --filter "until=24h"
