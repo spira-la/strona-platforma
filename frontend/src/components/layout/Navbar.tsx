@@ -1,0 +1,277 @@
+import { useState, useEffect, useRef } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Menu, X, Globe, ChevronDown } from 'lucide-react';
+import { EditableText } from '@/components/cms/EditableText';
+
+interface NavLink {
+  href: string;
+  labelKey: string;
+  fieldPath: string;
+  editable: string;
+}
+
+const NAV_LINKS: NavLink[] = [
+  { href: '/o-mnie', labelKey: 'common.about', fieldPath: 'link1', editable: 'O Mnie' },
+  { href: '/jak-pracuje', labelKey: 'common.howIWork', fieldPath: 'link2', editable: 'Jak Pracuję' },
+  { href: '/uslugi', labelKey: 'common.services', fieldPath: 'link3', editable: 'Usługi' },
+  { href: '/blog', labelKey: 'common.blog', fieldPath: 'link4', editable: 'Blog' },
+];
+
+const LANGUAGES = [
+  { code: 'pl', label: 'PL' },
+  { code: 'en', label: 'EN' },
+  { code: 'es', label: 'ES' },
+];
+
+interface NavbarProps {
+  transparent?: boolean;
+  /** When true, navbar text is white over dark hero images. When false + transparent, text stays dark. */
+  darkHero?: boolean;
+}
+
+export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
+  const { t, i18n } = useTranslation();
+  const location = useLocation();
+
+  const [scrolled, setScrolled] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
+
+  const langRef = useRef<HTMLDivElement>(null);
+
+  // Shadow on scroll
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 4);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Close drawer on route change
+  useEffect(() => {
+    setDrawerOpen(false);
+    setLangOpen(false);
+  }, [location.pathname]);
+
+  // Close lang dropdown on outside click
+  useEffect(() => {
+    if (!langOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (langRef.current && !langRef.current.contains(e.target as Node)) {
+        setLangOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [langOpen]);
+
+  const isActive = (href: string) => location.pathname === href;
+  const isTransparentMode = transparent && !scrolled;
+  const useWhiteText = isTransparentMode && darkHero;
+
+  const currentLang = LANGUAGES.find((l) => l.code === i18n.language) ?? LANGUAGES[0];
+
+  const handleLangChange = (code: string) => {
+    void i18n.changeLanguage(code);
+    setLangOpen(false);
+  };
+
+  return (
+    <>
+      {/* Main navbar */}
+      <header
+        className={[
+          'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+          transparent && !scrolled
+            ? 'bg-transparent'
+            : scrolled
+              ? 'bg-white shadow-[0_1px_12px_0_rgba(0,0,0,0.08)]'
+              : 'bg-white border-b border-[#F0EDE8]',
+        ].join(' ')}
+        role="banner"
+      >
+        <nav
+          className="mx-auto flex items-center justify-between px-4 md:px-[80px] h-[72px]"
+          aria-label="Nawigacja główna"
+        >
+          {/* Logo */}
+          <Link
+            to="/"
+            className={`font-['Playfair_Display'] text-[24px] font-bold tracking-[-0.5px] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded ${useWhiteText ? 'text-white hover:text-white/80' : 'text-[#B8944A] hover:text-[#8A6F2E]'}`}
+            aria-label="Spirala — strona główna"
+          >
+            Spirala
+          </Link>
+
+          {/* Desktop nav links */}
+          <ul className="hidden md:flex items-center gap-8" role="list">
+            {NAV_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link
+                  to={link.href}
+                  className={[
+                    "font-['Lato'] text-[14px] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded",
+                    useWhiteText
+                      ? (isActive(link.href) ? 'text-white font-medium' : 'text-white/70 hover:text-white')
+                      : (isActive(link.href) ? 'text-[#B8944A] font-medium' : 'text-[#8A8A8A] hover:text-[#2D2D2D]'),
+                  ].join(' ')}
+                  aria-current={isActive(link.href) ? 'page' : undefined}
+                >
+                  <EditableText section="navbar" fieldPath={link.fieldPath}>
+                    {t(link.labelKey)}
+                  </EditableText>
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          {/* Desktop right side: language switcher + CTA */}
+          <div className="hidden md:flex items-center gap-4">
+            {/* Language switcher */}
+            <div className="relative" ref={langRef}>
+              <button
+                type="button"
+                onClick={() => setLangOpen((v) => !v)}
+                className={`flex items-center gap-1 font-['Lato'] text-[13px] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded px-1 ${useWhiteText ? 'text-white/70 hover:text-white' : 'text-[#8A8A8A] hover:text-[#2D2D2D]'}`}
+                aria-haspopup="listbox"
+                aria-expanded={langOpen}
+                aria-label="Zmień język"
+              >
+                <Globe size={14} aria-hidden="true" />
+                <span>{currentLang.label}</span>
+                <ChevronDown
+                  size={12}
+                  className={`transition-transform duration-200 ${langOpen ? 'rotate-180' : ''}`}
+                  aria-hidden="true"
+                />
+              </button>
+
+              {langOpen && (
+                <ul
+                  role="listbox"
+                  aria-label="Wybierz język"
+                  className="absolute right-0 top-full mt-2 w-[72px] bg-white border border-[#F0EDE8] rounded-lg shadow-lg py-1 z-10"
+                >
+                  {LANGUAGES.map((lang) => (
+                    <li key={lang.code} role="option" aria-selected={lang.code === i18n.language}>
+                      <button
+                        type="button"
+                        onClick={() => handleLangChange(lang.code)}
+                        className={[
+                          "w-full text-left px-3 py-1.5 font-['Lato'] text-[13px] transition-colors duration-150 hover:bg-[#FAF8F5]",
+                          lang.code === i18n.language ? 'text-[#B8944A] font-medium' : 'text-[#6B6B6B]',
+                        ].join(' ')}
+                      >
+                        {lang.label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            {/* CTA button */}
+            <Link
+              to="/uslugi"
+              className="font-['Lato'] text-[13px] font-medium text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-full px-6 py-[10px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
+            >
+              <EditableText section="navbar" fieldPath="ctaText">
+                {t('navbar.cta', 'Umów wizytę')}
+              </EditableText>
+            </Link>
+          </div>
+
+          {/* Mobile: hamburger */}
+          <button
+            type="button"
+            className={`md:hidden flex items-center justify-center w-10 h-10 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded ${useWhiteText ? 'text-white hover:text-white/80' : 'text-[#2D2D2D] hover:text-[#B8944A]'}`}
+            onClick={() => setDrawerOpen((v) => !v)}
+            aria-expanded={drawerOpen}
+            aria-controls="mobile-drawer"
+            aria-label={drawerOpen ? 'Zamknij menu' : 'Otwórz menu'}
+          >
+            {drawerOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
+          </button>
+        </nav>
+      </header>
+
+      {/* Mobile drawer overlay */}
+      {drawerOpen && (
+        <div
+          className="fixed inset-0 bg-black/20 z-40 md:hidden"
+          aria-hidden="true"
+          onClick={() => setDrawerOpen(false)}
+        />
+      )}
+
+      {/* Mobile drawer */}
+      <div
+        id="mobile-drawer"
+        role="dialog"
+        aria-label="Menu nawigacyjne"
+        aria-modal="true"
+        className={[
+          'fixed top-[72px] left-0 right-0 z-40 bg-white border-b border-[#F0EDE8] shadow-lg md:hidden',
+          'transition-all duration-300 ease-in-out overflow-hidden',
+          drawerOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none',
+        ].join(' ')}
+      >
+        <ul className="flex flex-col px-4 pt-4 pb-6 gap-1" role="list">
+          {NAV_LINKS.map((link) => (
+            <li key={link.href}>
+              <Link
+                to={link.href}
+                className={[
+                  "block py-3 px-2 font-['Lato'] text-[15px] border-b border-[#F0EDE8] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded",
+                  isActive(link.href)
+                    ? 'text-[#B8944A] font-medium'
+                    : 'text-[#2D2D2D] hover:text-[#B8944A]',
+                ].join(' ')}
+                aria-current={isActive(link.href) ? 'page' : undefined}
+              >
+                <EditableText section="navbar" fieldPath={link.fieldPath}>
+                  {t(link.labelKey)}
+                </EditableText>
+              </Link>
+            </li>
+          ))}
+
+          {/* Language row */}
+          <li className="flex items-center gap-2 pt-4 pb-2 px-2">
+            <Globe size={14} className="text-[#8A8A8A]" aria-hidden="true" />
+            {LANGUAGES.map((lang) => (
+              <button
+                key={lang.code}
+                type="button"
+                onClick={() => handleLangChange(lang.code)}
+                className={[
+                  "font-['Lato'] text-[13px] px-2 py-1 rounded transition-colors duration-150",
+                  lang.code === i18n.language
+                    ? 'text-[#B8944A] font-semibold'
+                    : 'text-[#8A8A8A] hover:text-[#2D2D2D]',
+                ].join(' ')}
+                aria-pressed={lang.code === i18n.language}
+              >
+                {lang.label}
+              </button>
+            ))}
+          </li>
+
+          {/* Mobile CTA */}
+          <li className="pt-2">
+            <Link
+              to="/uslugi"
+              className="flex items-center justify-center font-['Lato'] text-[14px] font-medium text-white bg-[#B8944A] hover:bg-[#8A6F2E] transition-colors duration-200 rounded-full px-6 py-[11px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
+            >
+              <EditableText section="navbar" fieldPath="ctaText">
+                {t('navbar.cta', 'Umów wizytę')}
+              </EditableText>
+            </Link>
+          </li>
+        </ul>
+      </div>
+    </>
+  );
+}
+
+export default Navbar;

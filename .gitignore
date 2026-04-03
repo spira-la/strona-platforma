@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+.next/
+lib/
+
+# Environment
+.env
+.env.local
+.env.*.local
+plan/infra.md
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Test
+coverage/
+
+# Drizzle
+drizzle/meta/_journal.json.bak
+
+# Playwright MCP
+.playwright-mcp/
+*.png
+
+# Claude
+.claude/

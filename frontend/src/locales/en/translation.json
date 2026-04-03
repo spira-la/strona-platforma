@@ -1,0 +1,39 @@
+{
+  "common": {
+    "home": "Home",
+    "about": "About",
+    "howIWork": "How I Work",
+    "services": "Services",
+    "blog": "Blog",
+    "contact": "Contact",
+    "book": "Book",
+    "login": "Log in",
+    "register": "Register",
+    "logout": "Log out",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "save": "Save",
+    "cancel": "Cancel",
+    "back": "Back",
+    "next": "Next",
+    "send": "Send",
+    "readMore": "Read more"
+  },
+  "navbar": {
+    "cta": "Book a session"
+  },
+  "hero": {
+    "title": "Spirala",
+    "subtitle": "Coaching and therapy"
+  },
+  "footer": {
+    "copyright": "© 2026 Spirala. All rights reserved.",
+    "privacy": "Privacy policy",
+    "terms": "Terms of service"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "Sorry, the page you are looking for does not exist.",
+    "backHome": "Back to home"
+  }
+}

@@ -1,0 +1,32 @@
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
+export default function NotFound() {
+  const { t } = useTranslation();
+
+  return (
+    <main className="min-h-screen flex flex-col items-center justify-center bg-[#F9F6F0] px-4 text-center">
+      <h1
+        className="text-8xl font-bold text-[#B8963E]"
+        style={{ fontFamily: "'Playfair Display', serif" }}
+      >
+        404
+      </h1>
+      <h2
+        className="mt-4 text-2xl font-semibold text-[#1a1a1a]"
+        style={{ fontFamily: "'Playfair Display', serif" }}
+      >
+        {t('notFound.title')}
+      </h2>
+      <p className="mt-2 text-base text-[#555555]">
+        {t('notFound.description')}
+      </p>
+      <Link
+        to="/"
+        className="mt-8 inline-block rounded px-6 py-3 bg-[#B8963E] text-white font-medium hover:bg-[#8A6F2E] transition-colors"
+      >
+        {t('notFound.backHome')}
+      </Link>
+    </main>
+  );
+}

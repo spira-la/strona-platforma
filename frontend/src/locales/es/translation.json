@@ -1,0 +1,39 @@
+{
+  "common": {
+    "home": "Inicio",
+    "about": "Sobre mí",
+    "howIWork": "Cómo trabajo",
+    "services": "Servicios",
+    "blog": "Blog",
+    "contact": "Contacto",
+    "book": "Reservar",
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "logout": "Cerrar sesión",
+    "loading": "Cargando...",
+    "error": "Se produjo un error",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "send": "Enviar",
+    "readMore": "Leer más"
+  },
+  "navbar": {
+    "cta": "Reservar sesión"
+  },
+  "hero": {
+    "title": "Spirala",
+    "subtitle": "Coaching y terapia"
+  },
+  "footer": {
+    "copyright": "© 2026 Spirala. Todos los derechos reservados.",
+    "privacy": "Política de privacidad",
+    "terms": "Términos de servicio"
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "description": "Lo sentimos, la página que buscas no existe.",
+    "backHome": "Volver al inicio"
+  }
+}

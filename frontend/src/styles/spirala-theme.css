@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand Colors */
+  --color-brand-gold: #B8944A;
+  --color-brand-gold-light: #D4B97A;
+  --color-brand-gold-dark: #8A6F2E;
+  --color-brand-navy: #173A5E;
+
+  /* Background Colors */
+  --color-bg-cream: #FAF8F5;
+  --color-bg-warm: #F5F3EF;
+  --color-bg-white: #FFFFFF;
+
+  /* Border Colors */
+  --color-border-subtle: #F0EDE8;
+  --color-border-warm: #E8E4DF;
+
+  /* Text Colors */
+  --color-text-primary: #2D2D2D;
+  --color-text-secondary: #6B6B6B;
+  --color-text-muted: #8A8A8A;
+  --color-text-on-dark: #FFFFFF;
+  --color-text-on-dark-muted: #C8D6E5;
+
+  /* Spacing Scale */
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 40px;
+  --spacing-xl: 64px;
+  --spacing-2xl: 80px;
+
+  /* Border Radius */
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 24px;
+
+  /* Typography */
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Lato', sans-serif;
+}
+
+/* Base styles */
+body {
+  font-family: var(--font-body);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+/* ──────────────────────────────────────────────
+   Custom Scrollbar — elegant gold on cream
+   ────────────────────────────────────────────── */
+
+/* Thin scrollbar for Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-brand-gold-light) transparent;
+}
+
+/* Webkit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    var(--color-brand-gold-light) 0%,
+    var(--color-brand-gold) 100%
+  );
+  border-radius: 100px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    var(--color-brand-gold) 0%,
+    var(--color-brand-gold-dark) 100%
+  );
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--color-brand-gold-dark);
+}
+
+/* Hide scrollbar corner */
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ──────────────────────────────────────────────
+   Lenis smooth scroll base
+   ────────────────────────────────────────────── */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ──────────────────────────────────────────────
+   Booking animations
+   ────────────────────────────────────────────── */
+
+@keyframes slotAppear {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.95);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: none;
+  }
+}
+
+@keyframes summaryAppear {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: none;
+  }
+}

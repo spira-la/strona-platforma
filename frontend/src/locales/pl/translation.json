@@ -1,0 +1,39 @@
+{
+  "common": {
+    "home": "Strona główna",
+    "about": "O Mnie",
+    "howIWork": "Jak Pracuję",
+    "services": "Usługi",
+    "blog": "Blog",
+    "contact": "Kontakt",
+    "book": "Zarezerwuj",
+    "login": "Zaloguj się",
+    "register": "Zarejestruj się",
+    "logout": "Wyloguj się",
+    "loading": "Ładowanie...",
+    "error": "Wystąpił błąd",
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "back": "Wstecz",
+    "next": "Dalej",
+    "send": "Wyślij",
+    "readMore": "Czytaj więcej"
+  },
+  "navbar": {
+    "cta": "Umów wizytę"
+  },
+  "hero": {
+    "title": "Spirala",
+    "subtitle": "Coaching i terapia"
+  },
+  "footer": {
+    "copyright": "© 2026 Spirala. Wszelkie prawa zastrzeżone.",
+    "privacy": "Polityka prywatności",
+    "terms": "Regulamin"
+  },
+  "notFound": {
+    "title": "Strona nie istnieje",
+    "description": "Przepraszamy, strona której szukasz nie została znaleziona.",
+    "backHome": "Wróć na stronę główną"
+  }
+}
