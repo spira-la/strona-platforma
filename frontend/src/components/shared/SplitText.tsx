@@ -3,8 +3,6 @@ import { useScrollReveal } from '@/hooks/useScrollReveal';
 interface SplitTextProps {
   /** The text to split and animate */
   text: string;
-  /** HTML tag for the container. Default: 'h2' */
-  as?: keyof React.JSX.IntrinsicElements;
   /** CSS class on the container */
   className?: string;
   /** Split by 'word' or 'char'. Default: 'word' */
@@ -23,7 +21,6 @@ interface SplitTextProps {
  */
 export function SplitText({
   text,
-  as: Tag = 'h2',
   className,
   splitBy = 'word',
   delay = 0,
@@ -36,7 +33,7 @@ export function SplitText({
   const easing = 'cubic-bezier(0.19, 1, 0.22, 1)';
 
   return (
-    <Tag ref={ref} className={className} aria-label={text}>
+    <div ref={ref} className={className} aria-label={text}>
       {pieces.map((piece, i) => (
         <span
           key={i}
@@ -57,6 +54,6 @@ export function SplitText({
           </span>
         </span>
       ))}
-    </Tag>
+    </div>
   );
 }

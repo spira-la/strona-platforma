@@ -14,7 +14,8 @@ export type CMSSectionKey =
   | 'confirmation'
   | 'booking'
   | 'newsletter'
-  | 'cta';
+  | 'cta'
+  | 'testimonials';
 
 export interface CMSContentResponse {
   success: boolean;
@@ -35,6 +36,7 @@ export interface EditableTextProps {
   section: CMSSectionKey;
   fieldPath: string;
   as?: keyof React.JSX.IntrinsicElements;
+  id?: string;
   className?: string;
   /**
    * Fallback text displayed when no CMS content exists for this field.

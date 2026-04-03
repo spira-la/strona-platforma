@@ -25,15 +25,6 @@ function SectionBadge({ children }: SectionBadgeProps) {
   );
 }
 
-function GoldDivider() {
-  return (
-    <div
-      className="w-12 h-0.5 bg-[#B8944A] mx-auto"
-      aria-hidden="true"
-    />
-  );
-}
-
 // ---------------------------------------------------------------------------
 // 1. Hero Section
 // ---------------------------------------------------------------------------
@@ -68,7 +59,6 @@ function HeroSection() {
       <div className="relative z-10 flex flex-col items-center text-center px-6 py-16 md:py-0 max-w-[900px] mx-auto gap-6">
         <SplitText
           text="Odkryj swoją wewnętrzną siłę i rozpocznij drogę ku zmianie"
-          as="h1"
           className="font-['Playfair_Display'] text-[2rem] md:text-[3rem] font-bold text-white leading-[1.2] tracking-[-0.5px] md:tracking-[-1px] max-w-[800px]"
           delay={100}
           staggerInterval={50}
@@ -441,7 +431,6 @@ function ServicesSection() {
         <div className="mt-4 flex flex-col items-center gap-4 text-center">
           <SplitText
             text="Chcesz mnie poznać?"
-            as="h3"
             className="font-['Playfair_Display'] text-[26px] md:text-[28px] italic text-[#2D2D2D]"
             delay={0}
             staggerInterval={80}
@@ -856,7 +845,6 @@ function CtaSection() {
 
         <SplitText
           text="GOTOWA NA ZMIANĘ?"
-          as="h2"
           className="font-['Playfair_Display'] text-[2.25rem] md:text-[2.75rem] font-bold text-white leading-[1.15] tracking-[-0.5px]"
           delay={300}
           staggerInterval={80}
