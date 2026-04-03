@@ -3,12 +3,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: runner-prebuilt
+      target: runner
     container_name: spirala-fe-dev
     ports:
       - "45000:80"
-    volumes:
-      - ./frontend/dist:/usr/share/nginx/html:ro
     restart: unless-stopped
     networks:
       - spirala-dev-network

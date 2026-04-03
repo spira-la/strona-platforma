@@ -94,9 +94,6 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            cd ${{ secrets.SPIRALA_APP_DIR }}/frontend
-            npm ci
-            npm run build:dev
             cd ${{ secrets.SPIRALA_APP_DIR }}
             docker compose -f docker-compose.dev.yml build --no-cache
             docker compose -f docker-compose.dev.yml up -d --force-recreate
