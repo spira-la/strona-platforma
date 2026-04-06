@@ -92,6 +92,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (error) throw new Error(error.message);
   }
 
+  async function updatePassword(newPassword: string): Promise<void> {
+    if (!supabase) throw new Error('Supabase not configured');
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) throw new Error(error.message);
+  }
+
   const value: AuthContextValue = {
     user,
     session,
@@ -102,6 +108,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     signOut,
     signInWithGoogle,
     resetPassword,
+    updatePassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
