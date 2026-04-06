@@ -26,4 +26,6 @@ export interface AuthContextValue {
   signInWithGoogle: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   updatePassword: (newPassword: string) => Promise<void>;
+  isRecoveryMode: boolean;
+  clearRecoveryMode: () => void;
 }

@@ -19,6 +19,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isRecoveryMode, setIsRecoveryMode] = useState(false);
 
   useEffect(() => {
     if (!supabase) {
@@ -33,10 +34,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, newSession) => {
+      (event, newSession) => {
         setSession(newSession);
         setUser(newSession?.user ?? null);
         setIsLoading(false);
+
+        if (event === 'PASSWORD_RECOVERY') {
+          setIsRecoveryMode(true);
+        }
       },
     );
 
@@ -98,6 +103,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (error) throw new Error(error.message);
   }
 
+  function clearRecoveryMode() {
+    setIsRecoveryMode(false);
+  }
+
   const value: AuthContextValue = {
     user,
     session,
@@ -109,6 +118,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     signInWithGoogle,
     resetPassword,
     updatePassword,
+    isRecoveryMode,
+    clearRecoveryMode,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
