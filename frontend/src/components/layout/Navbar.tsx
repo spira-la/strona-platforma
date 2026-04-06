@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Menu, X, Globe, ChevronDown, LogOut, User } from 'lucide-react';
+import { Menu, X, Globe, ChevronDown, LogOut, User, LayoutDashboard } from 'lucide-react';
 import { EditableText } from '@/components/cms/EditableText';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAuthStore } from '@/stores/auth.store';
@@ -215,6 +215,17 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                       <p className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D] truncate">{userName}</p>
                       <p className="font-['Lato'] text-[11px] text-[#8A8A8A] truncate">{user?.email}</p>
                     </div>
+                    {user?.app_metadata?.role === 'admin' && (
+                      <Link
+                        to="/admin"
+                        className="w-full flex items-center gap-2 px-3 py-2 font-['Lato'] text-[13px] text-[#B8944A] hover:bg-[#FAF8F5] hover:text-[#8A6F2E] transition-colors"
+                        role="menuitem"
+                        onClick={() => setUserMenuOpen(false)}
+                      >
+                        <LayoutDashboard size={14} aria-hidden="true" />
+                        Panel admin
+                      </Link>
+                    )}
                     <button
                       type="button"
                       onClick={handleSignOut}
@@ -318,21 +329,32 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
           {/* Mobile Auth / CTA */}
           <li className="pt-2">
             {isAuthenticated ? (
-              <div className="flex items-center justify-between px-2 py-3">
-                <div className="flex items-center gap-2">
-                  <span className="w-8 h-8 rounded-full bg-[#B8944A]/15 text-[#B8944A] flex items-center justify-center font-['Lato'] text-[13px] font-bold">
-                    {userInitial}
-                  </span>
-                  <span className="font-['Lato'] text-[14px] text-[#2D2D2D] truncate max-w-[180px]">{userName}</span>
+              <div className="flex flex-col gap-2 px-2 py-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="w-8 h-8 rounded-full bg-[#B8944A]/15 text-[#B8944A] flex items-center justify-center font-['Lato'] text-[13px] font-bold">
+                      {userInitial}
+                    </span>
+                    <span className="font-['Lato'] text-[14px] text-[#2D2D2D] truncate max-w-[180px]">{userName}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleSignOut}
+                    className="flex items-center gap-1 font-['Lato'] text-[13px] text-[#8A8A8A] hover:text-[#2D2D2D] transition-colors"
+                  >
+                    <LogOut size={14} aria-hidden="true" />
+                    Wyloguj
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={handleSignOut}
-                  className="flex items-center gap-1 font-['Lato'] text-[13px] text-[#8A8A8A] hover:text-[#2D2D2D] transition-colors"
-                >
-                  <LogOut size={14} aria-hidden="true" />
-                  Wyloguj
-                </button>
+                {user?.app_metadata?.role === 'admin' && (
+                  <Link
+                    to="/admin"
+                    className="flex items-center gap-2 font-['Lato'] text-[13px] font-semibold text-[#B8944A] hover:text-[#8A6F2E] transition-colors px-1 py-1"
+                  >
+                    <LayoutDashboard size={14} aria-hidden="true" />
+                    Panel admin
+                  </Link>
+                )}
               </div>
             ) : (
               <button
