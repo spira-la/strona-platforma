@@ -1,7 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { DatabaseService } from '../../core/database.service.js';
 import { CacheService } from '../../core/cache.service.js';
+import { StorageService } from '../../core/storage.service.js';
 import { cmsContent } from '../../db/schema/cms.js';
 
 const CACHE_KEY = 'cms:content:main_page';
@@ -24,6 +25,7 @@ export class CmsService {
   constructor(
     private readonly db: DatabaseService,
     private readonly cache: CacheService,
+    private readonly storage: StorageService,
   ) {}
 
   async getContent(): Promise<CMSDocument> {
@@ -122,6 +124,19 @@ export class CmsService {
     return { version: newVersion, updatedAt: now };
   }
 
+  /**
+   * Clears a field value by setting it to an empty string.
+   * The frontend treats "" as "no content" and shows its fallback.
+   */
+  async deleteField(
+    section: string,
+    language: string,
+    fieldPath: string,
+    userId?: string,
+  ): Promise<{ version: number; updatedAt: Date }> {
+    return this.updateField(section, language, fieldPath, '', userId);
+  }
+
   async updateSection(
     section: string,
     language: string,
@@ -194,5 +209,11 @@ export class CmsService {
 
     this.cache.delete(CACHE_KEY);
     return { version: doc.version + 1, created: true };
+  }
+
+  /** Returns the StorageService so the controller can access it without
+   *  a separate injection (keeps the DI graph simple). */
+  getStorage(): StorageService {
+    return this.storage;
   }
 }

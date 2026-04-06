@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, ShieldCheck, Lock, Heart } from 'lucide-react';
 import { EditableText } from '@/components/cms/EditableText';
+import { EditableImage } from '@/components/cms/EditableImage';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
 import { SplitText } from '@/components/shared/SplitText';
 import { ParallaxImage } from '@/components/shared/ParallaxImage';
@@ -109,11 +110,13 @@ function AboutSection() {
       <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-[60px]">
         {/* Image */}
         <ScrollReveal animation="clip-left" delay={300} className="flex-shrink-0 w-full md:w-[480px]">
-          <img
-            src={ane1Photo}
+          <EditableImage
+            section="about"
+            fieldPath="photo"
+            fallbackSrc={ane1Photo}
             alt="Aneta — terapeutka i coach"
-            className="w-full md:w-[480px] h-[360px] md:h-[520px] object-cover rounded-[20px]"
-            loading="lazy"
+            className="object-cover rounded-[20px]"
+            containerClassName="w-full md:w-[480px] h-[360px] md:h-[520px] rounded-[20px]"
           />
         </ScrollReveal>
 
