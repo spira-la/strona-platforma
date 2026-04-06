@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -19,19 +19,29 @@ const passwordSchema = z
 
 type PasswordData = z.infer<typeof passwordSchema>;
 
-function isRecoveryFlow(): boolean {
+function detectRecovery(): boolean {
+  // PKCE flow: Supabase redirects with ?code=xxx — type comes via onAuthStateChange
+  // Implicit flow: hash contains type=recovery
   const hash = window.location.hash;
-  return hash.includes('type=recovery');
+  if (hash.includes('type=recovery')) return true;
+
+  // Check URL search params (some Supabase versions)
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('type') === 'recovery') return true;
+
+  return false;
 }
 
 export default function AuthCallback() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { updatePassword } = useAuth();
   const [mode, setMode] = useState<'loading' | 'reset' | 'success'>(() =>
-    isRecoveryFlow() ? 'reset' : 'loading',
+    detectRecovery() ? 'reset' : 'loading',
   );
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const handled = useRef(false);
 
   const {
     register,
@@ -40,33 +50,51 @@ export default function AuthCallback() {
   } = useForm<PasswordData>({ resolver: zodResolver(passwordSchema) });
 
   useEffect(() => {
-    if (!supabase) {
-      navigate('/', { replace: true });
-      return;
+    if (!supabase || mode === 'reset') return;
+
+    // PKCE flow: exchange code for session, then listen for event
+    const code = searchParams.get('code');
+    if (code) {
+      supabase.auth.exchangeCodeForSession(code).then(({ error: err }) => {
+        if (err) {
+          console.error('Code exchange failed:', err.message);
+          navigate('/', { replace: true });
+        }
+        // After exchange, onAuthStateChange will fire
+      });
     }
 
-    // If already detected as recovery from hash, don't redirect
-    if (mode === 'reset') return;
-
-    // Listen for auth events
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (handled.current) return;
+
       if (event === 'PASSWORD_RECOVERY') {
+        handled.current = true;
         setMode('reset');
-      } else if (event === 'SIGNED_IN') {
-        navigate('/', { replace: true });
+      } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        // Not a recovery — it's email confirmation or magic link
+        // Wait a beat to see if PASSWORD_RECOVERY follows
+        setTimeout(() => {
+          if (!handled.current) {
+            handled.current = true;
+            navigate('/', { replace: true });
+          }
+        }, 500);
       }
     });
 
-    // Fallback: if no event fires within 3s, redirect home
+    // Fallback: if nothing happens within 5s, go home
     const timeout = setTimeout(() => {
-      navigate('/', { replace: true });
-    }, 3000);
+      if (!handled.current) {
+        handled.current = true;
+        navigate('/', { replace: true });
+      }
+    }, 5000);
 
     return () => {
       subscription.unsubscribe();
       clearTimeout(timeout);
     };
-  }, [navigate, mode]);
+  }, [navigate, searchParams, mode]);
 
   const onSubmit = async (data: PasswordData) => {
     setError('');
