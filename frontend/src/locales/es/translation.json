@@ -35,5 +35,35 @@
     "title": "Página no encontrada",
     "description": "Lo sentimos, la página que buscas no existe.",
     "backHome": "Volver al inicio"
+  },
+  "admin": {
+    "branding": {
+      "logoAlt": "Logo de Spirala",
+      "panel": "Admin"
+    },
+    "nav": {
+      "ariaLabel": "Navegación del panel de administración",
+      "sidebarLabel": "Barra lateral",
+      "openMenu": "Abrir menú",
+      "closeMenu": "Cerrar menú",
+      "collapseSidebar": "Contraer barra lateral",
+      "expandSidebar": "Expandir barra lateral",
+      "backToSite": "Volver al sitio",
+      "dashboard": "Panel",
+      "sessions": "Sesiones",
+      "availability": "Disponibilidad",
+      "services": "Servicios",
+      "blog": "Blog",
+      "newsletter": "Newsletter",
+      "invoices": "Facturas",
+      "coupons": "Cupones",
+      "seo": "SEO",
+      "sections": {
+        "main": "Principal",
+        "content": "Contenido",
+        "business": "Negocio",
+        "system": "Sistema"
+      }
+    }
   }
 }

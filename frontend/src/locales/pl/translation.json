@@ -35,5 +35,35 @@
     "title": "Strona nie istnieje",
     "description": "Przepraszamy, strona której szukasz nie została znaleziona.",
     "backHome": "Wróć na stronę główną"
+  },
+  "admin": {
+    "branding": {
+      "logoAlt": "Logo Spirala",
+      "panel": "Admin"
+    },
+    "nav": {
+      "ariaLabel": "Nawigacja panelu administracyjnego",
+      "sidebarLabel": "Pasek boczny",
+      "openMenu": "Otwórz menu",
+      "closeMenu": "Zamknij menu",
+      "collapseSidebar": "Zwiń pasek",
+      "expandSidebar": "Rozwiń pasek",
+      "backToSite": "Wróć na stronę",
+      "dashboard": "Dashboard",
+      "sessions": "Sesje",
+      "availability": "Dostępność",
+      "services": "Usługi",
+      "blog": "Blog",
+      "newsletter": "Newsletter",
+      "invoices": "Faktury",
+      "coupons": "Kupony",
+      "seo": "SEO",
+      "sections": {
+        "main": "Główne",
+        "content": "Treści",
+        "business": "Biznes",
+        "system": "System"
+      }
+    }
   }
 }
