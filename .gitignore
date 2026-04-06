@@ -39,6 +39,9 @@ drizzle/meta/_journal.json.bak
 # Playwright MCP
 .playwright-mcp/
 *.png
+# Allow favicon/icon PNGs in public and src assets
+!frontend/public/*.png
+!frontend/src/assets/*.png
 
 # Reference project (read-only)
 ref/

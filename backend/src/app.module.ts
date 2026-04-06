@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { validate } from './config/env.validation.js';
 import { CoreModule } from './core/core.module.js';
 import { CmsModule } from './modules/cms/cms.module.js';
+import { EmailModule } from './modules/email/email.module.js';
 import { AppController } from './app.controller.js';
 
 @Module({
@@ -13,6 +14,7 @@ import { AppController } from './app.controller.js';
       envFilePath: ['.env.local', '.env'],
     }),
     CoreModule,
+    EmailModule,
     CmsModule,
   ],
   controllers: [AppController],

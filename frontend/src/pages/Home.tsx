@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, ShieldCheck, Lock, Heart } from 'lucide-react';
 import { EditableText } from '@/components/cms/EditableText';
+import { EditableImage } from '@/components/cms/EditableImage';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
 import { SplitText } from '@/components/shared/SplitText';
 import { ParallaxImage } from '@/components/shared/ParallaxImage';
@@ -38,7 +39,7 @@ function HeroSection() {
       {/* Background image */}
       <div className="absolute inset-0" aria-hidden="true">
         <ParallaxImage
-          src="https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=2070&auto=format&fit=crop"
+          src="https://images.unsplash.com/photo-1744192876531-f00759ed9c57?q=80&w=2070&auto=format&fit=crop"
           alt=""
           speed={0.15}
           className="w-full h-full"
@@ -63,6 +64,8 @@ function HeroSection() {
           delay={100}
           staggerInterval={50}
           duration={800}
+          cmsSection="hero"
+          cmsField="title"
         />
 
         <ScrollReveal animation="blur" delay={400} duration={900}>
@@ -107,11 +110,13 @@ function AboutSection() {
       <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-[60px]">
         {/* Image */}
         <ScrollReveal animation="clip-left" delay={300} className="flex-shrink-0 w-full md:w-[480px]">
-          <img
-            src={ane1Photo}
+          <EditableImage
+            section="about"
+            fieldPath="photo"
+            fallbackSrc={ane1Photo}
             alt="Aneta — terapeutka i coach"
-            className="w-full md:w-[480px] h-[360px] md:h-[520px] object-cover rounded-[20px]"
-            loading="lazy"
+            className="object-cover rounded-[20px]"
+            containerClassName="w-full md:w-[480px] h-[360px] md:h-[520px] rounded-[20px]"
           />
         </ScrollReveal>
 
@@ -435,6 +440,8 @@ function ServicesSection() {
             delay={0}
             staggerInterval={80}
             duration={900}
+            cmsSection="services"
+            cmsField="meetTitle"
           />
           <EditableText
             section="services"
@@ -569,6 +576,14 @@ function TestimonialsSection() {
             id="testimonials-heading"
             className="font-['Playfair_Display'] text-[2rem] md:text-[2.25rem] font-bold text-[#2D2D2D] leading-[1.15] tracking-[-0.5px] text-center"
             placeholder="CO MÓWIĄ OSOBY, Z KTÓRYMI PRACUJĘ"
+          />
+
+          <EditableText
+            section="testimonials"
+            fieldPath="description"
+            as="p"
+            className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7] max-w-[640px] text-center"
+            placeholder="Każda historia jest wyjątkowa — ale łączy je jedno: odwaga, by zajrzeć w głąb siebie."
           />
         </ScrollReveal>
 
@@ -849,6 +864,8 @@ function CtaSection() {
           delay={300}
           staggerInterval={80}
           duration={1000}
+          cmsSection="cta"
+          cmsField="title"
         />
 
         <ScrollReveal animation="blur" delay={600} duration={1000}>

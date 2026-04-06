@@ -3,12 +3,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: runner-prebuilt
+      target: runner
+      args:
+        VITE_SUPABASE_URL: https://fofdpgtpwibccezrnxnw.supabase.co
+        VITE_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZvZmRwZ3Rwd2liY2NlenJueG53Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMjQwNjIsImV4cCI6MjA5MDcwMDA2Mn0.TC1lfTlG7NEN11VJUlbp9RTKn7JmwRVHUnvk3MOB8wU
     container_name: spirala-fe-dev
     ports:
       - "45000:80"
-    volumes:
-      - ./frontend/dist:/usr/share/nginx/html:ro
     restart: unless-stopped
     networks:
       - spirala-dev-network

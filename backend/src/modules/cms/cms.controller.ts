@@ -3,10 +3,16 @@ import {
   Get,
   Put,
   Post,
+  Delete,
   Body,
   Query,
   HttpCode,
+  UseInterceptors,
+  UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import sharp from 'sharp';
 import { CmsService } from './cms.service.js';
 
 // ---------------------------------------------------------------------------
@@ -31,6 +37,18 @@ interface InitializeDto {
   force?: boolean;
 }
 
+interface ImageUploadBody {
+  section: string;
+  fieldPath: string;
+  language: string;
+}
+
+interface DeleteImageDto {
+  section: string;
+  fieldPath: string;
+  language: string;
+}
+
 // ---------------------------------------------------------------------------
 // Controller
 // ---------------------------------------------------------------------------
@@ -42,7 +60,6 @@ export class CmsController {
   /**
    * GET /api/cms/content
    * Public — returns all CMS content.
-   * Optional query params: section, language (not implemented yet, returns all).
    */
   @Get('content')
   async getContent() {
@@ -103,9 +120,115 @@ export class CmsController {
     const result = await this.cms.initialize(body.content, body.force);
     return {
       success: true,
-      message: result.created ? 'CMS content initialized' : 'CMS content already exists (use force: true to overwrite)',
+      message: result.created
+        ? 'CMS content initialized'
+        : 'CMS content already exists (use force: true to overwrite)',
       version: result.version,
       created: result.created,
+    };
+  }
+
+  /**
+   * POST /api/cms/image
+   * Admin — upload an image for a CMS field.
+   *
+   * Expects multipart/form-data with:
+   *   - file: the image file
+   *   - section: CMS section key
+   *   - fieldPath: dot-notation field path within the section
+   *   - language: language code (pl, en, es)
+   *
+   * Processing:
+   *   - Main:      WebP, quality 80, max-width 1920px (aspect ratio preserved)
+   *   - Thumbnail: WebP, quality 75, max-width 400px
+   *
+   * Storage keys:
+   *   - cms/{section}/{fieldPath}.webp
+   *   - cms/{section}/{fieldPath}-thumb.webp
+   */
+  @Post('image')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadImage(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body: ImageUploadBody,
+  ) {
+    if (!file) {
+      throw new BadRequestException('No file provided');
+    }
+
+    const { section, fieldPath, language } = body;
+
+    if (!section || !fieldPath || !language) {
+      throw new BadRequestException('section, fieldPath and language are required');
+    }
+
+    const storage = this.cms.getStorage();
+
+    // Process main image — max 1920px wide, WebP quality 80
+    const mainBuffer = await sharp(file.buffer)
+      .resize({ width: 1920, withoutEnlargement: true })
+      .webp({ quality: 80 })
+      .toBuffer();
+
+    // Process thumbnail — max 400px wide, WebP quality 75
+    const thumbBuffer = await sharp(file.buffer)
+      .resize({ width: 400, withoutEnlargement: true })
+      .webp({ quality: 75 })
+      .toBuffer();
+
+    const mainKey = `cms/${section}/${fieldPath}.webp`;
+    const thumbKey = `cms/${section}/${fieldPath}-thumb.webp`;
+
+    // Upload both to R2 in parallel
+    const [url, thumbnailUrl] = await Promise.all([
+      storage.upload(mainKey, mainBuffer, 'image/webp'),
+      storage.upload(thumbKey, thumbBuffer, 'image/webp'),
+    ]);
+
+    // Persist the public URL in CMS JSONB
+    const result = await this.cms.updateField(section, language, fieldPath, url);
+
+    return {
+      success: true,
+      url,
+      thumbnailUrl,
+      version: result.version,
+    };
+  }
+
+  /**
+   * DELETE /api/cms/image
+   * Admin — delete an image from R2 and clear its CMS field.
+   *
+   * Body: { section, fieldPath, language }
+   */
+  @Delete('image')
+  async deleteImage(
+    @Query('section') section: string,
+    @Query('fieldPath') fieldPath: string,
+    @Query('language') language: string,
+  ) {
+
+    if (!section || !fieldPath || !language) {
+      throw new BadRequestException('section, fieldPath and language are required');
+    }
+
+    const storage = this.cms.getStorage();
+
+    const mainKey = `cms/${section}/${fieldPath}.webp`;
+    const thumbKey = `cms/${section}/${fieldPath}-thumb.webp`;
+
+    // Delete both R2 objects and clear the CMS field in parallel.
+    // R2 delete is idempotent — missing files do not throw.
+    await Promise.all([
+      storage.delete(mainKey),
+      storage.delete(thumbKey),
+      this.cms.deleteField(section, language, fieldPath),
+    ]);
+
+    return {
+      success: true,
+      message: 'Image deleted',
     };
   }
 }

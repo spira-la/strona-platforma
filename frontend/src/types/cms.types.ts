@@ -49,6 +49,15 @@ export interface EditableTextProps {
   render?: (content: string) => React.ReactNode;
 }
 
+export interface EditableImageProps {
+  section: CMSSectionKey;
+  fieldPath: string;
+  fallbackSrc: string;
+  alt: string;
+  className?: string;
+  containerClassName?: string;
+}
+
 export interface CMSContextValue {
   content: Record<string, Record<CMSLanguage, Record<string, unknown>>>;
   isLoading: boolean;

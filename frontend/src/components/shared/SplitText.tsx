@@ -1,4 +1,7 @@
 import { useScrollReveal } from '@/hooks/useScrollReveal';
+import { useCMS } from '@/contexts/CMSContext';
+import { EditableText } from '@/components/cms/EditableText';
+import type { CMSSectionKey } from '@/types/cms.types';
 
 interface SplitTextProps {
   /** The text to split and animate */
@@ -13,6 +16,10 @@ interface SplitTextProps {
   staggerInterval?: number;
   /** Duration per item in ms. Default: 900 */
   duration?: number;
+  /** CMS section key for inline editing */
+  cmsSection?: CMSSectionKey;
+  /** CMS field path for inline editing */
+  cmsField?: string;
 }
 
 /**
@@ -26,8 +33,25 @@ export function SplitText({
   delay = 0,
   staggerInterval = 60,
   duration = 900,
+  cmsSection,
+  cmsField,
 }: SplitTextProps) {
+  const { isEditMode } = useCMS();
   const { ref, isVisible } = useScrollReveal<HTMLDivElement>({ threshold: 0.2 });
+
+  // In CMS edit mode, render an EditableText instead of the animation
+  if (isEditMode && cmsSection && cmsField) {
+    return (
+      <div className={className}>
+        <EditableText
+          section={cmsSection}
+          fieldPath={cmsField}
+          as="span"
+          placeholder={text}
+        />
+      </div>
+    );
+  }
 
   const pieces = splitBy === 'word' ? text.split(' ') : text.split('');
   const easing = 'cubic-bezier(0.19, 1, 0.22, 1)';
