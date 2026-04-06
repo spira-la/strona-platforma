@@ -153,30 +153,43 @@ export function EditableText({
           rows={1}
           aria-label={`Edit ${section}.${fieldPath}`}
         />
-        <span className="flex items-center justify-end gap-2 mt-1">
-          {isSaving && (
-            <span className="text-[10px] text-[#B8963E]">saving...</span>
-          )}
+        <span className="flex items-center justify-between mt-1">
           <button
             type="button"
             onMouseDown={(e) => {
               e.preventDefault();
-              cancelEditing();
+              setDraftValue('');
             }}
-            className="rounded px-2 py-0.5 text-[11px] font-medium text-[#6B6B6B] bg-gray-100 hover:bg-gray-200 transition-colors"
+            className="rounded px-2 py-0.5 text-[11px] font-medium text-red-500 hover:text-red-700 hover:bg-red-50 transition-colors"
+            title="Clear to show default text"
           >
-            Cancel
+            Reset
           </button>
-          <button
-            type="button"
-            onMouseDown={(e) => {
-              e.preventDefault();
-              void saveEditing();
-            }}
-            className="rounded px-2 py-0.5 text-[11px] font-medium text-white bg-[#B8963E] hover:bg-[#8A6F2E] transition-colors"
-          >
-            Save
-          </button>
+          <span className="flex items-center gap-2">
+            {isSaving && (
+              <span className="text-[10px] text-[#B8963E]">saving...</span>
+            )}
+            <button
+              type="button"
+              onMouseDown={(e) => {
+                e.preventDefault();
+                cancelEditing();
+              }}
+              className="rounded px-2 py-0.5 text-[11px] font-medium text-[#6B6B6B] bg-gray-100 hover:bg-gray-200 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onMouseDown={(e) => {
+                e.preventDefault();
+                void saveEditing();
+              }}
+              className="rounded px-2 py-0.5 text-[11px] font-medium text-white bg-[#B8963E] hover:bg-[#8A6F2E] transition-colors"
+            >
+              Save
+            </button>
+          </span>
         </span>
       </span>
     );
