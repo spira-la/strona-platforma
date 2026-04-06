@@ -155,7 +155,7 @@ function PricingBannerSection() {
           <div className="w-full aspect-[4/3] rounded-lg bg-white/20 border border-white/30 flex items-center justify-center">
             <div className="flex flex-col items-center gap-3 text-white/60">
               <Globe size={40} aria-hidden="true" />
-              <span className="font-['Lato'] text-[13px]">Podglad strony</span>
+              <span className="font-['Lato'] text-[13px]"><EditableText section="contact" fieldPath="previewLabel" as="span" placeholder="Podgląd strony" /></span>
             </div>
           </div>
         </div>
@@ -249,7 +249,7 @@ function ContactInfoColumn() {
             <Mail size={18} aria-hidden="true" />
           </div>
           <div>
-            <p className="font-['Lato'] text-[12px] text-[#8A8A8A] uppercase tracking-wide">E-mail</p>
+            <p className="font-['Lato'] text-[12px] text-[#8A8A8A] uppercase tracking-wide"><EditableText section="contact" fieldPath="infoEmailLabel" as="span" placeholder="E-mail" /></p>
             <EditableText
               section="contact"
               fieldPath="info.email"
@@ -269,7 +269,7 @@ function ContactInfoColumn() {
             <Phone size={18} aria-hidden="true" />
           </div>
           <div>
-            <p className="font-['Lato'] text-[12px] text-[#8A8A8A] uppercase tracking-wide">Telefon</p>
+            <p className="font-['Lato'] text-[12px] text-[#8A8A8A] uppercase tracking-wide"><EditableText section="contact" fieldPath="infoPhoneLabel" as="span" placeholder="Telefon" /></p>
             <EditableText
               section="contact"
               fieldPath="info.phone"
@@ -285,7 +285,7 @@ function ContactInfoColumn() {
             <Clock size={18} aria-hidden="true" />
           </div>
           <div>
-            <p className="font-['Lato'] text-[12px] text-[#8A8A8A] uppercase tracking-wide">Godziny</p>
+            <p className="font-['Lato'] text-[12px] text-[#8A8A8A] uppercase tracking-wide"><EditableText section="contact" fieldPath="infoHoursLabel" as="span" placeholder="Godziny" /></p>
             <EditableText
               section="contact"
               fieldPath="info.hours"
@@ -299,7 +299,7 @@ function ContactInfoColumn() {
 
       <div className="flex flex-col gap-2">
         <p className="font-['Lato'] text-[12px] text-[#8A8A8A] uppercase tracking-wide">
-          Social media
+          <EditableText section="contact" fieldPath="infoSocialLabel" as="span" placeholder="Social media" />
         </p>
         <div className="flex items-center gap-3">
           <a
@@ -370,7 +370,7 @@ function ContactFormColumn() {
         <div className="flex items-start gap-3 rounded-lg bg-emerald-50 border border-emerald-200 px-5 py-4 mb-6">
           <CheckCircle size={18} className="text-emerald-600 mt-0.5 flex-shrink-0" aria-hidden="true" />
           <p className="font-['Lato'] text-[14px] text-emerald-700">
-            Wiadomosc zostala wyslana! Odpowiem w ciagu 24 godzin.
+            <EditableText section="contact" fieldPath="formSuccessMsg" as="span" placeholder="Wiadomość została wysłana! Odpowiem w ciągu 24 godzin." />
           </p>
         </div>
       )}
@@ -379,7 +379,7 @@ function ContactFormColumn() {
         <div className="flex items-start gap-3 rounded-lg bg-red-50 border border-red-200 px-5 py-4 mb-6">
           <AlertCircle size={18} className="text-red-500 mt-0.5 flex-shrink-0" aria-hidden="true" />
           <p className="font-['Lato'] text-[14px] text-red-600">
-            Cos poszlo nie tak. Sprobuj ponownie lub napisz bezposrednio na e-mail.
+            <EditableText section="contact" fieldPath="formErrorMsg" as="span" placeholder="Coś poszło nie tak. Spróbuj ponownie lub napisz bezpośrednio na e-mail." />
           </p>
         </div>
       )}
@@ -391,7 +391,7 @@ function ContactFormColumn() {
             htmlFor="contact-name"
             className="block font-['Lato'] text-[13px] font-semibold text-[#2D2D2D] mb-1.5"
           >
-            Imie i nazwisko
+            <EditableText section="contact" fieldPath="formNameLabel" as="span" placeholder="Imię i nazwisko" />
             <span className="text-[#B8944A] ml-0.5" aria-hidden="true">*</span>
           </label>
           <input
@@ -417,7 +417,7 @@ function ContactFormColumn() {
             htmlFor="contact-email"
             className="block font-['Lato'] text-[13px] font-semibold text-[#2D2D2D] mb-1.5"
           >
-            E-mail
+            <EditableText section="contact" fieldPath="formEmailLabel" as="span" placeholder="E-mail" />
             <span className="text-[#B8944A] ml-0.5" aria-hidden="true">*</span>
           </label>
           <input
@@ -443,8 +443,8 @@ function ContactFormColumn() {
             htmlFor="contact-phone"
             className="block font-['Lato'] text-[13px] font-semibold text-[#2D2D2D] mb-1.5"
           >
-            Telefon
-            <span className="font-['Lato'] text-[12px] font-normal text-[#8A8A8A] ml-1.5">(opcjonalnie)</span>
+            <EditableText section="contact" fieldPath="formPhoneLabel" as="span" placeholder="Telefon" />
+            <span className="font-['Lato'] text-[12px] font-normal text-[#8A8A8A] ml-1.5"><EditableText section="contact" fieldPath="formPhoneOptional" as="span" placeholder="(opcjonalnie)" /></span>
           </label>
           <input
             id="contact-phone"
@@ -462,7 +462,7 @@ function ContactFormColumn() {
             htmlFor="contact-subject"
             className="block font-['Lato'] text-[13px] font-semibold text-[#2D2D2D] mb-1.5"
           >
-            Temat
+            <EditableText section="contact" fieldPath="formSubjectLabel" as="span" placeholder="Temat" />
             <span className="text-[#B8944A] ml-0.5" aria-hidden="true">*</span>
           </label>
           <select
@@ -493,7 +493,7 @@ function ContactFormColumn() {
             htmlFor="contact-message"
             className="block font-['Lato'] text-[13px] font-semibold text-[#2D2D2D] mb-1.5"
           >
-            Wiadomosc
+            <EditableText section="contact" fieldPath="formMessageLabel" as="span" placeholder="Wiadomość" />
             <span className="text-[#B8944A] ml-0.5" aria-hidden="true">*</span>
           </label>
           <textarea
@@ -517,7 +517,7 @@ function ContactFormColumn() {
           disabled={isSubmitting}
           className="font-['Lato'] text-[15px] font-semibold text-white bg-[#B8944A] hover:bg-[#D4B97A] disabled:opacity-60 disabled:cursor-not-allowed rounded-lg px-6 py-3.5 transition-colors"
         >
-          {isSubmitting ? 'Wysylanie...' : 'Wyslij wiadomosc'}
+          {isSubmitting ? 'Wysyłanie...' : <EditableText section="contact" fieldPath="formSubmitButton" as="span" placeholder="Wyślij wiadomość" />}
         </button>
       </form>
     </div>
