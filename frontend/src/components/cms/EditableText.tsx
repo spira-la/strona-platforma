@@ -132,31 +132,51 @@ export function EditableText({
   const displayContent = hasNoContent ? fallback : resolvedValue;
 
   // -------------------------------------------------------------------------
-  // Admin edit mode — active textarea
+  // Admin edit mode — active textarea with save/cancel buttons
   // -------------------------------------------------------------------------
   if (isEditMode && isEditing) {
     return (
-      <span className={`relative inline-block w-full ${className ?? ''}`}>
+      <span
+        className={`relative inline-block w-full ${className ?? ''}`}
+        onClick={(e) => e.preventDefault()}
+      >
         <textarea
           ref={textareaRef}
           value={draftValue}
           onChange={(e) => {
             setDraftValue(e.target.value);
-            // Re-size on every change
             e.target.style.height = 'auto';
             e.target.style.height = `${e.target.scrollHeight}px`;
           }}
           onKeyDown={handleKeyDown}
-          onBlur={() => void saveEditing()}
-          className="w-full resize-none overflow-hidden rounded border border-[#B8963E] bg-white px-2 py-1 font-[inherit] text-[inherit] leading-[inherit] shadow-sm outline-none focus:ring-2 focus:ring-[#B8963E]/50"
+          className="w-full resize-none overflow-hidden rounded border border-[#B8963E] bg-white px-2 py-1 font-sans text-sm text-[#2D2D2D] leading-normal shadow-sm outline-none focus:ring-2 focus:ring-[#B8963E]/50"
           rows={1}
           aria-label={`Edit ${section}.${fieldPath}`}
         />
-        <span className="pointer-events-none absolute -bottom-5 right-0 text-[10px] text-gray-400 px-1">
-          Ctrl+Enter to save · Esc to cancel
+        <span className="flex items-center justify-end gap-2 mt-1">
           {isSaving && (
-            <span className="ml-2 text-[#B8963E]">saving...</span>
+            <span className="text-[10px] text-[#B8963E]">saving...</span>
           )}
+          <button
+            type="button"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              cancelEditing();
+            }}
+            className="rounded px-2 py-0.5 text-[11px] font-medium text-[#6B6B6B] bg-gray-100 hover:bg-gray-200 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              void saveEditing();
+            }}
+            className="rounded px-2 py-0.5 text-[11px] font-medium text-white bg-[#B8963E] hover:bg-[#8A6F2E] transition-colors"
+          >
+            Save
+          </button>
         </span>
       </span>
     );
@@ -164,6 +184,7 @@ export function EditableText({
 
   // -------------------------------------------------------------------------
   // Admin edit mode — hoverable, clickable element
+  // Prevents event from reaching parent links/buttons
   // -------------------------------------------------------------------------
   if (isEditMode) {
     return React.createElement(
@@ -171,13 +192,18 @@ export function EditableText({
       {
         id,
         className: `relative cursor-pointer rounded transition-[outline,box-shadow] outline outline-1 outline-transparent hover:outline-[#B8963E]/70 hover:shadow-[0_0_0_3px_rgba(184,150,62,0.12)] ${resolvedClassName ?? ''}`,
-        onClick: startEditing,
+        onClick: (e: React.MouseEvent) => {
+          e.preventDefault();
+          e.stopPropagation();
+          startEditing();
+        },
         title: `Edit: ${section} → ${fieldPath}`,
         role: 'button',
         tabIndex: 0,
         onKeyDown: (e: React.KeyboardEvent) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
+            e.stopPropagation();
             startEditing();
           }
         },

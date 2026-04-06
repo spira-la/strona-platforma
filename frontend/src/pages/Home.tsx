@@ -63,6 +63,8 @@ function HeroSection() {
           delay={100}
           staggerInterval={50}
           duration={800}
+          cmsSection="hero"
+          cmsField="title"
         />
 
         <ScrollReveal animation="blur" delay={400} duration={900}>
@@ -435,6 +437,8 @@ function ServicesSection() {
             delay={0}
             staggerInterval={80}
             duration={900}
+            cmsSection="services"
+            cmsField="meetTitle"
           />
           <EditableText
             section="services"
@@ -857,6 +861,8 @@ function CtaSection() {
           delay={300}
           staggerInterval={80}
           duration={1000}
+          cmsSection="cta"
+          cmsField="title"
         />
 
         <ScrollReveal animation="blur" delay={600} duration={1000}>
