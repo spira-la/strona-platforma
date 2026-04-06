@@ -19,10 +19,17 @@ const passwordSchema = z
 
 type PasswordData = z.infer<typeof passwordSchema>;
 
+function isRecoveryFlow(): boolean {
+  const hash = window.location.hash;
+  return hash.includes('type=recovery');
+}
+
 export default function AuthCallback() {
   const navigate = useNavigate();
   const { updatePassword } = useAuth();
-  const [mode, setMode] = useState<'loading' | 'reset' | 'success' | 'error'>('loading');
+  const [mode, setMode] = useState<'loading' | 'reset' | 'success'>(() =>
+    isRecoveryFlow() ? 'reset' : 'loading',
+  );
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -38,22 +45,21 @@ export default function AuthCallback() {
       return;
     }
 
+    // If already detected as recovery from hash, don't redirect
+    if (mode === 'reset') return;
+
+    // Listen for auth events
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'PASSWORD_RECOVERY') {
         setMode('reset');
       } else if (event === 'SIGNED_IN') {
-        // Email confirmation or magic link — redirect home
-        if (mode === 'loading') {
-          setTimeout(() => navigate('/', { replace: true }), 500);
-        }
+        navigate('/', { replace: true });
       }
     });
 
     // Fallback: if no event fires within 3s, redirect home
     const timeout = setTimeout(() => {
-      if (mode === 'loading') {
-        navigate('/', { replace: true });
-      }
+      navigate('/', { replace: true });
     }, 3000);
 
     return () => {
@@ -110,30 +116,6 @@ export default function AuthCallback() {
             className="font-['Lato'] text-[15px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] transition-colors duration-200 rounded-lg px-8 py-3"
           >
             Przejdź do strony głównej
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // Error state
-  if (mode === 'error') {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#F9F6F0] px-4">
-        <div className="bg-white rounded-xl shadow-2xl w-full max-w-[420px] p-8 text-center">
-          <img src={spiralaLogo} alt="" className="w-20 h-20 mx-auto mb-4 object-contain" />
-          <h1 className="font-['Playfair_Display'] text-[24px] font-bold text-[#2D2D2D] mb-2">
-            Link wygasł
-          </h1>
-          <p className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-relaxed mb-6">
-            Ten link do resetowania hasła jest nieaktualny. Spróbuj ponownie.
-          </p>
-          <button
-            type="button"
-            onClick={() => navigate('/', { replace: true })}
-            className="font-['Lato'] text-[15px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] transition-colors duration-200 rounded-lg px-8 py-3"
-          >
-            Wróć na stronę główną
           </button>
         </div>
       </div>
