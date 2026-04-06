@@ -84,6 +84,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (error) throw new Error(error.message);
   }
 
+  async function resetPassword(email: string): Promise<void> {
+    if (!supabase) throw new Error('Supabase not configured');
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth/callback`,
+    });
+    if (error) throw new Error(error.message);
+  }
+
   const value: AuthContextValue = {
     user,
     session,
@@ -93,6 +101,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     signUp,
     signOut,
     signInWithGoogle,
+    resetPassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

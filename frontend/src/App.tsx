@@ -18,6 +18,7 @@ const Services = lazy(() => import('@/pages/Services'));
 const Blog = lazy(() => import('@/pages/Blog'));
 const Contact = lazy(() => import('@/pages/Contact'));
 const Confirmation = lazy(() => import('@/pages/Confirmation'));
+const AuthCallback = lazy(() => import('@/pages/AuthCallback'));
 
 // Feature-flagged pages — lazy only when flags are active
 const Webinars = lazy(() => import('@/pages/Webinars'));
@@ -89,6 +90,14 @@ function AppRoutes() {
           element={
             <Suspense fallback={<LoadingFallback />}>
               <Contact />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/auth/callback"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <AuthCallback />
             </Suspense>
           }
         />

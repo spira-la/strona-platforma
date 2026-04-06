@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { EditableText } from '@/components/cms/EditableText';
+import spiralaIcon from '@/assets/spirala-icon.png';
 
 function InstagramIcon({ size = 18 }: { size?: number }) {
   return (
@@ -106,10 +107,13 @@ export function Footer() {
           <div className="flex flex-col gap-4 lg:max-w-[280px]">
             <Link
               to="/"
-              className="font-['Playfair_Display'] text-[20px] font-bold tracking-[-0.5px] text-[#B8944A] hover:text-[#8A6F2E] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded self-start"
+              className="flex items-center gap-2 self-start transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded"
               aria-label="Spirala — strona główna"
             >
-              Spirala
+              <img src={spiralaIcon} alt="" className="h-8 w-auto" aria-hidden="true" />
+              <span className="font-['Playfair_Display'] text-[20px] font-bold tracking-[-0.5px] text-[#B8944A] hover:text-[#8A6F2E]">
+                Spirala
+              </span>
             </Link>
 
             <p className="font-['Lato'] text-[14px] leading-relaxed text-[#6B6B6B]">

@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { CMSEditToolbar } from '@/components/cms/CMSEditToolbar';
+import { AuthModal } from '@/components/auth/AuthModal';
 import { useSmoothScroll } from '@/hooks/useSmoothScroll';
 
 interface LayoutProps {
@@ -27,6 +28,7 @@ export function Layout({ children }: LayoutProps) {
       <main className={hasHero ? 'flex-1' : 'flex-1 pt-[72px]'}>{children}</main>
       <Footer />
       <CMSEditToolbar />
+      <AuthModal />
     </div>
   );
 }
