@@ -85,8 +85,8 @@ run_migrations() {
     set -a
     source "$ENV_FILE"
     set +a
-    npm ci --ignore-scripts --silent 2>/dev/null || npm install --ignore-scripts --silent
-    npx drizzle-kit migrate 2>&1 || echo "  WARNING: No pending migrations or migration failed"
+    npm ci --silent 2>/dev/null || npm install --silent
+    npm run db:migrate 2>&1 || echo "  WARNING: No pending migrations or migration failed"
   else
     echo "  WARNING: $ENV_FILE not found, skipping migrations"
   fi
