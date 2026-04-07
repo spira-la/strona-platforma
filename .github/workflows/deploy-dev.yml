@@ -66,8 +66,8 @@ jobs:
             cd ${{ secrets.SPIRALA_APP_DIR }}/backend
             # Run database migrations before building
             set -a && source .env.development && set +a
-            npm ci --ignore-scripts
-            npx drizzle-kit migrate 2>&1 || echo "WARNING: migration failed or no pending migrations"
+            npm ci
+            npm run db:migrate 2>&1 || echo "WARNING: migration failed or no pending migrations"
             # Build and deploy
             docker compose -f docker-compose.dev.yml build --no-cache
             docker compose -f docker-compose.dev.yml up -d --force-recreate
