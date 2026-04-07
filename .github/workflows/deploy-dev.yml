@@ -64,6 +64,11 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             cd ${{ secrets.SPIRALA_APP_DIR }}/backend
+            # Run database migrations before building
+            export $(grep -v '^#' .env.development | grep -v '^\s*$' | xargs)
+            npm ci --ignore-scripts
+            npx drizzle-kit migrate 2>&1 || echo "WARNING: migration failed or no pending migrations"
+            # Build and deploy
             docker compose -f docker-compose.dev.yml build --no-cache
             docker compose -f docker-compose.dev.yml up -d --force-recreate
             # Health check with retries
