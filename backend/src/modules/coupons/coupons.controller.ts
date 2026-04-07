@@ -83,12 +83,12 @@ export class CouponsController {
 
   /**
    * DELETE /api/coupons/:id
-   * Admin — soft-delete a coupon (sets isActive=false).
+   * Admin — soft-delete (archive) a coupon.
    */
   @Delete(':id')
   async softDelete(@Param('id') id: string) {
-    const data = await this.coupons.softDelete(id);
-    return { success: true, data };
+    await this.coupons.softDelete(id);
+    return { success: true };
   }
 
   /**

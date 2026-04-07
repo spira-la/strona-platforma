@@ -64,6 +64,233 @@
         "business": "Negocio",
         "system": "Sistema"
       }
+    },
+    "dashboard": {
+      "title": "Panel",
+      "greeting": "¡Bienvenido! Aquí tienes un resumen de tu práctica.",
+      "stats": {
+        "upcomingSessions": "Próximas sesiones",
+        "thisWeek": "esta semana",
+        "clients": "Clientes",
+        "total": "total",
+        "revenue": "Ingresos",
+        "thisMonth": "este mes",
+        "newsletter": "Newsletter",
+        "subscribers": "suscriptores"
+      },
+      "upcomingSessions": "Próximas sesiones",
+      "viewAll": "Ver todas",
+      "sessionsList": "Lista de próximas sesiones",
+      "quickActions": "Acciones rápidas",
+      "blockSlot": "Bloquear horario",
+      "writeNewsletter": "Escribir newsletter",
+      "newArticle": "Nuevo artículo",
+      "addCoupon": "Añadir cupón"
+    },
+    "sessions": {
+      "title": "Sesiones",
+      "description": "Gestionar sesiones y reservas"
+    },
+    "availability": {
+      "title": "Disponibilidad",
+      "description": "Configurar horario de trabajo"
+    },
+    "services": {
+      "title": "Servicios",
+      "description": "Gestionar servicios y precios",
+      "stats": {
+        "total": "Todos los servicios",
+        "active": "Activos",
+        "archived": "Archivados",
+        "avgPrice": "Precio medio"
+      },
+      "filter": {
+        "active": "Activos",
+        "inactive": "Archivados"
+      },
+      "searchPlaceholder": "Buscar por nombre...",
+      "searchLabel": "Buscar servicio",
+      "newService": "Nuevo servicio",
+      "editService": "Editar servicio",
+      "table": {
+        "name": "Nombre",
+        "duration": "Duración",
+        "sessions": "Sesiones",
+        "price": "Precio",
+        "status": "Estado",
+        "actions": "Acciones",
+        "label": "Lista de servicios"
+      },
+      "status": {
+        "active": "Activo",
+        "inactive": "Archivado"
+      },
+      "form": {
+        "name": "Nombre del servicio",
+        "namePlaceholder": "p. ej. Sesión individual",
+        "description": "Descripción",
+        "descriptionPlaceholder": "Descripción breve del servicio (opcional)",
+        "duration": "Duración",
+        "durationPlaceholder": "p. ej. 60",
+        "sessionCount": "Número de sesiones",
+        "sessionCountPlaceholder": "p. ej. 1",
+        "price": "Precio (PLN)",
+        "pricePlaceholder": "p. ej. 250.00",
+        "sortOrder": "Orden",
+        "sortOrderPlaceholder": "p. ej. 0",
+        "activeToggle": "Activo",
+        "save": "Guardar cambios",
+        "create": "Crear servicio"
+      },
+      "validation": {
+        "nameRequired": "El nombre es obligatorio.",
+        "durationRequired": "Introduce una duración de al menos 1 minuto.",
+        "priceRequired": "Introduce un precio mayor que cero."
+      },
+      "confirm": {
+        "archive": "¿Estás seguro de que quieres archivar el servicio",
+        "restore": "¿Estás seguro de que quieres restaurar el servicio"
+      },
+      "actions": {
+        "edit": "Editar",
+        "editService": "Editar servicio",
+        "archive": "Archivar",
+        "restore": "Restaurar",
+        "archiveService": "Archivar servicio",
+        "restoreService": "Restaurar servicio"
+      },
+      "empty": {
+        "noResults": "Ningún servicio coincide con tu búsqueda.",
+        "noServices": "Aún no tienes ningún servicio. Haz clic en \"Nuevo servicio\" para añadir el primero."
+      },
+      "errors": {
+        "loadFailed": "No se pudieron cargar los servicios. Actualiza la página."
+      },
+      "durationUnit": "min",
+      "sessionUnit": "sesión"
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "Gestionar artículos"
+    },
+    "blogEditor": {
+      "title": "Editor de artículos",
+      "description": "Crear y editar artículos"
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "description": "Gestionar suscriptores y campañas"
+    },
+    "invoices": {
+      "title": "Facturas",
+      "description": "Historial de facturas y generación de PDF"
+    },
+    "seo": {
+      "title": "SEO",
+      "description": "Gestión de metaetiquetas y optimización"
+    },
+    "common": {
+      "inPreparation": "Esta sección está en preparación.",
+      "confirmDelete": "¿Estás seguro? Esta acción no se puede deshacer.",
+      "created": "Creado exitosamente",
+      "updated": "Actualizado exitosamente",
+      "deleted": "Eliminado exitosamente",
+      "error": "Ocurrió un error"
+    },
+    "coupons": {
+      "title": "Cupones",
+      "description": "Códigos de descuento y promociones",
+      "stats": {
+        "allCoupons": "Todos los cupones",
+        "active": "Activos",
+        "expired": "Caducados",
+        "totalUses": "Usos totales"
+      },
+      "filter": {
+        "all": "Todos",
+        "active": "Activos",
+        "inactive": "Archivados"
+      },
+      "searchPlaceholder": "Buscar por código...",
+      "searchLabel": "Buscar cupón",
+      "newCoupon": "Nuevo cupón",
+      "editCoupon": "Editar cupón",
+      "close": "Cerrar",
+      "table": {
+        "code": "Código",
+        "type": "Tipo",
+        "value": "Valor",
+        "uses": "Usos",
+        "expires": "Caduca",
+        "status": "Estado",
+        "actions": "Acciones",
+        "label": "Lista de cupones"
+      },
+      "status": {
+        "expired": "Caducado",
+        "active": "Activo",
+        "inactive": "Inactivo"
+      },
+      "discountType": {
+        "percentage": "Porcentaje",
+        "fixed": "Importe fijo"
+      },
+      "form": {
+        "couponCode": "Código del cupón",
+        "codePlaceholder": "p. ej. VERANO2025",
+        "generate": "Generar",
+        "generateTooltip": "Generar código aleatorio",
+        "discountType": "Tipo de descuento",
+        "discountValue": "Valor del descuento",
+        "valuePlaceholder": "p. ej. 20",
+        "maxUses": "Usos máximos",
+        "noLimit": "Sin límite",
+        "expiryDate": "Fecha de caducidad",
+        "noExpiry": "Sin fecha de caducidad",
+        "activeToggle": "Activo",
+        "save": "Guardar cambios",
+        "create": "Crear cupón"
+      },
+      "validation": {
+        "codeRequired": "El código es obligatorio.",
+        "valueRequired": "Introduce un valor mayor que cero.",
+        "percentageMax": "El valor porcentual no puede superar 100.",
+        "usesRequired": "Introduce un número mayor que cero.",
+        "expiryRequired": "Selecciona una fecha de caducidad."
+      },
+      "confirm": {
+        "archive": "¿Estás seguro de que quieres archivar el cupón",
+        "restore": "¿Estás seguro de que quieres restaurar el cupón"
+      },
+      "delete": {
+        "title": "Eliminar cupón",
+        "confirm": "¿Estás seguro de que quieres eliminar el cupón",
+        "irreversible": "Esta acción no se puede deshacer.",
+        "cancel": "Cancelar",
+        "delete": "Eliminar",
+        "confirmLabel": "Confirmar eliminación"
+      },
+      "actions": {
+        "edit": "Editar",
+        "editCoupon": "Editar cupón",
+        "archive": "Archivar",
+        "restore": "Restaurar",
+        "archiveCoupon": "Archivar cupón",
+        "restoreCoupon": "Restaurar cupón",
+        "copyCode": "Copiar código",
+        "copied": "Copiado"
+      },
+      "empty": {
+        "noResults": "Ningún cupón coincide con tu búsqueda.",
+        "noCoupons": "Aún no tienes ningún cupón. Haz clic en \"Nuevo cupón\" para añadir el primero."
+      },
+      "errors": {
+        "loadFailed": "No se pudieron cargar los cupones. Actualiza la página.",
+        "createFailed": "Error al crear el cupón:",
+        "updateFailed": "Error al actualizar el cupón:",
+        "deleteFailed": "Error al eliminar el cupón:",
+        "unknown": "Error desconocido"
+      }
     }
   }
 }

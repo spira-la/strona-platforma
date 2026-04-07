@@ -6,6 +6,7 @@ import { ALL_ENTITIES } from './db/entities/index.js';
 import { CoreModule } from './core/core.module.js';
 import { CmsModule } from './modules/cms/cms.module.js';
 import { CouponsModule } from './modules/coupons/coupons.module.js';
+import { CoachingServicesModule } from './modules/coaching-services/coaching-services.module.js';
 import { EmailModule } from './modules/email/email.module.js';
 import { AppController } from './app.controller.js';
 
@@ -47,6 +48,7 @@ import { AppController } from './app.controller.js';
     EmailModule,
     CmsModule,
     CouponsModule,
+    CoachingServicesModule,
   ],
   controllers: [AppController],
 })

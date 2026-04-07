@@ -64,6 +64,233 @@
         "business": "Biznes",
         "system": "System"
       }
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "greeting": "Witaj! Oto przegląd Twojej praktyki.",
+      "stats": {
+        "upcomingSessions": "Nadchodzące sesje",
+        "thisWeek": "w tym tygodniu",
+        "clients": "Klienci",
+        "total": "łącznie",
+        "revenue": "Przychód",
+        "thisMonth": "ten miesiąc",
+        "newsletter": "Newsletter",
+        "subscribers": "subskrybentów"
+      },
+      "upcomingSessions": "Najbliższe sesje",
+      "viewAll": "Zobacz wszystkie",
+      "sessionsList": "Lista nadchodzących sesji",
+      "quickActions": "Szybkie akcje",
+      "blockSlot": "Zablokuj termin",
+      "writeNewsletter": "Napisz newsletter",
+      "newArticle": "Nowy artykuł",
+      "addCoupon": "Dodaj kupon"
+    },
+    "sessions": {
+      "title": "Sesje",
+      "description": "Zarządzaj sesjami i rezerwacjami"
+    },
+    "availability": {
+      "title": "Dostępność",
+      "description": "Skonfiguruj godziny pracy"
+    },
+    "services": {
+      "title": "Usługi",
+      "description": "Zarządzaj usługami i cennikiem",
+      "stats": {
+        "total": "Wszystkie usługi",
+        "active": "Aktywne",
+        "archived": "Zarchiwizowane",
+        "avgPrice": "Średnia cena"
+      },
+      "filter": {
+        "active": "Aktywne",
+        "inactive": "Zarchiwizowane"
+      },
+      "searchPlaceholder": "Szukaj po nazwie...",
+      "searchLabel": "Szukaj usługi",
+      "newService": "Nowa usługa",
+      "editService": "Edytuj usługę",
+      "table": {
+        "name": "Nazwa",
+        "duration": "Czas trwania",
+        "sessions": "Sesje",
+        "price": "Cena",
+        "status": "Status",
+        "actions": "Akcje",
+        "label": "Lista usług"
+      },
+      "status": {
+        "active": "Aktywna",
+        "inactive": "Zarchiwizowana"
+      },
+      "form": {
+        "name": "Nazwa usługi",
+        "namePlaceholder": "np. Sesja indywidualna",
+        "description": "Opis",
+        "descriptionPlaceholder": "Krótki opis usługi (opcjonalnie)",
+        "duration": "Czas trwania",
+        "durationPlaceholder": "np. 60",
+        "sessionCount": "Liczba sesji",
+        "sessionCountPlaceholder": "np. 1",
+        "price": "Cena (zł)",
+        "pricePlaceholder": "np. 250.00",
+        "sortOrder": "Kolejność",
+        "sortOrderPlaceholder": "np. 0",
+        "activeToggle": "Aktywna",
+        "save": "Zapisz zmiany",
+        "create": "Utwórz usługę"
+      },
+      "validation": {
+        "nameRequired": "Nazwa jest wymagana.",
+        "durationRequired": "Podaj czas trwania (min. 1 minuta).",
+        "priceRequired": "Podaj cenę większą od zera."
+      },
+      "confirm": {
+        "archive": "Czy na pewno chcesz zarchiwizować usługę",
+        "restore": "Czy na pewno chcesz przywrócić usługę"
+      },
+      "actions": {
+        "edit": "Edytuj",
+        "editService": "Edytuj usługę",
+        "archive": "Archiwizuj",
+        "restore": "Przywróć",
+        "archiveService": "Archiwizuj usługę",
+        "restoreService": "Przywróć usługę"
+      },
+      "empty": {
+        "noResults": "Brak usług pasujących do wyszukiwania.",
+        "noServices": "Nie masz jeszcze żadnych usług. Kliknij \"Nowa usługa\", aby dodać pierwszą."
+      },
+      "errors": {
+        "loadFailed": "Nie udało się załadować usług. Odśwież stronę."
+      },
+      "durationUnit": "min",
+      "sessionUnit": "sesja"
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "Zarządzaj artykułami"
+    },
+    "blogEditor": {
+      "title": "Edytor artykułu",
+      "description": "Twórz i edytuj artykuły"
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "description": "Zarządzaj subskrybentami i kampaniami"
+    },
+    "invoices": {
+      "title": "Faktury",
+      "description": "Historia faktur i generowanie PDF"
+    },
+    "seo": {
+      "title": "SEO",
+      "description": "Zarządzanie meta tagami i optymalizacja"
+    },
+    "common": {
+      "inPreparation": "Ta sekcja jest w przygotowaniu.",
+      "confirmDelete": "Czy na pewno? Tej operacji nie można cofnąć.",
+      "created": "Utworzono pomyślnie",
+      "updated": "Zaktualizowano pomyślnie",
+      "deleted": "Usunięto pomyślnie",
+      "error": "Wystąpił błąd"
+    },
+    "coupons": {
+      "title": "Kupony",
+      "description": "Kody rabatowe i promocje",
+      "stats": {
+        "allCoupons": "Wszystkie kupony",
+        "active": "Aktywne",
+        "expired": "Wygasłe",
+        "totalUses": "Łączne użycia"
+      },
+      "filter": {
+        "all": "Wszystkie",
+        "active": "Aktywne",
+        "inactive": "Archiwalne"
+      },
+      "searchPlaceholder": "Szukaj po kodzie...",
+      "searchLabel": "Szukaj kuponu",
+      "newCoupon": "Nowy kupon",
+      "editCoupon": "Edytuj kupon",
+      "close": "Zamknij",
+      "table": {
+        "code": "Kod",
+        "type": "Typ",
+        "value": "Wartość",
+        "uses": "Użycia",
+        "expires": "Wygasa",
+        "status": "Status",
+        "actions": "Akcje",
+        "label": "Lista kuponów"
+      },
+      "status": {
+        "expired": "Wygasły",
+        "active": "Aktywny",
+        "inactive": "Nieaktywny"
+      },
+      "discountType": {
+        "percentage": "Procentowy",
+        "fixed": "Kwotowy"
+      },
+      "form": {
+        "couponCode": "Kod kuponu",
+        "codePlaceholder": "np. LATO2025",
+        "generate": "Generuj",
+        "generateTooltip": "Generuj losowy kod",
+        "discountType": "Typ rabatu",
+        "discountValue": "Wartość rabatu",
+        "valuePlaceholder": "np. 20",
+        "maxUses": "Maksymalna liczba użyć",
+        "noLimit": "Bez limitu",
+        "expiryDate": "Data wygaśnięcia",
+        "noExpiry": "Bez daty wygaśnięcia",
+        "activeToggle": "Aktywny",
+        "save": "Zapisz zmiany",
+        "create": "Utwórz kupon"
+      },
+      "validation": {
+        "codeRequired": "Kod jest wymagany.",
+        "valueRequired": "Podaj wartość większą od zera.",
+        "percentageMax": "Wartość procentowa nie może przekraczać 100.",
+        "usesRequired": "Podaj liczbę większą od zera.",
+        "expiryRequired": "Wybierz datę wygaśnięcia."
+      },
+      "confirm": {
+        "archive": "Czy na pewno chcesz zarchiwizować kupon",
+        "restore": "Czy na pewno chcesz przywrócić kupon"
+      },
+      "delete": {
+        "title": "Usuń kupon",
+        "confirm": "Czy na pewno chcesz usunąć kupon",
+        "irreversible": "Tej operacji nie można cofnąć.",
+        "cancel": "Anuluj",
+        "delete": "Usuń",
+        "confirmLabel": "Potwierdź usunięcie"
+      },
+      "actions": {
+        "edit": "Edytuj",
+        "editCoupon": "Edytuj kupon",
+        "archive": "Archiwizuj",
+        "restore": "Przywróć",
+        "archiveCoupon": "Archiwizuj kupon",
+        "restoreCoupon": "Przywróć kupon",
+        "copyCode": "Kopiuj kod",
+        "copied": "Skopiowano"
+      },
+      "empty": {
+        "noResults": "Brak kuponów pasujących do wyszukiwania.",
+        "noCoupons": "Nie masz jeszcze żadnych kuponów. Kliknij \"Nowy kupon\", aby dodać pierwszy."
+      },
+      "errors": {
+        "loadFailed": "Nie udało się załadować kuponów. Odśwież stronę.",
+        "createFailed": "Błąd podczas tworzenia kuponu:",
+        "updateFailed": "Błąd podczas aktualizacji kuponu:",
+        "deleteFailed": "Błąd podczas usuwania kuponu:",
+        "unknown": "Nieznany błąd"
+      }
     }
   }
 }

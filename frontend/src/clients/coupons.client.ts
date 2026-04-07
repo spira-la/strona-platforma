@@ -28,13 +28,13 @@ export interface CreateCouponData {
 export type UpdateCouponData = Partial<CreateCouponData>;
 
 interface GetAllResponse {
-  coupons: Coupon[];
-  total: number;
+  success: boolean;
+  data: Coupon[];
 }
 
 interface CouponResponse {
   success: boolean;
-  coupon: Coupon;
+  data: Coupon;
 }
 
 interface DeleteResponse {
@@ -46,20 +46,20 @@ interface DeleteResponse {
 // ---------------------------------------------------------------------------
 
 export const couponsClient = {
-  getAll(): Promise<GetAllResponse> {
-    return api.get<GetAllResponse>('/coupons');
+  getAll(): Promise<Coupon[]> {
+    return api.get<GetAllResponse>('/coupons').then((res) => res.data);
   },
 
   create(data: CreateCouponData): Promise<Coupon> {
     return api
       .post<CouponResponse>('/coupons', data)
-      .then((res) => res.coupon);
+      .then((res) => res.data);
   },
 
   update(id: string, data: UpdateCouponData): Promise<Coupon> {
     return api
       .put<CouponResponse>(`/coupons/${id}`, data)
-      .then((res) => res.coupon);
+      .then((res) => res.data);
   },
 
   remove(id: string): Promise<void> {

@@ -16,8 +16,10 @@ import {
   X,
   ChevronsLeft,
   ChevronsRight,
+  Globe,
 } from 'lucide-react';
 import spiralaIcon from '@/assets/spirala-icon.png';
+import { ToastContainer } from '@/components/ui/ToastContainer';
 
 // ─── Nav configuration ───────────────────────────────────────────────────────
 
@@ -63,6 +65,12 @@ const NAV_SECTIONS: NavSection[] = [
       { path: '/admin/seo', icon: Search, labelKey: 'admin.nav.seo' },
     ],
   },
+];
+
+const LANGUAGES = [
+  { code: 'pl', label: 'PL' },
+  { code: 'en', label: 'EN' },
+  { code: 'es', label: 'ES' },
 ];
 
 const STORAGE_KEY = 'spirala_sidebar_collapsed';
@@ -145,7 +153,11 @@ interface SidebarFooterProps {
 }
 
 function SidebarFooter({ collapsed, onBack, onToggleCollapse }: SidebarFooterProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  const handleLangChange = (code: string) => {
+    void i18n.changeLanguage(code);
+  };
 
   const footerBtnClass = (extraClass = '') =>
     [
@@ -158,6 +170,37 @@ function SidebarFooter({ collapsed, onBack, onToggleCollapse }: SidebarFooterPro
 
   return (
     <div className="px-3 py-3 border-t border-[#E8E4DF] space-y-0.5 flex-shrink-0">
+      {/* Language switcher */}
+      <div
+        className={[
+          'flex items-center rounded-lg py-2',
+          collapsed ? 'flex-col gap-1 px-1' : 'gap-1 px-3',
+        ].join(' ')}
+      >
+        {!collapsed && (
+          <Globe className="h-4 w-4 text-[#AAAAAA] flex-shrink-0 mr-1" aria-hidden="true" />
+        )}
+        {collapsed && (
+          <Globe className="h-4 w-4 text-[#AAAAAA] flex-shrink-0 mb-0.5" aria-hidden="true" />
+        )}
+        {LANGUAGES.map((lang) => (
+          <button
+            key={lang.code}
+            type="button"
+            onClick={() => handleLangChange(lang.code)}
+            aria-pressed={lang.code === i18n.language}
+            className={[
+              "font-['Inter'] text-[11px] font-medium px-2 py-1 rounded transition-colors duration-150",
+              lang.code === i18n.language
+                ? 'bg-[#B8963E]/10 text-[#B8963E]'
+                : 'text-[#AAAAAA] hover:text-[#6B6B6B] hover:bg-[#F9F6F0]',
+            ].join(' ')}
+          >
+            {lang.label}
+          </button>
+        ))}
+      </div>
+
       <button
         type="button"
         onClick={onBack}
@@ -225,7 +268,7 @@ function SidebarBranding({ collapsed }: SidebarBrandingProps) {
 // ─── AdminLayout ──────────────────────────────────────────────────────────────
 
 export function AdminLayout() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   const [isCollapsed, setIsCollapsed] = useState<boolean>(() => {
@@ -364,8 +407,31 @@ export function AdminLayout() {
 
         <SidebarNav collapsed={false} onNavigate={handleCloseMobile} />
 
-        {/* Mobile back link */}
-        <div className="px-3 py-3 border-t border-[#E8E4DF] flex-shrink-0">
+        {/* Mobile footer: language switcher + back link */}
+        <div className="px-3 py-3 border-t border-[#E8E4DF] flex-shrink-0 space-y-1">
+          {/* Language switcher (mobile) */}
+          <div className="flex items-center gap-1 px-3 py-2 rounded-lg">
+            <Globe className="h-4 w-4 text-[#AAAAAA] flex-shrink-0 mr-1" aria-hidden="true" />
+            {LANGUAGES.map((lang) => (
+              <button
+                key={lang.code}
+                type="button"
+                onClick={() => {
+                  void i18n.changeLanguage(lang.code);
+                }}
+                aria-pressed={lang.code === i18n.language}
+                className={[
+                  "font-['Inter'] text-[11px] font-medium px-2 py-1 rounded transition-colors duration-150",
+                  lang.code === i18n.language
+                    ? 'bg-[#B8963E]/10 text-[#B8963E]'
+                    : 'text-[#AAAAAA] hover:text-[#6B6B6B] hover:bg-[#F9F6F0]',
+                ].join(' ')}
+              >
+                {lang.label}
+              </button>
+            ))}
+          </div>
+
           <button
             type="button"
             onClick={() => {
@@ -391,6 +457,8 @@ export function AdminLayout() {
           <Outlet />
         </div>
       </main>
+
+      <ToastContainer />
     </div>
   );
 }
