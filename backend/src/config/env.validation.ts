@@ -2,7 +2,17 @@ import { z } from 'zod';
 
 const envSchema = z.object({
   // Database
-  DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
+  DATABASE_HOST: z.string().min(1, 'DATABASE_HOST is required'),
+  DATABASE_PORT: z
+    .string()
+    .optional()
+    .transform((val) => (val ? parseInt(val, 10) : 5432))
+    .pipe(z.number().int()),
+  DATABASE_USER: z.string().min(1, 'DATABASE_USER is required'),
+  DATABASE_PASSWORD: z.string().min(1, 'DATABASE_PASSWORD is required'),
+  DATABASE_NAME: z.string().min(1, 'DATABASE_NAME is required'),
+  DATABASE_SCHEMA: z.string().optional(),
+  DATABASE_SSL: z.string().optional(),
 
   // Server
   PORT: z

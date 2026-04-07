@@ -4,19 +4,22 @@ import { config } from 'dotenv';
 config({ path: '.env.local' });
 config({ path: '.env' });
 
-const schema = process.env.DB_SCHEMA ?? 'spirala_dev_schema';
-const useSSL = process.env.DB_SSL === 'true';
+const schema = process.env.DATABASE_SCHEMA ?? 'spirala_dev_schema';
+const useSSL = process.env.DATABASE_SSL === 'true';
 
 /**
- * TypeORM DataSource used by the CLI (migrations:generate, migrations:run).
+ * TypeORM DataSource for CLI (migration:generate, migration:run).
  *
- * - uuidExtension: 'pgcrypto' => uses gen_random_uuid() (PG 13+ native)
- * - schema: from DB_SCHEMA env var => migrations are schema-agnostic
- * - SSL: only when DB_SSL=true (for Supabase), disabled for local PostgreSQL
+ * Reads individual DATABASE_* env vars — no monolithic URL.
+ * SSL only when DATABASE_SSL=true (e.g. Supabase), off for local PostgreSQL.
  */
 export default new DataSource({
   type: 'postgres',
-  url: process.env.DATABASE_URL,
+  host: process.env.DATABASE_HOST ?? 'localhost',
+  port: parseInt(process.env.DATABASE_PORT ?? '5432', 10),
+  username: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME,
   schema,
   entities: [__dirname + '/../db/entities/*.{ts,js}'],
   migrations: [__dirname + '/../db/migrations/*.{ts,js}'],

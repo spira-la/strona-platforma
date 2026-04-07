@@ -20,11 +20,15 @@ import { AppController } from './app.controller.js';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
-        const schema = config.get<string>('DB_SCHEMA') ?? 'spirala_dev_schema';
-        const useSSL = config.get<string>('DB_SSL') === 'true';
+        const schema = config.get<string>('DATABASE_SCHEMA') ?? 'spirala_dev_schema';
+        const useSSL = config.get<string>('DATABASE_SSL') === 'true';
         return {
           type: 'postgres' as const,
-          url: config.getOrThrow<string>('DATABASE_URL'),
+          host: config.getOrThrow<string>('DATABASE_HOST'),
+          port: config.get<number>('DATABASE_PORT') ?? 5432,
+          username: config.getOrThrow<string>('DATABASE_USER'),
+          password: config.getOrThrow<string>('DATABASE_PASSWORD'),
+          database: config.getOrThrow<string>('DATABASE_NAME'),
           schema,
           entities: ALL_ENTITIES,
           synchronize: false,

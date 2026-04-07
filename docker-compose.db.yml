@@ -4,12 +4,13 @@
 # MANUAL use only — NOT part of the CI/CD pipeline.
 # Start once on the server and leave running.
 #
-# Usage:
-#   docker compose -f docker-compose.db.yml up -d
+# Setup:
+#   1. Create .env.db with passwords (see .env.db.example)
+#   2. docker compose -f docker-compose.db.yml up -d
 #
-# Two databases created on init:
-#   - spirala_dev (schema: spirala_dev_schema, user: spirala_dev)
-#   - spirala_prod (schema: spirala_schema, user: spirala)
+# Two databases created on first run:
+#   - spirala_dev  (schema: spirala_dev_schema, user: spirala_dev)
+#   - spirala_prod (schema: spirala_schema,     user: spirala)
 # =====================================================================
 
 services:
@@ -18,13 +19,11 @@ services:
     container_name: spirala-db
     ports:
       - "45432:5432"
-    environment:
-      POSTGRES_USER: spirala_admin
-      POSTGRES_PASSWORD: ${DB_ADMIN_PASSWORD:-SpR1l4_Adm1n_2026!}
-      POSTGRES_DB: postgres
+    env_file:
+      - .env.db
     volumes:
       - spirala-db-data:/var/lib/postgresql/data
-      - ./docker/db-init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+      - ./docker/db-init.sh:/docker-entrypoint-initdb.d/01-init.sh:ro
     restart: unless-stopped
     networks:
       - spirala-db-network
@@ -34,7 +33,7 @@ services:
           cpus: '1.0'
           memory: 512M
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U spirala_admin -d postgres"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -45,8 +44,6 @@ services:
       - "max_connections=100"
       - "-c"
       - "shared_buffers=128MB"
-      - "-c"
-      - "log_statement=none"
 
 volumes:
   spirala-db-data:
