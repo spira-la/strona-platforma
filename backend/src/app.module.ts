@@ -28,7 +28,10 @@ import { AppController } from './app.controller.js';
         migrationsRun: false,
         migrations: [],
         ssl: { rejectUnauthorized: false },
-        extra: { ssl: { rejectUnauthorized: false } },
+        extra: {
+          ssl: { rejectUnauthorized: false },
+          options: `-c search_path=${process.env.DB_SCHEMA ?? 'spirala_dev_schema'},public`,
+        },
         logging: process.env.NODE_ENV === 'development',
       }),
     }),
