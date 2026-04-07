@@ -4,6 +4,12 @@ export class AddLanguagesTable1775570100000 implements MigrationInterface {
   name = 'AddLanguagesTable1775570100000';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
+    // Add parent_id column to categories (missing from initial migration)
+    await queryRunner.query(`
+      ALTER TABLE "categories"
+      ADD COLUMN IF NOT EXISTS "parent_id" uuid
+    `);
+
     await queryRunner.query(`
       CREATE TABLE IF NOT EXISTS "languages" (
         "id" uuid NOT NULL DEFAULT gen_random_uuid(),
