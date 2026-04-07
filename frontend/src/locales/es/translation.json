@@ -58,11 +58,430 @@
       "invoices": "Facturas",
       "coupons": "Cupones",
       "seo": "SEO",
+      "contact": "Mensajes",
+      "categories": "Categorías",
+      "languages": "Idiomas",
       "sections": {
         "main": "Principal",
+        "management": "Gestión",
         "content": "Contenido",
         "business": "Negocio",
-        "system": "Sistema"
+        "system": "Sistema",
+        "catalog": "Catálogo"
+      }
+    },
+    "dashboard": {
+      "title": "Panel",
+      "greeting": "¡Bienvenido! Aquí tienes un resumen de tu práctica.",
+      "stats": {
+        "upcomingSessions": "Próximas sesiones",
+        "thisWeek": "esta semana",
+        "clients": "Clientes",
+        "total": "total",
+        "revenue": "Ingresos",
+        "thisMonth": "este mes",
+        "newsletter": "Newsletter",
+        "subscribers": "suscriptores"
+      },
+      "upcomingSessions": "Próximas sesiones",
+      "viewAll": "Ver todas",
+      "sessionsList": "Lista de próximas sesiones",
+      "quickActions": "Acciones rápidas",
+      "blockSlot": "Bloquear horario",
+      "writeNewsletter": "Escribir newsletter",
+      "newArticle": "Nuevo artículo",
+      "addCoupon": "Añadir cupón"
+    },
+    "sessions": {
+      "title": "Sesiones",
+      "description": "Gestionar sesiones y reservas"
+    },
+    "availability": {
+      "title": "Disponibilidad",
+      "description": "Configurar horario de trabajo"
+    },
+    "services": {
+      "title": "Servicios",
+      "description": "Gestionar servicios y precios",
+      "stats": {
+        "total": "Todos los servicios",
+        "active": "Activos",
+        "archived": "Archivados",
+        "avgPrice": "Precio medio"
+      },
+      "filter": {
+        "active": "Activos",
+        "inactive": "Archivados"
+      },
+      "searchPlaceholder": "Buscar por nombre...",
+      "searchLabel": "Buscar servicio",
+      "newService": "Nuevo servicio",
+      "editService": "Editar servicio",
+      "table": {
+        "name": "Nombre",
+        "duration": "Duración",
+        "sessions": "Sesiones",
+        "price": "Precio",
+        "status": "Estado",
+        "actions": "Acciones",
+        "label": "Lista de servicios"
+      },
+      "status": {
+        "active": "Activo",
+        "inactive": "Archivado"
+      },
+      "form": {
+        "name": "Nombre del servicio",
+        "namePlaceholder": "p. ej. Sesión individual",
+        "description": "Descripción",
+        "descriptionPlaceholder": "Descripción breve del servicio (opcional)",
+        "duration": "Duración",
+        "durationPlaceholder": "p. ej. 60",
+        "sessionCount": "Número de sesiones",
+        "sessionCountPlaceholder": "p. ej. 1",
+        "price": "Precio (PLN)",
+        "pricePlaceholder": "p. ej. 250.00",
+        "sortOrder": "Orden",
+        "sortOrderPlaceholder": "p. ej. 0",
+        "activeToggle": "Activo",
+        "save": "Guardar cambios",
+        "create": "Crear servicio"
+      },
+      "validation": {
+        "nameRequired": "El nombre es obligatorio.",
+        "durationRequired": "Introduce una duración de al menos 1 minuto.",
+        "priceRequired": "Introduce un precio mayor que cero."
+      },
+      "confirm": {
+        "archive": "¿Estás seguro de que quieres archivar el servicio",
+        "restore": "¿Estás seguro de que quieres restaurar el servicio"
+      },
+      "actions": {
+        "edit": "Editar",
+        "editService": "Editar servicio",
+        "archive": "Archivar",
+        "restore": "Restaurar",
+        "archiveService": "Archivar servicio",
+        "restoreService": "Restaurar servicio"
+      },
+      "empty": {
+        "noResults": "Ningún servicio coincide con tu búsqueda.",
+        "noServices": "Aún no tienes ningún servicio. Haz clic en \"Nuevo servicio\" para añadir el primero."
+      },
+      "errors": {
+        "loadFailed": "No se pudieron cargar los servicios. Actualiza la página."
+      },
+      "durationUnit": "min",
+      "sessionUnit": "sesión"
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "Gestionar artículos"
+    },
+    "blogEditor": {
+      "title": "Editor de artículos",
+      "description": "Crear y editar artículos"
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "description": "Gestionar suscriptores y campañas"
+    },
+    "invoices": {
+      "title": "Facturas",
+      "description": "Historial de facturas y generación de PDF"
+    },
+    "seo": {
+      "title": "SEO",
+      "description": "Gestión de metaetiquetas y optimización"
+    },
+    "categories": {
+      "title": "Categorías",
+      "description": "Gestionar categorías de servicios y contenidos",
+      "stats": {
+        "total": "Todas las categorías",
+        "active": "Activas",
+        "archived": "Archivadas"
+      },
+      "filter": {
+        "active": "Activas",
+        "archived": "Archivadas"
+      },
+      "searchPlaceholder": "Buscar por nombre...",
+      "searchLabel": "Buscar categoría",
+      "newCategory": "Nueva categoría",
+      "editCategory": "Editar categoría",
+      "table": {
+        "name": "Nombre",
+        "slug": "Slug",
+        "description": "Descripción",
+        "sortOrder": "Orden",
+        "status": "Estado",
+        "actions": "Acciones",
+        "label": "Lista de categorías"
+      },
+      "status": {
+        "active": "Activa",
+        "archived": "Archivada"
+      },
+      "form": {
+        "name": "Nombre de la categoría",
+        "namePlaceholder": "p. ej. Coaching individual",
+        "slug": "Slug (URL)",
+        "slugPlaceholder": "p. ej. coaching-individual",
+        "description": "Descripción",
+        "descriptionPlaceholder": "Descripción breve de la categoría (opcional)",
+        "sortOrder": "Orden",
+        "sortOrderPlaceholder": "p. ej. 0",
+        "activeToggle": "Activa",
+        "save": "Guardar cambios",
+        "create": "Crear categoría"
+      },
+      "validation": {
+        "nameRequired": "El nombre es obligatorio.",
+        "slugRequired": "El slug es obligatorio."
+      },
+      "confirm": {
+        "archive": "¿Estás seguro de que quieres archivar la categoría",
+        "restore": "¿Estás seguro de que quieres restaurar la categoría"
+      },
+      "actions": {
+        "edit": "Editar",
+        "editCategory": "Editar categoría",
+        "archive": "Archivar",
+        "restore": "Restaurar",
+        "archiveCategory": "Archivar categoría",
+        "restoreCategory": "Restaurar categoría"
+      },
+      "empty": {
+        "noResults": "Ninguna categoría coincide con tu búsqueda.",
+        "noCategories": "Aún no tienes ninguna categoría. Haz clic en \"Nueva categoría\" para añadir la primera."
+      },
+      "errors": {
+        "loadFailed": "No se pudieron cargar las categorías. Actualiza la página."
+      }
+    },
+    "languages": {
+      "title": "Idiomas",
+      "description": "Gestionar idiomas de las sesiones de coaching",
+      "stats": {
+        "total": "Todos los idiomas",
+        "active": "Activos",
+        "archived": "Archivados"
+      },
+      "filter": {
+        "active": "Activos",
+        "archived": "Archivados"
+      },
+      "searchPlaceholder": "Buscar por nombre o código...",
+      "searchLabel": "Buscar idioma",
+      "newLanguage": "Nuevo idioma",
+      "editLanguage": "Editar idioma",
+      "table": {
+        "name": "Nombre",
+        "code": "Código",
+        "nativeName": "Nombre nativo",
+        "sortOrder": "Orden",
+        "status": "Estado",
+        "actions": "Acciones",
+        "label": "Lista de idiomas"
+      },
+      "status": {
+        "active": "Activo",
+        "archived": "Archivado"
+      },
+      "form": {
+        "code": "Código de idioma",
+        "codePlaceholder": "p. ej. pl",
+        "name": "Nombre",
+        "namePlaceholder": "p. ej. Polish",
+        "nativeName": "Nombre nativo",
+        "nativeNamePlaceholder": "p. ej. Polski",
+        "flag": "Bandera (emoji)",
+        "flagPlaceholder": "p. ej. 🇵🇱",
+        "sortOrder": "Orden",
+        "sortOrderPlaceholder": "p. ej. 0",
+        "activeToggle": "Activo",
+        "save": "Guardar cambios",
+        "create": "Crear idioma"
+      },
+      "validation": {
+        "codeRequired": "El código de idioma es obligatorio.",
+        "nameRequired": "El nombre es obligatorio."
+      },
+      "confirm": {
+        "archive": "¿Estás seguro de que quieres archivar el idioma",
+        "restore": "¿Estás seguro de que quieres restaurar el idioma"
+      },
+      "actions": {
+        "edit": "Editar",
+        "editLanguage": "Editar idioma",
+        "archive": "Archivar",
+        "restore": "Restaurar",
+        "archiveLanguage": "Archivar idioma",
+        "restoreLanguage": "Restaurar idioma"
+      },
+      "empty": {
+        "noResults": "Ningún idioma coincide con tu búsqueda.",
+        "noLanguages": "Aún no tienes ningún idioma. Haz clic en \"Nuevo idioma\" para añadir el primero."
+      },
+      "errors": {
+        "loadFailed": "No se pudieron cargar los idiomas. Actualiza la página."
+      }
+    },
+    "contact": {
+      "title": "Mensajes de contacto",
+      "description": "Ver y gestionar mensajes de clientes",
+      "stats": {
+        "total": "Todos los mensajes",
+        "unread": "No leídos",
+        "read": "Leídos"
+      },
+      "filter": {
+        "unread": "No leídos",
+        "read": "Leídos"
+      },
+      "table": {
+        "name": "Remitente",
+        "email": "Email",
+        "phone": "Teléfono",
+        "message": "Mensaje",
+        "date": "Fecha",
+        "status": "Estado",
+        "actions": "Acciones",
+        "label": "Lista de mensajes"
+      },
+      "status": {
+        "read": "Leído",
+        "unread": "No leído"
+      },
+      "actions": {
+        "markRead": "Marcar como leído",
+        "markUnread": "Marcar como no leído",
+        "delete": "Eliminar",
+        "deleteMessage": "Eliminar mensaje",
+        "viewMessage": "Ver mensaje"
+      },
+      "delete": {
+        "title": "Eliminar mensaje",
+        "confirm": "¿Estás seguro de que quieres eliminar el mensaje de",
+        "irreversible": "Esta acción no se puede deshacer.",
+        "confirmLabel": "Eliminar mensaje"
+      },
+      "messageDialog": {
+        "title": "Mensaje de",
+        "phone": "Teléfono",
+        "date": "Fecha"
+      },
+      "empty": {
+        "noUnread": "No hay mensajes sin leer.",
+        "noRead": "No hay mensajes leídos.",
+        "noMessages": "No hay mensajes de contacto."
+      },
+      "errors": {
+        "loadFailed": "No se pudieron cargar los mensajes. Actualiza la página."
+      }
+    },
+    "common": {
+      "inPreparation": "Esta sección está en preparación.",
+      "confirmDelete": "¿Estás seguro? Esta acción no se puede deshacer.",
+      "created": "Creado exitosamente",
+      "updated": "Actualizado exitosamente",
+      "deleted": "Eliminado exitosamente",
+      "error": "Ocurrió un error"
+    },
+    "coupons": {
+      "title": "Cupones",
+      "description": "Códigos de descuento y promociones",
+      "stats": {
+        "allCoupons": "Todos los cupones",
+        "active": "Activos",
+        "expired": "Caducados",
+        "totalUses": "Usos totales"
+      },
+      "filter": {
+        "all": "Todos",
+        "active": "Activos",
+        "inactive": "Archivados"
+      },
+      "searchPlaceholder": "Buscar por código...",
+      "searchLabel": "Buscar cupón",
+      "newCoupon": "Nuevo cupón",
+      "editCoupon": "Editar cupón",
+      "close": "Cerrar",
+      "table": {
+        "code": "Código",
+        "type": "Tipo",
+        "value": "Valor",
+        "uses": "Usos",
+        "expires": "Caduca",
+        "status": "Estado",
+        "actions": "Acciones",
+        "label": "Lista de cupones"
+      },
+      "status": {
+        "expired": "Caducado",
+        "active": "Activo",
+        "inactive": "Inactivo"
+      },
+      "discountType": {
+        "percentage": "Porcentaje",
+        "fixed": "Importe fijo"
+      },
+      "form": {
+        "couponCode": "Código del cupón",
+        "codePlaceholder": "p. ej. VERANO2025",
+        "generate": "Generar",
+        "generateTooltip": "Generar código aleatorio",
+        "discountType": "Tipo de descuento",
+        "discountValue": "Valor del descuento",
+        "valuePlaceholder": "p. ej. 20",
+        "maxUses": "Usos máximos",
+        "noLimit": "Sin límite",
+        "expiryDate": "Fecha de caducidad",
+        "noExpiry": "Sin fecha de caducidad",
+        "activeToggle": "Activo",
+        "save": "Guardar cambios",
+        "create": "Crear cupón"
+      },
+      "validation": {
+        "codeRequired": "El código es obligatorio.",
+        "valueRequired": "Introduce un valor mayor que cero.",
+        "percentageMax": "El valor porcentual no puede superar 100.",
+        "usesRequired": "Introduce un número mayor que cero.",
+        "expiryRequired": "Selecciona una fecha de caducidad."
+      },
+      "confirm": {
+        "archive": "¿Estás seguro de que quieres archivar el cupón",
+        "restore": "¿Estás seguro de que quieres restaurar el cupón"
+      },
+      "delete": {
+        "title": "Eliminar cupón",
+        "confirm": "¿Estás seguro de que quieres eliminar el cupón",
+        "irreversible": "Esta acción no se puede deshacer.",
+        "cancel": "Cancelar",
+        "delete": "Eliminar",
+        "confirmLabel": "Confirmar eliminación"
+      },
+      "actions": {
+        "edit": "Editar",
+        "editCoupon": "Editar cupón",
+        "archive": "Archivar",
+        "restore": "Restaurar",
+        "archiveCoupon": "Archivar cupón",
+        "restoreCoupon": "Restaurar cupón",
+        "copyCode": "Copiar código",
+        "copied": "Copiado"
+      },
+      "empty": {
+        "noResults": "Ningún cupón coincide con tu búsqueda.",
+        "noCoupons": "Aún no tienes ningún cupón. Haz clic en \"Nuevo cupón\" para añadir el primero."
+      },
+      "errors": {
+        "loadFailed": "No se pudieron cargar los cupones. Actualiza la página.",
+        "createFailed": "Error al crear el cupón:",
+        "updateFailed": "Error al actualizar el cupón:",
+        "deleteFailed": "Error al eliminar el cupón:",
+        "unknown": "Error desconocido"
       }
     }
   }

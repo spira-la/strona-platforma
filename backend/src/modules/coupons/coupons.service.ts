@@ -127,11 +127,8 @@ export class CouponsService {
   }
 
   async softDelete(id: string): Promise<Coupon> {
-    // Ensure the coupon exists
     await this.findById(id);
-
     await this.repo.update({ id }, { isActive: false });
-
     this.cache.delete(CACHE_KEY_ALL);
     return this.findById(id);
   }

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   CalendarCheck,
   Users,
@@ -35,35 +36,8 @@ interface QuickAction {
 }
 
 // ---------------------------------------------------------------------------
-// Static mock data (replaced by API calls in a later iteration)
+// Static mock data — defined inside Dashboard to use t()
 // ---------------------------------------------------------------------------
-
-const STAT_CARDS: StatCard[] = [
-  {
-    icon: CalendarCheck,
-    label: 'Nadchodzące sesje',
-    value: '3',
-    subtitle: 'w tym tygodniu',
-  },
-  {
-    icon: Users,
-    label: 'Klienci',
-    value: '24',
-    subtitle: 'łącznie',
-  },
-  {
-    icon: TrendingUp,
-    label: 'Przychód',
-    value: '3 250 zł',
-    subtitle: 'ten miesiąc',
-  },
-  {
-    icon: Mail,
-    label: 'Newsletter',
-    value: '156',
-    subtitle: 'subskrybentów',
-  },
-];
 
 const UPCOMING_SESSIONS: Session[] = [
   {
@@ -81,13 +55,6 @@ const UPCOMING_SESSIONS: Session[] = [
     service: 'Pakiet sesji (3/5)',
     datetime: 'Śr, 9 kwi · 11:00',
   },
-];
-
-const QUICK_ACTIONS: QuickAction[] = [
-  { icon: CalendarX, label: 'Zablokuj termin', to: '/admin/availability' },
-  { icon: Send, label: 'Napisz newsletter', to: '/admin/newsletter' },
-  { icon: PenLine, label: 'Nowy artykuł', to: '/admin/blog' },
-  { icon: Ticket, label: 'Dodaj kupon', to: '/admin/coupons' },
 ];
 
 // ---------------------------------------------------------------------------
@@ -156,11 +123,47 @@ function QuickActionButton({ icon: Icon, label, to }: QuickAction) {
 // ---------------------------------------------------------------------------
 
 export default function Dashboard() {
+  const { t } = useTranslation();
+
+  const STAT_CARDS: StatCard[] = [
+    {
+      icon: CalendarCheck,
+      label: t('admin.dashboard.stats.upcomingSessions'),
+      value: '3',
+      subtitle: t('admin.dashboard.stats.thisWeek'),
+    },
+    {
+      icon: Users,
+      label: t('admin.dashboard.stats.clients'),
+      value: '24',
+      subtitle: t('admin.dashboard.stats.total'),
+    },
+    {
+      icon: TrendingUp,
+      label: t('admin.dashboard.stats.revenue'),
+      value: '3 250 zł',
+      subtitle: t('admin.dashboard.stats.thisMonth'),
+    },
+    {
+      icon: Mail,
+      label: t('admin.dashboard.stats.newsletter'),
+      value: '156',
+      subtitle: t('admin.dashboard.stats.subscribers'),
+    },
+  ];
+
+  const QUICK_ACTIONS: QuickAction[] = [
+    { icon: CalendarX, label: t('admin.dashboard.blockSlot'), to: '/admin/availability' },
+    { icon: Send, label: t('admin.dashboard.writeNewsletter'), to: '/admin/newsletter' },
+    { icon: PenLine, label: t('admin.dashboard.newArticle'), to: '/admin/blog' },
+    { icon: Ticket, label: t('admin.dashboard.addCoupon'), to: '/admin/coupons' },
+  ];
+
   return (
     <div>
       <AdminPageHeader
-        title="Dashboard"
-        description="Witaj, Aneta! Oto przegląd Twojej praktyki."
+        title={t('admin.dashboard.title')}
+        description={t('admin.dashboard.greeting')}
       />
 
       {/* Stats grid — 1 col mobile, 2 cols md, 4 cols xl */}
@@ -176,17 +179,17 @@ export default function Dashboard() {
         <div className="bg-white border border-[#E8E4DF] rounded-xl p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-['Playfair_Display'] font-bold text-[18px] text-[#1A1A1A]">
-              Najbliższe sesje
+              {t('admin.dashboard.upcomingSessions')}
             </h2>
             <Link
               to="/admin/sessions"
               className="font-['Inter'] text-[13px] text-[#B8963E] hover:text-[#8A6F2E] transition-colors duration-150"
             >
-              Zobacz wszystkie
+              {t('admin.dashboard.viewAll')}
             </Link>
           </div>
 
-          <ul aria-label="Lista nadchodzących sesji">
+          <ul aria-label={t('admin.dashboard.sessionsList')}>
             {UPCOMING_SESSIONS.map((session) => (
               <SessionItem key={session.client} {...session} />
             ))}
@@ -196,7 +199,7 @@ export default function Dashboard() {
         {/* Quick actions */}
         <div className="bg-white border border-[#E8E4DF] rounded-xl p-6">
           <h2 className="font-['Playfair_Display'] font-bold text-[18px] text-[#1A1A1A] mb-4">
-            Szybkie akcje
+            {t('admin.dashboard.quickActions')}
           </h2>
 
           <div className="flex flex-col gap-2">

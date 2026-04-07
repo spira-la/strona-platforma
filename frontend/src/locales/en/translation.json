@@ -58,11 +58,430 @@
       "invoices": "Invoices",
       "coupons": "Coupons",
       "seo": "SEO",
+      "contact": "Messages",
+      "categories": "Categories",
+      "languages": "Languages",
       "sections": {
         "main": "Main",
+        "management": "Management",
         "content": "Content",
         "business": "Business",
-        "system": "System"
+        "system": "System",
+        "catalog": "Catalog"
+      }
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "greeting": "Welcome! Here's an overview of your practice.",
+      "stats": {
+        "upcomingSessions": "Upcoming sessions",
+        "thisWeek": "this week",
+        "clients": "Clients",
+        "total": "total",
+        "revenue": "Revenue",
+        "thisMonth": "this month",
+        "newsletter": "Newsletter",
+        "subscribers": "subscribers"
+      },
+      "upcomingSessions": "Upcoming sessions",
+      "viewAll": "View all",
+      "sessionsList": "Upcoming sessions list",
+      "quickActions": "Quick actions",
+      "blockSlot": "Block time slot",
+      "writeNewsletter": "Write newsletter",
+      "newArticle": "New article",
+      "addCoupon": "Add coupon"
+    },
+    "sessions": {
+      "title": "Sessions",
+      "description": "Manage sessions and bookings"
+    },
+    "availability": {
+      "title": "Availability",
+      "description": "Configure working hours"
+    },
+    "services": {
+      "title": "Services",
+      "description": "Manage services and pricing",
+      "stats": {
+        "total": "All services",
+        "active": "Active",
+        "archived": "Archived",
+        "avgPrice": "Average price"
+      },
+      "filter": {
+        "active": "Active",
+        "inactive": "Archived"
+      },
+      "searchPlaceholder": "Search by name...",
+      "searchLabel": "Search service",
+      "newService": "New service",
+      "editService": "Edit service",
+      "table": {
+        "name": "Name",
+        "duration": "Duration",
+        "sessions": "Sessions",
+        "price": "Price",
+        "status": "Status",
+        "actions": "Actions",
+        "label": "Services list"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Archived"
+      },
+      "form": {
+        "name": "Service name",
+        "namePlaceholder": "e.g. Individual session",
+        "description": "Description",
+        "descriptionPlaceholder": "Short service description (optional)",
+        "duration": "Duration",
+        "durationPlaceholder": "e.g. 60",
+        "sessionCount": "Session count",
+        "sessionCountPlaceholder": "e.g. 1",
+        "price": "Price (PLN)",
+        "pricePlaceholder": "e.g. 250.00",
+        "sortOrder": "Sort order",
+        "sortOrderPlaceholder": "e.g. 0",
+        "activeToggle": "Active",
+        "save": "Save changes",
+        "create": "Create service"
+      },
+      "validation": {
+        "nameRequired": "Name is required.",
+        "durationRequired": "Enter a duration of at least 1 minute.",
+        "priceRequired": "Enter a price greater than zero."
+      },
+      "confirm": {
+        "archive": "Are you sure you want to archive service",
+        "restore": "Are you sure you want to restore service"
+      },
+      "actions": {
+        "edit": "Edit",
+        "editService": "Edit service",
+        "archive": "Archive",
+        "restore": "Restore",
+        "archiveService": "Archive service",
+        "restoreService": "Restore service"
+      },
+      "empty": {
+        "noResults": "No services match your search.",
+        "noServices": "You don't have any services yet. Click \"New service\" to add your first."
+      },
+      "errors": {
+        "loadFailed": "Failed to load services. Refresh the page."
+      },
+      "durationUnit": "min",
+      "sessionUnit": "session"
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "Manage articles"
+    },
+    "blogEditor": {
+      "title": "Article editor",
+      "description": "Create and edit articles"
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "description": "Manage subscribers and campaigns"
+    },
+    "invoices": {
+      "title": "Invoices",
+      "description": "Invoice history and PDF generation"
+    },
+    "seo": {
+      "title": "SEO",
+      "description": "Meta tags management and optimization"
+    },
+    "categories": {
+      "title": "Categories",
+      "description": "Manage service and content categories",
+      "stats": {
+        "total": "All categories",
+        "active": "Active",
+        "archived": "Archived"
+      },
+      "filter": {
+        "active": "Active",
+        "archived": "Archived"
+      },
+      "searchPlaceholder": "Search by name...",
+      "searchLabel": "Search category",
+      "newCategory": "New category",
+      "editCategory": "Edit category",
+      "table": {
+        "name": "Name",
+        "slug": "Slug",
+        "description": "Description",
+        "sortOrder": "Order",
+        "status": "Status",
+        "actions": "Actions",
+        "label": "Categories list"
+      },
+      "status": {
+        "active": "Active",
+        "archived": "Archived"
+      },
+      "form": {
+        "name": "Category name",
+        "namePlaceholder": "e.g. Individual coaching",
+        "slug": "Slug (URL)",
+        "slugPlaceholder": "e.g. individual-coaching",
+        "description": "Description",
+        "descriptionPlaceholder": "Short category description (optional)",
+        "sortOrder": "Sort order",
+        "sortOrderPlaceholder": "e.g. 0",
+        "activeToggle": "Active",
+        "save": "Save changes",
+        "create": "Create category"
+      },
+      "validation": {
+        "nameRequired": "Name is required.",
+        "slugRequired": "Slug is required."
+      },
+      "confirm": {
+        "archive": "Are you sure you want to archive category",
+        "restore": "Are you sure you want to restore category"
+      },
+      "actions": {
+        "edit": "Edit",
+        "editCategory": "Edit category",
+        "archive": "Archive",
+        "restore": "Restore",
+        "archiveCategory": "Archive category",
+        "restoreCategory": "Restore category"
+      },
+      "empty": {
+        "noResults": "No categories match your search.",
+        "noCategories": "You don't have any categories yet. Click \"New category\" to add your first."
+      },
+      "errors": {
+        "loadFailed": "Failed to load categories. Refresh the page."
+      }
+    },
+    "languages": {
+      "title": "Languages",
+      "description": "Manage coaching session languages",
+      "stats": {
+        "total": "All languages",
+        "active": "Active",
+        "archived": "Archived"
+      },
+      "filter": {
+        "active": "Active",
+        "archived": "Archived"
+      },
+      "searchPlaceholder": "Search by name or code...",
+      "searchLabel": "Search language",
+      "newLanguage": "New language",
+      "editLanguage": "Edit language",
+      "table": {
+        "name": "Name",
+        "code": "Code",
+        "nativeName": "Native name",
+        "sortOrder": "Order",
+        "status": "Status",
+        "actions": "Actions",
+        "label": "Languages list"
+      },
+      "status": {
+        "active": "Active",
+        "archived": "Archived"
+      },
+      "form": {
+        "code": "Language code",
+        "codePlaceholder": "e.g. pl",
+        "name": "Name",
+        "namePlaceholder": "e.g. Polish",
+        "nativeName": "Native name",
+        "nativeNamePlaceholder": "e.g. Polski",
+        "flag": "Flag (emoji)",
+        "flagPlaceholder": "e.g. 🇵🇱",
+        "sortOrder": "Sort order",
+        "sortOrderPlaceholder": "e.g. 0",
+        "activeToggle": "Active",
+        "save": "Save changes",
+        "create": "Create language"
+      },
+      "validation": {
+        "codeRequired": "Language code is required.",
+        "nameRequired": "Name is required."
+      },
+      "confirm": {
+        "archive": "Are you sure you want to archive language",
+        "restore": "Are you sure you want to restore language"
+      },
+      "actions": {
+        "edit": "Edit",
+        "editLanguage": "Edit language",
+        "archive": "Archive",
+        "restore": "Restore",
+        "archiveLanguage": "Archive language",
+        "restoreLanguage": "Restore language"
+      },
+      "empty": {
+        "noResults": "No languages match your search.",
+        "noLanguages": "You don't have any languages yet. Click \"New language\" to add your first."
+      },
+      "errors": {
+        "loadFailed": "Failed to load languages. Refresh the page."
+      }
+    },
+    "contact": {
+      "title": "Contact Messages",
+      "description": "View and manage messages from clients",
+      "stats": {
+        "total": "All messages",
+        "unread": "Unread",
+        "read": "Read"
+      },
+      "filter": {
+        "unread": "Unread",
+        "read": "Read"
+      },
+      "table": {
+        "name": "Sender",
+        "email": "Email",
+        "phone": "Phone",
+        "message": "Message",
+        "date": "Date",
+        "status": "Status",
+        "actions": "Actions",
+        "label": "Messages list"
+      },
+      "status": {
+        "read": "Read",
+        "unread": "Unread"
+      },
+      "actions": {
+        "markRead": "Mark as read",
+        "markUnread": "Mark as unread",
+        "delete": "Delete",
+        "deleteMessage": "Delete message",
+        "viewMessage": "View message"
+      },
+      "delete": {
+        "title": "Delete message",
+        "confirm": "Are you sure you want to delete the message from",
+        "irreversible": "This action cannot be undone.",
+        "confirmLabel": "Delete message"
+      },
+      "messageDialog": {
+        "title": "Message from",
+        "phone": "Phone",
+        "date": "Date"
+      },
+      "empty": {
+        "noUnread": "No unread messages.",
+        "noRead": "No read messages.",
+        "noMessages": "No contact messages."
+      },
+      "errors": {
+        "loadFailed": "Failed to load messages. Refresh the page."
+      }
+    },
+    "common": {
+      "inPreparation": "This section is in preparation.",
+      "confirmDelete": "Are you sure? This action cannot be undone.",
+      "created": "Created successfully",
+      "updated": "Updated successfully",
+      "deleted": "Deleted successfully",
+      "error": "An error occurred"
+    },
+    "coupons": {
+      "title": "Coupons",
+      "description": "Discount codes and promotions",
+      "stats": {
+        "allCoupons": "All coupons",
+        "active": "Active",
+        "expired": "Expired",
+        "totalUses": "Total uses"
+      },
+      "filter": {
+        "all": "All",
+        "active": "Active",
+        "inactive": "Archived"
+      },
+      "searchPlaceholder": "Search by code...",
+      "searchLabel": "Search coupon",
+      "newCoupon": "New coupon",
+      "editCoupon": "Edit coupon",
+      "close": "Close",
+      "table": {
+        "code": "Code",
+        "type": "Type",
+        "value": "Value",
+        "uses": "Uses",
+        "expires": "Expires",
+        "status": "Status",
+        "actions": "Actions",
+        "label": "Coupons list"
+      },
+      "status": {
+        "expired": "Expired",
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "discountType": {
+        "percentage": "Percentage",
+        "fixed": "Fixed amount"
+      },
+      "form": {
+        "couponCode": "Coupon code",
+        "codePlaceholder": "e.g. SUMMER2025",
+        "generate": "Generate",
+        "generateTooltip": "Generate random code",
+        "discountType": "Discount type",
+        "discountValue": "Discount value",
+        "valuePlaceholder": "e.g. 20",
+        "maxUses": "Maximum uses",
+        "noLimit": "No limit",
+        "expiryDate": "Expiry date",
+        "noExpiry": "No expiry date",
+        "activeToggle": "Active",
+        "save": "Save changes",
+        "create": "Create coupon"
+      },
+      "validation": {
+        "codeRequired": "Code is required.",
+        "valueRequired": "Enter a value greater than zero.",
+        "percentageMax": "Percentage value cannot exceed 100.",
+        "usesRequired": "Enter a number greater than zero.",
+        "expiryRequired": "Select an expiry date."
+      },
+      "confirm": {
+        "archive": "Are you sure you want to archive coupon",
+        "restore": "Are you sure you want to restore coupon"
+      },
+      "delete": {
+        "title": "Delete coupon",
+        "confirm": "Are you sure you want to delete coupon",
+        "irreversible": "This action cannot be undone.",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "confirmLabel": "Confirm deletion"
+      },
+      "actions": {
+        "edit": "Edit",
+        "editCoupon": "Edit coupon",
+        "archive": "Archive",
+        "restore": "Restore",
+        "archiveCoupon": "Archive coupon",
+        "restoreCoupon": "Restore coupon",
+        "copyCode": "Copy code",
+        "copied": "Copied"
+      },
+      "empty": {
+        "noResults": "No coupons match your search.",
+        "noCoupons": "You don't have any coupons yet. Click \"New coupon\" to add your first."
+      },
+      "errors": {
+        "loadFailed": "Failed to load coupons. Refresh the page.",
+        "createFailed": "Error creating coupon:",
+        "updateFailed": "Error updating coupon:",
+        "deleteFailed": "Error deleting coupon:",
+        "unknown": "Unknown error"
       }
     }
   }

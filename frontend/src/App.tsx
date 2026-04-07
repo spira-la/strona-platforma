@@ -37,6 +37,9 @@ const AdminNewsletter = lazy(() => import('@/pages/admin/Newsletter'));
 const AdminInvoices = lazy(() => import('@/pages/admin/Invoices'));
 const AdminCoupons = lazy(() => import('@/pages/admin/Coupons'));
 const AdminSEO = lazy(() => import('@/pages/admin/SEO'));
+const AdminCategories = lazy(() => import('@/pages/admin/Categories'));
+const AdminLanguages = lazy(() => import('@/pages/admin/Languages'));
+const AdminContact = lazy(() => import('@/pages/admin/Contact'));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -92,6 +95,9 @@ function AppRoutes() {
         <Route path="invoices" element={<Suspense fallback={<LoadingFallback />}><AdminInvoices /></Suspense>} />
         <Route path="coupons" element={<Suspense fallback={<LoadingFallback />}><AdminCoupons /></Suspense>} />
         <Route path="seo" element={<Suspense fallback={<LoadingFallback />}><AdminSEO /></Suspense>} />
+        <Route path="categories" element={<Suspense fallback={<LoadingFallback />}><AdminCategories /></Suspense>} />
+        <Route path="languages" element={<Suspense fallback={<LoadingFallback />}><AdminLanguages /></Suspense>} />
+        <Route path="contact" element={<Suspense fallback={<LoadingFallback />}><AdminContact /></Suspense>} />
       </Route>
 
       {/* Public routes — wrapped in the public Layout (Navbar, Footer, CMS toolbar) */}

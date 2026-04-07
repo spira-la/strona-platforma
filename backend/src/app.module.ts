@@ -6,7 +6,11 @@ import { ALL_ENTITIES } from './db/entities/index.js';
 import { CoreModule } from './core/core.module.js';
 import { CmsModule } from './modules/cms/cms.module.js';
 import { CouponsModule } from './modules/coupons/coupons.module.js';
+import { CoachingServicesModule } from './modules/coaching-services/coaching-services.module.js';
 import { EmailModule } from './modules/email/email.module.js';
+import { CategoriesModule } from './modules/categories/categories.module.js';
+import { LanguagesModule } from './modules/languages/languages.module.js';
+import { ContactModule } from './modules/contact/contact.module.js';
 import { AppController } from './app.controller.js';
 
 @Module({
@@ -47,6 +51,10 @@ import { AppController } from './app.controller.js';
     EmailModule,
     CmsModule,
     CouponsModule,
+    CoachingServicesModule,
+    CategoriesModule,
+    LanguagesModule,
+    ContactModule,
   ],
   controllers: [AppController],
 })
