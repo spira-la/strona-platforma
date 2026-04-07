@@ -82,7 +82,9 @@ run_migrations() {
   echo "  [2/5] Running database migrations..."
   cd backend
   if [ -f "$ENV_FILE" ]; then
-    export $(grep -v '^#' "$ENV_FILE" | grep -v '^\s*$' | xargs)
+    set -a
+    source "$ENV_FILE"
+    set +a
     npm ci --ignore-scripts --silent 2>/dev/null || npm install --ignore-scripts --silent
     npx drizzle-kit migrate 2>&1 || echo "  WARNING: No pending migrations or migration failed"
   else

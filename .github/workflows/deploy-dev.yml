@@ -65,7 +65,7 @@ jobs:
           script: |
             cd ${{ secrets.SPIRALA_APP_DIR }}/backend
             # Run database migrations before building
-            export $(grep -v '^#' .env.development | grep -v '^\s*$' | xargs)
+            set -a && source .env.development && set +a
             npm ci --ignore-scripts
             npx drizzle-kit migrate 2>&1 || echo "WARNING: migration failed or no pending migrations"
             # Build and deploy
