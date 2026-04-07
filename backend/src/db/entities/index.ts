@@ -17,6 +17,7 @@ export * from './purchase.entity';
 export * from './webinar.entity';
 export * from './gift.entity';
 export * from './review.entity';
+export * from './language.entity';
 
 import { ProfileEntity } from './profile.entity';
 import { CoachEntity } from './coach.entity';
@@ -36,6 +37,7 @@ import { PurchaseEntity, UserProgressEntity } from './purchase.entity';
 import { WebinarEntity, WebinarSessionEntity, WebinarRegistrationEntity } from './webinar.entity';
 import { GiftEntity } from './gift.entity';
 import { ReviewEntity } from './review.entity';
+import { LanguageEntity } from './language.entity';
 
 export const ALL_ENTITIES = [
   ProfileEntity,
@@ -62,4 +64,5 @@ export const ALL_ENTITIES = [
   WebinarRegistrationEntity,
   GiftEntity,
   ReviewEntity,
+  LanguageEntity,
 ];

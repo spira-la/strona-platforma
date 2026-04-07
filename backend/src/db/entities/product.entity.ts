@@ -23,6 +23,12 @@ export class CategoryEntity {
   @Column({ name: 'parent_id', type: 'uuid', nullable: true })
   parentId: string | null;
 
+  @Column({ type: 'text', nullable: true })
+  description: string | null;
+
+  @Column({ name: 'is_active', type: 'boolean', default: true, nullable: true })
+  isActive: boolean | null;
+
   @Column({ name: 'sort_order', type: 'int', default: 0, nullable: true })
   sortOrder: number | null;
 

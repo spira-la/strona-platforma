@@ -58,11 +58,16 @@
       "invoices": "Faktury",
       "coupons": "Kupony",
       "seo": "SEO",
+      "contact": "Wiadomości",
+      "categories": "Kategorie",
+      "languages": "Języki",
       "sections": {
         "main": "Główne",
+        "management": "Zarządzanie",
         "content": "Treści",
         "business": "Biznes",
-        "system": "System"
+        "system": "System",
+        "catalog": "Katalog"
       }
     },
     "dashboard": {
@@ -188,6 +193,193 @@
     "seo": {
       "title": "SEO",
       "description": "Zarządzanie meta tagami i optymalizacja"
+    },
+    "categories": {
+      "title": "Kategorie",
+      "description": "Zarządzaj kategoriami usług i treści",
+      "stats": {
+        "total": "Wszystkie kategorie",
+        "active": "Aktywne",
+        "archived": "Zarchiwizowane"
+      },
+      "filter": {
+        "active": "Aktywne",
+        "archived": "Zarchiwizowane"
+      },
+      "searchPlaceholder": "Szukaj po nazwie...",
+      "searchLabel": "Szukaj kategorii",
+      "newCategory": "Nowa kategoria",
+      "editCategory": "Edytuj kategorię",
+      "table": {
+        "name": "Nazwa",
+        "slug": "Slug",
+        "description": "Opis",
+        "sortOrder": "Kolejność",
+        "status": "Status",
+        "actions": "Akcje",
+        "label": "Lista kategorii"
+      },
+      "status": {
+        "active": "Aktywna",
+        "archived": "Zarchiwizowana"
+      },
+      "form": {
+        "name": "Nazwa kategorii",
+        "namePlaceholder": "np. Coaching indywidualny",
+        "slug": "Slug (URL)",
+        "slugPlaceholder": "np. coaching-indywidualny",
+        "description": "Opis",
+        "descriptionPlaceholder": "Krótki opis kategorii (opcjonalnie)",
+        "sortOrder": "Kolejność",
+        "sortOrderPlaceholder": "np. 0",
+        "activeToggle": "Aktywna",
+        "save": "Zapisz zmiany",
+        "create": "Utwórz kategorię"
+      },
+      "validation": {
+        "nameRequired": "Nazwa jest wymagana.",
+        "slugRequired": "Slug jest wymagany."
+      },
+      "confirm": {
+        "archive": "Czy na pewno chcesz zarchiwizować kategorię",
+        "restore": "Czy na pewno chcesz przywrócić kategorię"
+      },
+      "actions": {
+        "edit": "Edytuj",
+        "editCategory": "Edytuj kategorię",
+        "archive": "Archiwizuj",
+        "restore": "Przywróć",
+        "archiveCategory": "Archiwizuj kategorię",
+        "restoreCategory": "Przywróć kategorię"
+      },
+      "empty": {
+        "noResults": "Brak kategorii pasujących do wyszukiwania.",
+        "noCategories": "Nie masz jeszcze żadnych kategorii. Kliknij \"Nowa kategoria\", aby dodać pierwszą."
+      },
+      "errors": {
+        "loadFailed": "Nie udało się załadować kategorii. Odśwież stronę."
+      }
+    },
+    "languages": {
+      "title": "Języki",
+      "description": "Zarządzaj językami sesji coachingowych",
+      "stats": {
+        "total": "Wszystkie języki",
+        "active": "Aktywne",
+        "archived": "Zarchiwizowane"
+      },
+      "filter": {
+        "active": "Aktywne",
+        "archived": "Zarchiwizowane"
+      },
+      "searchPlaceholder": "Szukaj po nazwie lub kodzie...",
+      "searchLabel": "Szukaj języka",
+      "newLanguage": "Nowy język",
+      "editLanguage": "Edytuj język",
+      "table": {
+        "name": "Nazwa",
+        "code": "Kod",
+        "nativeName": "Nazwa własna",
+        "sortOrder": "Kolejność",
+        "status": "Status",
+        "actions": "Akcje",
+        "label": "Lista języków"
+      },
+      "status": {
+        "active": "Aktywny",
+        "archived": "Zarchiwizowany"
+      },
+      "form": {
+        "code": "Kod języka",
+        "codePlaceholder": "np. pl",
+        "name": "Nazwa",
+        "namePlaceholder": "np. Polish",
+        "nativeName": "Nazwa własna",
+        "nativeNamePlaceholder": "np. Polski",
+        "flag": "Flaga (emoji)",
+        "flagPlaceholder": "np. 🇵🇱",
+        "sortOrder": "Kolejność",
+        "sortOrderPlaceholder": "np. 0",
+        "activeToggle": "Aktywny",
+        "save": "Zapisz zmiany",
+        "create": "Utwórz język"
+      },
+      "validation": {
+        "codeRequired": "Kod języka jest wymagany.",
+        "nameRequired": "Nazwa jest wymagana."
+      },
+      "confirm": {
+        "archive": "Czy na pewno chcesz zarchiwizować język",
+        "restore": "Czy na pewno chcesz przywrócić język"
+      },
+      "actions": {
+        "edit": "Edytuj",
+        "editLanguage": "Edytuj język",
+        "archive": "Archiwizuj",
+        "restore": "Przywróć",
+        "archiveLanguage": "Archiwizuj język",
+        "restoreLanguage": "Przywróć język"
+      },
+      "empty": {
+        "noResults": "Brak języków pasujących do wyszukiwania.",
+        "noLanguages": "Nie masz jeszcze żadnych języków. Kliknij \"Nowy język\", aby dodać pierwszy."
+      },
+      "errors": {
+        "loadFailed": "Nie udało się załadować języków. Odśwież stronę."
+      }
+    },
+    "contact": {
+      "title": "Wiadomości kontaktowe",
+      "description": "Przeglądaj i zarządzaj wiadomościami od klientów",
+      "stats": {
+        "total": "Wszystkie wiadomości",
+        "unread": "Nieprzeczytane",
+        "read": "Przeczytane"
+      },
+      "filter": {
+        "unread": "Nieprzeczytane",
+        "read": "Przeczytane"
+      },
+      "table": {
+        "name": "Nadawca",
+        "email": "Email",
+        "phone": "Telefon",
+        "message": "Wiadomość",
+        "date": "Data",
+        "status": "Status",
+        "actions": "Akcje",
+        "label": "Lista wiadomości"
+      },
+      "status": {
+        "read": "Przeczytana",
+        "unread": "Nieprzeczytana"
+      },
+      "actions": {
+        "markRead": "Oznacz jako przeczytaną",
+        "markUnread": "Oznacz jako nieprzeczytaną",
+        "delete": "Usuń",
+        "deleteMessage": "Usuń wiadomość",
+        "viewMessage": "Podgląd wiadomości"
+      },
+      "delete": {
+        "title": "Usuń wiadomość",
+        "confirm": "Czy na pewno chcesz usunąć wiadomość od",
+        "irreversible": "Tej operacji nie można cofnąć.",
+        "confirmLabel": "Usuń wiadomość"
+      },
+      "messageDialog": {
+        "title": "Wiadomość od",
+        "phone": "Telefon",
+        "date": "Data"
+      },
+      "empty": {
+        "noUnread": "Brak nieprzeczytanych wiadomości.",
+        "noRead": "Brak przeczytanych wiadomości.",
+        "noMessages": "Brak wiadomości kontaktowych."
+      },
+      "errors": {
+        "loadFailed": "Nie udało się załadować wiadomości. Odśwież stronę."
+      }
     },
     "common": {
       "inPreparation": "Ta sekcja jest w przygotowaniu.",

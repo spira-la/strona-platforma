@@ -17,6 +17,8 @@ import {
   ChevronsLeft,
   ChevronsRight,
   Globe,
+  MessageSquare,
+  FolderOpen,
 } from 'lucide-react';
 import spiralaIcon from '@/assets/spirala-icon.png';
 import { ToastContainer } from '@/components/ui/ToastContainer';
@@ -37,32 +39,30 @@ interface NavSection {
 
 const NAV_SECTIONS: NavSection[] = [
   {
-    sectionKey: 'admin.nav.sections.main',
+    sectionKey: 'admin.nav.sections.management',
     items: [
       { path: '/admin', icon: LayoutDashboard, labelKey: 'admin.nav.dashboard', end: true },
       { path: '/admin/sessions', icon: Calendar, labelKey: 'admin.nav.sessions' },
-      { path: '/admin/availability', icon: Clock, labelKey: 'admin.nav.availability' },
-      { path: '/admin/services', icon: Briefcase, labelKey: 'admin.nav.services' },
+      { path: '/admin/invoices', icon: Receipt, labelKey: 'admin.nav.invoices' },
+      { path: '/admin/coupons', icon: Ticket, labelKey: 'admin.nav.coupons' },
+      { path: '/admin/contact', icon: MessageSquare, labelKey: 'admin.nav.contact' },
+      { path: '/admin/seo', icon: Search, labelKey: 'admin.nav.seo' },
     ],
   },
   {
     sectionKey: 'admin.nav.sections.content',
     items: [
+      { path: '/admin/services', icon: Briefcase, labelKey: 'admin.nav.services' },
       { path: '/admin/blog', icon: PenLine, labelKey: 'admin.nav.blog' },
       { path: '/admin/newsletter', icon: Mail, labelKey: 'admin.nav.newsletter' },
+      { path: '/admin/availability', icon: Clock, labelKey: 'admin.nav.availability' },
     ],
   },
   {
-    sectionKey: 'admin.nav.sections.business',
+    sectionKey: 'admin.nav.sections.catalog',
     items: [
-      { path: '/admin/invoices', icon: Receipt, labelKey: 'admin.nav.invoices' },
-      { path: '/admin/coupons', icon: Ticket, labelKey: 'admin.nav.coupons' },
-    ],
-  },
-  {
-    sectionKey: 'admin.nav.sections.system',
-    items: [
-      { path: '/admin/seo', icon: Search, labelKey: 'admin.nav.seo' },
+      { path: '/admin/categories', icon: FolderOpen, labelKey: 'admin.nav.categories' },
+      { path: '/admin/languages', icon: Globe, labelKey: 'admin.nav.languages' },
     ],
   },
 ];

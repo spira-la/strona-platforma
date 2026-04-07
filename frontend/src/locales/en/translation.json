@@ -58,11 +58,16 @@
       "invoices": "Invoices",
       "coupons": "Coupons",
       "seo": "SEO",
+      "contact": "Messages",
+      "categories": "Categories",
+      "languages": "Languages",
       "sections": {
         "main": "Main",
+        "management": "Management",
         "content": "Content",
         "business": "Business",
-        "system": "System"
+        "system": "System",
+        "catalog": "Catalog"
       }
     },
     "dashboard": {
@@ -188,6 +193,193 @@
     "seo": {
       "title": "SEO",
       "description": "Meta tags management and optimization"
+    },
+    "categories": {
+      "title": "Categories",
+      "description": "Manage service and content categories",
+      "stats": {
+        "total": "All categories",
+        "active": "Active",
+        "archived": "Archived"
+      },
+      "filter": {
+        "active": "Active",
+        "archived": "Archived"
+      },
+      "searchPlaceholder": "Search by name...",
+      "searchLabel": "Search category",
+      "newCategory": "New category",
+      "editCategory": "Edit category",
+      "table": {
+        "name": "Name",
+        "slug": "Slug",
+        "description": "Description",
+        "sortOrder": "Order",
+        "status": "Status",
+        "actions": "Actions",
+        "label": "Categories list"
+      },
+      "status": {
+        "active": "Active",
+        "archived": "Archived"
+      },
+      "form": {
+        "name": "Category name",
+        "namePlaceholder": "e.g. Individual coaching",
+        "slug": "Slug (URL)",
+        "slugPlaceholder": "e.g. individual-coaching",
+        "description": "Description",
+        "descriptionPlaceholder": "Short category description (optional)",
+        "sortOrder": "Sort order",
+        "sortOrderPlaceholder": "e.g. 0",
+        "activeToggle": "Active",
+        "save": "Save changes",
+        "create": "Create category"
+      },
+      "validation": {
+        "nameRequired": "Name is required.",
+        "slugRequired": "Slug is required."
+      },
+      "confirm": {
+        "archive": "Are you sure you want to archive category",
+        "restore": "Are you sure you want to restore category"
+      },
+      "actions": {
+        "edit": "Edit",
+        "editCategory": "Edit category",
+        "archive": "Archive",
+        "restore": "Restore",
+        "archiveCategory": "Archive category",
+        "restoreCategory": "Restore category"
+      },
+      "empty": {
+        "noResults": "No categories match your search.",
+        "noCategories": "You don't have any categories yet. Click \"New category\" to add your first."
+      },
+      "errors": {
+        "loadFailed": "Failed to load categories. Refresh the page."
+      }
+    },
+    "languages": {
+      "title": "Languages",
+      "description": "Manage coaching session languages",
+      "stats": {
+        "total": "All languages",
+        "active": "Active",
+        "archived": "Archived"
+      },
+      "filter": {
+        "active": "Active",
+        "archived": "Archived"
+      },
+      "searchPlaceholder": "Search by name or code...",
+      "searchLabel": "Search language",
+      "newLanguage": "New language",
+      "editLanguage": "Edit language",
+      "table": {
+        "name": "Name",
+        "code": "Code",
+        "nativeName": "Native name",
+        "sortOrder": "Order",
+        "status": "Status",
+        "actions": "Actions",
+        "label": "Languages list"
+      },
+      "status": {
+        "active": "Active",
+        "archived": "Archived"
+      },
+      "form": {
+        "code": "Language code",
+        "codePlaceholder": "e.g. pl",
+        "name": "Name",
+        "namePlaceholder": "e.g. Polish",
+        "nativeName": "Native name",
+        "nativeNamePlaceholder": "e.g. Polski",
+        "flag": "Flag (emoji)",
+        "flagPlaceholder": "e.g. 🇵🇱",
+        "sortOrder": "Sort order",
+        "sortOrderPlaceholder": "e.g. 0",
+        "activeToggle": "Active",
+        "save": "Save changes",
+        "create": "Create language"
+      },
+      "validation": {
+        "codeRequired": "Language code is required.",
+        "nameRequired": "Name is required."
+      },
+      "confirm": {
+        "archive": "Are you sure you want to archive language",
+        "restore": "Are you sure you want to restore language"
+      },
+      "actions": {
+        "edit": "Edit",
+        "editLanguage": "Edit language",
+        "archive": "Archive",
+        "restore": "Restore",
+        "archiveLanguage": "Archive language",
+        "restoreLanguage": "Restore language"
+      },
+      "empty": {
+        "noResults": "No languages match your search.",
+        "noLanguages": "You don't have any languages yet. Click \"New language\" to add your first."
+      },
+      "errors": {
+        "loadFailed": "Failed to load languages. Refresh the page."
+      }
+    },
+    "contact": {
+      "title": "Contact Messages",
+      "description": "View and manage messages from clients",
+      "stats": {
+        "total": "All messages",
+        "unread": "Unread",
+        "read": "Read"
+      },
+      "filter": {
+        "unread": "Unread",
+        "read": "Read"
+      },
+      "table": {
+        "name": "Sender",
+        "email": "Email",
+        "phone": "Phone",
+        "message": "Message",
+        "date": "Date",
+        "status": "Status",
+        "actions": "Actions",
+        "label": "Messages list"
+      },
+      "status": {
+        "read": "Read",
+        "unread": "Unread"
+      },
+      "actions": {
+        "markRead": "Mark as read",
+        "markUnread": "Mark as unread",
+        "delete": "Delete",
+        "deleteMessage": "Delete message",
+        "viewMessage": "View message"
+      },
+      "delete": {
+        "title": "Delete message",
+        "confirm": "Are you sure you want to delete the message from",
+        "irreversible": "This action cannot be undone.",
+        "confirmLabel": "Delete message"
+      },
+      "messageDialog": {
+        "title": "Message from",
+        "phone": "Phone",
+        "date": "Date"
+      },
+      "empty": {
+        "noUnread": "No unread messages.",
+        "noRead": "No read messages.",
+        "noMessages": "No contact messages."
+      },
+      "errors": {
+        "loadFailed": "Failed to load messages. Refresh the page."
+      }
     },
     "common": {
       "inPreparation": "This section is in preparation.",
