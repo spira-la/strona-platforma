@@ -11,6 +11,7 @@ lib/
 
 # Environment
 .env
+.env.db
 .env.local
 .env.*.local
 plan/infra.md
