@@ -1,21 +1,18 @@
 import { DataSource } from 'typeorm';
 import { config } from 'dotenv';
 
-// Load environment-specific file first, then fall back to .env
 config({ path: '.env.local' });
 config({ path: '.env' });
 
 const schema = process.env.DB_SCHEMA ?? 'spirala_dev_schema';
+const useSSL = process.env.DB_SSL === 'true';
 
 /**
  * TypeORM DataSource used by the CLI (migrations:generate, migrations:run).
- * The NestJS app uses TypeOrmModule.forRoot() in app.module.ts which shares
- * the same configuration but receives entities as imported classes.
  *
- * Key points:
- * - uuidExtension: 'pgcrypto' => uses gen_random_uuid() (built into PG 13+)
+ * - uuidExtension: 'pgcrypto' => uses gen_random_uuid() (PG 13+ native)
  * - schema: from DB_SCHEMA env var => migrations are schema-agnostic
- * - search_path includes 'public' for extensions accessibility
+ * - SSL: only when DB_SSL=true (for Supabase), disabled for local PostgreSQL
  */
 export default new DataSource({
   type: 'postgres',
@@ -24,10 +21,9 @@ export default new DataSource({
   entities: [__dirname + '/../db/entities/*.{ts,js}'],
   migrations: [__dirname + '/../db/migrations/*.{ts,js}'],
   uuidExtension: 'pgcrypto',
-  ssl: { rejectUnauthorized: false },
-  extra: {
+  ...(useSSL ? {
     ssl: { rejectUnauthorized: false },
-    options: `-c search_path=${schema},public`,
-  },
+    extra: { ssl: { rejectUnauthorized: false } },
+  } : {}),
   logging: process.env.NODE_ENV === 'development',
 });

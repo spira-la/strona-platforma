@@ -21,6 +21,7 @@ import { AppController } from './app.controller.js';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
         const schema = config.get<string>('DB_SCHEMA') ?? 'spirala_dev_schema';
+        const useSSL = config.get<string>('DB_SSL') === 'true';
         return {
           type: 'postgres' as const,
           url: config.getOrThrow<string>('DATABASE_URL'),
@@ -29,13 +30,11 @@ import { AppController } from './app.controller.js';
           synchronize: false,
           migrationsRun: true,
           migrations: [__dirname + '/db/migrations/*.js'],
-          // Use gen_random_uuid() — built into PostgreSQL 13+, no extension needed
           uuidExtension: 'pgcrypto' as const,
-          ssl: { rejectUnauthorized: false },
-          extra: {
+          ...(useSSL ? {
             ssl: { rejectUnauthorized: false },
-            options: `-c search_path=${schema},public`,
-          },
+            extra: { ssl: { rejectUnauthorized: false } },
+          } : {}),
           logging: config.get<string>('NODE_ENV') === 'development',
         };
       },
