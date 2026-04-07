@@ -67,7 +67,7 @@ jobs:
             # Run database migrations before building
             set -a && source .env.development && set +a
             npm ci
-            yes | npm run db:push 2>&1 || echo "WARNING: db:push failed"
+            npm run db:migrate 2>&1 || echo "WARNING: migration failed or no pending migrations"
             # Build and deploy
             docker compose -f docker-compose.dev.yml build --no-cache
             docker compose -f docker-compose.dev.yml up -d --force-recreate

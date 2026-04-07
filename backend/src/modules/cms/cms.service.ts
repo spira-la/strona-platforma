@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { eq } from 'drizzle-orm';
-import { DatabaseService } from '../../core/database.service.js';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CacheService } from '../../core/cache.service.js';
 import { StorageService } from '../../core/storage.service.js';
-import { cmsContent } from '../../db/schema/cms.js';
+import { CmsContentEntity } from '../../db/entities/cms-content.entity.js';
 
 const CACHE_KEY = 'cms:content:main_page';
 const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
@@ -23,7 +23,8 @@ interface CMSDocument {
 @Injectable()
 export class CmsService {
   constructor(
-    private readonly db: DatabaseService,
+    @InjectRepository(CmsContentEntity)
+    private readonly repo: Repository<CmsContentEntity>,
     private readonly cache: CacheService,
     private readonly storage: StorageService,
   ) {}
@@ -34,11 +35,7 @@ export class CmsService {
     if (cached) return cached;
 
     // Query DB
-    const [doc] = await this.db.db
-      .select()
-      .from(cmsContent)
-      .where(eq(cmsContent.id, DOC_ID))
-      .limit(1);
+    const doc = await this.repo.findOne({ where: { id: DOC_ID } });
 
     if (!doc) {
       // Return empty document if none exists yet
@@ -98,24 +95,25 @@ export class CmsService {
 
     if (doc.version === 0) {
       // Document doesn't exist yet — insert
-      await this.db.db.insert(cmsContent).values({
+      const entity = this.repo.create({
         id: DOC_ID,
         content,
         version: newVersion,
         updatedBy: userId ?? null,
         updatedAt: now,
       });
+      await this.repo.save(entity);
     } else {
       // Update existing
-      await this.db.db
-        .update(cmsContent)
-        .set({
+      await this.repo.update(
+        { id: DOC_ID },
+        {
           content,
           version: newVersion,
           updatedBy: userId ?? null,
           updatedAt: now,
-        })
-        .where(eq(cmsContent.id, DOC_ID));
+        },
+      );
     }
 
     // Invalidate cache
@@ -153,23 +151,24 @@ export class CmsService {
     const now = new Date();
 
     if (doc.version === 0) {
-      await this.db.db.insert(cmsContent).values({
+      const entity = this.repo.create({
         id: DOC_ID,
         content,
         version: newVersion,
         updatedBy: userId ?? null,
         updatedAt: now,
       });
+      await this.repo.save(entity);
     } else {
-      await this.db.db
-        .update(cmsContent)
-        .set({
+      await this.repo.update(
+        { id: DOC_ID },
+        {
           content,
           version: newVersion,
           updatedBy: userId ?? null,
           updatedAt: now,
-        })
-        .where(eq(cmsContent.id, DOC_ID));
+        },
+      );
     }
 
     this.cache.delete(CACHE_KEY);
@@ -190,21 +189,22 @@ export class CmsService {
     const now = new Date();
 
     if (doc.version === 0) {
-      await this.db.db.insert(cmsContent).values({
+      const entity = this.repo.create({
         id: DOC_ID,
         content: initialContent,
         version: 1,
         updatedAt: now,
       });
+      await this.repo.save(entity);
     } else {
-      await this.db.db
-        .update(cmsContent)
-        .set({
+      await this.repo.update(
+        { id: DOC_ID },
+        {
           content: initialContent,
           version: (doc.version || 0) + 1,
           updatedAt: now,
-        })
-        .where(eq(cmsContent.id, DOC_ID));
+        },
+      );
     }
 
     this.cache.delete(CACHE_KEY);

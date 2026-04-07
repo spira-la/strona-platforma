@@ -3,13 +3,17 @@ import {
   NotFoundException,
   ConflictException,
 } from '@nestjs/common';
-import { eq, desc, sql } from 'drizzle-orm';
-import { DatabaseService } from '../../core/database.service.js';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CacheService } from '../../core/cache.service.js';
-import { coupons, type Coupon } from '../../db/schema/coupons.js';
+import { CouponEntity } from '../../db/entities/coupon.entity.js';
+import { DiscountType } from '../../db/entities/enums.js';
 
 const CACHE_KEY_ALL = 'coupons:all';
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+// Re-export the Coupon type from the entity for backwards compatibility
+export type Coupon = CouponEntity;
 
 export interface ValidateCouponResult {
   valid: boolean;
@@ -34,7 +38,8 @@ export interface UpdateCouponData extends Partial<CreateCouponData> {
 @Injectable()
 export class CouponsService {
   constructor(
-    private readonly db: DatabaseService,
+    @InjectRepository(CouponEntity)
+    private readonly repo: Repository<CouponEntity>,
     private readonly cache: CacheService,
   ) {}
 
@@ -42,21 +47,16 @@ export class CouponsService {
     const cached = this.cache.get<Coupon[]>(CACHE_KEY_ALL);
     if (cached) return cached;
 
-    const result = await this.db.db
-      .select()
-      .from(coupons)
-      .orderBy(desc(coupons.createdAt));
+    const result = await this.repo.find({
+      order: { createdAt: 'DESC' },
+    });
 
     this.cache.set(CACHE_KEY_ALL, result, CACHE_TTL);
     return result;
   }
 
   async findById(id: string): Promise<Coupon> {
-    const [coupon] = await this.db.db
-      .select()
-      .from(coupons)
-      .where(eq(coupons.id, id))
-      .limit(1);
+    const coupon = await this.repo.findOne({ where: { id } });
 
     if (!coupon) {
       throw new NotFoundException(`Coupon with id "${id}" not found`);
@@ -66,13 +66,7 @@ export class CouponsService {
   }
 
   async findByCode(code: string): Promise<Coupon | null> {
-    const [coupon] = await this.db.db
-      .select()
-      .from(coupons)
-      .where(eq(coupons.code, code.toUpperCase()))
-      .limit(1);
-
-    return coupon ?? null;
+    return this.repo.findOne({ where: { code: code.toUpperCase() } });
   }
 
   async create(data: CreateCouponData): Promise<Coupon> {
@@ -83,16 +77,15 @@ export class CouponsService {
       throw new ConflictException(`Coupon code "${upperCode}" already exists`);
     }
 
-    const [created] = await this.db.db
-      .insert(coupons)
-      .values({
-        code: upperCode,
-        discountType: data.discountType,
-        discountValue: data.discountValue,
-        maxUses: data.maxUses ?? null,
-        expiresAt: data.expiresAt ? new Date(data.expiresAt) : null,
-      })
-      .returning();
+    const entity = this.repo.create({
+      code: upperCode,
+      discountType: data.discountType as DiscountType,
+      discountValue: data.discountValue,
+      maxUses: data.maxUses ?? null,
+      expiresAt: data.expiresAt ? new Date(data.expiresAt) : null,
+    });
+
+    const created = await this.repo.save(entity);
 
     this.cache.delete(CACHE_KEY_ALL);
     return created;
@@ -112,39 +105,35 @@ export class CouponsService {
       data = { ...data, code: upperCode };
     }
 
-    const updatePayload: Partial<typeof coupons.$inferInsert> = {};
+    const updatePayload: Partial<CouponEntity> = {};
 
     if (data.code !== undefined) updatePayload.code = data.code;
-    if (data.discountType !== undefined) updatePayload.discountType = data.discountType;
-    if (data.discountValue !== undefined) updatePayload.discountValue = data.discountValue;
+    if (data.discountType !== undefined)
+      updatePayload.discountType = data.discountType as DiscountType;
+    if (data.discountValue !== undefined)
+      updatePayload.discountValue = data.discountValue;
     if (data.maxUses !== undefined) updatePayload.maxUses = data.maxUses ?? null;
     if (data.isActive !== undefined) updatePayload.isActive = data.isActive;
     if ('expiresAt' in data) {
-      updatePayload.expiresAt = data.expiresAt ? new Date(data.expiresAt) : null;
+      updatePayload.expiresAt = data.expiresAt
+        ? new Date(data.expiresAt)
+        : null;
     }
 
-    const [updated] = await this.db.db
-      .update(coupons)
-      .set(updatePayload)
-      .where(eq(coupons.id, id))
-      .returning();
+    await this.repo.update({ id }, updatePayload);
 
     this.cache.delete(CACHE_KEY_ALL);
-    return updated;
+    return this.findById(id);
   }
 
   async softDelete(id: string): Promise<Coupon> {
     // Ensure the coupon exists
     await this.findById(id);
 
-    const [updated] = await this.db.db
-      .update(coupons)
-      .set({ isActive: false })
-      .where(eq(coupons.id, id))
-      .returning();
+    await this.repo.update({ id }, { isActive: false });
 
     this.cache.delete(CACHE_KEY_ALL);
-    return updated;
+    return this.findById(id);
   }
 
   async validateCoupon(
@@ -192,7 +181,7 @@ export class CouponsService {
     // Calculate discount amount in cents
     let discountAmountCents: number;
 
-    if (coupon.discountType === 'percentage') {
+    if (coupon.discountType === DiscountType.PERCENTAGE) {
       discountAmountCents = Math.round(
         (totalAmountCents * coupon.discountValue) / 100,
       );
@@ -212,11 +201,7 @@ export class CouponsService {
   }
 
   async recordUsage(id: string): Promise<void> {
-    await this.db.db
-      .update(coupons)
-      .set({ currentUses: sql`${coupons.currentUses} + 1` })
-      .where(eq(coupons.id, id));
-
+    await this.repo.increment({ id }, 'currentUses', 1);
     this.cache.delete(CACHE_KEY_ALL);
   }
 }

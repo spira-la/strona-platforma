@@ -6,12 +6,12 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { eq } from 'drizzle-orm';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 import type { Request } from 'express';
 import type { User } from '@supabase/supabase-js';
 import { ROLES_KEY, UserRole } from '../decorators/roles.decorator.js';
-import { DatabaseService } from '../../core/database.service.js';
-import { profiles } from '../../db/schema/index.js';
+import { ProfileEntity } from '../../db/entities/profile.entity.js';
 
 /**
  * Checks that the authenticated user (set by SupabaseAuthGuard) has one of
@@ -23,7 +23,7 @@ import { profiles } from '../../db/schema/index.js';
 export class RolesGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
-    private readonly database: DatabaseService,
+    @InjectDataSource() private readonly dataSource: DataSource,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -47,11 +47,9 @@ export class RolesGuard implements CanActivate {
     }
 
     // Look up the user's role from the profiles table
-    const [profile] = await this.database.db
-      .select({ role: profiles.role })
-      .from(profiles)
-      .where(eq(profiles.id, user.id))
-      .limit(1);
+    const profile = await this.dataSource
+      .getRepository(ProfileEntity)
+      .findOne({ where: { id: user.id }, select: { role: true } });
 
     if (!profile) {
       throw new ForbiddenException('User profile not found');

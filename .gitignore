@@ -48,3 +48,5 @@ ref/
 
 # Claude
 .claude/
+creds.md
+dev.sh

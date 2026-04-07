@@ -5,11 +5,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { eq } from 'drizzle-orm';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 import { FEATURE_FLAG_KEY } from '../decorators/feature-flag.decorator.js';
-import { DatabaseService } from '../../core/database.service.js';
 import { CacheService } from '../../core/cache.service.js';
-import { featureFlags } from '../../db/schema/index.js';
+import { FeatureFlagEntity } from '../../db/entities/feature-flag.entity.js';
 
 const FLAG_CACHE_TTL_MS = 60 * 1000; // 1 minute
 const CACHE_PREFIX = 'feature_flag:';
@@ -22,7 +22,7 @@ const CACHE_PREFIX = 'feature_flag:';
 export class FeatureFlagGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
-    private readonly database: DatabaseService,
+    @InjectDataSource() private readonly dataSource: DataSource,
     private readonly cache: CacheService,
   ) {}
 
@@ -54,11 +54,9 @@ export class FeatureFlagGuard implements CanActivate {
       return cached;
     }
 
-    const [flag] = await this.database.db
-      .select({ enabled: featureFlags.enabled })
-      .from(featureFlags)
-      .where(eq(featureFlags.key, flagKey))
-      .limit(1);
+    const flag = await this.dataSource
+      .getRepository(FeatureFlagEntity)
+      .findOne({ where: { key: flagKey }, select: { enabled: true } });
 
     // If the flag row doesn't exist in the DB, treat as disabled
     const enabled = flag?.enabled ?? false;
