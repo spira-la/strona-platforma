@@ -19,21 +19,26 @@ import { AppController } from './app.controller.js';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        type: 'postgres' as const,
-        url: config.getOrThrow<string>('DATABASE_URL'),
-        schema: process.env.DB_SCHEMA ?? 'spirala_dev_schema',
-        entities: ALL_ENTITIES,
-        synchronize: false,
-        migrationsRun: false,
-        migrations: [],
-        ssl: { rejectUnauthorized: false },
-        extra: {
+      useFactory: (config: ConfigService) => {
+        const schema = config.get<string>('DB_SCHEMA') ?? 'spirala_dev_schema';
+        return {
+          type: 'postgres' as const,
+          url: config.getOrThrow<string>('DATABASE_URL'),
+          schema,
+          entities: ALL_ENTITIES,
+          synchronize: false,
+          migrationsRun: true,
+          migrations: [__dirname + '/db/migrations/*.js'],
+          // Use gen_random_uuid() — built into PostgreSQL 13+, no extension needed
+          uuidExtension: 'pgcrypto' as const,
           ssl: { rejectUnauthorized: false },
-          options: `-c search_path=${process.env.DB_SCHEMA ?? 'spirala_dev_schema'},public`,
-        },
-        logging: process.env.NODE_ENV === 'development',
-      }),
+          extra: {
+            ssl: { rejectUnauthorized: false },
+            options: `-c search_path=${schema},public`,
+          },
+          logging: config.get<string>('NODE_ENV') === 'development',
+        };
+      },
     }),
     CoreModule,
     EmailModule,
