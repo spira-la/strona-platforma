@@ -10,9 +10,11 @@ export default new DataSource({
   type: 'postgres',
   url: process.env.DATABASE_URL,
   schema: process.env.DB_SCHEMA ?? 'spirala_dev_schema',
-  // For CLI: glob paths pointing to compiled JS in dist/
-  entities: ['dist/db/entities/*.js'],
-  migrations: ['dist/db/migrations/*.js'],
+  entities: [__dirname + '/../db/entities/*.{ts,js}'],
+  migrations: [__dirname + '/../db/migrations/*.{ts,js}'],
   ssl: { rejectUnauthorized: false },
+  extra: {
+    ssl: { rejectUnauthorized: false },
+  },
   logging: process.env.NODE_ENV === 'development',
 });
