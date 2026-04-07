@@ -62,4 +62,5 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=5 \
   CMD wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1
 
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 CMD ["dumb-init", "node", "dist/main"]
