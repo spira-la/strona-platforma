@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
   Index,
 } from 'typeorm';
-import { BookingStatus } from './enums.js';
+import { BookingStatus } from './enums';
 
 @Entity({ name: 'bookings' })
 @Index('bookings_coach_id_idx', ['coachId'])

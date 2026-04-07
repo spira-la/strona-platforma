@@ -6,7 +6,7 @@ import {
   Index,
   Unique,
 } from 'typeorm';
-import { PurchaseStatus } from './enums.js';
+import { PurchaseStatus } from './enums';
 
 @Entity({ name: 'purchases' })
 @Unique('purchases_user_product_unique', ['userId', 'productId'])

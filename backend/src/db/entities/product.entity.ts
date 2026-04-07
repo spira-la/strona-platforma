@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
   Index,
 } from 'typeorm';
-import { ProductType } from './enums.js';
+import { ProductType } from './enums';
 
 @Entity({ name: 'categories' })
 @Index('categories_slug_idx', ['slug'])

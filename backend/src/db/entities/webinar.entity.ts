@@ -7,7 +7,7 @@ import {
   Index,
   Unique,
 } from 'typeorm';
-import { WebinarStatus, WebinarSessionStatus } from './enums.js';
+import { WebinarStatus, WebinarSessionStatus } from './enums';
 
 @Entity({ name: 'webinars' })
 @Index('webinars_slug_idx', ['slug'])

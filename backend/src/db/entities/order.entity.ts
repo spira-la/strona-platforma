@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   Index,
 } from 'typeorm';
-import { OrderStatus } from './enums.js';
+import { OrderStatus } from './enums';
 
 @Entity({ name: 'orders' })
 @Index('orders_user_id_idx', ['userId'])

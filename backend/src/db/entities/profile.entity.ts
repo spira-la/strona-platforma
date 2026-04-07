@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { UserRole } from './enums.js';
+import { UserRole } from './enums';
 
 @Entity({ name: 'profiles' })
 export class ProfileEntity {

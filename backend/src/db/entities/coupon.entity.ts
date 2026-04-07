@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   Index,
 } from 'typeorm';
-import { DiscountType } from './enums.js';
+import { DiscountType } from './enums';
 
 @Entity({ name: 'coupons' })
 @Index('coupons_code_idx', ['code'])
