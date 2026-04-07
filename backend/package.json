@@ -18,8 +18,10 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "db:migrate": "drizzle-kit migrate",
-    "db:generate": "drizzle-kit generate"
+    "typeorm": "NODE_TLS_REJECT_UNAUTHORIZED=0 ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "db:migrate": "npm run typeorm -- migration:run -d src/config/data-source.ts",
+    "db:generate": "npm run typeorm -- migration:generate -d src/config/data-source.ts src/db/migrations/migration",
+    "db:revert": "npm run typeorm -- migration:revert -d src/config/data-source.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1022.0",
@@ -28,17 +30,20 @@
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.2.6",
+    "@nestjs/typeorm": "^11.0.1",
     "@supabase/supabase-js": "^2.101.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.4",
     "dotenv": "^17.4.0",
-    "drizzle-kit": "^0.31.10",
-    "drizzle-orm": "^0.45.2",
     "nodemailer": "^8.0.4",
-    "postgres": "^3.4.8",
+    "pg": "^8.20.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "sharp": "^0.34.5",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typeorm": "^0.3.28",
+    "typescript": "^5.7.3",
     "zod": "^4.3.6"
   },
   "devDependencies": {
@@ -63,9 +68,6 @@
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
     "ts-loader": "^9.5.2",
-    "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.7.3",
     "typescript-eslint": "^8.20.0"
   },
   "jest": {

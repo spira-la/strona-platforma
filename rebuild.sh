@@ -86,7 +86,7 @@ run_migrations() {
     source "$ENV_FILE"
     set +a
     npm ci --silent 2>/dev/null || npm install --silent
-    npm run db:migrate 2>&1 || echo "  WARNING: No pending migrations or migration failed"
+    npm run db:migrate 2>&1 || echo "  WARNING: migration failed or no pending migrations"
   else
     echo "  WARNING: $ENV_FILE not found, skipping migrations"
   fi
