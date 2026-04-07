@@ -85,6 +85,7 @@ run_migrations() {
     set -a
     source "$ENV_FILE"
     set +a
+    export NODE_TLS_REJECT_UNAUTHORIZED=0
     npm ci --silent 2>/dev/null || npm install --silent
     npm run db:migrate 2>&1 || echo "  WARNING: migration failed or no pending migrations"
   else

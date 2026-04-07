@@ -66,6 +66,7 @@ jobs:
             cd ${{ secrets.SPIRALA_APP_DIR_PROD }}/backend
             # Run database migrations before building
             set -a && source .env.production && set +a
+            export NODE_TLS_REJECT_UNAUTHORIZED=0
             npm ci
             npm run db:migrate 2>&1 || echo "WARNING: migration failed or no pending migrations"
             # Build and deploy
