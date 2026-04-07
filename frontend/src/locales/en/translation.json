@@ -35,5 +35,35 @@
     "title": "Page not found",
     "description": "Sorry, the page you are looking for does not exist.",
     "backHome": "Back to home"
+  },
+  "admin": {
+    "branding": {
+      "logoAlt": "Spirala Logo",
+      "panel": "Admin"
+    },
+    "nav": {
+      "ariaLabel": "Admin panel navigation",
+      "sidebarLabel": "Sidebar",
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu",
+      "collapseSidebar": "Collapse sidebar",
+      "expandSidebar": "Expand sidebar",
+      "backToSite": "Back to site",
+      "dashboard": "Dashboard",
+      "sessions": "Sessions",
+      "availability": "Availability",
+      "services": "Services",
+      "blog": "Blog",
+      "newsletter": "Newsletter",
+      "invoices": "Invoices",
+      "coupons": "Coupons",
+      "seo": "SEO",
+      "sections": {
+        "main": "Main",
+        "content": "Content",
+        "business": "Business",
+        "system": "System"
+      }
+    }
   }
 }

@@ -140,7 +140,7 @@ function BlogCard({ post }: BlogCardProps) {
             className="flex items-center gap-1 font-['Lato'] text-[13px] font-semibold text-[#B8944A] hover:text-[#D4B97A] transition-colors"
             aria-label={`Czytaj wiecej: ${post.title}`}
           >
-            Czytaj
+            <EditableText section="blog" fieldPath="readMore" as="span" placeholder="Czytaj" />
             <ArrowRight size={13} aria-hidden="true" />
           </Link>
         </div>
@@ -330,7 +330,7 @@ function NewsletterSection() {
         {submitted ? (
           <div className="w-full max-w-[480px] rounded-lg bg-[#B8944A]/[0.1] border border-[#B8944A]/30 px-6 py-4">
             <p className="font-['Lato'] text-[15px] font-semibold text-[#B8944A]">
-              Dziekujemy za zapis! Sprawdz swoja skrzynke.
+              <EditableText section="newsletter" fieldPath="successMsg" as="span" placeholder="Dziękujemy za zapis! Sprawdź swoją skrzynkę." />
             </p>
           </div>
         ) : (
@@ -355,7 +355,7 @@ function NewsletterSection() {
               type="submit"
               className="font-['Lato'] text-[14px] font-semibold text-white bg-[#B8944A] hover:bg-[#D4B97A] rounded-lg px-6 py-3 transition-colors whitespace-nowrap"
             >
-              Zapisz sie
+              <EditableText section="newsletter" fieldPath="submitButton" as="span" placeholder="Zapisz się" />
             </button>
           </form>
         )}

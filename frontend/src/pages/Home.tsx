@@ -668,7 +668,7 @@ function BlogCard({
               to="/blog"
               className="inline-flex items-center gap-1.5 font-['Lato'] text-[13px] font-semibold text-[#B8944A] hover:text-[#8A6F2E] transition-colors duration-200 focus-visible:outline-none focus-visible:underline"
             >
-              Czytaj więcej
+              <EditableText section="blog" fieldPath="readMoreFeatured" placeholder="Czytaj więcej" />
               <ArrowRight size={13} aria-hidden="true" />
             </Link>
           </div>
@@ -719,7 +719,7 @@ function BlogCard({
             to="/blog"
             className="inline-flex items-center gap-1 font-['Lato'] text-[12px] font-semibold text-[#B8944A] hover:text-[#8A6F2E] transition-colors duration-200 focus-visible:outline-none focus-visible:underline"
           >
-            Czytaj
+            <EditableText section="blog" fieldPath="readMore" placeholder="Czytaj" />
             <ArrowRight size={12} aria-hidden="true" />
           </Link>
         </div>

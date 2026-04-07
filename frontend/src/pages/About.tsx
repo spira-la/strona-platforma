@@ -153,9 +153,9 @@ export default function About() {
         <ScrollReveal animation="fade" delay={200} duration={800} className="relative z-10 flex flex-col items-center gap-5 px-6 md:px-[120px]">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-[13px] [font-family:'Lato',sans-serif]" aria-label="Breadcrumb">
-            <span className="text-white/50">Strona główna</span>
+            <span className="text-white/50"><EditableText section="about" fieldPath="breadcrumbHome" as="span" placeholder="Strona główna" /></span>
             <span className="text-white/30">/</span>
-            <span className="text-white/80">O mnie</span>
+            <span className="text-white/80"><EditableText section="about" fieldPath="breadcrumbCurrent" as="span" placeholder="O mnie" /></span>
           </nav>
 
           <EditableText
