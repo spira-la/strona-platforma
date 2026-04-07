@@ -28,6 +28,7 @@ import { AppController } from './app.controller.js';
         migrationsRun: false,
         migrations: [],
         ssl: { rejectUnauthorized: false },
+        extra: { ssl: { rejectUnauthorized: false } },
         logging: process.env.NODE_ENV === 'development',
       }),
     }),
