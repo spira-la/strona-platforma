@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Calendar } from 'lucide-react';
 import { EditableText } from '@/components/cms/EditableText';
+import { EditableBackground } from '@/components/cms/EditableBackground';
 import { BookingCalendar } from '@/components/booking/BookingCalendar';
 import { TimeSlotPicker } from '@/components/booking/TimeSlotPicker';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
@@ -304,16 +305,12 @@ export default function Services() {
         aria-label="Naglowek strony Uslugi"
       >
         {/* Background image */}
-        <div
+        <EditableBackground
+          section="services"
+          fieldPath="heroBg"
+          fallbackSrc="https://images.unsplash.com/photo-1448375240586-882707db888b?w=1400&q=80"
           className="absolute inset-0"
-          style={{
-            backgroundImage:
-              'url(https://images.unsplash.com/photo-1448375240586-882707db888b?w=1400&q=80)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-          role="presentation"
-          aria-hidden="true"
+          aria-hidden={true}
         />
         {/* Dark overlay */}
         <div
@@ -425,16 +422,12 @@ export default function Services() {
         aria-label="Wezwanie do dzialania"
       >
         {/* Background */}
-        <div
+        <EditableBackground
+          section="services"
+          fieldPath="ctaBg"
+          fallbackSrc="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1400&q=80"
           className="absolute inset-0"
-          style={{
-            backgroundImage:
-              'url(https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1400&q=80)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-          role="presentation"
-          aria-hidden="true"
+          aria-hidden={true}
         />
         <div
           className="absolute inset-0"

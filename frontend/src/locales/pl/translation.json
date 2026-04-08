@@ -17,7 +17,18 @@
     "back": "Wstecz",
     "next": "Dalej",
     "send": "Wyślij",
-    "readMore": "Czytaj więcej"
+    "readMore": "Czytaj więcej",
+    "saved": "Zapisano",
+    "done": "Gotowe"
+  },
+  "cms": {
+    "changeImage": "Zmień",
+    "changeBackground": "Zmień tło",
+    "resetDefault": "Przywróć domyślne",
+    "positionAndSize": "Pozycja i rozmiar",
+    "horizontal": "Poziomo",
+    "vertical": "Pionowo",
+    "size": "Rozmiar"
   },
   "navbar": {
     "cta": "Umów wizytę"

@@ -1,21 +1,21 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type ReactNode, type CSSProperties } from 'react';
 import { Camera, Trash2, Settings2, Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { cmsClient } from '@/clients/cms.client';
 import { useCMS } from '@/contexts/CMSContext';
-import type { CMSLanguage } from '@/types/cms.types';
-import type { EditableImageProps } from '@/types/cms.types';
+import type { CMSLanguage, CMSSectionKey } from '@/types/cms.types';
 
 const FIT_OPTIONS = [
   { label: 'Cover', value: 'cover' },
   { label: 'Contain', value: 'contain' },
-  { label: 'Fill', value: 'fill' },
+  { label: 'Fill', value: '100% 100%' },
 ] as const;
 
 /** Parse "50% 30%" into { x: 50, y: 30 }, defaults to 50/50 */
 function parsePosition(pos: string): { x: number; y: number } {
   const match = pos.match(/(\d+)%\s+(\d+)%/);
   if (match) return { x: Number(match[1]), y: Number(match[2]) };
+  // Handle named positions
   const xMap: Record<string, number> = { left: 0, center: 50, right: 100 };
   const yMap: Record<string, number> = { top: 0, center: 50, bottom: 100 };
   const parts = pos.split(/\s+/);
@@ -25,14 +25,27 @@ function parsePosition(pos: string): { x: number; y: number } {
   };
 }
 
-export function EditableImage({
+interface EditableBackgroundProps {
+  section: CMSSectionKey;
+  fieldPath: string;
+  fallbackSrc: string;
+  className?: string;
+  style?: CSSProperties;
+  children?: ReactNode;
+  role?: string;
+  'aria-label'?: string;
+  'aria-hidden'?: boolean;
+}
+
+export function EditableBackground({
   section,
   fieldPath,
   fallbackSrc,
-  alt,
   className,
-  containerClassName,
-}: EditableImageProps) {
+  style,
+  children,
+  ...rest
+}: EditableBackgroundProps) {
   const { isEditMode, getFieldValue, updateField } = useCMS();
   const { t, i18n } = useTranslation();
 
@@ -43,7 +56,6 @@ export function EditableImage({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const savedTimerRef = useRef<ReturnType<typeof setTimeout>>();
 
-  // Flash "saved" indicator then auto-hide
   const flashSaved = useCallback(() => {
     setSaved(true);
     clearTimeout(savedTimerRef.current);
@@ -57,17 +69,25 @@ export function EditableImage({
   const hasCmsImage = resolvedValue !== fieldPath && resolvedValue.trim() !== '';
   const displaySrc = previewSrc ?? (hasCmsImage ? resolvedValue : fallbackSrc);
 
-  // Object position
+  // Position (stored as separate CMS field)
   const posField = `${fieldPath}Pos`;
   const posValue = getFieldValue(section, posField);
-  const objectPosition = (posValue !== posField && posValue.trim() !== '') ? posValue : 'center center';
+  const bgPosition = (posValue !== posField && posValue.trim() !== '') ? posValue : 'center center';
 
-  // Object fit
+  // Size/fit (stored as separate CMS field)
   const fitField = `${fieldPath}Fit`;
   const fitValue = getFieldValue(section, fitField);
-  const objectFit = (fitValue !== fitField && fitValue.trim() !== '') ? fitValue : 'cover';
+  const bgSize = (fitValue !== fitField && fitValue.trim() !== '') ? fitValue : 'cover';
 
   const currentLanguage = i18n.language as CMSLanguage;
+
+  const bgStyle: CSSProperties = {
+    backgroundImage: `url(${displaySrc})`,
+    backgroundSize: bgSize,
+    backgroundPosition: bgPosition,
+    backgroundRepeat: 'no-repeat',
+    ...style,
+  };
 
   const handleFileChange = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,32 +141,25 @@ export function EditableImage({
     [section, fitField, updateField, flashSaved],
   );
 
-  const parsed = parsePosition(objectPosition);
-
-  // Read-only
+  // View mode
   if (!isEditMode) {
     return (
-      <img
-        src={displaySrc}
-        alt={alt}
-        className={className}
-        style={{ objectFit: objectFit as React.CSSProperties['objectFit'], objectPosition }}
-      />
+      <div className={className} style={bgStyle} {...rest}>
+        {children}
+      </div>
     );
   }
 
-  // Admin edit mode — controls rendered as sibling to avoid overflow-hidden clipping
+  // Edit mode
   return (
     <>
-      <img
-        src={displaySrc}
-        alt={alt}
-        className={`block w-full h-full ${className ?? ''}`}
-        style={{ objectFit: objectFit as React.CSSProperties['objectFit'], objectPosition }}
-      />
+      <div className={className} style={bgStyle} {...rest}>
+        {children}
+      </div>
 
-      {/* Admin controls — positioned relative to parent container */}
-      <div className="absolute bottom-2 right-2 z-30 flex items-center gap-1.5">
+      {/* Admin controls — bottom-right */}
+      <div className="absolute bottom-3 right-3 z-30 flex items-center gap-1.5">
+        {/* Upload */}
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
@@ -154,9 +167,10 @@ export function EditableImage({
           className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-black/70 text-white text-[11px] font-medium hover:bg-[#B8963E] transition-colors disabled:cursor-not-allowed backdrop-blur-sm shadow-lg border border-white/20"
         >
           <Camera size={12} />
-          {t('cms.changeImage')}
+          {t('cms.changeBackground')}
         </button>
 
+        {/* Position & Fit toggle */}
         <button
           type="button"
           onClick={() => setShowControls(!showControls)}
@@ -168,6 +182,7 @@ export function EditableImage({
           <Settings2 size={12} />
         </button>
 
+        {/* Reset */}
         {hasCmsImage && (
           <button
             type="button"
@@ -193,19 +208,20 @@ export function EditableImage({
       {/* Position & Fit panel */}
       {showControls && (
         <div
-          className="absolute bottom-12 right-2 z-40 bg-white rounded-xl shadow-2xl p-3 pb-2 flex flex-col gap-3 border border-[#E8E4DF]"
+          className="absolute bottom-12 right-3 z-40 bg-white rounded-xl shadow-2xl p-3 pb-2 flex flex-col gap-3 border border-[#E8E4DF]"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex items-start gap-4">
           {/* Position sliders */}
           <div className="flex flex-col gap-3 min-w-[120px]">
+            {/* Horizontal */}
             <div>
               <div className="flex items-center justify-between mb-1">
                 <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter']">
                   {t('cms.horizontal')}
                 </p>
                 <span className="text-[10px] text-[#8A8A8A] font-['Inter'] font-medium">
-                  {parsed.x}%
+                  {parsePosition(bgPosition).x}%
                 </span>
               </div>
               <input
@@ -213,12 +229,13 @@ export function EditableImage({
                 min={0}
                 max={100}
                 step={5}
-                value={parsed.x}
+                value={parsePosition(bgPosition).x}
                 onChange={(e) => {
                   const x = Number(e.target.value);
-                  void handlePositionChange(`${x}% ${parsed.y}%`);
+                  const y = parsePosition(bgPosition).y;
+                  void handlePositionChange(`${x}% ${y}%`);
                 }}
-                className="w-full h-1.5 rounded-full appearance-none bg-gray-200 cursor-pointer"
+                className="w-full h-1.5 rounded-full appearance-none bg-gray-200 accent-[#B8963E] cursor-pointer"
                 style={{ accentColor: '#B8963E' }}
               />
               <div className="flex justify-between text-[9px] text-[#AAAAAA] font-['Inter'] mt-0.5">
@@ -226,13 +243,14 @@ export function EditableImage({
                 <span>→</span>
               </div>
             </div>
+            {/* Vertical */}
             <div>
               <div className="flex items-center justify-between mb-1">
                 <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter']">
                   {t('cms.vertical')}
                 </p>
                 <span className="text-[10px] text-[#8A8A8A] font-['Inter'] font-medium">
-                  {parsed.y}%
+                  {parsePosition(bgPosition).y}%
                 </span>
               </div>
               <input
@@ -240,12 +258,13 @@ export function EditableImage({
                 min={0}
                 max={100}
                 step={5}
-                value={parsed.y}
+                value={parsePosition(bgPosition).y}
                 onChange={(e) => {
                   const y = Number(e.target.value);
-                  void handlePositionChange(`${parsed.x}% ${y}%`);
+                  const x = parsePosition(bgPosition).x;
+                  void handlePositionChange(`${x}% ${y}%`);
                 }}
-                className="w-full h-1.5 rounded-full appearance-none bg-gray-200 cursor-pointer"
+                className="w-full h-1.5 rounded-full appearance-none bg-gray-200 accent-[#B8963E] cursor-pointer"
                 style={{ accentColor: '#B8963E' }}
               />
               <div className="flex justify-between text-[9px] text-[#AAAAAA] font-['Inter'] mt-0.5">
@@ -267,7 +286,7 @@ export function EditableImage({
                   type="button"
                   onClick={() => void handleFitChange(opt.value)}
                   className={`px-3 py-1 rounded text-[11px] font-medium transition-colors font-['Inter'] ${
-                    objectFit === opt.value
+                    bgSize === opt.value
                       ? 'bg-[#B8963E] text-white'
                       : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
                   }`}
@@ -277,6 +296,7 @@ export function EditableImage({
               ))}
             </div>
           </div>
+
           </div>
 
           {/* Footer inside panel */}
@@ -298,7 +318,7 @@ export function EditableImage({
 
       {/* Upload spinner */}
       {isUploading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/60 z-30">
+        <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-30">
           <span className="block h-8 w-8 rounded-full border-2 border-[#B8963E]/30 border-t-[#B8963E] animate-spin" />
         </div>
       )}
@@ -306,4 +326,4 @@ export function EditableImage({
   );
 }
 
-export default EditableImage;
+export default EditableBackground;
