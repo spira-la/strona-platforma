@@ -5,7 +5,6 @@ import { EditableImage } from '@/components/cms/EditableImage';
 import { EditableBackground } from '@/components/cms/EditableBackground';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
 import { SplitText } from '@/components/shared/SplitText';
-import { ParallaxImage } from '@/components/shared/ParallaxImage';
 import { GoldLine } from '@/components/shared/GoldLine';
 import ane1Photo from '@/assets/Ane1.jpg';
 
@@ -38,14 +37,13 @@ function HeroSection() {
       aria-label="Sekcja główna"
     >
       {/* Background image */}
-      <div className="absolute inset-0" aria-hidden="true">
-        <ParallaxImage
-          src="https://images.unsplash.com/photo-1744192876531-f00759ed9c57?q=80&w=2070&auto=format&fit=crop"
-          alt=""
-          speed={0.15}
-          className="w-full h-full"
-        />
-      </div>
+      <EditableBackground
+        section="hero"
+        fieldPath="heroBg"
+        fallbackSrc="https://images.unsplash.com/photo-1744192876531-f00759ed9c57?q=80&w=2070&auto=format&fit=crop"
+        className="absolute inset-0"
+        aria-hidden={true}
+      />
 
       {/* Dark gradient overlay: bottom darker → top slightly lighter */}
       <div

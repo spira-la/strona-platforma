@@ -134,9 +134,9 @@ export function EditableImage({
     );
   }
 
-  // Admin edit mode — controls rendered as sibling to avoid overflow-hidden clipping
+  // Admin edit mode — wrapper with relative + overflow-visible so controls are never clipped
   return (
-    <>
+    <div className="relative w-full h-full" style={{ overflow: 'visible' }}>
       <img
         src={displaySrc}
         alt={alt}
@@ -301,7 +301,7 @@ export function EditableImage({
           <span className="block h-8 w-8 rounded-full border-2 border-[#B8963E]/30 border-t-[#B8963E] animate-spin" />
         </div>
       )}
-    </>
+    </div>
   );
 }
 
