@@ -87,6 +87,12 @@
     "profile": {
       "title": "Perfil",
       "description": "Gestiona tu perfil público",
+      "fullName": "Nombre completo",
+      "fullNamePlaceholder": "ej. Ana García",
+      "email": "Correo electrónico",
+      "emailPlaceholder": "ej. ana@example.com",
+      "phone": "Teléfono",
+      "phonePlaceholder": "ej. +48 123 456 789",
       "bio": "Biografía",
       "bioPlaceholder": "Cuéntales a tus clientes sobre ti...",
       "location": "Ubicación",

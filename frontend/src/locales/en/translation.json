@@ -87,6 +87,12 @@
     "profile": {
       "title": "Profile",
       "description": "Manage your public profile",
+      "fullName": "Full name",
+      "fullNamePlaceholder": "e.g. Anna Smith",
+      "email": "Email",
+      "emailPlaceholder": "e.g. anna@example.com",
+      "phone": "Phone",
+      "phonePlaceholder": "e.g. +48 123 456 789",
       "bio": "Bio",
       "bioPlaceholder": "Tell clients about yourself...",
       "location": "Location",

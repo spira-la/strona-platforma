@@ -87,6 +87,12 @@
     "profile": {
       "title": "Profil",
       "description": "Zarządzaj swoim profilem publicznym",
+      "fullName": "Imię i nazwisko",
+      "fullNamePlaceholder": "np. Anna Kowalska",
+      "email": "E-mail",
+      "emailPlaceholder": "np. anna@example.com",
+      "phone": "Telefon",
+      "phonePlaceholder": "np. +48 123 456 789",
       "bio": "Bio",
       "bioPlaceholder": "Opowiedz klientom o sobie...",
       "location": "Lokalizacja",

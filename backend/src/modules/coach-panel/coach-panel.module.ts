@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoachEntity } from '../../db/entities/coach.entity.js';
+import { ProfileEntity } from '../../db/entities/profile.entity.js';
 import { BookingEntity } from '../../db/entities/booking.entity.js';
 import { CoachingServiceEntity } from '../../db/entities/coaching-service.entity.js';
 import { AvailabilityEntity, AvailabilityBlockEntity } from '../../db/entities/availability.entity.js';
@@ -12,6 +13,7 @@ import { CoachPanelController } from './coach-panel.controller.js';
   imports: [
     TypeOrmModule.forFeature([
       CoachEntity,
+      ProfileEntity,
       BookingEntity,
       CoachingServiceEntity,
       AvailabilityEntity,

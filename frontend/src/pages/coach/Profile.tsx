@@ -55,7 +55,7 @@ function TagDisplay({ tags }: TagDisplayProps) {
       {tags.map((tag) => (
         <span
           key={tag}
-          className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[12px] font-medium bg-[#B8963E]/10 text-[#B8963E] font-['Inter']"
+          className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[12px] font-medium bg-[#0D9488]/10 text-[#0D9488] font-['Inter']"
         >
           {tag}
         </span>
@@ -87,7 +87,7 @@ function Toggle({ id, checked, onChange, label }: ToggleProps) {
         <div
           className={[
             'w-10 h-6 rounded-full transition-colors duration-200',
-            checked ? 'bg-[#B8963E]' : 'bg-[#D4D0CB]',
+            checked ? 'bg-[#0D9488]' : 'bg-[#D4D0CB]',
           ].join(' ')}
         />
         <div
@@ -114,6 +114,9 @@ export default function CoachProfile() {
   });
 
   // ── Local form state ─────────────────────────────────────────────────────────
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [bio, setBio] = useState('');
   const [location, setLocation] = useState('');
   const [website, setWebsite] = useState('');
@@ -127,6 +130,9 @@ export default function CoachProfile() {
   // Populate form when profile loads
   useEffect(() => {
     if (!profile) return;
+    setFullName(profile.fullName ?? '');
+    setEmail(profile.email ?? '');
+    setPhone(profile.phone ?? '');
     setBio(profile.bio ?? '');
     setLocation(profile.location ?? '');
     setWebsite(profile.website ?? '');
@@ -156,6 +162,9 @@ export default function CoachProfile() {
     const yearsNum = yearsExperience !== '' ? parseInt(yearsExperience, 10) : undefined;
 
     mutate({
+      fullName: fullName || undefined,
+      email: email || undefined,
+      phone: phone || undefined,
       bio: bio || undefined,
       location: location || undefined,
       website: website || undefined,
@@ -177,7 +186,7 @@ export default function CoachProfile() {
         />
         <div className="flex justify-center py-16">
           <div
-            className="w-8 h-8 rounded-full border-4 border-[#E8E4DF] border-t-[#B8963E] animate-spin"
+            className="w-8 h-8 rounded-full border-4 border-[#E8E4DF] border-t-[#0D9488] animate-spin"
             role="status"
             aria-label={t('common.loading')}
           />
@@ -198,6 +207,42 @@ export default function CoachProfile() {
       />
 
       <form onSubmit={handleSubmit} className="max-w-2xl space-y-6" noValidate>
+
+        {/* Full name */}
+        <AdminFormField label={t('coach.profile.fullName')} htmlFor="profile-fullname">
+          <input
+            id="profile-fullname"
+            type="text"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            placeholder={t('coach.profile.fullNamePlaceholder')}
+            className={ADMIN_INPUT_CLASS}
+          />
+        </AdminFormField>
+
+        {/* Email */}
+        <AdminFormField label={t('coach.profile.email')} htmlFor="profile-email">
+          <input
+            id="profile-email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder={t('coach.profile.emailPlaceholder')}
+            className={ADMIN_INPUT_CLASS}
+          />
+        </AdminFormField>
+
+        {/* Phone */}
+        <AdminFormField label={t('coach.profile.phone')} htmlFor="profile-phone">
+          <input
+            id="profile-phone"
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder={t('coach.profile.phonePlaceholder')}
+            className={ADMIN_INPUT_CLASS}
+          />
+        </AdminFormField>
 
         {/* Bio */}
         <AdminFormField label={t('coach.profile.bio')} htmlFor="profile-bio">
@@ -321,7 +366,7 @@ export default function CoachProfile() {
             disabled={isPending}
             className={[
               'px-6 py-2.5 rounded-lg text-sm font-medium text-white',
-              'bg-[#B8963E] hover:bg-[#8A6F2E] active:bg-[#7A6028]',
+              'bg-[#0D9488] hover:bg-[#0B7C72] active:bg-[#7A6028]',
               'transition-colors duration-150',
               'disabled:opacity-50 disabled:cursor-not-allowed',
               "font-['Inter']",

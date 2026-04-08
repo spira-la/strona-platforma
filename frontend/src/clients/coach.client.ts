@@ -12,6 +12,9 @@ export interface CoachDashboardStats {
 export interface CoachProfile {
   id: string;
   userId: string | null;
+  fullName: string | null;
+  email: string | null;
+  phone: string | null;
   bio: string | null;
   expertise: string[] | null;
   languages: string[] | null;
@@ -27,6 +30,9 @@ export interface CoachProfile {
 }
 
 export interface UpdateCoachProfileData {
+  fullName?: string;
+  email?: string;
+  phone?: string;
   bio?: string;
   expertise?: string[];
   languages?: string[];

@@ -6,6 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, MoreThan } from 'typeorm';
 import { CoachEntity } from '../../db/entities/coach.entity.js';
+import { ProfileEntity } from '../../db/entities/profile.entity.js';
 import { BookingEntity } from '../../db/entities/booking.entity.js';
 import { CoachingServiceEntity } from '../../db/entities/coaching-service.entity.js';
 import { AvailabilityEntity, AvailabilityBlockEntity } from '../../db/entities/availability.entity.js';
@@ -30,6 +31,9 @@ export interface CreateBlockData {
 }
 
 export interface UpdateProfileData {
+  fullName?: string | null;
+  email?: string | null;
+  phone?: string | null;
   bio?: string | null;
   expertise?: string[] | null;
   languages?: string[] | null;
@@ -72,6 +76,9 @@ export class CoachPanelService {
 
     @InjectRepository(OrderEntity)
     private readonly orderRepo: Repository<OrderEntity>,
+
+    @InjectRepository(ProfileEntity)
+    private readonly profileRepo: Repository<ProfileEntity>,
   ) {}
 
   // ---------------------------------------------------------------------------
@@ -147,13 +154,30 @@ export class CoachPanelService {
   // Profile
   // ---------------------------------------------------------------------------
 
-  async getProfile(userId: string): Promise<CoachEntity> {
-    return this.resolveCoach(userId);
+  async getProfile(userId: string) {
+    const coach = await this.resolveCoach(userId);
+    const profile = await this.profileRepo.findOne({ where: { id: userId } });
+    return {
+      ...coach,
+      fullName: profile?.fullName ?? null,
+      email: profile?.email ?? null,
+      phone: profile?.phone ?? null,
+    };
   }
 
-  async updateProfile(userId: string, data: UpdateProfileData): Promise<CoachEntity> {
+  async updateProfile(userId: string, data: UpdateProfileData) {
     const coach = await this.resolveCoach(userId);
 
+    // Update profile fields (fullName, email, phone)
+    if (data.fullName !== undefined || data.email !== undefined || data.phone !== undefined) {
+      const profilePatch: Partial<ProfileEntity> = {};
+      if (data.fullName !== undefined) profilePatch.fullName = data.fullName;
+      if (data.email !== undefined) profilePatch.email = data.email!;
+      if (data.phone !== undefined) profilePatch.phone = data.phone ?? null;
+      await this.profileRepo.update({ id: userId }, profilePatch);
+    }
+
+    // Update coach fields
     const patch: Partial<CoachEntity> = {};
     if (data.bio !== undefined) patch.bio = data.bio ?? null;
     if (data.expertise !== undefined) patch.expertise = data.expertise ?? null;
@@ -165,8 +189,11 @@ export class CoachPanelService {
     if (data.yearsExperience !== undefined) patch.yearsExperience = data.yearsExperience ?? null;
     if (data.certifications !== undefined) patch.certifications = data.certifications ?? null;
 
-    await this.coachRepo.update({ id: coach.id }, patch);
-    return this.resolveCoach(userId);
+    if (Object.keys(patch).length > 0) {
+      await this.coachRepo.update({ id: coach.id }, patch);
+    }
+
+    return this.getProfile(userId);
   }
 
   // ---------------------------------------------------------------------------
