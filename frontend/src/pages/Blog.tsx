@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Calendar, Mail } from 'lucide-react';
 import { EditableText } from '@/components/cms/EditableText';
+import { EditableBackground } from '@/components/cms/EditableBackground';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
 
 // ---------------------------------------------------------------------------
@@ -159,13 +160,12 @@ function HeroSection() {
       className="relative flex items-center justify-center min-h-[380px] md:min-h-[440px] overflow-hidden"
       aria-label="Naglowek bloga"
     >
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage:
-            'url(https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=2070&auto=format&fit=crop)',
-        }}
-        aria-hidden="true"
+      <EditableBackground
+        section="blog"
+        fieldPath="heroBg"
+        fallbackSrc="https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=2070&auto=format&fit=crop"
+        className="absolute inset-0"
+        aria-hidden={true}
       />
       <div
         className="absolute inset-0"

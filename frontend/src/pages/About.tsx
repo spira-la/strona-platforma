@@ -1,5 +1,6 @@
 import { Heart, Leaf, Zap } from 'lucide-react';
 import { EditableText } from '@/components/cms/EditableText';
+import { EditableBackground } from '@/components/cms/EditableBackground';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
 import ane2Photo from '@/assets/Ane2.jpg';
 
@@ -134,12 +135,12 @@ export default function About() {
         aria-label="Nagłówek strony O mnie"
       >
         {/* Background image */}
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1669493032929-791a77069ee4?q=80&w=1920&auto=format&fit=crop)',
-          }}
-          aria-hidden="true"
+        <EditableBackground
+          section="about"
+          fieldPath="heroBg"
+          fallbackSrc="https://images.unsplash.com/photo-1669493032929-791a77069ee4?q=80&w=1920&auto=format&fit=crop"
+          className="absolute inset-0"
+          aria-hidden={true}
         />
         {/* Dark gradient overlay */}
         <div
@@ -454,15 +455,12 @@ export default function About() {
         className="relative flex flex-col items-center justify-center text-center px-6 py-20 sm:py-28 overflow-hidden"
         aria-label="Wezwanie do działania"
       >
-        <div
+        <EditableBackground
+          section="about"
+          fieldPath="ctaBg"
+          fallbackSrc="https://images.unsplash.com/photo-1448375240586-882707db888b?w=1400&q=80"
           className="absolute inset-0"
-          style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1448375240586-882707db888b?w=1400&q=80)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-          role="presentation"
-          aria-hidden="true"
+          aria-hidden={true}
         />
         <div
           className="absolute inset-0"

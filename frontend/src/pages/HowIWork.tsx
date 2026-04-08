@@ -1,6 +1,7 @@
 import { ChevronDown, Compass, Layers, MessageCircle, Shield } from 'lucide-react';
 import { useState } from 'react';
 import { EditableText } from '@/components/cms/EditableText';
+import { EditableBackground } from '@/components/cms/EditableBackground';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
 import ane3Photo from '@/assets/Ane3.jpg';
 
@@ -165,15 +166,12 @@ export default function HowIWork() {
         className="relative flex flex-col items-center justify-center text-center px-6 py-32 sm:py-40 overflow-hidden"
         aria-label="Nagłówek strony Jak pracuję"
       >
-        <div
+        <EditableBackground
+          section="howIWork"
+          fieldPath="heroBg"
+          fallbackSrc="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1400&q=80"
           className="absolute inset-0"
-          style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1400&q=80)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-          role="presentation"
-          aria-hidden="true"
+          aria-hidden={true}
         />
         <div
           className="absolute inset-0"
@@ -507,15 +505,12 @@ export default function HowIWork() {
         className="relative flex flex-col items-center justify-center text-center px-6 py-20 sm:py-28 overflow-hidden"
         aria-label="Wezwanie do rezerwacji"
       >
-        <div
+        <EditableBackground
+          section="howIWork"
+          fieldPath="ctaBg"
+          fallbackSrc="https://images.unsplash.com/photo-1448375240586-882707db888b?w=1400&q=80"
           className="absolute inset-0"
-          style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1448375240586-882707db888b?w=1400&q=80)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-          role="presentation"
-          aria-hidden="true"
+          aria-hidden={true}
         />
         <div
           className="absolute inset-0"

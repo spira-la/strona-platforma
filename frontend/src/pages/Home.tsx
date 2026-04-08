@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, ShieldCheck, Lock, Heart } from 'lucide-react';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableImage } from '@/components/cms/EditableImage';
+import { EditableBackground } from '@/components/cms/EditableBackground';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
 import { SplitText } from '@/components/shared/SplitText';
 import { ParallaxImage } from '@/components/shared/ParallaxImage';
@@ -836,13 +837,12 @@ function CtaSection() {
       aria-labelledby="cta-heading"
     >
       {/* Background */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage:
-            'url(https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?q=80&w=2070&auto=format&fit=crop)',
-        }}
-        aria-hidden="true"
+      <EditableBackground
+        section="cta"
+        fieldPath="ctaBg"
+        fallbackSrc="https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?q=80&w=2070&auto=format&fit=crop"
+        className="absolute inset-0"
+        aria-hidden={true}
       />
       <div
         className="absolute inset-0"

@@ -16,31 +16,26 @@ interface UseScrollRevealOptions {
 export function useScrollReveal<T extends HTMLElement = HTMLDivElement>(
   options: UseScrollRevealOptions = {},
 ) {
-  const { threshold = 0.1, once = true, rootMargin = '0px 0px -20px 0px' } = options;
+  const { threshold = 0.05, once = true, rootMargin = '0px 0px 0px 0px' } = options;
   const ref = useRef<T>(null);
-  const [isVisible, setIsVisible] = useState(false);
+
+  // Skip animations entirely if user prefers reduced motion
+  const prefersReduced =
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const [isVisible, setIsVisible] = useState(prefersReduced);
 
   useEffect(() => {
+    if (prefersReduced) return;
+
     const el = ref.current;
     if (!el) return;
-
-    // Check if already in viewport (handles elements visible on page load)
-    const rect = el.getBoundingClientRect();
-    const alreadyVisible =
-      rect.top < window.innerHeight * (1 - threshold) &&
-      rect.bottom > 0;
-
-    if (alreadyVisible) {
-      // Small delay so the initial hidden styles are painted first,
-      // then the transition to visible kicks in.
-      const timer = setTimeout(() => setIsVisible(true), 50);
-      return () => clearTimeout(timer);
-    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true);
+          requestAnimationFrame(() => setIsVisible(true));
           if (once) observer.unobserve(el);
         }
       },
@@ -48,8 +43,16 @@ export function useScrollReveal<T extends HTMLElement = HTMLDivElement>(
     );
 
     observer.observe(el);
-    return () => observer.disconnect();
-  }, [threshold, once, rootMargin]);
+
+    // Safety fallback: if observer never fires (e.g. browser quirk),
+    // make content visible after 3 seconds so it's never permanently hidden
+    const fallback = setTimeout(() => setIsVisible(true), 3000);
+
+    return () => {
+      observer.disconnect();
+      clearTimeout(fallback);
+    };
+  }, [threshold, once, rootMargin, prefersReduced]);
 
   return { ref, isVisible };
 }
