@@ -9,25 +9,36 @@ export interface Coach {
   userId: string | null;
   fullName: string;
   email: string;
+  phone?: string | null;
   bio: string | null;
   expertise: string[] | null;
+  certifications?: string[] | null;
   languages: string[] | null;
   location: string | null;
   timezone: string;
   acceptingClients: boolean;
   isActive: boolean;
+  yearsExperience?: number | null;
   createdAt: string;
 }
 
 export interface CreateCoachData {
-  userId: string;
+  // Step 1: Basic info
+  fullName: string;
+  email: string;
+  phone?: string;
   bio?: string;
+  expertise?: string[];
+  certifications?: string[];
+  yearsExperience?: number;
+  // Step 2: Location & Settings
+  location?: string;
   timezone?: string;
+  languages?: string[];
+  acceptingClients?: boolean;
 }
 
-export type UpdateCoachData = Partial<
-  Omit<Coach, 'id' | 'userId' | 'fullName' | 'email' | 'createdAt'>
->;
+export type UpdateCoachData = Partial<Omit<Coach, 'id' | 'createdAt' | 'userId'>>;
 
 interface ListResponse {
   success: boolean;

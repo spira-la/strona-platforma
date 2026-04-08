@@ -18,6 +18,7 @@ export interface CoachWithProfile {
   userId: string | null;
   fullName: string | null;
   email: string;
+  phone: string | null;
   bio: string | null;
   expertise: string[] | null;
   languages: string[] | null;
@@ -33,14 +34,23 @@ export interface CoachWithProfile {
 }
 
 export interface CreateCoachData {
-  userId: string;
+  fullName: string;
+  email: string;
+  phone?: string | null;
   bio?: string | null;
   expertise?: string[] | null;
   languages?: string[] | null;
+  location?: string | null;
   timezone?: string | null;
+  acceptingClients?: boolean;
+  yearsExperience?: number | null;
+  certifications?: string[] | null;
 }
 
 export interface UpdateCoachData {
+  fullName?: string | null;
+  email?: string | null;
+  phone?: string | null;
   bio?: string | null;
   expertise?: string[] | null;
   languages?: string[] | null;
@@ -77,6 +87,7 @@ export class CoachesService {
       userId: coach.userId,
       fullName: profile?.fullName ?? null,
       email: profile?.email ?? '',
+      phone: profile?.phone ?? null,
       bio: coach.bio,
       expertise: coach.expertise,
       languages: coach.languages,
@@ -125,6 +136,7 @@ export class CoachesService {
         userId: coach.userId,
         fullName: profile?.fullName ?? null,
         email: profile?.email ?? '',
+        phone: profile?.phone ?? null,
         bio: coach.bio,
         expertise: coach.expertise,
         languages: coach.languages,
@@ -156,44 +168,62 @@ export class CoachesService {
   }
 
   // ---------------------------------------------------------------------------
-  // create — link an existing user profile as a coach
+  // create — create a coach (and profile if needed) by email
   // ---------------------------------------------------------------------------
   async create(data: CreateCoachData): Promise<CoachWithProfile> {
-    // Verify the user profile exists
-    const profile = await this.profileRepo.findOne({
-      where: { id: data.userId },
+    // Check if a profile with this email already exists
+    let profile = await this.profileRepo.findOne({
+      where: { email: data.email },
     });
-    if (!profile) {
-      throw new NotFoundException(
-        `User profile with id "${data.userId}" not found`,
-      );
+
+    if (profile) {
+      // Profile exists — check for duplicate coach
+      const existing = await this.coachRepo.findOne({
+        where: { userId: profile.id },
+      });
+      if (existing) {
+        throw new ConflictException(
+          `A coach record already exists for "${data.email}"`,
+        );
+      }
+    } else {
+      // Create a new profile for this coach
+      profile = this.profileRepo.create({
+        fullName: data.fullName,
+        email: data.email,
+        phone: data.phone ?? null,
+        timezone: data.timezone ?? 'Europe/Warsaw',
+        role: UserRole.COACH,
+      });
+      profile = await this.profileRepo.save(profile);
     }
 
-    // Prevent duplicates — one user can only be a coach once
-    const existing = await this.coachRepo.findOne({
-      where: { userId: data.userId },
-    });
-    if (existing) {
-      throw new ConflictException(
-        `A coach record already exists for user "${data.userId}"`,
-      );
+    // Update profile fields if provided
+    const profileUpdate: Partial<ProfileEntity> = {};
+    if (data.fullName) profileUpdate.fullName = data.fullName;
+    if (data.phone !== undefined) profileUpdate.phone = data.phone ?? null;
+    if (profile.role !== UserRole.COACH && profile.role !== UserRole.ADMIN) {
+      profileUpdate.role = UserRole.COACH;
+    }
+    if (Object.keys(profileUpdate).length > 0) {
+      await this.profileRepo.update({ id: profile.id }, profileUpdate);
     }
 
+    // Create the coach entity
     const entity = this.coachRepo.create({
-      userId: data.userId,
+      userId: profile.id,
       bio: data.bio ?? null,
       expertise: data.expertise ?? null,
       languages: data.languages ?? null,
+      location: data.location ?? null,
       timezone: data.timezone ?? profile.timezone ?? 'Europe/Warsaw',
+      acceptingClients: data.acceptingClients ?? true,
+      yearsExperience: data.yearsExperience ?? null,
+      certifications: data.certifications ?? null,
       isActive: true,
     });
 
     const created = await this.coachRepo.save(entity);
-
-    // Promote the profile role to COACH if it is currently USER
-    if (profile.role !== UserRole.COACH && profile.role !== UserRole.ADMIN) {
-      await this.profileRepo.update({ id: data.userId }, { role: UserRole.COACH });
-    }
 
     this.cache.delete(CACHE_KEY_ALL);
     return this.buildCoachWithProfile(created);
@@ -208,6 +238,16 @@ export class CoachesService {
       throw new NotFoundException(`Coach with id "${id}" not found`);
     }
 
+    // Update profile fields if provided
+    if (coach.userId && (data.fullName !== undefined || data.email !== undefined || data.phone !== undefined)) {
+      const profileUpdate: Partial<ProfileEntity> = {};
+      if (data.fullName !== undefined) profileUpdate.fullName = data.fullName;
+      if (data.email !== undefined) profileUpdate.email = data.email!;
+      if (data.phone !== undefined) profileUpdate.phone = data.phone ?? null;
+      await this.profileRepo.update({ id: coach.userId }, profileUpdate);
+    }
+
+    // Update coach fields
     const payload: Partial<CoachEntity> = {};
 
     if (data.bio !== undefined) payload.bio = data.bio ?? null;
@@ -223,7 +263,9 @@ export class CoachesService {
     if (data.certifications !== undefined)
       payload.certifications = data.certifications ?? null;
 
-    await this.coachRepo.update({ id }, payload);
+    if (Object.keys(payload).length > 0) {
+      await this.coachRepo.update({ id }, payload);
+    }
 
     this.cache.delete(CACHE_KEY_ALL);
 

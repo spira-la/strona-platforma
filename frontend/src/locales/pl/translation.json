@@ -676,6 +676,8 @@
       "searchLabel": "Szukaj coacha",
       "table": {
         "name": "Imię i email",
+        "phone": "Telefon",
+        "location": "Lokalizacja",
         "expertise": "Specjalizacja",
         "timezone": "Strefa czasowa",
         "status": "Status",
@@ -689,22 +691,39 @@
       "form": {
         "userId": "ID użytkownika",
         "userIdPlaceholder": "UUID użytkownika Supabase",
+        "fullName": "Imię i nazwisko",
+        "fullNamePlaceholder": "np. Anna Kowalska",
+        "email": "E-mail",
+        "emailPlaceholder": "np. anna@example.com",
+        "phone": "Telefon",
+        "phonePlaceholder": "np. +48 123 456 789",
         "bio": "Bio",
         "bioPlaceholder": "Krótki opis coacha...",
         "expertise": "Specjalizacje (po przecinku)",
-        "expertisePlaceholder": "np. CBT, Coaching kariery",
+        "expertisePlaceholder": "np. CBT, Trauma, Coaching",
+        "certifications": "Certyfikaty",
+        "certificationsPlaceholder": "np. ICF ACC, MBSR",
         "languages": "Języki (po przecinku)",
         "languagesPlaceholder": "np. Polski, Angielski",
         "location": "Lokalizacja",
         "locationPlaceholder": "np. Warszawa, Polska",
         "timezone": "Strefa czasowa",
         "timezonePlaceholder": "np. Europe/Warsaw",
+        "yearsExperience": "Lata doświadczenia",
         "acceptingClients": "Przyjmuje nowych klientów",
         "save": "Zapisz zmiany",
         "create": "Utwórz coacha"
       },
+      "wizard": {
+        "step": "Krok {{current}} z {{total}}",
+        "next": "Dalej",
+        "back": "Wstecz"
+      },
       "validation": {
-        "userIdRequired": "ID użytkownika jest wymagane."
+        "userIdRequired": "ID użytkownika jest wymagane.",
+        "nameRequired": "Imię i nazwisko jest wymagane",
+        "emailRequired": "E-mail jest wymagany",
+        "emailInvalid": "Nieprawidłowy adres e-mail"
       },
       "confirm": {
         "archive": "Czy na pewno chcesz zarchiwizować coacha",

@@ -10,6 +10,8 @@ interface AdminFormDialogProps {
   isLoading?: boolean;
   submitLabel: string;
   cancelLabel?: string;
+  /** When provided, the cancel button calls this instead of onClose */
+  onCancel?: () => void;
   children: React.ReactNode;
 }
 
@@ -21,11 +23,13 @@ export function AdminFormDialog({
   isLoading = false,
   submitLabel,
   cancelLabel,
+  onCancel,
   children,
 }: AdminFormDialogProps) {
   const { t } = useTranslation();
   const backdropRef = useRef<HTMLDivElement>(null);
   const resolvedCancelLabel = cancelLabel ?? t('common.cancel');
+  const handleCancelClick = onCancel ?? onClose;
 
   // Escape key
   useEffect(() => {
@@ -91,7 +95,7 @@ export function AdminFormDialog({
           <div className="flex justify-end gap-3 pt-1 pb-1">
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleCancelClick}
               disabled={isLoading}
               className="px-4 py-2 rounded-lg border border-[#E8E4DF] font-['Inter'] text-[14px] font-medium text-[#6B6B6B] hover:bg-[#F9F6F0] hover:text-[#2D2D2D] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E] disabled:opacity-50"
             >

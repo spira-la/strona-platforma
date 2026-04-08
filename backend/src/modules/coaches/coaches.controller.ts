@@ -16,14 +16,23 @@ import { CoachesService } from './coaches.service.js';
 // ---------------------------------------------------------------------------
 
 interface CreateCoachDto {
-  userId: string;
+  fullName: string;
+  email: string;
+  phone?: string | null;
   bio?: string | null;
   expertise?: string[] | null;
   languages?: string[] | null;
+  location?: string | null;
   timezone?: string | null;
+  acceptingClients?: boolean;
+  yearsExperience?: number | null;
+  certifications?: string[] | null;
 }
 
 interface UpdateCoachDto {
+  fullName?: string | null;
+  email?: string | null;
+  phone?: string | null;
   bio?: string | null;
   expertise?: string[] | null;
   languages?: string[] | null;

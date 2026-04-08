@@ -31,52 +31,34 @@ import {
 } from '@/clients/coaches.client';
 
 // ---------------------------------------------------------------------------
+// Constants
+// ---------------------------------------------------------------------------
+
+const TIMEZONES = [
+  { value: 'Europe/Warsaw', label: 'Europe/Warsaw (CET)' },
+  { value: 'Europe/London', label: 'Europe/London (GMT)' },
+  { value: 'Europe/Berlin', label: 'Europe/Berlin (CET)' },
+  { value: 'Europe/Paris', label: 'Europe/Paris (CET)' },
+  { value: 'Europe/Madrid', label: 'Europe/Madrid (CET)' },
+  { value: 'America/New_York', label: 'America/New_York (EST)' },
+  { value: 'America/Chicago', label: 'America/Chicago (CST)' },
+  { value: 'America/Los_Angeles', label: 'America/Los_Angeles (PST)' },
+  { value: 'America/Mexico_City', label: 'America/Mexico_City (CST)' },
+  { value: 'America/Sao_Paulo', label: 'America/Sao_Paulo (BRT)' },
+  { value: 'Asia/Tokyo', label: 'Asia/Tokyo (JST)' },
+  { value: 'Australia/Sydney', label: 'Australia/Sydney (AEST)' },
+  { value: 'UTC', label: 'UTC' },
+];
+
+// ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
-function tagsDisplay(tags: string[] | null, max = 3): string {
+function tagsDisplay(tags: string[] | null | undefined, max = 3): string {
   if (!tags || tags.length === 0) return '—';
   const shown = tags.slice(0, max);
   const rest = tags.length - max;
   return rest > 0 ? `${shown.join(', ')} +${rest}` : shown.join(', ');
-}
-
-// ---------------------------------------------------------------------------
-// Create form state
-// ---------------------------------------------------------------------------
-
-interface CreateFormState {
-  userId: string;
-  bio: string;
-  timezone: string;
-}
-
-function buildCreateForm(): CreateFormState {
-  return { userId: '', bio: '', timezone: 'Europe/Warsaw' };
-}
-
-// ---------------------------------------------------------------------------
-// Edit form state
-// ---------------------------------------------------------------------------
-
-interface EditFormState {
-  bio: string;
-  expertise: string; // comma-separated
-  languages: string; // comma-separated
-  location: string;
-  timezone: string;
-  acceptingClients: boolean;
-}
-
-function buildEditForm(coach: Coach): EditFormState {
-  return {
-    bio: coach.bio ?? '',
-    expertise: (coach.expertise ?? []).join(', '),
-    languages: (coach.languages ?? []).join(', '),
-    location: coach.location ?? '',
-    timezone: coach.timezone,
-    acceptingClients: coach.acceptingClients,
-  };
 }
 
 function parseCommaSeparated(value: string): string[] {
@@ -87,7 +69,49 @@ function parseCommaSeparated(value: string): string[] {
 }
 
 // ---------------------------------------------------------------------------
-// CoachCreateDialog
+// Create wizard — form state
+// ---------------------------------------------------------------------------
+
+interface CreateStep1 {
+  fullName: string;
+  email: string;
+  phone: string;
+  bio: string;
+  expertise: string;
+  certifications: string;
+  yearsExperience: string;
+}
+
+interface CreateStep2 {
+  location: string;
+  timezone: string;
+  languages: string;
+  acceptingClients: boolean;
+}
+
+function buildStep1(): CreateStep1 {
+  return {
+    fullName: '',
+    email: '',
+    phone: '',
+    bio: '',
+    expertise: '',
+    certifications: '',
+    yearsExperience: '',
+  };
+}
+
+function buildStep2(): CreateStep2 {
+  return {
+    location: '',
+    timezone: 'Europe/Warsaw',
+    languages: '',
+    acceptingClients: true,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// CoachCreateDialog — 2-step wizard
 // ---------------------------------------------------------------------------
 
 interface CoachCreateDialogProps {
@@ -98,82 +122,329 @@ interface CoachCreateDialogProps {
 
 function CoachCreateDialog({ onClose, onSave, isSaving }: CoachCreateDialogProps) {
   const { t } = useTranslation();
-  const [form, setForm] = useState<CreateFormState>(buildCreateForm);
-  const [errors, setErrors] = useState<Partial<Record<keyof CreateFormState, string>>>({});
+  const [step, setStep] = useState<1 | 2>(1);
+  const [step1, setStep1] = useState<CreateStep1>(buildStep1);
+  const [step2, setStep2] = useState<CreateStep2>(buildStep2);
+  const [errors, setErrors] = useState<Partial<Record<string, string>>>({});
 
-  const setField = <K extends keyof CreateFormState>(key: K, value: CreateFormState[K]) => {
-    setForm((prev) => ({ ...prev, [key]: value }));
+  const setS1 = <K extends keyof CreateStep1>(key: K, value: CreateStep1[K]) => {
+    setStep1((prev) => ({ ...prev, [key]: value }));
     setErrors((prev) => ({ ...prev, [key]: undefined }));
   };
 
-  const validate = (): boolean => {
-    const next: Partial<Record<keyof CreateFormState, string>> = {};
-    if (!form.userId.trim()) {
-      next.userId = t('admin.coaches.validation.userIdRequired');
+  const setS2 = <K extends keyof CreateStep2>(key: K, value: CreateStep2[K]) => {
+    setStep2((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const validateStep1 = (): boolean => {
+    const next: Partial<Record<string, string>> = {};
+    if (!step1.fullName.trim()) {
+      next.fullName = t('admin.coaches.validation.nameRequired');
+    }
+    if (!step1.email.trim()) {
+      next.email = t('admin.coaches.validation.emailRequired');
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(step1.email.trim())) {
+      next.email = t('admin.coaches.validation.emailInvalid');
     }
     setErrors(next);
     return Object.keys(next).length === 0;
   };
 
+  const handleNext = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validateStep1()) setStep(2);
+  };
+
+  const handleBack = () => setStep(1);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validate()) return;
-    onSave({
-      userId: form.userId.trim(),
-      bio: form.bio.trim() || undefined,
-      timezone: form.timezone.trim() || undefined,
-    });
+    const payload: CreateCoachData = {
+      fullName: step1.fullName.trim(),
+      email: step1.email.trim(),
+      phone: step1.phone.trim() || undefined,
+      bio: step1.bio.trim() || undefined,
+      expertise: step1.expertise ? parseCommaSeparated(step1.expertise) : undefined,
+      certifications: step1.certifications
+        ? parseCommaSeparated(step1.certifications)
+        : undefined,
+      yearsExperience: step1.yearsExperience
+        ? parseInt(step1.yearsExperience, 10)
+        : undefined,
+      location: step2.location.trim() || undefined,
+      timezone: step2.timezone || 'Europe/Warsaw',
+      languages: step2.languages ? parseCommaSeparated(step2.languages) : undefined,
+      acceptingClients: step2.acceptingClients,
+    };
+    onSave(payload);
   };
+
+  const stepLabel = t('admin.coaches.wizard.step', { current: step, total: 2 });
+  const title =
+    step === 1
+      ? `${t('admin.coaches.newCoach')} — ${stepLabel}`
+      : `${t('admin.coaches.newCoach')} — ${stepLabel}`;
 
   return (
     <AdminFormDialog
       open
-      title={t('admin.coaches.newCoach')}
+      title={title}
       onClose={onClose}
-      onSubmit={handleSubmit}
+      onSubmit={step === 1 ? handleNext : handleSubmit}
       isLoading={isSaving}
-      submitLabel={t('admin.coaches.form.create')}
+      submitLabel={
+        step === 1
+          ? t('admin.coaches.wizard.next')
+          : t('admin.coaches.form.create')
+      }
+      cancelLabel={
+        step === 2 ? t('admin.coaches.wizard.back') : undefined
+      }
+      onCancel={step === 2 ? handleBack : undefined}
     >
-      <AdminFormField
-        label={t('admin.coaches.form.userId')}
-        htmlFor="coach-userId"
-        error={errors.userId}
-      >
-        <input
-          id="coach-userId"
-          type="text"
-          value={form.userId}
-          onChange={(e) => setField('userId', e.target.value)}
-          placeholder={t('admin.coaches.form.userIdPlaceholder')}
-          className={ADMIN_INPUT_CLASS}
-          autoFocus
-          autoComplete="off"
-        />
-      </AdminFormField>
+      {/* Step indicator */}
+      <div className="flex items-center gap-2 mb-1" aria-label={stepLabel}>
+        {([1, 2] as const).map((s) => (
+          <div key={s} className="flex items-center gap-2">
+            <div
+              className={[
+                'w-6 h-6 rounded-full flex items-center justify-center font-["Inter"] text-[12px] font-semibold transition-colors',
+                s === step
+                  ? 'bg-[#B8963E] text-white'
+                  : s < step
+                  ? 'bg-[#8A6F2E] text-white'
+                  : 'bg-[#E8E4DF] text-[#8A8A8A]',
+              ].join(' ')}
+            >
+              {s}
+            </div>
+            {s < 2 && (
+              <div
+                className={[
+                  'h-px w-8 transition-colors',
+                  step > s ? 'bg-[#B8963E]' : 'bg-[#E8E4DF]',
+                ].join(' ')}
+              />
+            )}
+          </div>
+        ))}
+        <span className="ml-1 font-['Inter'] text-[12px] text-[#8A8A8A]">{stepLabel}</span>
+      </div>
 
-      <AdminFormField label={t('admin.coaches.form.bio')} htmlFor="coach-bio">
-        <textarea
-          id="coach-bio"
-          rows={3}
-          value={form.bio}
-          onChange={(e) => setField('bio', e.target.value)}
-          placeholder={t('admin.coaches.form.bioPlaceholder')}
-          className={`${ADMIN_INPUT_CLASS} resize-none`}
-        />
-      </AdminFormField>
+      {step === 1 && (
+        <>
+          <AdminFormField
+            label={`${t('admin.coaches.form.fullName')} *`}
+            htmlFor="coach-fullName"
+            error={errors.fullName}
+          >
+            <input
+              id="coach-fullName"
+              type="text"
+              value={step1.fullName}
+              onChange={(e) => setS1('fullName', e.target.value)}
+              placeholder={t('admin.coaches.form.fullNamePlaceholder')}
+              className={ADMIN_INPUT_CLASS}
+              autoFocus
+              autoComplete="name"
+            />
+          </AdminFormField>
 
-      <AdminFormField label={t('admin.coaches.form.timezone')} htmlFor="coach-timezone">
-        <input
-          id="coach-timezone"
-          type="text"
-          value={form.timezone}
-          onChange={(e) => setField('timezone', e.target.value)}
-          placeholder={t('admin.coaches.form.timezonePlaceholder')}
-          className={ADMIN_INPUT_CLASS}
-        />
-      </AdminFormField>
+          <AdminFormField
+            label={`${t('admin.coaches.form.email')} *`}
+            htmlFor="coach-email"
+            error={errors.email}
+          >
+            <input
+              id="coach-email"
+              type="email"
+              value={step1.email}
+              onChange={(e) => setS1('email', e.target.value)}
+              placeholder={t('admin.coaches.form.emailPlaceholder')}
+              className={ADMIN_INPUT_CLASS}
+              autoComplete="email"
+            />
+          </AdminFormField>
+
+          <AdminFormField label={t('admin.coaches.form.phone')} htmlFor="coach-phone">
+            <input
+              id="coach-phone"
+              type="text"
+              value={step1.phone}
+              onChange={(e) => setS1('phone', e.target.value)}
+              placeholder={t('admin.coaches.form.phonePlaceholder')}
+              className={ADMIN_INPUT_CLASS}
+              autoComplete="tel"
+            />
+          </AdminFormField>
+
+          <AdminFormField label={t('admin.coaches.form.bio')} htmlFor="coach-bio">
+            <textarea
+              id="coach-bio"
+              rows={3}
+              value={step1.bio}
+              onChange={(e) => setS1('bio', e.target.value)}
+              placeholder={t('admin.coaches.form.bioPlaceholder')}
+              className={`${ADMIN_INPUT_CLASS} resize-none`}
+            />
+          </AdminFormField>
+
+          <AdminFormField
+            label={t('admin.coaches.form.expertise')}
+            htmlFor="coach-expertise"
+          >
+            <input
+              id="coach-expertise"
+              type="text"
+              value={step1.expertise}
+              onChange={(e) => setS1('expertise', e.target.value)}
+              placeholder={t('admin.coaches.form.expertisePlaceholder')}
+              className={ADMIN_INPUT_CLASS}
+            />
+          </AdminFormField>
+
+          <AdminFormField
+            label={t('admin.coaches.form.certifications')}
+            htmlFor="coach-certifications"
+          >
+            <input
+              id="coach-certifications"
+              type="text"
+              value={step1.certifications}
+              onChange={(e) => setS1('certifications', e.target.value)}
+              placeholder={t('admin.coaches.form.certificationsPlaceholder')}
+              className={ADMIN_INPUT_CLASS}
+            />
+          </AdminFormField>
+
+          <AdminFormField
+            label={t('admin.coaches.form.yearsExperience')}
+            htmlFor="coach-yearsExperience"
+          >
+            <input
+              id="coach-yearsExperience"
+              type="number"
+              min={0}
+              max={99}
+              value={step1.yearsExperience}
+              onChange={(e) => setS1('yearsExperience', e.target.value)}
+              className={ADMIN_INPUT_CLASS}
+            />
+          </AdminFormField>
+        </>
+      )}
+
+      {step === 2 && (
+        <>
+          <AdminFormField
+            label={t('admin.coaches.form.location')}
+            htmlFor="coach-location"
+          >
+            <input
+              id="coach-location"
+              type="text"
+              value={step2.location}
+              onChange={(e) => setS2('location', e.target.value)}
+              placeholder={t('admin.coaches.form.locationPlaceholder')}
+              className={ADMIN_INPUT_CLASS}
+              autoFocus
+            />
+          </AdminFormField>
+
+          <AdminFormField
+            label={t('admin.coaches.form.timezone')}
+            htmlFor="coach-timezone"
+          >
+            <select
+              id="coach-timezone"
+              value={step2.timezone}
+              onChange={(e) => setS2('timezone', e.target.value)}
+              className={ADMIN_INPUT_CLASS}
+            >
+              {TIMEZONES.map((tz) => (
+                <option key={tz.value} value={tz.value}>
+                  {tz.label}
+                </option>
+              ))}
+            </select>
+          </AdminFormField>
+
+          <AdminFormField
+            label={t('admin.coaches.form.languages')}
+            htmlFor="coach-languages"
+          >
+            <input
+              id="coach-languages"
+              type="text"
+              value={step2.languages}
+              onChange={(e) => setS2('languages', e.target.value)}
+              placeholder={t('admin.coaches.form.languagesPlaceholder')}
+              className={ADMIN_INPUT_CLASS}
+            />
+          </AdminFormField>
+
+          {/* Accepting clients toggle */}
+          <div className="flex items-center justify-between py-2 px-3 bg-[#F9F6F0] rounded-lg">
+            <span className="font-['Inter'] text-[14px] text-[#444444]">
+              {t('admin.coaches.form.acceptingClients')}
+            </span>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={step2.acceptingClients}
+              onClick={() => setS2('acceptingClients', !step2.acceptingClients)}
+              className={[
+                'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]',
+                step2.acceptingClients ? 'bg-[#B8963E]' : 'bg-[#DDDDDD]',
+              ].join(' ')}
+            >
+              <span
+                className={[
+                  'inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform',
+                  step2.acceptingClients ? 'translate-x-6' : 'translate-x-1',
+                ].join(' ')}
+              />
+            </button>
+          </div>
+        </>
+      )}
     </AdminFormDialog>
   );
+}
+
+// ---------------------------------------------------------------------------
+// Edit form state
+// ---------------------------------------------------------------------------
+
+interface EditFormState {
+  fullName: string;
+  email: string;
+  phone: string;
+  bio: string;
+  expertise: string;
+  certifications: string;
+  languages: string;
+  location: string;
+  timezone: string;
+  yearsExperience: string;
+  acceptingClients: boolean;
+}
+
+function buildEditForm(coach: Coach): EditFormState {
+  return {
+    fullName: coach.fullName,
+    email: coach.email,
+    phone: coach.phone ?? '',
+    bio: coach.bio ?? '',
+    expertise: (coach.expertise ?? []).join(', '),
+    certifications: (coach.certifications ?? []).join(', '),
+    languages: (coach.languages ?? []).join(', '),
+    location: coach.location ?? '',
+    timezone: coach.timezone,
+    yearsExperience: coach.yearsExperience != null ? String(coach.yearsExperience) : '',
+    acceptingClients: coach.acceptingClients,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -198,11 +469,16 @@ function CoachEditDialog({ coach, onClose, onSave, isSaving }: CoachEditDialogPr
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave(coach.id, {
+      fullName: form.fullName.trim() || coach.fullName,
+      email: form.email.trim() || coach.email,
+      phone: form.phone.trim() || null,
       bio: form.bio.trim() || null,
       expertise: parseCommaSeparated(form.expertise),
+      certifications: parseCommaSeparated(form.certifications),
       languages: parseCommaSeparated(form.languages),
       location: form.location.trim() || null,
       timezone: form.timezone.trim() || 'Europe/Warsaw',
+      yearsExperience: form.yearsExperience ? parseInt(form.yearsExperience, 10) : null,
       acceptingClients: form.acceptingClients,
     });
   };
@@ -216,6 +492,40 @@ function CoachEditDialog({ coach, onClose, onSave, isSaving }: CoachEditDialogPr
       isLoading={isSaving}
       submitLabel={t('admin.coaches.form.save')}
     >
+      <AdminFormField label={t('admin.coaches.form.fullName')} htmlFor="edit-coach-fullName">
+        <input
+          id="edit-coach-fullName"
+          type="text"
+          value={form.fullName}
+          onChange={(e) => setField('fullName', e.target.value)}
+          placeholder={t('admin.coaches.form.fullNamePlaceholder')}
+          className={ADMIN_INPUT_CLASS}
+          autoFocus
+        />
+      </AdminFormField>
+
+      <AdminFormField label={t('admin.coaches.form.email')} htmlFor="edit-coach-email">
+        <input
+          id="edit-coach-email"
+          type="email"
+          value={form.email}
+          onChange={(e) => setField('email', e.target.value)}
+          placeholder={t('admin.coaches.form.emailPlaceholder')}
+          className={ADMIN_INPUT_CLASS}
+        />
+      </AdminFormField>
+
+      <AdminFormField label={t('admin.coaches.form.phone')} htmlFor="edit-coach-phone">
+        <input
+          id="edit-coach-phone"
+          type="text"
+          value={form.phone}
+          onChange={(e) => setField('phone', e.target.value)}
+          placeholder={t('admin.coaches.form.phonePlaceholder')}
+          className={ADMIN_INPUT_CLASS}
+        />
+      </AdminFormField>
+
       <AdminFormField label={t('admin.coaches.form.bio')} htmlFor="edit-coach-bio">
         <textarea
           id="edit-coach-bio"
@@ -224,7 +534,6 @@ function CoachEditDialog({ coach, onClose, onSave, isSaving }: CoachEditDialogPr
           onChange={(e) => setField('bio', e.target.value)}
           placeholder={t('admin.coaches.form.bioPlaceholder')}
           className={`${ADMIN_INPUT_CLASS} resize-none`}
-          autoFocus
         />
       </AdminFormField>
 
@@ -238,6 +547,20 @@ function CoachEditDialog({ coach, onClose, onSave, isSaving }: CoachEditDialogPr
           value={form.expertise}
           onChange={(e) => setField('expertise', e.target.value)}
           placeholder={t('admin.coaches.form.expertisePlaceholder')}
+          className={ADMIN_INPUT_CLASS}
+        />
+      </AdminFormField>
+
+      <AdminFormField
+        label={t('admin.coaches.form.certifications')}
+        htmlFor="edit-coach-certifications"
+      >
+        <input
+          id="edit-coach-certifications"
+          type="text"
+          value={form.certifications}
+          onChange={(e) => setField('certifications', e.target.value)}
+          placeholder={t('admin.coaches.form.certificationsPlaceholder')}
           className={ADMIN_INPUT_CLASS}
         />
       </AdminFormField>
@@ -274,12 +597,31 @@ function CoachEditDialog({ coach, onClose, onSave, isSaving }: CoachEditDialogPr
         label={t('admin.coaches.form.timezone')}
         htmlFor="edit-coach-timezone"
       >
-        <input
+        <select
           id="edit-coach-timezone"
-          type="text"
           value={form.timezone}
           onChange={(e) => setField('timezone', e.target.value)}
-          placeholder={t('admin.coaches.form.timezonePlaceholder')}
+          className={ADMIN_INPUT_CLASS}
+        >
+          {TIMEZONES.map((tz) => (
+            <option key={tz.value} value={tz.value}>
+              {tz.label}
+            </option>
+          ))}
+        </select>
+      </AdminFormField>
+
+      <AdminFormField
+        label={t('admin.coaches.form.yearsExperience')}
+        htmlFor="edit-coach-yearsExperience"
+      >
+        <input
+          id="edit-coach-yearsExperience"
+          type="number"
+          min={0}
+          max={99}
+          value={form.yearsExperience}
+          onChange={(e) => setField('yearsExperience', e.target.value)}
           className={ADMIN_INPUT_CLASS}
         />
       </AdminFormField>
@@ -468,20 +810,29 @@ export default function AdminCoaches() {
       ),
     },
     {
+      key: 'phone',
+      header: t('admin.coaches.table.phone'),
+      render: (c) => (
+        <span className="font-['Inter'] text-[13px] text-[#6B6B6B]">
+          {c.phone ?? '—'}
+        </span>
+      ),
+    },
+    {
+      key: 'location',
+      header: t('admin.coaches.table.location'),
+      render: (c) => (
+        <span className="font-['Inter'] text-[13px] text-[#6B6B6B]">
+          {c.location ?? '—'}
+        </span>
+      ),
+    },
+    {
       key: 'expertise',
       header: t('admin.coaches.table.expertise'),
       render: (c) => (
         <span className="font-['Inter'] text-[13px] text-[#6B6B6B]">
           {tagsDisplay(c.expertise)}
-        </span>
-      ),
-    },
-    {
-      key: 'timezone',
-      header: t('admin.coaches.table.timezone'),
-      render: (c) => (
-        <span className="font-['Inter'] text-[13px] text-[#6B6B6B] font-mono">
-          {c.timezone}
         </span>
       ),
     },

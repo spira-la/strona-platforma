@@ -676,6 +676,8 @@
       "searchLabel": "Buscar coaches",
       "table": {
         "name": "Nombre y email",
+        "phone": "Teléfono",
+        "location": "Ubicación",
         "expertise": "Especialización",
         "timezone": "Zona horaria",
         "status": "Estado",
@@ -689,22 +691,39 @@
       "form": {
         "userId": "ID de usuario",
         "userIdPlaceholder": "UUID de usuario Supabase",
+        "fullName": "Nombre completo",
+        "fullNamePlaceholder": "ej. Ana García",
+        "email": "Correo electrónico",
+        "emailPlaceholder": "ej. ana@example.com",
+        "phone": "Teléfono",
+        "phonePlaceholder": "ej. +48 123 456 789",
         "bio": "Biografía",
         "bioPlaceholder": "Descripción breve del coach...",
         "expertise": "Especializaciones (separadas por comas)",
-        "expertisePlaceholder": "ej. TCC, Coaching de carrera",
+        "expertisePlaceholder": "ej. TCC, Trauma, Coaching",
+        "certifications": "Certificaciones",
+        "certificationsPlaceholder": "ej. ICF ACC, MBSR",
         "languages": "Idiomas (separados por comas)",
         "languagesPlaceholder": "ej. Español, Inglés",
         "location": "Ubicación",
         "locationPlaceholder": "ej. Madrid, España",
         "timezone": "Zona horaria",
         "timezonePlaceholder": "ej. Europe/Warsaw",
+        "yearsExperience": "Años de experiencia",
         "acceptingClients": "Aceptando nuevos clientes",
         "save": "Guardar cambios",
         "create": "Crear coach"
       },
+      "wizard": {
+        "step": "Paso {{current}} de {{total}}",
+        "next": "Siguiente",
+        "back": "Atrás"
+      },
       "validation": {
-        "userIdRequired": "El ID de usuario es obligatorio."
+        "userIdRequired": "El ID de usuario es obligatorio.",
+        "nameRequired": "El nombre completo es obligatorio",
+        "emailRequired": "El correo es obligatorio",
+        "emailInvalid": "Dirección de correo inválida"
       },
       "confirm": {
         "archive": "¿Estás seguro de que deseas archivar el coach",

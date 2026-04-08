@@ -676,6 +676,8 @@
       "searchLabel": "Search coaches",
       "table": {
         "name": "Name & Email",
+        "phone": "Phone",
+        "location": "Location",
         "expertise": "Expertise",
         "timezone": "Timezone",
         "status": "Status",
@@ -689,22 +691,39 @@
       "form": {
         "userId": "User ID",
         "userIdPlaceholder": "Supabase user UUID",
+        "fullName": "Full name",
+        "fullNamePlaceholder": "e.g. Anna Smith",
+        "email": "Email",
+        "emailPlaceholder": "e.g. anna@example.com",
+        "phone": "Phone",
+        "phonePlaceholder": "e.g. +48 123 456 789",
         "bio": "Bio",
         "bioPlaceholder": "Short coach description...",
         "expertise": "Expertise (comma-separated)",
-        "expertisePlaceholder": "e.g. CBT, Career coaching",
+        "expertisePlaceholder": "e.g. CBT, Trauma, Coaching",
+        "certifications": "Certifications",
+        "certificationsPlaceholder": "e.g. ICF ACC, MBSR",
         "languages": "Languages (comma-separated)",
         "languagesPlaceholder": "e.g. Polish, English",
         "location": "Location",
         "locationPlaceholder": "e.g. Warsaw, Poland",
         "timezone": "Timezone",
         "timezonePlaceholder": "e.g. Europe/Warsaw",
+        "yearsExperience": "Years of experience",
         "acceptingClients": "Accepting new clients",
         "save": "Save changes",
         "create": "Create coach"
       },
+      "wizard": {
+        "step": "Step {{current}} of {{total}}",
+        "next": "Next",
+        "back": "Back"
+      },
       "validation": {
-        "userIdRequired": "User ID is required."
+        "userIdRequired": "User ID is required.",
+        "nameRequired": "Full name is required",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Invalid email address"
       },
       "confirm": {
         "archive": "Are you sure you want to archive the coach",
