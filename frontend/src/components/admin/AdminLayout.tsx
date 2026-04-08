@@ -253,7 +253,7 @@ function SidebarBranding({ collapsed }: SidebarBrandingProps) {
       />
       {!collapsed && (
         <div className="min-w-0">
-          <span className="block font-['Playfair_Display',serif] font-bold text-base text-[#B8963E] leading-tight truncate">
+          <span className="block font-['Cormorant_Garamond',serif] font-bold text-base text-[#B8963E] leading-tight truncate">
             Spirala
           </span>
           <span className="block text-[10px] uppercase tracking-widest text-[#AAAAAA] font-medium font-['Inter',sans-serif]">
@@ -383,7 +383,7 @@ export function AdminLayout() {
               className="h-8 w-8 flex-shrink-0 object-contain"
             />
             <div className="min-w-0">
-              <span className="block font-['Playfair_Display',serif] font-bold text-base text-[#B8963E] leading-tight truncate">
+              <span className="block font-['Cormorant_Garamond',serif] font-bold text-base text-[#B8963E] leading-tight truncate">
                 Spirala
               </span>
               <span className="block text-[10px] uppercase tracking-widest text-[#AAAAAA] font-medium font-['Inter',sans-serif]">

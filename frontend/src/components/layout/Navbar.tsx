@@ -120,7 +120,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
             aria-label="Spirala — strona główna"
           >
             <img src={spiralaIcon} alt="" className="h-9 w-auto" aria-hidden="true" />
-            <span className={`font-['Playfair_Display'] text-[22px] font-bold tracking-[-0.5px] ${useWhiteText ? 'text-white hover:text-white/80' : 'text-[#B8944A] hover:text-[#8A6F2E]'}`}>
+            <span className={`font-['Cormorant_Garamond'] text-[22px] font-bold tracking-[-0.5px] ${useWhiteText ? 'text-white hover:text-white/80' : 'text-[#B8944A] hover:text-[#8A6F2E]'}`}>
               Spirala
             </span>
           </Link>

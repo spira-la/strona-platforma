@@ -31,7 +31,6 @@ export function EditableImage({
   fallbackSrc,
   alt,
   className,
-  containerClassName,
 }: EditableImageProps) {
   const { isEditMode, getFieldValue, updateField } = useCMS();
   const { t, i18n } = useTranslation();
@@ -41,7 +40,7 @@ export function EditableImage({
   const [showControls, setShowControls] = useState(false);
   const [saved, setSaved] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const savedTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const savedTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   // Flash "saved" indicator then auto-hide
   const flashSaved = useCallback(() => {

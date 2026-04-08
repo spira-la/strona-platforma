@@ -72,7 +72,7 @@ function StatCardItem({ icon: Icon, label, value, subtitle }: StatCard) {
           <p className="font-['Inter'] text-[13px] text-[#6B6B6B] leading-tight truncate">
             {label}
           </p>
-          <p className="font-['Playfair_Display'] font-bold text-[28px] text-[#2D2D2D] leading-tight">
+          <p className="font-['Cormorant_Garamond'] font-bold text-[28px] text-[#2D2D2D] leading-tight">
             {value}
           </p>
           <p className="font-['Inter'] text-[12px] text-[#AAAAAA] leading-tight">
@@ -178,7 +178,7 @@ export default function Dashboard() {
         {/* Upcoming sessions */}
         <div className="bg-white border border-[#E8E4DF] rounded-xl p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-['Playfair_Display'] font-bold text-[18px] text-[#1A1A1A]">
+            <h2 className="font-['Cormorant_Garamond'] font-bold text-[18px] text-[#1A1A1A]">
               {t('admin.dashboard.upcomingSessions')}
             </h2>
             <Link
@@ -198,7 +198,7 @@ export default function Dashboard() {
 
         {/* Quick actions */}
         <div className="bg-white border border-[#E8E4DF] rounded-xl p-6">
-          <h2 className="font-['Playfair_Display'] font-bold text-[18px] text-[#1A1A1A] mb-4">
+          <h2 className="font-['Cormorant_Garamond'] font-bold text-[18px] text-[#1A1A1A] mb-4">
             {t('admin.dashboard.quickActions')}
           </h2>
 

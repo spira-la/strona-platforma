@@ -87,7 +87,7 @@ export default function AuthCallback() {
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </div>
-          <h1 className="font-['Playfair_Display'] text-[24px] font-bold text-[#2D2D2D] mb-2">
+          <h1 className="font-['Cormorant_Garamond'] text-[24px] font-bold text-[#2D2D2D] mb-2">
             Hasło zmienione
           </h1>
           <p className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-relaxed mb-6">
@@ -115,7 +115,7 @@ export default function AuthCallback() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
           <div className="text-center mb-2">
-            <h1 className="font-['Playfair_Display'] text-[28px] font-bold text-[#2D2D2D]">
+            <h1 className="font-['Cormorant_Garamond'] text-[28px] font-bold text-[#2D2D2D]">
               Nowe hasło
             </h1>
             <p className="font-['Lato'] text-[14px] text-[#8A8A8A] mt-1">

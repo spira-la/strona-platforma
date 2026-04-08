@@ -40,7 +40,7 @@ function ValueCard({ icon, section, titleField, titlePlaceholder, descField, des
         fieldPath={titleField}
         as="h3"
         placeholder={titlePlaceholder}
-        className="text-base font-bold uppercase tracking-wide mb-3 text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+        className="text-base font-bold uppercase tracking-wide mb-3 text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
       />
       <EditableText
         section={section}
@@ -74,7 +74,7 @@ function QualificationCard({ number, section, titleField, titlePlaceholder, desc
           fieldPath={titleField}
           as="h4"
           placeholder={titlePlaceholder}
-          className="text-sm font-bold uppercase tracking-wide text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+          className="text-sm font-bold uppercase tracking-wide text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
         />
         <EditableText
           section={section}
@@ -165,7 +165,7 @@ export default function About() {
             fieldPath="heroTitle"
             as="h1"
             placeholder="POZNAJ MOJĄ HISTORIĘ"
-            className="text-4xl sm:text-[48px] font-normal uppercase tracking-[-1px] leading-tight text-white [font-family:'Playfair_Display',serif]"
+            className="text-4xl sm:text-[48px] font-normal uppercase tracking-[-1px] leading-tight text-white [font-family:'Cormorant_Garamond',serif]"
           />
 
           <EditableText
@@ -216,7 +216,7 @@ export default function About() {
               fieldPath="bioHeading"
               as="h2"
               placeholder="CZEŚĆ, JESTEM ANETA"
-              className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+              className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
             />
 
             <EditableText
@@ -249,7 +249,7 @@ export default function About() {
                 fieldPath="bioQuote"
                 as="p"
                 placeholder={'„Zmiana nie zaczyna się w głowie — zaczyna się w ciele i w odważnej decyzji, by siebie wysłuchać."'}
-                className="text-base sm:text-lg italic leading-relaxed text-[#B8944A] [font-family:'Playfair_Display',serif]"
+                className="text-base sm:text-lg italic leading-relaxed text-[#B8944A] [font-family:'Cormorant_Garamond',serif]"
               />
             </blockquote>
           </ScrollReveal>
@@ -271,7 +271,7 @@ export default function About() {
               fieldPath="valuesHeading"
               as="h2"
               placeholder="JAK PATRZĘ NA CZŁOWIEKA"
-              className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+              className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
             />
             <EditableText
               section="about"
@@ -332,7 +332,7 @@ export default function About() {
               fieldPath="qualHeading"
               as="h2"
               placeholder="CZYM SIĘ ZAJMUJĘ"
-              className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+              className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
             />
           </ScrollReveal>
 
@@ -396,7 +396,7 @@ export default function About() {
               fieldPath="certHeading"
               as="h2"
               placeholder="MOJE WYKSZTAŁCENIE I CERTYFIKATY"
-              className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+              className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
             />
           </ScrollReveal>
 
@@ -476,7 +476,7 @@ export default function About() {
             fieldPath="ctaHeading"
             as="h2"
             placeholder="GOTOWA NA PIERWSZY KROK?"
-            className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white [font-family:'Playfair_Display',serif]"
+            className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white [font-family:'Cormorant_Garamond',serif]"
           />
           <EditableText
             section="about"

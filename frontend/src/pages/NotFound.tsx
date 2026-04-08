@@ -8,13 +8,13 @@ export default function NotFound() {
     <main className="min-h-screen flex flex-col items-center justify-center bg-[#F9F6F0] px-4 text-center">
       <h1
         className="text-8xl font-bold text-[#B8963E]"
-        style={{ fontFamily: "'Playfair Display', serif" }}
+        style={{ fontFamily: "'Cormorant Garamond', serif" }}
       >
         404
       </h1>
       <h2
         className="mt-4 text-2xl font-semibold text-[#1a1a1a]"
-        style={{ fontFamily: "'Playfair Display', serif" }}
+        style={{ fontFamily: "'Cormorant Garamond', serif" }}
       >
         {t('notFound.title')}
       </h2>

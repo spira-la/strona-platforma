@@ -71,7 +71,7 @@ function MessageViewDialog({ message, onClose }: MessageViewDialogProps) {
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#E8E4DF] flex-shrink-0">
           <h2
             id="msg-dialog-title"
-            className="font-['Playfair_Display',serif] font-bold text-[18px] text-[#2D2D2D]"
+            className="font-['Cormorant_Garamond',serif] font-bold text-[18px] text-[#2D2D2D]"
           >
             {t('admin.contact.messageDialog.title')} {message.name}
           </h2>

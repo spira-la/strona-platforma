@@ -8,7 +8,7 @@ interface AdminPageHeaderProps {
 
 /**
  * Reusable page header for admin pages.
- * Renders the page title (Playfair Display), an optional description,
+ * Renders the page title (Cormorant Garamond), an optional description,
  * and an optional action element (e.g. a button) aligned to the right.
  */
 export function AdminPageHeader({ title, description, action }: AdminPageHeaderProps) {
@@ -17,7 +17,7 @@ export function AdminPageHeader({ title, description, action }: AdminPageHeaderP
       <div className="min-w-0">
         <h1
           className={[
-            "font-['Playfair_Display',serif] font-bold text-2xl leading-tight",
+            "font-['Cormorant_Garamond',serif] font-bold text-2xl leading-tight",
             'text-[#2D2D2D] truncate',
           ].join(' ')}
         >

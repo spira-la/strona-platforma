@@ -281,7 +281,7 @@ function CouponDialog({
       <div className="relative bg-white rounded-xl shadow-2xl w-full max-w-[500px] mx-4 max-h-[90vh] flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#F0EDE8] shrink-0">
-          <h2 className="font-['Playfair_Display'] font-bold text-[20px] text-[#2D2D2D]">
+          <h2 className="font-['Cormorant_Garamond'] font-bold text-[20px] text-[#2D2D2D]">
             {editingCoupon ? t('admin.coupons.editCoupon') : t('admin.coupons.newCoupon')}
           </h2>
           <button

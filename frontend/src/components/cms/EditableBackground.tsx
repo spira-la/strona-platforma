@@ -54,7 +54,7 @@ export function EditableBackground({
   const [showControls, setShowControls] = useState(false);
   const [saved, setSaved] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const savedTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const savedTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const flashSaved = useCallback(() => {
     setSaved(true);

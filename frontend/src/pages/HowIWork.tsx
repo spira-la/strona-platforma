@@ -44,7 +44,7 @@ function PrincipleCard({ icon, section, titleField, titlePlaceholder, descField,
         fieldPath={titleField}
         as="h3"
         placeholder={titlePlaceholder}
-        className="text-base font-bold uppercase tracking-wide text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+        className="text-base font-bold uppercase tracking-wide text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
       />
       <EditableText
         section={section}
@@ -89,7 +89,7 @@ function ProcessStep({ number, isLast, section, titleField, titlePlaceholder, de
           fieldPath={titleField}
           as="h3"
           placeholder={titlePlaceholder}
-          className="text-base font-bold uppercase tracking-wide pt-1.5 text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+          className="text-base font-bold uppercase tracking-wide pt-1.5 text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
         />
         <EditableText
           section={section}
@@ -188,7 +188,7 @@ export default function HowIWork() {
             fieldPath="heroTitle"
             as="h1"
             placeholder="JAK PRACUJĘ"
-            className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-tight text-white [font-family:'Playfair_Display',serif]"
+            className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-tight text-white [font-family:'Cormorant_Garamond',serif]"
           />
 
           <EditableText
@@ -217,7 +217,7 @@ export default function HowIWork() {
                 fieldPath="methodHeading"
                 as="h2"
                 placeholder="MOJA METODOLOGIA"
-                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
               />
               <EditableText
                 section="howIWork"
@@ -252,7 +252,7 @@ export default function HowIWork() {
                   fieldPath="method1Title"
                   as="h3"
                   placeholder="PODEJŚCIE SOMATYCZNE"
-                  className="text-base font-bold uppercase tracking-wide text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                  className="text-base font-bold uppercase tracking-wide text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
                 />
                 <EditableText
                   section="howIWork"
@@ -286,7 +286,7 @@ export default function HowIWork() {
                   fieldPath="method2Title"
                   as="h3"
                   placeholder="COACHING TRANSFORMACYJNY"
-                  className="text-base font-bold uppercase tracking-wide text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                  className="text-base font-bold uppercase tracking-wide text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
                 />
                 <EditableText
                   section="howIWork"
@@ -317,7 +317,7 @@ export default function HowIWork() {
                 fieldPath="processHeading"
                 as="h2"
                 placeholder="TWOJA DROGA — OD PIERWSZEGO KONTAKTU DO TRANSFORMACJI"
-                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
               />
             </div>
           </ScrollReveal>
@@ -381,7 +381,7 @@ export default function HowIWork() {
                 fieldPath="principlesHeading"
                 as="h2"
                 placeholder="CO JEST DLA MNIE WAŻNE W PRACY"
-                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
               />
             </div>
           </ScrollReveal>
@@ -447,7 +447,7 @@ export default function HowIWork() {
                 fieldPath="faqHeading"
                 as="h2"
                 placeholder="CZEGO SPODZIEWAĆ SIĘ NA SESJI?"
-                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
               />
               <EditableText
                 section="howIWork"
@@ -527,7 +527,7 @@ export default function HowIWork() {
             fieldPath="ctaHeading"
             as="h2"
             placeholder="ZAREZERWUJ SWOJĄ PIERWSZĄ WIZYTĘ"
-            className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white [font-family:'Playfair_Display',serif]"
+            className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white [font-family:'Cormorant_Garamond',serif]"
           />
           <EditableText
             section="howIWork"
