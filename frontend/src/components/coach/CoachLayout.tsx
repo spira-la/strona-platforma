@@ -9,17 +9,13 @@ import {
   PenLine,
   Mail,
   Receipt,
-  Ticket,
-  Search,
   ArrowLeft,
   Menu,
   X,
   ChevronsLeft,
   ChevronsRight,
   Globe,
-  MessageSquare,
-  FolderOpen,
-  UserCircle,
+  User,
 } from 'lucide-react';
 import spiralaIcon from '@/assets/spirala-icon.png';
 import { ToastContainer } from '@/components/ui/ToastContainer';
@@ -40,31 +36,21 @@ interface NavSection {
 
 const NAV_SECTIONS: NavSection[] = [
   {
-    sectionKey: 'admin.nav.sections.management',
+    sectionKey: 'coach.nav.sections.main',
     items: [
-      { path: '/admin', icon: LayoutDashboard, labelKey: 'admin.nav.dashboard', end: true },
-      { path: '/admin/sessions', icon: Calendar, labelKey: 'admin.nav.sessions' },
-      { path: '/admin/invoices', icon: Receipt, labelKey: 'admin.nav.invoices' },
-      { path: '/admin/coupons', icon: Ticket, labelKey: 'admin.nav.coupons' },
-      { path: '/admin/contact', icon: MessageSquare, labelKey: 'admin.nav.contact' },
-      { path: '/admin/seo', icon: Search, labelKey: 'admin.nav.seo' },
+      { path: '/coach', icon: LayoutDashboard, labelKey: 'coach.nav.dashboard', end: true },
+      { path: '/coach/sessions', icon: Calendar, labelKey: 'coach.nav.sessions' },
+      { path: '/coach/blog', icon: PenLine, labelKey: 'coach.nav.blog' },
+      { path: '/coach/newsletter', icon: Mail, labelKey: 'coach.nav.newsletter' },
+      { path: '/coach/invoices', icon: Receipt, labelKey: 'coach.nav.invoices' },
     ],
   },
   {
-    sectionKey: 'admin.nav.sections.content',
+    sectionKey: 'coach.nav.sections.config',
     items: [
-      { path: '/admin/services', icon: Briefcase, labelKey: 'admin.nav.services' },
-      { path: '/admin/blog', icon: PenLine, labelKey: 'admin.nav.blog' },
-      { path: '/admin/newsletter', icon: Mail, labelKey: 'admin.nav.newsletter' },
-      { path: '/admin/availability', icon: Clock, labelKey: 'admin.nav.availability' },
-    ],
-  },
-  {
-    sectionKey: 'admin.nav.sections.catalog',
-    items: [
-      { path: '/admin/categories', icon: FolderOpen, labelKey: 'admin.nav.categories' },
-      { path: '/admin/languages', icon: Globe, labelKey: 'admin.nav.languages' },
-      { path: '/admin/coaches', icon: UserCircle, labelKey: 'admin.nav.coaches' },
+      { path: '/coach/profile', icon: User, labelKey: 'coach.nav.profile' },
+      { path: '/coach/availability', icon: Clock, labelKey: 'coach.nav.availability' },
+      { path: '/coach/services', icon: Briefcase, labelKey: 'coach.nav.services' },
     ],
   },
 ];
@@ -75,7 +61,7 @@ const LANGUAGES = [
   { code: 'es', label: 'ES' },
 ];
 
-const STORAGE_KEY = 'spirala_sidebar_collapsed';
+const STORAGE_KEY = 'spirala_coach_sidebar_collapsed';
 
 // ─── NavItemLink ──────────────────────────────────────────────────────────────
 
@@ -100,8 +86,8 @@ function NavItemLink({ item, collapsed, onNavigate }: NavItemLinkProps) {
         'flex items-center gap-3 rounded-lg text-sm font-medium transition-colors duration-150',
         collapsed ? 'px-[18px] py-2.5 justify-center' : 'px-3 py-2.5',
         isActive
-          ? 'bg-[#B8963E]/10 text-[#B8963E] font-semibold border-l-2 border-[#B8963E]'
-          : 'text-[#6B6B6B] hover:bg-[#F9F6F0] hover:text-[#2D2D2D]',
+          ? 'bg-[#0D9488]/10 text-[#0D9488] font-semibold border-l-[3px] border-[#0D9488]'
+          : 'text-[#6B6B6B] hover:bg-[#F0FDFA] hover:text-[#2D2D2D]',
       ].join(' ')}
     >
       <Icon className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
@@ -123,7 +109,7 @@ function SidebarNav({ collapsed, onNavigate }: SidebarNavProps) {
   return (
     <nav
       className="flex-1 overflow-y-auto px-3 py-4 space-y-5"
-      aria-label={t('admin.nav.ariaLabel')}
+      aria-label={t('coach.nav.ariaLabel')}
     >
       {NAV_SECTIONS.map((section) => (
         <div key={section.sectionKey}>
@@ -165,7 +151,7 @@ function SidebarFooter({ collapsed, onBack, onToggleCollapse }: SidebarFooterPro
     [
       'flex items-center gap-3 w-full rounded-lg text-sm font-medium',
       'transition-colors duration-150 text-[#6B6B6B]',
-      'hover:bg-[#F9F6F0] hover:text-[#2D2D2D]',
+      'hover:bg-[#F0FDFA] hover:text-[#2D2D2D]',
       collapsed ? 'px-[18px] py-2.5 justify-center' : 'px-3 py-2.5',
       extraClass,
     ].join(' ');
@@ -194,7 +180,7 @@ function SidebarFooter({ collapsed, onBack, onToggleCollapse }: SidebarFooterPro
             className={[
               "font-['Inter'] text-[11px] font-medium px-2 py-1 rounded transition-colors duration-150",
               lang.code === i18n.language
-                ? 'bg-[#B8963E]/10 text-[#B8963E]'
+                ? 'bg-[#0D9488]/10 text-[#0D9488]'
                 : 'text-[#AAAAAA] hover:text-[#6B6B6B] hover:bg-[#F9F6F0]',
             ].join(' ')}
           >
@@ -206,17 +192,17 @@ function SidebarFooter({ collapsed, onBack, onToggleCollapse }: SidebarFooterPro
       <button
         type="button"
         onClick={onBack}
-        title={collapsed ? t('admin.nav.backToSite') : undefined}
+        title={collapsed ? t('coach.nav.backToSite') : undefined}
         className={footerBtnClass()}
       >
         <ArrowLeft className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
-        {!collapsed && <span>{t('admin.nav.backToSite')}</span>}
+        {!collapsed && <span>{t('coach.nav.backToSite')}</span>}
       </button>
 
       <button
         type="button"
         onClick={onToggleCollapse}
-        aria-label={collapsed ? t('admin.nav.expandSidebar') : t('admin.nav.collapseSidebar')}
+        aria-label={collapsed ? t('coach.nav.expandSidebar') : t('coach.nav.collapseSidebar')}
         className={footerBtnClass()}
       >
         {collapsed ? (
@@ -224,7 +210,7 @@ function SidebarFooter({ collapsed, onBack, onToggleCollapse }: SidebarFooterPro
         ) : (
           <>
             <ChevronsLeft className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
-            <span>{t('admin.nav.collapseSidebar')}</span>
+            <span>{t('coach.nav.collapseSidebar')}</span>
           </>
         )}
       </button>
@@ -250,16 +236,16 @@ function SidebarBranding({ collapsed }: SidebarBrandingProps) {
     >
       <img
         src={spiralaIcon}
-        alt={t('admin.branding.logoAlt')}
+        alt={t('coach.branding.logoAlt')}
         className="h-8 w-8 flex-shrink-0 object-contain"
       />
       {!collapsed && (
         <div className="min-w-0">
-          <span className="block font-['Cormorant_Garamond',serif] font-bold text-base text-[#B8963E] leading-tight truncate">
+          <span className="block font-['Cormorant_Garamond',serif] font-bold text-base text-[#0D9488] leading-tight truncate">
             Spirala
           </span>
-          <span className="block text-[10px] uppercase tracking-widest text-[#AAAAAA] font-medium font-['Inter',sans-serif]">
-            {t('admin.branding.panel')}
+          <span className="inline-block mt-0.5 px-2 py-0.5 text-[9px] uppercase tracking-widest font-semibold font-['Inter',sans-serif] bg-[#0D9488]/10 text-[#0D9488] rounded-full">
+            {t('coach.branding.panel')}
           </span>
         </div>
       )}
@@ -267,9 +253,9 @@ function SidebarBranding({ collapsed }: SidebarBrandingProps) {
   );
 }
 
-// ─── AdminLayout ──────────────────────────────────────────────────────────────
+// ─── CoachLayout ──────────────────────────────────────────────────────────────
 
-export function AdminLayout() {
+export function CoachLayout() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
@@ -325,7 +311,7 @@ export function AdminLayout() {
           'transition-all duration-200 overflow-hidden',
           isCollapsed ? 'w-[72px]' : 'w-[260px]',
         ].join(' ')}
-        aria-label={t('admin.nav.sidebarLabel')}
+        aria-label={t('coach.nav.sidebarLabel')}
       >
         <SidebarBranding collapsed={isCollapsed} />
         <SidebarNav collapsed={isCollapsed} />
@@ -339,9 +325,9 @@ export function AdminLayout() {
       {/* ── Mobile: Hamburger trigger ────────────────────────────────────────── */}
       <button
         type="button"
-        aria-label={t('admin.nav.openMenu')}
+        aria-label={t('coach.nav.openMenu')}
         aria-expanded={isMobileOpen}
-        aria-controls="admin-mobile-sidebar"
+        aria-controls="coach-mobile-sidebar"
         onClick={() => setIsMobileOpen(true)}
         className={[
           'md:hidden fixed top-4 left-4 z-40',
@@ -365,10 +351,10 @@ export function AdminLayout() {
 
       {/* ── Mobile Sidebar ───────────────────────────────────────────────────── */}
       <aside
-        id="admin-mobile-sidebar"
+        id="coach-mobile-sidebar"
         role="dialog"
         aria-modal="true"
-        aria-label={t('admin.nav.sidebarLabel')}
+        aria-label={t('coach.nav.sidebarLabel')}
         className={[
           'md:hidden fixed inset-y-0 left-0 z-50',
           'flex flex-col w-72 bg-white border-r border-[#E8E4DF] shadow-xl',
@@ -381,21 +367,21 @@ export function AdminLayout() {
           <div className="flex items-center gap-3 min-w-0">
             <img
               src={spiralaIcon}
-              alt={t('admin.branding.logoAlt')}
+              alt={t('coach.branding.logoAlt')}
               className="h-8 w-8 flex-shrink-0 object-contain"
             />
             <div className="min-w-0">
-              <span className="block font-['Cormorant_Garamond',serif] font-bold text-base text-[#B8963E] leading-tight truncate">
+              <span className="block font-['Cormorant_Garamond',serif] font-bold text-base text-[#0D9488] leading-tight truncate">
                 Spirala
               </span>
               <span className="block text-[10px] uppercase tracking-widest text-[#AAAAAA] font-medium font-['Inter',sans-serif]">
-                {t('admin.branding.panel')}
+                {t('coach.branding.panel')}
               </span>
             </div>
           </div>
           <button
             type="button"
-            aria-label={t('admin.nav.closeMenu')}
+            aria-label={t('coach.nav.closeMenu')}
             onClick={handleCloseMobile}
             className={[
               'flex items-center justify-center w-8 h-8 rounded-lg flex-shrink-0',
@@ -425,7 +411,7 @@ export function AdminLayout() {
                 className={[
                   "font-['Inter'] text-[11px] font-medium px-2 py-1 rounded transition-colors duration-150",
                   lang.code === i18n.language
-                    ? 'bg-[#B8963E]/10 text-[#B8963E]'
+                    ? 'bg-[#0D9488]/10 text-[#0D9488]'
                     : 'text-[#AAAAAA] hover:text-[#6B6B6B] hover:bg-[#F9F6F0]',
                 ].join(' ')}
               >
@@ -443,12 +429,12 @@ export function AdminLayout() {
             className={[
               'flex items-center gap-3 w-full px-3 py-2.5 rounded-lg',
               'text-sm font-medium text-[#6B6B6B]',
-              'hover:bg-[#F9F6F0] hover:text-[#2D2D2D]',
+              'hover:bg-[#F0FDFA] hover:text-[#2D2D2D]',
               'transition-colors duration-150',
             ].join(' ')}
           >
             <ArrowLeft className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
-            <span>{t('admin.nav.backToSite')}</span>
+            <span>{t('coach.nav.backToSite')}</span>
           </button>
         </div>
       </aside>
@@ -465,4 +451,4 @@ export function AdminLayout() {
   );
 }
 
-export default AdminLayout;
+export default CoachLayout;

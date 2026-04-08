@@ -1,4 +1,5 @@
 import { Heart, Leaf, Zap } from 'lucide-react';
+import { SEO } from '@/components/shared/SEO';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableBackground } from '@/components/cms/EditableBackground';
 import { EditableImage } from '@/components/cms/EditableImage';
@@ -127,6 +128,11 @@ function CertificationItem({ section, labelField, labelPlaceholder, yearField, y
 export default function About() {
   return (
     <main className="min-h-screen bg-white text-[#2D2D2D]">
+      <SEO
+        title="O mnie"
+        description="Poznaj Anetę — psycholog kliniczny, coach i terapeuta somatyczny. Wieloletnie doświadczenie w pracy z ciałem i transformacji."
+        canonical="/o-mnie"
+      />
 
       {/* ------------------------------------------------------------------ */}
       {/* HERO                                                                 */}

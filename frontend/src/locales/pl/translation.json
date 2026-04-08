@@ -47,6 +47,271 @@
     "description": "Przepraszamy, strona której szukasz nie została znaleziona.",
     "backHome": "Wróć na stronę główną"
   },
+  "coach": {
+    "branding": {
+      "logoAlt": "Logo Spirala",
+      "panel": "Coach"
+    },
+    "nav": {
+      "ariaLabel": "Nawigacja panelu coacha",
+      "sidebarLabel": "Pasek boczny",
+      "openMenu": "Otwórz menu",
+      "closeMenu": "Zamknij menu",
+      "collapseSidebar": "Zwiń pasek",
+      "expandSidebar": "Rozwiń pasek",
+      "backToSite": "Wróć na stronę",
+      "dashboard": "Dashboard",
+      "sessions": "Sesje",
+      "blog": "Blog",
+      "newsletter": "Newsletter",
+      "invoices": "Faktury",
+      "profile": "Profil",
+      "availability": "Dostępność",
+      "services": "Usługi",
+      "sections": {
+        "main": "Główne",
+        "config": "Konfiguracja"
+      }
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "greeting": "Witaj! Oto przegląd Twojej praktyki.",
+      "stats": {
+        "upcomingSessions": "Nadchodzące sesje",
+        "totalClients": "Wszyscy klienci",
+        "thisMonthEarnings": "Zarobki w tym miesiącu",
+        "totalSessions": "Łączna liczba sesji"
+      },
+      "viewAllSessions": "Zobacz wszystkie sesje"
+    },
+    "profile": {
+      "title": "Profil",
+      "description": "Zarządzaj swoim profilem publicznym",
+      "bio": "Bio",
+      "bioPlaceholder": "Opowiedz klientom o sobie...",
+      "location": "Lokalizacja",
+      "locationPlaceholder": "np. Warszawa, Polska",
+      "website": "Strona internetowa",
+      "websitePlaceholder": "https://...",
+      "timezone": "Strefa czasowa",
+      "yearsExperience": "Lata doświadczenia",
+      "languages": "Języki",
+      "languagesPlaceholder": "np. Polski, Angielski",
+      "expertise": "Obszary specjalizacji",
+      "expertisePlaceholder": "np. CBT, Terapia traumy",
+      "certifications": "Certyfikaty",
+      "certificationsPlaceholder": "np. ICF ACC, MBSR",
+      "acceptingClients": "Przyjmuję nowych klientów",
+      "save": "Zapisz profil"
+    },
+    "sessions": {
+      "title": "Sesje",
+      "description": "Zarządzaj sesjami coachingowymi",
+      "stats": {
+        "total": "Wszystkie sesje",
+        "confirmed": "Zaplanowane",
+        "completed": "Ukończone",
+        "cancelled": "Anulowane"
+      },
+      "filter": {
+        "all": "Wszystkie",
+        "confirmed": "Zaplanowane",
+        "completed": "Ukończone",
+        "cancelled": "Anulowane"
+      },
+      "table": {
+        "client": "Klient",
+        "service": "Usługa",
+        "dateTime": "Data i godzina",
+        "duration": "Czas",
+        "status": "Status",
+        "label": "Lista sesji"
+      },
+      "statusLabel": {
+        "confirmed": "Zaplanowana",
+        "completed": "Ukończona",
+        "cancelled": "Anulowana",
+        "no-show": "Nieobecność"
+      },
+      "durationUnit": "min",
+      "empty": {
+        "noSessions": "Brak sesji coachingowych."
+      },
+      "errors": {
+        "loadFailed": "Nie udało się załadować sesji. Odśwież stronę."
+      }
+    },
+    "availability": {
+      "title": "Dostępność",
+      "description": "Skonfiguruj swoje godziny pracy i blokady terminów",
+      "weeklySchedule": "Harmonogram tygodniowy",
+      "blockedDates": "Zablokowane terminy",
+      "addBlock": "Dodaj blokadę",
+      "addSlot": "Dodaj godzinę",
+      "saveSchedule": "Zapisz harmonogram",
+      "savedSuccess": "Harmonogram zapisany pomyślnie",
+      "enableDay": "Włącz dzień",
+      "disableDay": "Wyłącz dzień",
+      "dayDisabled": "Niedostępny",
+      "startTime": "Godzina początku",
+      "endTime": "Godzina końca",
+      "removeSlot": "Usuń godzinę",
+      "days": {
+        "0": "Niedziela",
+        "1": "Poniedziałek",
+        "2": "Wtorek",
+        "3": "Środa",
+        "4": "Czwartek",
+        "5": "Piątek",
+        "6": "Sobota"
+      },
+      "validation": {
+        "startRequired": "Data początku jest wymagana.",
+        "endRequired": "Data końca jest wymagana.",
+        "endAfterStart": "Data końca musi być późniejsza niż data początku."
+      },
+      "blocks": {
+        "startAt": "Od",
+        "endAt": "Do",
+        "reason": "Powód (opcjonalnie)",
+        "reasonPlaceholder": "np. Urlop, Szkolenie",
+        "save": "Zapisz blokadę",
+        "empty": "Brak zablokowanych terminów.",
+        "delete": "Usuń blokadę",
+        "deleteTitle": "Usuń blokadę",
+        "deleteMessage": "Czy na pewno chcesz usunąć tę blokadę?"
+      }
+    },
+    "services": {
+      "title": "Moje usługi",
+      "description": "Zarządzaj oferowanymi usługami i ich cenami",
+      "addService": "Dodaj usługę",
+      "editService": "Edytuj usługę",
+      "selectFromCatalog": "Wybierz usługę z katalogu:",
+      "durationUnit": "min",
+      "stats": {
+        "total": "Wszystkie usługi",
+        "active": "Aktywne",
+        "archived": "Zarchiwizowane"
+      },
+      "filter": {
+        "active": "Aktywne",
+        "archived": "Zarchiwizowane"
+      },
+      "table": {
+        "name": "Nazwa",
+        "duration": "Czas",
+        "price": "Cena",
+        "status": "Status",
+        "actions": "Akcje",
+        "label": "Lista usług"
+      },
+      "status": {
+        "active": "Aktywna",
+        "archived": "Zarchiwizowana"
+      },
+      "form": {
+        "duration": "Czas trwania",
+        "price": "Cena (zł)",
+        "save": "Zapisz zmiany",
+        "add": "Dodaj usługę"
+      },
+      "validation": {
+        "durationRequired": "Czas trwania musi być większy od 0.",
+        "priceRequired": "Cena musi być większa od 0."
+      },
+      "confirm": {
+        "archive": "Czy na pewno chcesz zarchiwizować usługę",
+        "restore": "Czy na pewno chcesz przywrócić usługę"
+      },
+      "actions": {
+        "edit": "Edytuj",
+        "editService": "Edytuj usługę",
+        "archive": "Archiwizuj",
+        "restore": "Przywróć",
+        "archiveService": "Archiwizuj usługę",
+        "restoreService": "Przywróć usługę"
+      },
+      "empty": {
+        "noServices": "Nie masz jeszcze żadnych usług. Kliknij \"Dodaj usługę\", aby dodać pierwszą.",
+        "allAdded": "Wszystkie usługi z katalogu zostały już dodane."
+      },
+      "errors": {
+        "loadFailed": "Nie udało się załadować usług. Odśwież stronę."
+      }
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "Zarządzaj swoimi artykułami",
+      "stats": {
+        "total": "Wszystkie artykuły",
+        "published": "Opublikowane",
+        "drafts": "Szkice"
+      },
+      "filter": {
+        "published": "Opublikowane",
+        "drafts": "Szkice"
+      },
+      "searchPlaceholder": "Szukaj po tytule...",
+      "newArticle": "Nowy artykuł",
+      "table": {
+        "title": "Tytuł",
+        "status": "Status",
+        "date": "Data",
+        "actions": "Akcje"
+      },
+      "status": {
+        "published": "Opublikowany",
+        "draft": "Szkic"
+      },
+      "empty": {
+        "noResults": "Brak artykułów spełniających kryteria wyszukiwania.",
+        "noPosts": "Nie masz jeszcze żadnych artykułów. Kliknij \"Nowy artykuł\", aby zacząć."
+      },
+      "errors": {
+        "loadFailed": "Nie udało się załadować artykułów. Odśwież stronę."
+      },
+      "delete": {
+        "title": "Usuń artykuł",
+        "confirm": "Czy na pewno chcesz usunąć artykuł",
+        "irreversible": "Tej operacji nie można cofnąć."
+      }
+    },
+    "blogEditor": {
+      "title": "Edytor artykułu",
+      "description": "Twórz i edytuj artykuły",
+      "newTitle": "Nowy artykuł",
+      "editTitle": "Edytuj artykuł",
+      "titlePlaceholder": "Wpisz tytuł artykułu...",
+      "contentPlaceholder": "Zacznij pisać treść artykułu...",
+      "coverImage": "Zdjęcie główne",
+      "uploadCover": "Kliknij, aby dodać zdjęcie",
+      "removeCover": "Usuń zdjęcie",
+      "excerpt": "Zajawka",
+      "excerptPlaceholder": "Krótki opis artykułu (max 300 znaków)...",
+      "tags": "Tagi",
+      "tagsPlaceholder": "Wpisz tag i naciśnij Enter lub przecinek",
+      "slug": "Slug (URL)",
+      "slugPlaceholder": "adres-url-artykulu",
+      "publish": "Opublikowany",
+      "draft": "Szkic",
+      "save": "Zapisz",
+      "saving": "Zapisuję...",
+      "back": "Wróć do bloga",
+      "characters": "znaków"
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "description": "Zarządzaj kampaniami i subskrybentami"
+    },
+    "invoices": {
+      "title": "Faktury",
+      "description": "Historia Twoich faktur"
+    },
+    "common": {
+      "inPreparation": "Ta sekcja jest w przygotowaniu."
+    }
+  },
   "admin": {
     "branding": {
       "logoAlt": "Logo Spirala",
@@ -72,6 +337,7 @@
       "contact": "Wiadomości",
       "categories": "Kategorie",
       "languages": "Języki",
+      "coaches": "Coachowie",
       "sections": {
         "main": "Główne",
         "management": "Zarządzanie",
@@ -390,6 +656,74 @@
       },
       "errors": {
         "loadFailed": "Nie udało się załadować wiadomości. Odśwież stronę."
+      }
+    },
+    "coaches": {
+      "title": "Coachowie",
+      "description": "Zarządzaj profilami coachów w systemie",
+      "newCoach": "Nowy coach",
+      "editCoach": "Edytuj coacha",
+      "stats": {
+        "total": "Wszyscy coachowie",
+        "active": "Aktywni",
+        "archived": "Zarchiwizowani"
+      },
+      "filter": {
+        "active": "Aktywni",
+        "archived": "Zarchiwizowani"
+      },
+      "searchPlaceholder": "Szukaj po nazwie lub emailu...",
+      "searchLabel": "Szukaj coacha",
+      "table": {
+        "name": "Imię i email",
+        "expertise": "Specjalizacja",
+        "timezone": "Strefa czasowa",
+        "status": "Status",
+        "actions": "Akcje",
+        "label": "Lista coachów"
+      },
+      "status": {
+        "active": "Aktywny",
+        "archived": "Zarchiwizowany"
+      },
+      "form": {
+        "userId": "ID użytkownika",
+        "userIdPlaceholder": "UUID użytkownika Supabase",
+        "bio": "Bio",
+        "bioPlaceholder": "Krótki opis coacha...",
+        "expertise": "Specjalizacje (po przecinku)",
+        "expertisePlaceholder": "np. CBT, Coaching kariery",
+        "languages": "Języki (po przecinku)",
+        "languagesPlaceholder": "np. Polski, Angielski",
+        "location": "Lokalizacja",
+        "locationPlaceholder": "np. Warszawa, Polska",
+        "timezone": "Strefa czasowa",
+        "timezonePlaceholder": "np. Europe/Warsaw",
+        "acceptingClients": "Przyjmuje nowych klientów",
+        "save": "Zapisz zmiany",
+        "create": "Utwórz coacha"
+      },
+      "validation": {
+        "userIdRequired": "ID użytkownika jest wymagane."
+      },
+      "confirm": {
+        "archive": "Czy na pewno chcesz zarchiwizować coacha",
+        "restore": "Czy na pewno chcesz przywrócić coacha"
+      },
+      "actions": {
+        "edit": "Edytuj",
+        "editCoach": "Edytuj coacha",
+        "archive": "Archiwizuj",
+        "restore": "Przywróć",
+        "archiveCoach": "Archiwizuj coacha",
+        "restoreCoach": "Przywróć coacha"
+      },
+      "empty": {
+        "noResults": "Brak coachów pasujących do wyszukiwania.",
+        "noCoaches": "Brak coachów w systemie. Kliknij \"Nowy coach\", aby dodać pierwszego."
+      },
+      "errors": {
+        "loadFailed": "Nie udało się załadować coachów. Odśwież stronę."
       }
     },
     "common": {

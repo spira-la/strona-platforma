@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { SEO } from '@/components/shared/SEO';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import {
@@ -562,6 +563,11 @@ function ContactSection() {
 export default function Contact() {
   return (
     <main>
+      <SEO
+        title="Kontakt"
+        description="Skontaktuj się — formularz kontaktowy, e-mail i dane do rezerwacji sesji."
+        canonical="/kontakt"
+      />
       <PricingBannerSection />
       <ProcessSection />
       <ContactSection />

@@ -1,4 +1,5 @@
 import { ChevronDown, Compass, Layers, MessageCircle, Shield } from 'lucide-react';
+import { SEO } from '@/components/shared/SEO';
 import { useState } from 'react';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableBackground } from '@/components/cms/EditableBackground';
@@ -159,6 +160,11 @@ function FaqItem({ section, questionField, questionPlaceholder, answerField, ans
 export default function HowIWork() {
   return (
     <main className="min-h-screen bg-white text-[#2D2D2D]">
+      <SEO
+        title="Jak pracuję"
+        description="Moje podejście do pracy — terapia somatyczna, coaching transformacyjny i psychobiologia stresu."
+        canonical="/jak-pracuje"
+      />
 
       {/* ------------------------------------------------------------------ */}
       {/* HERO — nature image with overlay title                              */}

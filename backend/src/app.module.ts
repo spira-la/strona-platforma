@@ -11,6 +11,10 @@ import { EmailModule } from './modules/email/email.module.js';
 import { CategoriesModule } from './modules/categories/categories.module.js';
 import { LanguagesModule } from './modules/languages/languages.module.js';
 import { ContactModule } from './modules/contact/contact.module.js';
+import { CoachPanelModule } from './modules/coach-panel/coach-panel.module.js';
+import { CoachesModule } from './modules/coaches/coaches.module.js';
+import { BlogsModule } from './modules/blogs/blogs.module.js';
+import { SitemapModule } from './modules/sitemap/sitemap.module.js';
 import { AppController } from './app.controller.js';
 
 @Module({
@@ -55,6 +59,10 @@ import { AppController } from './app.controller.js';
     CategoriesModule,
     LanguagesModule,
     ContactModule,
+    CoachPanelModule,
+    CoachesModule,
+    BlogsModule,
+    SitemapModule,
   ],
   controllers: [AppController],
 })

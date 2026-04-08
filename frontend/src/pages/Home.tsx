@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { SEO } from '@/components/shared/SEO';
 import { ArrowRight, ShieldCheck, Lock, Heart } from 'lucide-react';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableImage } from '@/components/cms/EditableImage';
@@ -971,6 +972,7 @@ function NewsletterBridge() {
 export default function Home() {
   return (
     <main>
+      <SEO canonical="/" />
       <HeroSection />
       <AboutSection />
       <HowIWorkSection />

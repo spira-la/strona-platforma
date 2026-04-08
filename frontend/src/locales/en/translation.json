@@ -47,6 +47,271 @@
     "description": "Sorry, the page you are looking for does not exist.",
     "backHome": "Back to home"
   },
+  "coach": {
+    "branding": {
+      "logoAlt": "Spirala Logo",
+      "panel": "Coach"
+    },
+    "nav": {
+      "ariaLabel": "Coach panel navigation",
+      "sidebarLabel": "Sidebar",
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu",
+      "collapseSidebar": "Collapse sidebar",
+      "expandSidebar": "Expand sidebar",
+      "backToSite": "Back to site",
+      "dashboard": "Dashboard",
+      "sessions": "Sessions",
+      "blog": "Blog",
+      "newsletter": "Newsletter",
+      "invoices": "Invoices",
+      "profile": "Profile",
+      "availability": "Availability",
+      "services": "Services",
+      "sections": {
+        "main": "Main",
+        "config": "Configuration"
+      }
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "greeting": "Welcome! Here's your practice overview.",
+      "stats": {
+        "upcomingSessions": "Upcoming sessions",
+        "totalClients": "Total clients",
+        "thisMonthEarnings": "This month earnings",
+        "totalSessions": "Total sessions"
+      },
+      "viewAllSessions": "View all sessions"
+    },
+    "profile": {
+      "title": "Profile",
+      "description": "Manage your public profile",
+      "bio": "Bio",
+      "bioPlaceholder": "Tell clients about yourself...",
+      "location": "Location",
+      "locationPlaceholder": "e.g. Warsaw, Poland",
+      "website": "Website",
+      "websitePlaceholder": "https://...",
+      "timezone": "Timezone",
+      "yearsExperience": "Years of experience",
+      "languages": "Languages",
+      "languagesPlaceholder": "e.g. Polish, English",
+      "expertise": "Areas of expertise",
+      "expertisePlaceholder": "e.g. CBT, Trauma therapy",
+      "certifications": "Certifications",
+      "certificationsPlaceholder": "e.g. ICF ACC, MBSR",
+      "acceptingClients": "Accepting new clients",
+      "save": "Save profile"
+    },
+    "sessions": {
+      "title": "Sessions",
+      "description": "Manage your coaching sessions",
+      "stats": {
+        "total": "All sessions",
+        "confirmed": "Confirmed",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      },
+      "filter": {
+        "all": "All",
+        "confirmed": "Confirmed",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      },
+      "table": {
+        "client": "Client",
+        "service": "Service",
+        "dateTime": "Date & Time",
+        "duration": "Duration",
+        "status": "Status",
+        "label": "Sessions list"
+      },
+      "statusLabel": {
+        "confirmed": "Confirmed",
+        "completed": "Completed",
+        "cancelled": "Cancelled",
+        "no-show": "No-show"
+      },
+      "durationUnit": "min",
+      "empty": {
+        "noSessions": "No coaching sessions found."
+      },
+      "errors": {
+        "loadFailed": "Failed to load sessions. Please refresh."
+      }
+    },
+    "availability": {
+      "title": "Availability",
+      "description": "Configure your working hours and blocked dates",
+      "weeklySchedule": "Weekly schedule",
+      "blockedDates": "Blocked dates",
+      "addBlock": "Add block",
+      "addSlot": "Add time slot",
+      "saveSchedule": "Save schedule",
+      "savedSuccess": "Schedule saved successfully",
+      "enableDay": "Enable day",
+      "disableDay": "Disable day",
+      "dayDisabled": "Unavailable",
+      "startTime": "Start time",
+      "endTime": "End time",
+      "removeSlot": "Remove slot",
+      "days": {
+        "0": "Sunday",
+        "1": "Monday",
+        "2": "Tuesday",
+        "3": "Wednesday",
+        "4": "Thursday",
+        "5": "Friday",
+        "6": "Saturday"
+      },
+      "validation": {
+        "startRequired": "Start date is required.",
+        "endRequired": "End date is required.",
+        "endAfterStart": "End date must be after start date."
+      },
+      "blocks": {
+        "startAt": "From",
+        "endAt": "To",
+        "reason": "Reason (optional)",
+        "reasonPlaceholder": "e.g. Vacation, Training",
+        "save": "Save block",
+        "empty": "No blocked dates.",
+        "delete": "Delete block",
+        "deleteTitle": "Delete block",
+        "deleteMessage": "Are you sure you want to delete this block?"
+      }
+    },
+    "services": {
+      "title": "My services",
+      "description": "Manage your offered services and pricing",
+      "addService": "Add service",
+      "editService": "Edit service",
+      "selectFromCatalog": "Select a service from the catalog:",
+      "durationUnit": "min",
+      "stats": {
+        "total": "All services",
+        "active": "Active",
+        "archived": "Archived"
+      },
+      "filter": {
+        "active": "Active",
+        "archived": "Archived"
+      },
+      "table": {
+        "name": "Name",
+        "duration": "Duration",
+        "price": "Price",
+        "status": "Status",
+        "actions": "Actions",
+        "label": "Services list"
+      },
+      "status": {
+        "active": "Active",
+        "archived": "Archived"
+      },
+      "form": {
+        "duration": "Duration",
+        "price": "Price (PLN)",
+        "save": "Save changes",
+        "add": "Add service"
+      },
+      "validation": {
+        "durationRequired": "Duration must be greater than 0.",
+        "priceRequired": "Price must be greater than 0."
+      },
+      "confirm": {
+        "archive": "Are you sure you want to archive the service",
+        "restore": "Are you sure you want to restore the service"
+      },
+      "actions": {
+        "edit": "Edit",
+        "editService": "Edit service",
+        "archive": "Archive",
+        "restore": "Restore",
+        "archiveService": "Archive service",
+        "restoreService": "Restore service"
+      },
+      "empty": {
+        "noServices": "No services yet. Click \"Add service\" to add your first.",
+        "allAdded": "All catalog services have already been added."
+      },
+      "errors": {
+        "loadFailed": "Failed to load services. Please refresh."
+      }
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "Manage your articles",
+      "stats": {
+        "total": "All articles",
+        "published": "Published",
+        "drafts": "Drafts"
+      },
+      "filter": {
+        "published": "Published",
+        "drafts": "Drafts"
+      },
+      "searchPlaceholder": "Search by title...",
+      "newArticle": "New article",
+      "table": {
+        "title": "Title",
+        "status": "Status",
+        "date": "Date",
+        "actions": "Actions"
+      },
+      "status": {
+        "published": "Published",
+        "draft": "Draft"
+      },
+      "empty": {
+        "noResults": "No articles match your search.",
+        "noPosts": "You have no articles yet. Click \"New article\" to get started."
+      },
+      "errors": {
+        "loadFailed": "Failed to load articles. Please refresh."
+      },
+      "delete": {
+        "title": "Delete article",
+        "confirm": "Are you sure you want to delete",
+        "irreversible": "This action cannot be undone."
+      }
+    },
+    "blogEditor": {
+      "title": "Article editor",
+      "description": "Create and edit articles",
+      "newTitle": "New article",
+      "editTitle": "Edit article",
+      "titlePlaceholder": "Enter article title...",
+      "contentPlaceholder": "Start writing your article...",
+      "coverImage": "Cover image",
+      "uploadCover": "Click to upload an image",
+      "removeCover": "Remove image",
+      "excerpt": "Excerpt",
+      "excerptPlaceholder": "Brief article description (max 300 characters)...",
+      "tags": "Tags",
+      "tagsPlaceholder": "Type a tag and press Enter or comma",
+      "slug": "Slug (URL)",
+      "slugPlaceholder": "article-url-slug",
+      "publish": "Published",
+      "draft": "Draft",
+      "save": "Save",
+      "saving": "Saving...",
+      "back": "Back to blog",
+      "characters": "characters"
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "description": "Manage campaigns and subscribers"
+    },
+    "invoices": {
+      "title": "Invoices",
+      "description": "View your invoice history"
+    },
+    "common": {
+      "inPreparation": "This section is in preparation."
+    }
+  },
   "admin": {
     "branding": {
       "logoAlt": "Spirala Logo",
@@ -72,6 +337,7 @@
       "contact": "Messages",
       "categories": "Categories",
       "languages": "Languages",
+      "coaches": "Coaches",
       "sections": {
         "main": "Main",
         "management": "Management",
@@ -390,6 +656,74 @@
       },
       "errors": {
         "loadFailed": "Failed to load messages. Refresh the page."
+      }
+    },
+    "coaches": {
+      "title": "Coaches",
+      "description": "Manage coach profiles in the system",
+      "newCoach": "New coach",
+      "editCoach": "Edit coach",
+      "stats": {
+        "total": "All coaches",
+        "active": "Active",
+        "archived": "Archived"
+      },
+      "filter": {
+        "active": "Active",
+        "archived": "Archived"
+      },
+      "searchPlaceholder": "Search by name or email...",
+      "searchLabel": "Search coaches",
+      "table": {
+        "name": "Name & Email",
+        "expertise": "Expertise",
+        "timezone": "Timezone",
+        "status": "Status",
+        "actions": "Actions",
+        "label": "Coaches list"
+      },
+      "status": {
+        "active": "Active",
+        "archived": "Archived"
+      },
+      "form": {
+        "userId": "User ID",
+        "userIdPlaceholder": "Supabase user UUID",
+        "bio": "Bio",
+        "bioPlaceholder": "Short coach description...",
+        "expertise": "Expertise (comma-separated)",
+        "expertisePlaceholder": "e.g. CBT, Career coaching",
+        "languages": "Languages (comma-separated)",
+        "languagesPlaceholder": "e.g. Polish, English",
+        "location": "Location",
+        "locationPlaceholder": "e.g. Warsaw, Poland",
+        "timezone": "Timezone",
+        "timezonePlaceholder": "e.g. Europe/Warsaw",
+        "acceptingClients": "Accepting new clients",
+        "save": "Save changes",
+        "create": "Create coach"
+      },
+      "validation": {
+        "userIdRequired": "User ID is required."
+      },
+      "confirm": {
+        "archive": "Are you sure you want to archive the coach",
+        "restore": "Are you sure you want to restore the coach"
+      },
+      "actions": {
+        "edit": "Edit",
+        "editCoach": "Edit coach",
+        "archive": "Archive",
+        "restore": "Restore",
+        "archiveCoach": "Archive coach",
+        "restoreCoach": "Restore coach"
+      },
+      "empty": {
+        "noResults": "No coaches matching your search.",
+        "noCoaches": "No coaches in the system. Click \"New coach\" to add the first one."
+      },
+      "errors": {
+        "loadFailed": "Failed to load coaches. Please refresh."
       }
     },
     "common": {

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Calendar } from 'lucide-react';
+import { SEO } from '@/components/shared/SEO';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableBackground } from '@/components/cms/EditableBackground';
 import { BookingCalendar } from '@/components/booking/BookingCalendar';
@@ -296,6 +297,11 @@ export default function Services() {
 
   return (
     <main className="min-h-screen bg-white text-[#2D2D2D]">
+      <SEO
+        title="Usługi"
+        description="Sesje indywidualne, pakiety coachingowe i terapia — sprawdź ofertę i zarezerwuj wizytę online."
+        canonical="/uslugi"
+      />
 
       {/* ------------------------------------------------------------------ */}
       {/* HERO                                                                 */}

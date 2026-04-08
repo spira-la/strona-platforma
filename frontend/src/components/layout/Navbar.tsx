@@ -215,6 +215,17 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                       <p className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D] truncate">{userName}</p>
                       <p className="font-['Lato'] text-[11px] text-[#8A8A8A] truncate">{user?.email}</p>
                     </div>
+                    {(user?.app_metadata?.role === 'coach' || user?.app_metadata?.role === 'admin') && (
+                      <Link
+                        to="/coach"
+                        className="w-full flex items-center gap-2 px-3 py-2 font-['Lato'] text-[13px] text-[#B8944A] hover:bg-[#FAF8F5] hover:text-[#8A6F2E] transition-colors"
+                        role="menuitem"
+                        onClick={() => setUserMenuOpen(false)}
+                      >
+                        <LayoutDashboard size={14} aria-hidden="true" />
+                        Panel coach
+                      </Link>
+                    )}
                     {user?.app_metadata?.role === 'admin' && (
                       <Link
                         to="/admin"
@@ -346,6 +357,15 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                     Wyloguj
                   </button>
                 </div>
+                {(user?.app_metadata?.role === 'coach' || user?.app_metadata?.role === 'admin') && (
+                  <Link
+                    to="/coach"
+                    className="flex items-center gap-2 font-['Lato'] text-[13px] font-semibold text-[#B8944A] hover:text-[#8A6F2E] transition-colors px-1 py-1"
+                  >
+                    <LayoutDashboard size={14} aria-hidden="true" />
+                    Panel coach
+                  </Link>
+                )}
                 {user?.app_metadata?.role === 'admin' && (
                   <Link
                     to="/admin"

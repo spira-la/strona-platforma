@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { SEO } from '@/components/shared/SEO';
 import { ArrowRight, Calendar, Mail } from 'lucide-react';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableBackground } from '@/components/cms/EditableBackground';
@@ -372,6 +373,11 @@ function NewsletterSection() {
 export default function Blog() {
   return (
     <main>
+      <SEO
+        title="Blog"
+        description="Artykuły o psychologii, coachingu, rozwoju osobistym i pracy z ciałem."
+        canonical="/blog"
+      />
       <HeroSection />
       <FeaturedPostSection />
       <ArticleGridSection />

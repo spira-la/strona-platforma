@@ -24,8 +24,8 @@ export class BlogPostEntity {
   @Column({ type: 'text', unique: true })
   slug: string;
 
-  @Column({ type: 'jsonb' })
-  content: Record<string, unknown>;
+  @Column({ type: 'text', nullable: true })
+  content: string | null;
 
   @Column({ type: 'text', nullable: true })
   excerpt: string | null;
