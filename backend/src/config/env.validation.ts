@@ -48,6 +48,11 @@ const envSchema = z.object({
   // Stripe
   STRIPE_SECRET_KEY: z.string().optional(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
+
+  // Cloudflare Cache (optional — cache purge disabled if not set)
+  CLOUDFLARE_ZONE_ID: z.string().optional(),
+  CLOUDFLARE_API_TOKEN: z.string().optional(),
+  SITE_URL: z.string().optional(),
 });
 
 export type EnvConfig = z.infer<typeof envSchema>;

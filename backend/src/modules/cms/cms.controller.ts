@@ -6,13 +6,16 @@ import {
   Delete,
   Body,
   Query,
+  Header,
   HttpCode,
   UseInterceptors,
   UploadedFile,
   BadRequestException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { FileInterceptor } from '@nestjs/platform-express';
 import sharp from 'sharp';
+import { CloudflareCacheService } from '../../core/cloudflare-cache.service.js';
 import { CmsService } from './cms.service.js';
 
 // ---------------------------------------------------------------------------
@@ -43,25 +46,43 @@ interface ImageUploadBody {
   language: string;
 }
 
-interface DeleteImageDto {
-  section: string;
-  fieldPath: string;
-  language: string;
-}
-
 // ---------------------------------------------------------------------------
 // Controller
 // ---------------------------------------------------------------------------
 
 @Controller('cms')
 export class CmsController {
-  constructor(private readonly cms: CmsService) {}
+  constructor(
+    private readonly cms: CmsService,
+    private readonly cloudflareCache: CloudflareCacheService,
+    private readonly config: ConfigService,
+  ) {}
+
+  // -------------------------------------------------------------------------
+  // Helpers
+  // -------------------------------------------------------------------------
+
+  private purgeCmsContent(): void {
+    const siteUrl = this.config.get<string>('SITE_URL') ?? '';
+    if (siteUrl) {
+      void this.cloudflareCache.purgeUrls([`${siteUrl}/api/cms/content`]);
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Endpoints
+  // -------------------------------------------------------------------------
 
   /**
    * GET /api/cms/content
    * Public — returns all CMS content.
+   *
+   * Cache-Control: tell Cloudflare to cache for 1 hour (s-maxage) and serve
+   * stale while revalidating for up to 24 h.  Browser gets max-age=0 so it
+   * always revalidates, but Cloudflare handles the heavy lifting.
    */
   @Get('content')
+  @Header('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400')
   async getContent() {
     const doc = await this.cms.getContent();
     return {
@@ -86,6 +107,9 @@ export class CmsController {
       fieldPath,
       value,
     );
+
+    this.purgeCmsContent();
+
     return {
       success: true,
       message: 'Field updated successfully',
@@ -102,6 +126,9 @@ export class CmsController {
   async updateSection(@Body() body: UpdateSectionDto) {
     const { section, language, content } = body;
     const result = await this.cms.updateSection(section, language, content);
+
+    this.purgeCmsContent();
+
     return {
       success: true,
       message: 'Section updated successfully',
@@ -118,6 +145,11 @@ export class CmsController {
   @HttpCode(200)
   async initialize(@Body() body: InitializeDto) {
     const result = await this.cms.initialize(body.content, body.force);
+
+    if (result.created) {
+      this.purgeCmsContent();
+    }
+
     return {
       success: true,
       message: result.created
@@ -188,6 +220,8 @@ export class CmsController {
     // Persist the public URL in CMS JSONB
     const result = await this.cms.updateField(section, language, fieldPath, url);
 
+    this.purgeCmsContent();
+
     return {
       success: true,
       url,
@@ -208,7 +242,6 @@ export class CmsController {
     @Query('fieldPath') fieldPath: string,
     @Query('language') language: string,
   ) {
-
     if (!section || !fieldPath || !language) {
       throw new BadRequestException('section, fieldPath and language are required');
     }
@@ -225,6 +258,8 @@ export class CmsController {
       storage.delete(thumbKey),
       this.cms.deleteField(section, language, fieldPath),
     ]);
+
+    this.purgeCmsContent();
 
     return {
       success: true,
