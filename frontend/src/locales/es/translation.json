@@ -17,7 +17,18 @@
     "back": "Atrás",
     "next": "Siguiente",
     "send": "Enviar",
-    "readMore": "Leer más"
+    "readMore": "Leer más",
+    "saved": "Guardado",
+    "done": "Listo"
+  },
+  "cms": {
+    "changeImage": "Cambiar",
+    "changeBackground": "Cambiar fondo",
+    "resetDefault": "Restablecer",
+    "positionAndSize": "Posición y tamaño",
+    "horizontal": "Horizontal",
+    "vertical": "Vertical",
+    "size": "Tamaño"
   },
   "navbar": {
     "cta": "Reservar sesión"

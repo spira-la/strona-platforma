@@ -17,7 +17,18 @@
     "back": "Back",
     "next": "Next",
     "send": "Send",
-    "readMore": "Read more"
+    "readMore": "Read more",
+    "saved": "Saved",
+    "done": "Done"
+  },
+  "cms": {
+    "changeImage": "Change",
+    "changeBackground": "Change background",
+    "resetDefault": "Reset to default",
+    "positionAndSize": "Position & size",
+    "horizontal": "Horizontal",
+    "vertical": "Vertical",
+    "size": "Size"
   },
   "navbar": {
     "cta": "Book a session"

@@ -2,6 +2,7 @@ import { ChevronDown, Compass, Layers, MessageCircle, Shield } from 'lucide-reac
 import { useState } from 'react';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableBackground } from '@/components/cms/EditableBackground';
+import { EditableImage } from '@/components/cms/EditableImage';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
 import ane3Photo from '@/assets/Ane3.jpg';
 
@@ -232,11 +233,12 @@ export default function HowIWork() {
             {/* Card 1 */}
             <ScrollReveal animation="fade-up" delay={stagger(0)} className="rounded-lg overflow-hidden flex flex-col border border-[#E8E4DF] bg-white">
               <div className="relative h-52 overflow-hidden">
-                <img
-                  src={ane3Photo}
+                <EditableImage
+                  section="howIWork"
+                  fieldPath="method1Photo"
+                  fallbackSrc={ane3Photo}
                   alt="Praca z ciałem i układem nerwowym"
                   className="w-full h-full object-cover"
-                  loading="lazy"
                 />
                 <div
                   className="absolute inset-0"
@@ -265,11 +267,12 @@ export default function HowIWork() {
             {/* Card 2 */}
             <ScrollReveal animation="fade-up" delay={stagger(1)} className="rounded-lg overflow-hidden flex flex-col border border-[#E8E4DF] bg-white">
               <div className="relative h-52 overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=700&q=80"
+                <EditableImage
+                  section="howIWork"
+                  fieldPath="method2Photo"
+                  fallbackSrc="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=700&q=80"
                   alt="Coaching transformacyjny"
                   className="w-full h-full object-cover"
-                  loading="lazy"
                 />
                 <div
                   className="absolute inset-0"

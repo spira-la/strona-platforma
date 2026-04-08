@@ -315,6 +315,7 @@ interface ServiceCardProps {
   fieldBase: string;
   imageUrl: string;
   imageAlt: string;
+  imageField: string;
   defaultTitle: string;
   defaultDescription: string;
   defaultPrice: string;
@@ -326,6 +327,7 @@ function ServiceCard({
   fieldBase,
   imageUrl,
   imageAlt,
+  imageField,
   defaultTitle,
   defaultDescription,
   defaultPrice,
@@ -334,11 +336,12 @@ function ServiceCard({
 }: ServiceCardProps) {
   return (
     <article className="flex flex-col border border-[#E8E4DF] rounded-[12px] overflow-hidden">
-      <img
-        src={imageUrl}
+      <EditableImage
+        section="home"
+        fieldPath={imageField}
+        fallbackSrc={imageUrl}
         alt={imageAlt}
         className="w-full h-[240px] object-cover"
-        loading="lazy"
       />
       <div className="flex flex-col gap-3 p-8 flex-1">
         <EditableText
@@ -412,6 +415,7 @@ function ServicesSection() {
               fieldBase="card1"
               imageUrl="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1000&auto=format&fit=crop"
               imageAlt="Sesja indywidualna — leśna ścieżka"
+              imageField="serviceCard1Img"
               defaultTitle="Sesja indywidualna"
               defaultDescription="Jednorazowa sesja terapeutyczna lub coachingowa trwająca 60 minut. Idealna na start lub przy konkretnej potrzebie w danym momencie życia."
               defaultPrice="250 zł / sesja"
@@ -424,6 +428,7 @@ function ServicesSection() {
               fieldBase="card2"
               imageUrl="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1000&auto=format&fit=crop"
               imageAlt="Pakiet sesji — łąka o świcie"
+              imageField="serviceCard2Img"
               defaultTitle="Pakiet sesji"
               defaultDescription="Cykl 5 sesji z rabatową ceną — dla osób gotowych na głębszą, ciągłą pracę. Regularność sprzyja trwałej zmianie i budowaniu wewnętrznej stabilności."
               defaultPrice="1 100 zł / 5 sesji"
@@ -609,6 +614,7 @@ interface BlogCardProps {
   fieldBase: string;
   imageUrl: string;
   imageAlt: string;
+  imageField: string;
   defaultCategory: string;
   defaultTitle: string;
   defaultExcerpt: string;
@@ -620,6 +626,7 @@ function BlogCard({
   fieldBase,
   imageUrl,
   imageAlt,
+  imageField,
   defaultCategory,
   defaultTitle,
   defaultExcerpt,
@@ -629,11 +636,12 @@ function BlogCard({
   if (featured) {
     return (
       <article className="flex flex-col md:flex-row border border-[#E8E4DF] rounded-[12px] overflow-hidden">
-        <img
-          src={imageUrl}
+        <EditableImage
+          section="home"
+          fieldPath={imageField}
+          fallbackSrc={imageUrl}
           alt={imageAlt}
           className="w-full md:w-[500px] h-[260px] md:h-[320px] object-cover flex-shrink-0"
-          loading="lazy"
         />
         <div className="flex flex-col gap-3 p-8 justify-center flex-1">
           <EditableText
@@ -680,11 +688,12 @@ function BlogCard({
 
   return (
     <article className="flex flex-col border border-[#E8E4DF] rounded-[12px] overflow-hidden">
-      <img
-        src={imageUrl}
+      <EditableImage
+        section="home"
+        fieldPath={imageField}
+        fallbackSrc={imageUrl}
         alt={imageAlt}
         className="w-full h-[180px] object-cover"
-        loading="lazy"
       />
       <div className="flex flex-col gap-2.5 p-5 flex-1">
         <EditableText
@@ -766,6 +775,7 @@ function BlogSection() {
             fieldBase="featured"
             imageUrl="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1200&auto=format&fit=crop"
             imageAlt="Jesienny las — artykuł o akceptacji"
+            imageField="blogFeaturedImg"
             defaultCategory="Terapia"
             defaultTitle="Jak zaakceptować to, czego zmienić nie możemy"
             defaultExcerpt="Akceptacja nie oznacza zgody na wszystko. To raczej głęboka mądrość o tym, co jest w naszym zasięgu — i piękna ulga, która z tego wynika."
@@ -781,6 +791,7 @@ function BlogSection() {
               fieldBase="post1"
               imageUrl="https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?q=80&w=800&auto=format&fit=crop"
               imageAlt="Słońce przez liście — artykuł o granicach"
+              imageField="blogPost1Img"
               defaultCategory="Coaching"
               defaultTitle="Granice jako wyraz miłości do siebie"
               defaultExcerpt="Mówienie 'nie' innym to często największy akt troski o siebie. Dowiedz się, jak stawiać granice bez poczucia winy."
@@ -792,6 +803,7 @@ function BlogSection() {
               fieldBase="post2"
               imageUrl="https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?q=80&w=800&auto=format&fit=crop"
               imageAlt="Spokojne jezioro — artykuł o uważności"
+              imageField="blogPost2Img"
               defaultCategory="Uważność"
               defaultTitle="Pięć chwil uważności, które zmienią Twój dzień"
               defaultExcerpt="Uważność nie wymaga godzinnej medytacji. Wystarczy kilka świadomych oddechów, by wrócić do siebie."
@@ -803,6 +815,7 @@ function BlogSection() {
               fieldBase="post3"
               imageUrl="https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=800&auto=format&fit=crop"
               imageAlt="Mglisty poranek — artykuł o lęku"
+              imageField="blogPost3Img"
               defaultCategory="Emocje"
               defaultTitle="Lęk jako nauczyciel: co chce nam powiedzieć?"
               defaultExcerpt="Zamiast walczyć z lękiem, warto go posłuchać. Często kryje w sobie ważną informację o naszych potrzebach."

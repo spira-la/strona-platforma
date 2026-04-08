@@ -1,6 +1,7 @@
 import { Heart, Leaf, Zap } from 'lucide-react';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableBackground } from '@/components/cms/EditableBackground';
+import { EditableImage } from '@/components/cms/EditableImage';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
 import ane2Photo from '@/assets/Ane2.jpg';
 
@@ -191,11 +192,12 @@ export default function About() {
               className="relative rounded-[20px] overflow-hidden aspect-[4/5] w-full"
               style={{ boxShadow: '0 20px 60px rgba(184,148,74,0.15)' }}
             >
-              <img
-                src={ane2Photo}
+              <EditableImage
+                section="about"
+                fieldPath="profilePhoto"
+                fallbackSrc={ane2Photo}
                 alt="Aneta — psycholog kliniczny i coach"
                 className="w-full h-full object-cover"
-                loading="lazy"
               />
               <div
                 className="absolute inset-0 rounded-[20px] pointer-events-none"

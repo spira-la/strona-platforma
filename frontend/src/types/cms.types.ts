@@ -5,6 +5,7 @@ export type CMSLanguage = 'pl' | 'en' | 'es';
 export type CMSSectionKey =
   | 'navbar'
   | 'hero'
+  | 'home'
   | 'about'
   | 'howIWork'
   | 'services'

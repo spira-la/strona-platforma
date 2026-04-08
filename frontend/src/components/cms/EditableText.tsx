@@ -37,6 +37,11 @@ export function EditableText({
   const resolvedValue = getFieldValue(section, fieldPath);
   const hasContent = Object.keys(content).length > 0;
 
+  // Derive a string from the children prop for use as fallback text.
+  const childrenText = typeof children === 'string'
+    ? children
+    : React.Children.toArray(children).map((c) => (typeof c === 'string' ? c : '')).join('');
+
   const [isEditing, setIsEditing] = useState(false);
   const [draftValue, setDraftValue] = useState('');
   const [isSaving, setIsSaving] = useState(false);
@@ -55,10 +60,14 @@ export function EditableText({
 
   const startEditing = useCallback(() => {
     if (!isEditMode) return;
-    // If the resolved value equals the fieldPath, there is no CMS content yet
-    setDraftValue(resolvedValue === fieldPath ? '' : resolvedValue);
+    const hasNoValue = resolvedValue === fieldPath || resolvedValue.trim() === '';
+    // Pre-fill with existing CMS value, or the placeholder/fallback as reference
+    const prefill = hasNoValue
+      ? (placeholder ?? childrenText ?? '')
+      : resolvedValue;
+    setDraftValue(prefill);
     setIsEditing(true);
-  }, [isEditMode, resolvedValue, fieldPath]);
+  }, [isEditMode, resolvedValue, fieldPath, placeholder, childrenText]);
 
   const cancelEditing = useCallback(() => {
     setIsEditing(false);
@@ -118,12 +127,6 @@ export function EditableText({
   const resolvedClassName = needsFullWidth && !hasExplicitWidth
     ? `w-full ${className ?? ''}`
     : className;
-
-  // Derive a string from the children prop for use as fallback text.
-  // We only support plain string children (e.g. from t() calls in the Navbar).
-  const childrenText = typeof children === 'string'
-    ? children
-    : React.Children.toArray(children).map((c) => (typeof c === 'string' ? c : '')).join('');
 
   // When the field has no CMS content, fall back to: placeholder → children text → fieldPath
   // Also treat empty/whitespace-only strings as "no content" so the placeholder shows instead of blank space
