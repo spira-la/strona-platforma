@@ -79,7 +79,7 @@ function StepCard({
         section="contact"
         fieldPath={titleField}
         as="h3"
-        className="font-['Playfair_Display'] text-[17px] font-bold text-[#2D2D2D] mb-3"
+        className="font-['Cormorant_Garamond'] text-[17px] font-bold text-[#2D2D2D] mb-3"
         placeholder={titlePlaceholder}
       />
       <EditableText
@@ -116,7 +116,7 @@ function PricingBannerSection() {
             section="contact"
             fieldPath="pricing.title"
             as="h2"
-            className="font-['Playfair_Display'] text-[28px] md:text-[36px] font-bold text-white leading-snug"
+            className="font-['Cormorant_Garamond'] text-[28px] md:text-[36px] font-bold text-white leading-snug"
             placeholder="Chcesz taka strone dla siebie?"
           />
           <EditableText
@@ -131,7 +131,7 @@ function PricingBannerSection() {
               section="contact"
               fieldPath="pricing.price"
               as="span"
-              className="font-['Playfair_Display'] text-[48px] font-bold text-white"
+              className="font-['Cormorant_Garamond'] text-[48px] font-bold text-white"
               placeholder="2 000 zl"
             />
             <EditableText
@@ -175,7 +175,7 @@ function ProcessSection() {
               section="contact"
               fieldPath="process.title"
               as="h2"
-              className="font-['Playfair_Display'] text-[26px] md:text-[34px] font-bold text-[#2D2D2D]"
+              className="font-['Cormorant_Garamond'] text-[26px] md:text-[34px] font-bold text-[#2D2D2D]"
               placeholder="Jak wyglada tworzenie Twojej strony?"
             />
             <div className="w-10 h-0.5 bg-[#B8944A] mt-1" aria-hidden="true" />
@@ -227,7 +227,7 @@ function ContactInfoColumn() {
           section="contact"
           fieldPath="info.greeting"
           as="h3"
-          className="font-['Playfair_Display'] text-[22px] font-bold text-[#2D2D2D] mb-2"
+          className="font-['Cormorant_Garamond'] text-[22px] font-bold text-[#2D2D2D] mb-2"
           placeholder="Porozmawiajmy"
         />
         <EditableText
@@ -362,7 +362,7 @@ function ContactFormColumn() {
         section="contact"
         fieldPath="form.title"
         as="h3"
-        className="font-['Playfair_Display'] text-[22px] font-bold text-[#2D2D2D] mb-6"
+        className="font-['Cormorant_Garamond'] text-[22px] font-bold text-[#2D2D2D] mb-6"
         placeholder="Wyslij wiadomosc"
       />
 
@@ -535,7 +535,7 @@ function ContactSection() {
               section="contact"
               fieldPath="section.title"
               as="h2"
-              className="font-['Playfair_Display'] text-[26px] md:text-[34px] font-bold text-[#2D2D2D]"
+              className="font-['Cormorant_Garamond'] text-[26px] md:text-[34px] font-bold text-[#2D2D2D]"
               placeholder="Porozmawiajmy"
             />
             <div className="w-10 h-0.5 bg-[#B8944A] mt-1" aria-hidden="true" />

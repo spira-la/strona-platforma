@@ -15,7 +15,7 @@ export function AdminStatCard({ icon: Icon, label, value }: AdminStatCardProps) 
           <p className="font-['Inter'] text-[13px] text-[#6B6B6B] leading-tight">
             {label}
           </p>
-          <p className="font-['Playfair_Display'] font-bold text-[28px] text-[#2D2D2D] leading-tight">
+          <p className="font-['Cormorant_Garamond'] font-bold text-[28px] text-[#2D2D2D] leading-tight">
             {value}
           </p>
         </div>

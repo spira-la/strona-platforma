@@ -54,7 +54,7 @@ export function EditableBackground({
   const [showControls, setShowControls] = useState(false);
   const [saved, setSaved] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const savedTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const savedTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const flashSaved = useCallback(() => {
     setSaved(true);
@@ -150,12 +150,10 @@ export function EditableBackground({
     );
   }
 
-  // Edit mode
+  // Edit mode — controls inside the bg div so overflow-hidden doesn't clip them
   return (
-    <>
-      <div className={className} style={bgStyle} {...rest}>
-        {children}
-      </div>
+    <div className={className} style={bgStyle} {...rest}>
+      {children}
 
       {/* Admin controls — bottom-right */}
       <div className="absolute bottom-3 right-3 z-30 flex items-center gap-1.5">
@@ -322,7 +320,7 @@ export function EditableBackground({
           <span className="block h-8 w-8 rounded-full border-2 border-[#B8963E]/30 border-t-[#B8963E] animate-spin" />
         </div>
       )}
-    </>
+    </div>
   );
 }
 

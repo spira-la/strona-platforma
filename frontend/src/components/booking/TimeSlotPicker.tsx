@@ -165,7 +165,7 @@ export function TimeSlotPicker({
         </p>
         <p
           className="text-lg font-bold text-white"
-          style={{ fontFamily: "'Playfair Display', serif" }}
+          style={{ fontFamily: "'Cormorant Garamond', serif" }}
         >
           Wybierz godzine, ktora Ci najbardziej odpowiada
         </p>
@@ -176,7 +176,7 @@ export function TimeSlotPicker({
         <div className="mb-5 p-4 rounded-lg bg-[#FAF8F5] border border-[#F0EDE8]">
           <p
             className="text-sm font-bold text-[#2D2D2D] mb-0.5"
-            style={{ fontFamily: "'Playfair Display', serif" }}
+            style={{ fontFamily: "'Cormorant Garamond', serif" }}
           >
             {formattedDate}
           </p>

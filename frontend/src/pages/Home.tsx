@@ -5,7 +5,6 @@ import { EditableImage } from '@/components/cms/EditableImage';
 import { EditableBackground } from '@/components/cms/EditableBackground';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
 import { SplitText } from '@/components/shared/SplitText';
-import { ParallaxImage } from '@/components/shared/ParallaxImage';
 import { GoldLine } from '@/components/shared/GoldLine';
 import ane1Photo from '@/assets/Ane1.jpg';
 
@@ -38,14 +37,13 @@ function HeroSection() {
       aria-label="Sekcja główna"
     >
       {/* Background image */}
-      <div className="absolute inset-0" aria-hidden="true">
-        <ParallaxImage
-          src="https://images.unsplash.com/photo-1744192876531-f00759ed9c57?q=80&w=2070&auto=format&fit=crop"
-          alt=""
-          speed={0.15}
-          className="w-full h-full"
-        />
-      </div>
+      <EditableBackground
+        section="hero"
+        fieldPath="heroBg"
+        fallbackSrc="https://images.unsplash.com/photo-1744192876531-f00759ed9c57?q=80&w=2070&auto=format&fit=crop"
+        className="absolute inset-0"
+        aria-hidden={true}
+      />
 
       {/* Dark gradient overlay: bottom darker → top slightly lighter */}
       <div
@@ -61,7 +59,7 @@ function HeroSection() {
       <div className="relative z-10 flex flex-col items-center text-center px-6 py-16 md:py-0 max-w-[900px] mx-auto gap-6">
         <SplitText
           text="Odkryj swoją wewnętrzną siłę i rozpocznij drogę ku zmianie"
-          className="font-['Playfair_Display'] text-[2rem] md:text-[3rem] font-bold text-white leading-[1.2] tracking-[-0.5px] md:tracking-[-1px] max-w-[800px]"
+          className="font-['Cormorant_Garamond'] text-[2rem] md:text-[3rem] font-bold text-white leading-[1.2] tracking-[-0.5px] md:tracking-[-1px] max-w-[800px]"
           delay={100}
           staggerInterval={50}
           duration={800}
@@ -132,7 +130,7 @@ function AboutSection() {
             fieldPath="heading"
             as="h2"
             id="about-heading"
-            className="font-['Playfair_Display'] text-[2rem] md:text-[2.25rem] font-bold text-[#2D2D2D] leading-[1.15] tracking-[-0.5px]"
+            className="font-['Cormorant_Garamond'] text-[2rem] md:text-[2.25rem] font-bold text-[#2D2D2D] leading-[1.15] tracking-[-0.5px]"
             placeholder="CZEŚĆ. JESTEM ANETA"
           />
 
@@ -156,7 +154,7 @@ function AboutSection() {
             section="about"
             fieldPath="quote"
             as="blockquote"
-            className="font-['Playfair_Display'] text-[18px] italic text-[#B8944A] leading-[1.5] border-l-2 border-[#B8944A] pl-4"
+            className="font-['Cormorant_Garamond'] text-[18px] italic text-[#B8944A] leading-[1.5] border-l-2 border-[#B8944A] pl-4"
             placeholder='"Prawdziwa zmiana zaczyna się od odwagi spotkania z samą sobą."'
           />
 
@@ -198,7 +196,7 @@ function WorkStepCard({ number, fieldBase, defaultTitle, defaultDescription }: W
         section="howIWork"
         fieldPath={`${fieldBase}Title`}
         as="h3"
-        className="font-['Playfair_Display'] text-[18px] font-bold text-[#2D2D2D]"
+        className="font-['Cormorant_Garamond'] text-[18px] font-bold text-[#2D2D2D]"
         placeholder={defaultTitle}
       />
 
@@ -262,7 +260,7 @@ function HowIWorkSection() {
             fieldPath="heading"
             as="h2"
             id="how-i-work-heading"
-            className="font-['Playfair_Display'] text-[2rem] md:text-[2.25rem] font-bold text-[#2D2D2D] leading-[1.15] tracking-[-0.5px]"
+            className="font-['Cormorant_Garamond'] text-[2rem] md:text-[2.25rem] font-bold text-[#2D2D2D] leading-[1.15] tracking-[-0.5px]"
             placeholder="JAK PRACUJĘ"
           />
 
@@ -348,7 +346,7 @@ function ServiceCard({
           section="services"
           fieldPath={`${fieldBase}Title`}
           as="h3"
-          className="font-['Playfair_Display'] text-[22px] font-bold text-[#2D2D2D] leading-[1.2]"
+          className="font-['Cormorant_Garamond'] text-[22px] font-bold text-[#2D2D2D] leading-[1.2]"
           placeholder={defaultTitle}
         />
         <EditableText
@@ -362,7 +360,7 @@ function ServiceCard({
           section="services"
           fieldPath={`${fieldBase}Price`}
           as="p"
-          className="font-['Playfair_Display'] text-[24px] font-bold text-[#B8944A]"
+          className="font-['Cormorant_Garamond'] text-[24px] font-bold text-[#B8944A]"
           placeholder={defaultPrice}
         />
         <Link
@@ -395,7 +393,7 @@ function ServicesSection() {
             fieldPath="heading"
             as="h2"
             id="services-heading"
-            className="font-['Playfair_Display'] text-[2rem] md:text-[2.25rem] font-bold text-[#2D2D2D] leading-[1.15] tracking-[-0.5px]"
+            className="font-['Cormorant_Garamond'] text-[2rem] md:text-[2.25rem] font-bold text-[#2D2D2D] leading-[1.15] tracking-[-0.5px]"
             placeholder="WYBIERZ SWOJĄ ŚCIEŻKĘ"
           />
 
@@ -442,7 +440,7 @@ function ServicesSection() {
         <div className="mt-4 flex flex-col items-center gap-4 text-center">
           <SplitText
             text="Chcesz mnie poznać?"
-            className="font-['Playfair_Display'] text-[26px] md:text-[28px] italic text-[#2D2D2D]"
+            className="font-['Cormorant_Garamond'] text-[26px] md:text-[28px] italic text-[#2D2D2D]"
             delay={0}
             staggerInterval={80}
             duration={900}
@@ -492,7 +490,7 @@ function TestimonialCard({
     <article className="flex flex-col gap-4 bg-[#FAF8F5] rounded-[8px] p-7">
       {/* Decorative quote mark */}
       <span
-        className="font-['Playfair_Display'] text-[48px] text-[#B8944A] leading-none select-none"
+        className="font-['Cormorant_Garamond'] text-[48px] text-[#B8944A] leading-none select-none"
         aria-hidden="true"
       >
         "
@@ -580,7 +578,7 @@ function TestimonialsSection() {
             fieldPath="heading"
             as="h2"
             id="testimonials-heading"
-            className="font-['Playfair_Display'] text-[2rem] md:text-[2.25rem] font-bold text-[#2D2D2D] leading-[1.15] tracking-[-0.5px] text-center"
+            className="font-['Cormorant_Garamond'] text-[2rem] md:text-[2.25rem] font-bold text-[#2D2D2D] leading-[1.15] tracking-[-0.5px] text-center"
             placeholder="CO MÓWIĄ OSOBY, Z KTÓRYMI PRACUJĘ"
           />
 
@@ -655,7 +653,7 @@ function BlogCard({
             section="blog"
             fieldPath={`${fieldBase}Title`}
             as="h3"
-            className="font-['Playfair_Display'] text-[22px] md:text-[26px] font-bold text-[#2D2D2D] leading-[1.25]"
+            className="font-['Cormorant_Garamond'] text-[22px] md:text-[26px] font-bold text-[#2D2D2D] leading-[1.25]"
             placeholder={defaultTitle}
           />
           <EditableText
@@ -707,7 +705,7 @@ function BlogCard({
           section="blog"
           fieldPath={`${fieldBase}Title`}
           as="h3"
-          className="font-['Playfair_Display'] text-[17px] font-bold text-[#2D2D2D] leading-[1.3]"
+          className="font-['Cormorant_Garamond'] text-[17px] font-bold text-[#2D2D2D] leading-[1.3]"
           placeholder={defaultTitle}
         />
         <EditableText
@@ -756,7 +754,7 @@ function BlogSection() {
             fieldPath="heading"
             as="h2"
             id="blog-heading"
-            className="font-['Playfair_Display'] text-[2rem] md:text-[2.25rem] font-bold text-[#2D2D2D] leading-[1.15] tracking-[-0.5px]"
+            className="font-['Cormorant_Garamond'] text-[2rem] md:text-[2.25rem] font-bold text-[#2D2D2D] leading-[1.15] tracking-[-0.5px]"
             placeholder="INSPIRACJE I REFLEKSJE"
           />
 
@@ -873,7 +871,7 @@ function CtaSection() {
 
         <SplitText
           text="GOTOWA NA ZMIANĘ?"
-          className="font-['Playfair_Display'] text-[2.25rem] md:text-[2.75rem] font-bold text-white leading-[1.15] tracking-[-0.5px]"
+          className="font-['Cormorant_Garamond'] text-[2.25rem] md:text-[2.75rem] font-bold text-white leading-[1.15] tracking-[-0.5px]"
           delay={300}
           staggerInterval={80}
           duration={1000}

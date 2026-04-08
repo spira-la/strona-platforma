@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 
 interface UseScrollRevealOptions {
-  /** Fraction of the element visible before triggering (0–1). Default: 0.15 */
+  /** Fraction of the element visible before triggering (0–1). Default: 0.01 */
   threshold?: number;
   /** Only trigger once. Default: true */
   once?: boolean;
-  /** Root margin to trigger earlier/later. Default: '0px 0px -40px 0px' */
+  /** Root margin to trigger earlier. Default: '50px' — triggers 50px before entering viewport */
   rootMargin?: string;
 }
 
@@ -16,7 +16,7 @@ interface UseScrollRevealOptions {
 export function useScrollReveal<T extends HTMLElement = HTMLDivElement>(
   options: UseScrollRevealOptions = {},
 ) {
-  const { threshold = 0.05, once = true, rootMargin = '0px 0px 0px 0px' } = options;
+  const { threshold = 0.01, once = true, rootMargin = '0px 0px 50px 0px' } = options;
   const ref = useRef<T>(null);
 
   // Skip animations entirely if user prefers reduced motion
@@ -32,6 +32,20 @@ export function useScrollReveal<T extends HTMLElement = HTMLDivElement>(
     const el = ref.current;
     if (!el) return;
 
+    // Check if element is already in viewport on mount (handles sections
+    // visible on page load — e.g. the section right below the hero).
+    // Use requestAnimationFrame to ensure layout is settled first.
+    const rafId = requestAnimationFrame(() => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        // Element is visible — trigger with a tiny delay so the hidden
+        // styles paint first and the CSS transition actually runs.
+        setTimeout(() => setIsVisible(true), 60);
+        return;
+      }
+    });
+
+    // Also observe for scroll — handles elements below the fold.
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -44,11 +58,11 @@ export function useScrollReveal<T extends HTMLElement = HTMLDivElement>(
 
     observer.observe(el);
 
-    // Safety fallback: if observer never fires (e.g. browser quirk),
-    // make content visible after 3 seconds so it's never permanently hidden
-    const fallback = setTimeout(() => setIsVisible(true), 3000);
+    // Safety fallback: never leave content permanently hidden
+    const fallback = setTimeout(() => setIsVisible(true), 2500);
 
     return () => {
+      cancelAnimationFrame(rafId);
       observer.disconnect();
       clearTimeout(fallback);
     };

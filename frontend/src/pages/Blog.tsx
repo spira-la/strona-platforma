@@ -125,7 +125,7 @@ function BlogCard({ post }: BlogCardProps) {
         <span className="inline-block self-start font-['Lato'] text-[11px] font-semibold tracking-[0.08em] uppercase text-[#B8944A] bg-[#B8944A]/[0.1] rounded-full px-3 py-1">
           {post.category}
         </span>
-        <h3 className="font-['Playfair_Display'] text-[17px] font-bold text-[#2D2D2D] leading-snug">
+        <h3 className="font-['Cormorant_Garamond'] text-[17px] font-bold text-[#2D2D2D] leading-snug">
           {post.title}
         </h3>
         <p className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-relaxed flex-1">
@@ -179,7 +179,7 @@ function HeroSection() {
           section="blog"
           fieldPath="hero.title"
           as="h1"
-          className="font-['Playfair_Display'] text-[2rem] md:text-[44px] font-bold italic text-white leading-[1.2]"
+          className="font-['Cormorant_Garamond'] text-[2rem] md:text-[44px] font-bold italic text-white leading-[1.2]"
           placeholder="Refleksje, narzedzia, inspiracje"
         />
         <EditableText
@@ -222,7 +222,7 @@ function FeaturedPostSection() {
               section="blog"
               fieldPath="featured.title"
               as="h2"
-              className="font-['Playfair_Display'] text-[24px] md:text-[28px] font-bold text-[#2D2D2D] leading-snug"
+              className="font-['Cormorant_Garamond'] text-[24px] md:text-[28px] font-bold text-[#2D2D2D] leading-snug"
               placeholder={FEATURED_POST.title}
             />
             <EditableText
@@ -275,7 +275,7 @@ function ArticleGridSection() {
               section="blog"
               fieldPath="grid.title"
               as="h2"
-              className="font-['Playfair_Display'] text-[28px] md:text-[36px] font-bold text-[#2D2D2D]"
+              className="font-['Cormorant_Garamond'] text-[28px] md:text-[36px] font-bold text-[#2D2D2D]"
               placeholder="Artykuly i refleksje"
             />
             <div className="w-10 h-0.5 bg-[#B8944A] mt-1" aria-hidden="true" />
@@ -316,7 +316,7 @@ function NewsletterSection() {
           section="blog"
           fieldPath="newsletter.title"
           as="h2"
-          className="font-['Playfair_Display'] text-[26px] md:text-[32px] font-bold text-[#2D2D2D]"
+          className="font-['Cormorant_Garamond'] text-[26px] md:text-[32px] font-bold text-[#2D2D2D]"
           placeholder="Refleksje prosto do Twojej skrzynki"
         />
         <EditableText

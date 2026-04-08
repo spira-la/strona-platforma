@@ -31,7 +31,7 @@ function NextStepCard({
         section="confirmation"
         fieldPath={titleField}
         as="h3"
-        className="font-['Playfair_Display'] text-[18px] font-bold text-[#2D2D2D]"
+        className="font-['Cormorant_Garamond'] text-[18px] font-bold text-[#2D2D2D]"
         placeholder={titlePlaceholder}
       />
       <EditableText
@@ -63,7 +63,7 @@ function ThankYouSection() {
           section="confirmation"
           fieldPath="hero.title"
           as="h1"
-          className="font-['Playfair_Display'] text-[32px] md:text-[40px] font-bold text-[#2D2D2D] leading-snug"
+          className="font-['Cormorant_Garamond'] text-[32px] md:text-[40px] font-bold text-[#2D2D2D] leading-snug"
           placeholder="Dziekujemy za zakup pakietu!"
         />
         <EditableText
@@ -94,7 +94,7 @@ function OrderSummarySection() {
               section="confirmation"
               fieldPath="order.packageName"
               as="h2"
-              className="font-['Playfair_Display'] text-[24px] font-bold text-white"
+              className="font-['Cormorant_Garamond'] text-[24px] font-bold text-white"
               placeholder="Pakiet 8 Sesji"
             />
             <div className="flex flex-col gap-3">
@@ -153,7 +153,7 @@ function NextStepsSection() {
               section="confirmation"
               fieldPath="steps.title"
               as="h2"
-              className="font-['Playfair_Display'] text-[26px] md:text-[34px] font-bold text-[#2D2D2D]"
+              className="font-['Cormorant_Garamond'] text-[26px] md:text-[34px] font-bold text-[#2D2D2D]"
               placeholder="Co dalej?"
             />
             <div className="w-10 h-0.5 bg-[#B8944A] mt-1" aria-hidden="true" />
@@ -203,7 +203,7 @@ function MotivationalCTASection() {
           section="confirmation"
           fieldPath="cta.title"
           as="h2"
-          className="font-['Playfair_Display'] text-[26px] md:text-[32px] font-bold text-[#2D2D2D] leading-snug"
+          className="font-['Cormorant_Garamond'] text-[26px] md:text-[32px] font-bold text-[#2D2D2D] leading-snug"
           placeholder="Zaczyna sie Twoja piekna podroz do siebie"
         />
         <EditableText
@@ -245,7 +245,7 @@ function QuoteSection() {
           section="confirmation"
           fieldPath="quote.text"
           as="blockquote"
-          className="font-['Playfair_Display'] text-[20px] md:text-[22px] italic text-[#2D2D2D] leading-[1.6]"
+          className="font-['Cormorant_Garamond'] text-[20px] md:text-[22px] italic text-[#2D2D2D] leading-[1.6]"
           placeholder="Kazdy krok, z glebokosci siebie, jest krokiem ku wolnosci."
         />
         <EditableText

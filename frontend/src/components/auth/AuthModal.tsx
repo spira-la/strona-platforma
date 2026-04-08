@@ -57,7 +57,7 @@ export function AuthModal() {
             <X size={20} />
           </button>
           <img src={spiralaLogo} alt="" className="w-20 h-20 mx-auto mb-4 object-contain" />
-          <h2 className="font-['Playfair_Display'] text-[22px] font-bold text-[#2D2D2D] mb-2">
+          <h2 className="font-['Cormorant_Garamond'] text-[22px] font-bold text-[#2D2D2D] mb-2">
             Konfiguracja w toku
           </h2>
           <p className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-relaxed">

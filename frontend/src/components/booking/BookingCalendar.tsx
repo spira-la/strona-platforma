@@ -127,7 +127,7 @@ export function BookingCalendar({
         </p>
         <p
           className="text-lg font-bold text-white"
-          style={{ fontFamily: "'Playfair Display', serif" }}
+          style={{ fontFamily: "'Cormorant Garamond', serif" }}
         >
           Wybierz date
         </p>
@@ -146,7 +146,7 @@ export function BookingCalendar({
 
           <span
             className="text-sm font-bold uppercase tracking-wide text-[#2D2D2D]"
-            style={{ fontFamily: "'Playfair Display', serif" }}
+            style={{ fontFamily: "'Cormorant Garamond', serif" }}
             aria-live="polite"
           >
             {MONTH_NAMES[viewMonth]} {viewYear}

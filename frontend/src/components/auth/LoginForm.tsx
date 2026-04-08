@@ -40,7 +40,7 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
       <div className="text-center mb-2">
-        <h2 className="font-['Playfair_Display'] text-[28px] font-bold text-[#2D2D2D]">
+        <h2 className="font-['Cormorant_Garamond'] text-[28px] font-bold text-[#2D2D2D]">
           Zaloguj się
         </h2>
         <p className="font-['Lato'] text-[14px] text-[#8A8A8A] mt-1">

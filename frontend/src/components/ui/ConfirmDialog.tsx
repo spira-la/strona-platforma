@@ -97,7 +97,7 @@ export function ConfirmDialog({
         {/* Title */}
         <h2
           id="confirm-dialog-title"
-          className="font-['Playfair_Display',serif] font-bold text-[18px] text-[#2D2D2D] leading-snug mb-3"
+          className="font-['Cormorant_Garamond',serif] font-bold text-[18px] text-[#2D2D2D] leading-snug mb-3"
         >
           {title}
         </h2>

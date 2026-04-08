@@ -69,7 +69,7 @@ function ServiceCard({
         fieldPath={titleField}
         as="h3"
         placeholder={titlePlaceholder}
-        className="text-2xl font-black uppercase tracking-tight text-[#2D2D2D] mb-4 [font-family:'Playfair_Display',serif]"
+        className="text-2xl font-black uppercase tracking-tight text-[#2D2D2D] mb-4 [font-family:'Cormorant_Garamond',serif]"
       />
 
       <div className="flex flex-col gap-3 flex-1">
@@ -184,7 +184,7 @@ function BookingSection() {
             fieldPath="sectionTitle"
             as="h2"
             placeholder="WYBIERZ TERMIN"
-            className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+            className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
           />
           <EditableText
             section="booking"
@@ -202,7 +202,7 @@ function BookingSection() {
               <Calendar size={28} />
             </div>
             <h3
-              className="text-xl font-black uppercase tracking-tight text-[#2D2D2D] mb-3 [font-family:'Playfair_Display',serif]"
+              className="text-xl font-black uppercase tracking-tight text-[#2D2D2D] mb-3 [font-family:'Cormorant_Garamond',serif]"
             >
               Termin wybrany
             </h3>
@@ -327,7 +327,7 @@ export default function Services() {
             fieldPath="heroTitle"
             as="h1"
             placeholder="RAZEM MOZEMY WIECEJ"
-            className="text-4xl sm:text-5xl font-black uppercase tracking-tight leading-tight text-white [font-family:'Playfair_Display',serif]"
+            className="text-4xl sm:text-5xl font-black uppercase tracking-tight leading-tight text-white [font-family:'Cormorant_Garamond',serif]"
           />
 
           <EditableText
@@ -356,7 +356,7 @@ export default function Services() {
                 fieldPath="offersTitle"
                 as="h2"
                 placeholder="CO OFERUJE"
-                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
               />
               <EditableText
                 section="services"
@@ -441,7 +441,7 @@ export default function Services() {
             fieldPath="ctaTitle"
             as="h2"
             placeholder="GOTOWA NA KOLEJNY KROK?"
-            className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white [font-family:'Playfair_Display',serif]"
+            className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white [font-family:'Cormorant_Garamond',serif]"
           />
           <EditableText
             section="services"
