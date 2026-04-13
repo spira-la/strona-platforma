@@ -484,3 +484,57 @@ chore: update Supabase client configuration
 ### Reference Project
 
 The original BeWonderMe codebase is at `ref/BeWonderMeFE/` for reference. Read-only - do not modify.
+
+<!-- ORIONOPS:BEGIN -->
+## OrionOps Integration
+
+This project is connected to OrionOps for AI-assisted development.
+
+### How to Determine What to Do Next (PRIORITY ORDER)
+
+When the user asks "what's next?", "continue", "what should I do?", or starts a new session:
+
+1. **OrionOps Context** (ALWAYS first): Call `get_context(project_id)` + `list_tasks(project_id)`
+   - ANY status is relevant: `blocked`, `in_progress`, `completed` — all contain useful info
+   - A `blocked` context tells you what went wrong and what to fix
+   - A `completed` context tells you what was done and what comes next
+   - An `in_progress` context tells you what to continue working on
+   - `list_tasks` shows the full backlog with states and priorities
+2. **Local files**: Check for `plans/`, `PLAN.md`, `tasks/`, `TODO.md` in the project root
+3. **Git history**: `git log --oneline -10` to understand recent changes
+
+### Session Lifecycle (MUST FOLLOW)
+
+1. **Session Start**: Call `get_context(project_id)` to retrieve prior work — regardless of status.
+2. **Before Coding**: Call `search_guidelines` and `search_project_config` for patterns.
+3. **Task Claim**: Call `task_claim(task_id, agent_id)` before starting any task.
+4. **During Work**: Call `task_progress(task_id, agent_id, progress)` periodically.
+5. **Task Done**: Call `task_complete(task_id, agent_id, summary, files_modified)` when finished.
+6. **Session End**: **ALWAYS** call `save_context(...)` to persist progress — even if blocked or incomplete.
+
+### After `/clear` or New Conversation
+
+**CRITICAL**: ALWAYS call `get_context(project_id)` FIRST before doing anything else. Do NOT skip this step. Do NOT say "no prior context" without actually calling the tool. The context contains decisions, blockers, files modified, and the current task state. Any status (blocked, in_progress, completed) is valuable — do not ignore context because of its status.
+
+### Available MCP Tools
+
+| Tool | When to Use |
+|------|-------------|
+| `get_context` | **Start of every session** — retrieve prior work (any status) |
+| `save_context` | **End of every session** — persist progress for next time |
+| `list_tasks` | See current tasks, backlog, and priorities |
+| `search_guidelines` | Before implementing — get coding patterns and standards |
+| `search_project_config` | Architecture decisions — find existing conventions |
+| `get_role_context` | When switching roles — get full agent profile |
+| `get_documentation` | Technical docs about frameworks and libraries |
+| `create_task` | Create new tasks in the project backlog |
+| `set_project` | Select the active project for all operations |
+
+### Project: spirala
+
+<!-- ORIONOPS:END -->
+
+
+
+
+
