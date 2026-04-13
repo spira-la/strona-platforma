@@ -8,8 +8,12 @@ import {
   Param,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { CoachesService } from './coaches.service.js';
+import { SupabaseAuthGuard } from '../../common/guards/supabase-auth.guard.js';
+import { RolesGuard } from '../../common/guards/roles.guard.js';
+import { Roles } from '../../common/decorators/roles.decorator.js';
 
 // ---------------------------------------------------------------------------
 // DTOs
@@ -48,6 +52,8 @@ interface UpdateCoachDto {
 // Controller
 // ---------------------------------------------------------------------------
 
+@UseGuards(SupabaseAuthGuard, RolesGuard)
+@Roles('admin')
 @Controller('coaches')
 export class CoachesController {
   constructor(private readonly coaches: CoachesService) {}
