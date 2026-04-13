@@ -8,10 +8,16 @@ import { supabase } from '@/config/supabase';
 import spiralaLogo from '@/assets/spirala.png';
 
 export function AuthModal() {
-  const { isLoginModalOpen, isRegisterModalOpen, isForgotPasswordOpen, closeModals } = useAuthStore();
+  const {
+    isLoginModalOpen,
+    isRegisterModalOpen,
+    isForgotPasswordOpen,
+    closeModals,
+  } = useAuthStore();
   const backdropRef = useRef<HTMLDivElement>(null);
 
-  const isOpen = isLoginModalOpen || isRegisterModalOpen || isForgotPasswordOpen;
+  const isOpen =
+    isLoginModalOpen || isRegisterModalOpen || isForgotPasswordOpen;
 
   // Close on Escape
   useEffect(() => {
@@ -25,12 +31,10 @@ export function AuthModal() {
 
   // Lock body scroll when open
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => {
       document.body.style.overflow = '';
-    }
-    return () => { document.body.style.overflow = ''; };
+    };
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -56,12 +60,17 @@ export function AuthModal() {
           >
             <X size={20} />
           </button>
-          <img src={spiralaLogo} alt="" className="w-20 h-20 mx-auto mb-4 object-contain" />
+          <img
+            src={spiralaLogo}
+            alt=""
+            className="w-20 h-20 mx-auto mb-4 object-contain"
+          />
           <h2 className="font-['Cormorant_Garamond'] text-[22px] font-bold text-[#2D2D2D] mb-2">
             Konfiguracja w toku
           </h2>
           <p className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-relaxed">
-            System logowania jest w trakcie konfiguracji. Spróbuj ponownie za chwilę.
+            System logowania jest w trakcie konfiguracji. Spróbuj ponownie za
+            chwilę.
           </p>
         </div>
       </div>
@@ -75,7 +84,13 @@ export function AuthModal() {
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-[2px]"
       role="dialog"
       aria-modal="true"
-      aria-label={isLoginModalOpen ? 'Logowanie' : isForgotPasswordOpen ? 'Resetowanie hasła' : 'Rejestracja'}
+      aria-label={
+        isLoginModalOpen
+          ? 'Logowanie'
+          : isForgotPasswordOpen
+            ? 'Resetowanie hasła'
+            : 'Rejestracja'
+      }
     >
       <div className="relative bg-white rounded-xl shadow-2xl w-full max-w-[420px] mx-4 p-8 animate-in zoom-in-95 fade-in duration-200">
         {/* Close button */}

@@ -88,7 +88,7 @@ export class CmsService {
       }
       cursor = cursor[key] as Record<string, unknown>;
     }
-    cursor[parts[parts.length - 1]] = value;
+    cursor[parts.at(-1)] = value;
 
     const newVersion = (doc.version || 0) + 1;
     const now = new Date();

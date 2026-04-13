@@ -21,6 +21,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [isRecoveryMode, setIsRecoveryMode] = useState(false);
 
+  // All setState calls inside this effect are updating React state in response
+  // to Supabase auth events (an external system) — this is the intended pattern.
+
   useEffect(() => {
     if (!supabase) {
       setIsLoading(false);
@@ -33,17 +36,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setIsLoading(false);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, newSession) => {
-        setSession(newSession);
-        setUser(newSession?.user ?? null);
-        setIsLoading(false);
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, newSession) => {
+      setSession(newSession);
+      setUser(newSession?.user ?? null);
+      setIsLoading(false);
 
-        if (event === 'PASSWORD_RECOVERY') {
-          setIsRecoveryMode(true);
-        }
-      },
-    );
+      if (event === 'PASSWORD_RECOVERY') {
+        setIsRecoveryMode(true);
+      }
+    });
 
     return () => {
       subscription.unsubscribe();
@@ -52,7 +55,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function signIn(email: string, password: string): Promise<void> {
     if (!supabase) throw new Error('Supabase not configured');
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
     if (error) throw new Error(error.message);
   }
 
@@ -83,7 +89,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${globalThis.location.origin}/auth/callback`,
       },
     });
     if (error) throw new Error(error.message);
@@ -92,7 +98,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   async function resetPassword(email: string): Promise<void> {
     if (!supabase) throw new Error('Supabase not configured');
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/callback`,
+      redirectTo: `${globalThis.location.origin}/auth/callback`,
     });
     if (error) throw new Error(error.message);
   }

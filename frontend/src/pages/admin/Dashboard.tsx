@@ -153,10 +153,26 @@ export default function Dashboard() {
   ];
 
   const QUICK_ACTIONS: QuickAction[] = [
-    { icon: CalendarX, label: t('admin.dashboard.blockSlot'), to: '/admin/availability' },
-    { icon: Send, label: t('admin.dashboard.writeNewsletter'), to: '/admin/newsletter' },
-    { icon: PenLine, label: t('admin.dashboard.newArticle'), to: '/admin/blog' },
-    { icon: Ticket, label: t('admin.dashboard.addCoupon'), to: '/admin/coupons' },
+    {
+      icon: CalendarX,
+      label: t('admin.dashboard.blockSlot'),
+      to: '/admin/availability',
+    },
+    {
+      icon: Send,
+      label: t('admin.dashboard.writeNewsletter'),
+      to: '/admin/newsletter',
+    },
+    {
+      icon: PenLine,
+      label: t('admin.dashboard.newArticle'),
+      to: '/admin/blog',
+    },
+    {
+      icon: Ticket,
+      label: t('admin.dashboard.addCoupon'),
+      to: '/admin/coupons',
+    },
   ];
 
   return (

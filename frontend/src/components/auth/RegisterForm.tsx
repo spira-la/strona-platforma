@@ -38,8 +38,10 @@ export function RegisterForm() {
     try {
       await signUp(data.email, data.password, data.fullName);
       setSuccess(true);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Wystąpił błąd rejestracji');
+    } catch (error_) {
+      setError(
+        error_ instanceof Error ? error_.message : 'Wystąpił błąd rejestracji',
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -49,7 +51,16 @@ export function RegisterForm() {
     return (
       <div className="flex flex-col items-center gap-4 py-4 text-center">
         <div className="w-14 h-14 rounded-full bg-[#B8944A]/10 flex items-center justify-center">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#B8944A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#B8944A"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>
@@ -57,7 +68,8 @@ export function RegisterForm() {
           Sprawdź swoją skrzynkę
         </h2>
         <p className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-relaxed max-w-[320px]">
-          Wysłaliśmy link potwierdzający na Twój adres e-mail. Kliknij go, aby aktywować konto.
+          Wysłaliśmy link potwierdzający na Twój adres e-mail. Kliknij go, aby
+          aktywować konto.
         </p>
         <button
           type="button"
@@ -88,7 +100,10 @@ export function RegisterForm() {
       )}
 
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="reg-name" className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D]">
+        <label
+          htmlFor="reg-name"
+          className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D]"
+        >
           Imię i nazwisko
         </label>
         <input
@@ -100,12 +115,17 @@ export function RegisterForm() {
           placeholder="Anna Kowalska"
         />
         {errors.fullName && (
-          <span className="font-['Lato'] text-[12px] text-red-500">{errors.fullName.message}</span>
+          <span className="font-['Lato'] text-[12px] text-red-500">
+            {errors.fullName.message}
+          </span>
         )}
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="reg-email" className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D]">
+        <label
+          htmlFor="reg-email"
+          className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D]"
+        >
           Adres e-mail
         </label>
         <input
@@ -117,12 +137,17 @@ export function RegisterForm() {
           placeholder="twoj@email.com"
         />
         {errors.email && (
-          <span className="font-['Lato'] text-[12px] text-red-500">{errors.email.message}</span>
+          <span className="font-['Lato'] text-[12px] text-red-500">
+            {errors.email.message}
+          </span>
         )}
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="reg-password" className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D]">
+        <label
+          htmlFor="reg-password"
+          className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D]"
+        >
           Hasło
         </label>
         <input
@@ -134,12 +159,17 @@ export function RegisterForm() {
           placeholder="Min. 6 znaków"
         />
         {errors.password && (
-          <span className="font-['Lato'] text-[12px] text-red-500">{errors.password.message}</span>
+          <span className="font-['Lato'] text-[12px] text-red-500">
+            {errors.password.message}
+          </span>
         )}
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="reg-confirm" className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D]">
+        <label
+          htmlFor="reg-confirm"
+          className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D]"
+        >
           Potwierdź hasło
         </label>
         <input
@@ -151,7 +181,9 @@ export function RegisterForm() {
           placeholder="Powtórz hasło"
         />
         {errors.confirmPassword && (
-          <span className="font-['Lato'] text-[12px] text-red-500">{errors.confirmPassword.message}</span>
+          <span className="font-['Lato'] text-[12px] text-red-500">
+            {errors.confirmPassword.message}
+          </span>
         )}
       </div>
 

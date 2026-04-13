@@ -54,10 +54,14 @@ export const categoriesClient = {
   },
 
   archive(id: string): Promise<Category> {
-    return api.patch<ItemResponse>(`/categories/${id}/archive`).then((r) => r.data);
+    return api
+      .patch<ItemResponse>(`/categories/${id}/archive`)
+      .then((r) => r.data);
   },
 
   restore(id: string): Promise<Category> {
-    return api.patch<ItemResponse>(`/categories/${id}/restore`).then((r) => r.data);
+    return api
+      .patch<ItemResponse>(`/categories/${id}/restore`)
+      .then((r) => r.data);
   },
 };

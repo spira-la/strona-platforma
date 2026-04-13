@@ -21,7 +21,8 @@ export class SitemapService {
     @InjectRepository(BlogPostEntity)
     private readonly blogRepo: Repository<BlogPostEntity>,
   ) {
-    this.siteUrl = this.config.get<string>('SITE_URL') ?? 'https://spira-la.com';
+    this.siteUrl =
+      this.config.get<string>('SITE_URL') ?? 'https://spira-la.com';
   }
 
   private static readonly STATIC_PAGES: SitemapUrl[] = [
@@ -35,11 +36,11 @@ export class SitemapService {
 
   private escapeXml(value: string): string {
     return value
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&apos;');
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&apos;');
   }
 
   private buildUrlElement(entry: SitemapUrl, base: string): string {
@@ -68,8 +69,10 @@ export class SitemapService {
         where: { isPublished: true },
         order: { publishedAt: 'DESC' },
       });
-    } catch (err) {
-      this.logger.warn(`Failed to fetch blog posts for sitemap: ${String(err)}`);
+    } catch (error) {
+      this.logger.warn(
+        `Failed to fetch blog posts for sitemap: ${String(error)}`,
+      );
     }
 
     const staticEntries = SitemapService.STATIC_PAGES.map((page) =>

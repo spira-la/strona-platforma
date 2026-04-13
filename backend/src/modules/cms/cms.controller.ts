@@ -82,7 +82,10 @@ export class CmsController {
    * always revalidates, but Cloudflare handles the heavy lifting.
    */
   @Get('content')
-  @Header('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400')
+  @Header(
+    'Cache-Control',
+    'public, s-maxage=3600, stale-while-revalidate=86400',
+  )
   async getContent() {
     const doc = await this.cms.getContent();
     return {
@@ -191,7 +194,9 @@ export class CmsController {
     const { section, fieldPath, language } = body;
 
     if (!section || !fieldPath || !language) {
-      throw new BadRequestException('section, fieldPath and language are required');
+      throw new BadRequestException(
+        'section, fieldPath and language are required',
+      );
     }
 
     const storage = this.cms.getStorage();
@@ -218,7 +223,12 @@ export class CmsController {
     ]);
 
     // Persist the public URL in CMS JSONB
-    const result = await this.cms.updateField(section, language, fieldPath, url);
+    const result = await this.cms.updateField(
+      section,
+      language,
+      fieldPath,
+      url,
+    );
 
     this.purgeCmsContent();
 
@@ -243,7 +253,9 @@ export class CmsController {
     @Query('language') language: string,
   ) {
     if (!section || !fieldPath || !language) {
-      throw new BadRequestException('section, fieldPath and language are required');
+      throw new BadRequestException(
+        'section, fieldPath and language are required',
+      );
     }
 
     const storage = this.cms.getStorage();

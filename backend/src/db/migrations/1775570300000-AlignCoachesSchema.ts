@@ -68,8 +68,12 @@ export class AlignCoachesSchema1775570300000 implements MigrationInterface {
       END
     `);
 
-    await queryRunner.query(`ALTER TABLE "coaches" DROP COLUMN IF EXISTS "languages"`);
-    await queryRunner.query(`ALTER TABLE "coaches" RENAME COLUMN "languages_new" TO "languages"`);
+    await queryRunner.query(
+      `ALTER TABLE "coaches" DROP COLUMN IF EXISTS "languages"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "coaches" RENAME COLUMN "languages_new" TO "languages"`,
+    );
 
     // 5. Fix `certifications` column type: old text -> text[]
     await queryRunner.query(`
@@ -85,8 +89,12 @@ export class AlignCoachesSchema1775570300000 implements MigrationInterface {
       END
     `);
 
-    await queryRunner.query(`ALTER TABLE "coaches" DROP COLUMN IF EXISTS "certifications"`);
-    await queryRunner.query(`ALTER TABLE "coaches" RENAME COLUMN "certifications_new" TO "certifications"`);
+    await queryRunner.query(
+      `ALTER TABLE "coaches" DROP COLUMN IF EXISTS "certifications"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "coaches" RENAME COLUMN "certifications_new" TO "certifications"`,
+    );
 
     // 6. Drop obsolete columns that have no corresponding entity field
     await queryRunner.query(`
@@ -139,8 +147,12 @@ export class AlignCoachesSchema1775570300000 implements MigrationInterface {
       SET "certifications_old" = array_to_string("certifications", ',')
       WHERE "certifications" IS NOT NULL
     `);
-    await queryRunner.query(`ALTER TABLE "coaches" DROP COLUMN IF EXISTS "certifications"`);
-    await queryRunner.query(`ALTER TABLE "coaches" RENAME COLUMN "certifications_old" TO "certifications"`);
+    await queryRunner.query(
+      `ALTER TABLE "coaches" DROP COLUMN IF EXISTS "certifications"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "coaches" RENAME COLUMN "certifications_old" TO "certifications"`,
+    );
 
     // Convert languages text[] back to text
     await queryRunner.query(`
@@ -152,8 +164,12 @@ export class AlignCoachesSchema1775570300000 implements MigrationInterface {
       SET "languages_old" = COALESCE("languages"[1], 'pl')
       WHERE "languages" IS NOT NULL
     `);
-    await queryRunner.query(`ALTER TABLE "coaches" DROP COLUMN IF EXISTS "languages"`);
-    await queryRunner.query(`ALTER TABLE "coaches" RENAME COLUMN "languages_old" TO "languages"`);
+    await queryRunner.query(
+      `ALTER TABLE "coaches" DROP COLUMN IF EXISTS "languages"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "coaches" RENAME COLUMN "languages_old" TO "languages"`,
+    );
 
     // Remove columns added in `up`
     await queryRunner.query(`

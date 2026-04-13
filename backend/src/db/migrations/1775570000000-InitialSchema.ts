@@ -458,7 +458,9 @@ export class InitialSchema1775570000000 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`DROP TABLE IF EXISTS "gifts" CASCADE`);
     await queryRunner.query(`DROP TABLE IF EXISTS "reviews" CASCADE`);
-    await queryRunner.query(`DROP TABLE IF EXISTS "webinar_registrations" CASCADE`);
+    await queryRunner.query(
+      `DROP TABLE IF EXISTS "webinar_registrations" CASCADE`,
+    );
     await queryRunner.query(`DROP TABLE IF EXISTS "webinar_sessions" CASCADE`);
     await queryRunner.query(`DROP TABLE IF EXISTS "webinars" CASCADE`);
     await queryRunner.query(`DROP TABLE IF EXISTS "user_progress" CASCADE`);
@@ -467,14 +469,18 @@ export class InitialSchema1775570000000 implements MigrationInterface {
     await queryRunner.query(`DROP TABLE IF EXISTS "categories" CASCADE`);
     await queryRunner.query(`DROP TABLE IF EXISTS "cms_content" CASCADE`);
     await queryRunner.query(`DROP TABLE IF EXISTS "contact_messages" CASCADE`);
-    await queryRunner.query(`DROP TABLE IF EXISTS "newsletter_subscribers" CASCADE`);
+    await queryRunner.query(
+      `DROP TABLE IF EXISTS "newsletter_subscribers" CASCADE`,
+    );
     await queryRunner.query(`DROP TABLE IF EXISTS "blog_comments" CASCADE`);
     await queryRunner.query(`DROP TABLE IF EXISTS "blog_posts" CASCADE`);
     await queryRunner.query(`DROP TABLE IF EXISTS "invoices" CASCADE`);
     await queryRunner.query(`DROP TABLE IF EXISTS "bookings" CASCADE`);
     await queryRunner.query(`DROP TABLE IF EXISTS "orders" CASCADE`);
     await queryRunner.query(`DROP TABLE IF EXISTS "coupons" CASCADE`);
-    await queryRunner.query(`DROP TABLE IF EXISTS "availability_blocks" CASCADE`);
+    await queryRunner.query(
+      `DROP TABLE IF EXISTS "availability_blocks" CASCADE`,
+    );
     await queryRunner.query(`DROP TABLE IF EXISTS "availability" CASCADE`);
     await queryRunner.query(`DROP TABLE IF EXISTS "coaching_services" CASCADE`);
     await queryRunner.query(`DROP TABLE IF EXISTS "coaches" CASCADE`);

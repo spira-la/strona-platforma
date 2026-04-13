@@ -33,7 +33,11 @@ export class PurchaseEntity {
   })
   status: PurchaseStatus | null;
 
-  @CreateDateColumn({ name: 'purchased_at', type: 'timestamptz', nullable: true })
+  @CreateDateColumn({
+    name: 'purchased_at',
+    type: 'timestamptz',
+    nullable: true,
+  })
   purchasedAt: Date | null;
 
   @Column({ name: 'expires_at', type: 'timestamptz', nullable: true })
@@ -69,18 +73,37 @@ export class UserProgressEntity {
   @Column({ name: 'current_page', type: 'int', nullable: true })
   currentPage: number | null;
 
-  @Column({ name: 'chapters_completed', type: 'uuid', array: true, nullable: true })
+  @Column({
+    name: 'chapters_completed',
+    type: 'uuid',
+    array: true,
+    nullable: true,
+  })
   chaptersCompleted: string[] | null;
 
-  @Column({ name: 'is_completed', type: 'boolean', default: false, nullable: true })
+  @Column({
+    name: 'is_completed',
+    type: 'boolean',
+    default: false,
+    nullable: true,
+  })
   isCompleted: boolean | null;
 
   @Column({ name: 'completed_at', type: 'timestamptz', nullable: true })
   completedAt: Date | null;
 
-  @CreateDateColumn({ name: 'last_accessed_at', type: 'timestamptz', nullable: true })
+  @CreateDateColumn({
+    name: 'last_accessed_at',
+    type: 'timestamptz',
+    nullable: true,
+  })
   lastAccessedAt: Date | null;
 
-  @Column({ name: 'time_spent_minutes', type: 'int', default: 0, nullable: true })
+  @Column({
+    name: 'time_spent_minutes',
+    type: 'int',
+    default: 0,
+    nullable: true,
+  })
   timeSpentMinutes: number | null;
 }

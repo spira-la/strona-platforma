@@ -9,7 +9,10 @@ import { CoachEntity } from '../../db/entities/coach.entity.js';
 import { ProfileEntity } from '../../db/entities/profile.entity.js';
 import { BookingEntity } from '../../db/entities/booking.entity.js';
 import { CoachingServiceEntity } from '../../db/entities/coaching-service.entity.js';
-import { AvailabilityEntity, AvailabilityBlockEntity } from '../../db/entities/availability.entity.js';
+import {
+  AvailabilityEntity,
+  AvailabilityBlockEntity,
+} from '../../db/entities/availability.entity.js';
 import { OrderEntity } from '../../db/entities/order.entity.js';
 import { BookingStatus, OrderStatus } from '../../db/entities/enums.js';
 
@@ -123,11 +126,19 @@ export class CoachPanelService {
       .select('COUNT(DISTINCT b.user_id)', 'count')
       .where('b.coach_id = :coachId', { coachId })
       .getRawOne<{ count: string }>();
-    const totalClients = parseInt(clientsResult?.count ?? '0', 10);
+    const totalClients = Number.parseInt(clientsResult?.count ?? '0', 10);
 
     // This month earnings: sum amountCents from paid orders linked to this coach's bookings
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+    const endOfMonth = new Date(
+      now.getFullYear(),
+      now.getMonth() + 1,
+      0,
+      23,
+      59,
+      59,
+      999,
+    );
 
     const earningsResult = await this.orderRepo
       .createQueryBuilder('o')
@@ -142,7 +153,7 @@ export class CoachPanelService {
       .andWhere('o.paid_at >= :start', { start: startOfMonth })
       .andWhere('o.paid_at <= :end', { end: endOfMonth })
       .getRawOne<{ total: string }>();
-    const thisMonthEarnings = parseInt(earningsResult?.total ?? '0', 10);
+    const thisMonthEarnings = Number.parseInt(earningsResult?.total ?? '0', 10);
 
     // Total sessions ever
     const totalSessions = await this.bookingRepo.count({ where: { coachId } });
@@ -169,7 +180,11 @@ export class CoachPanelService {
     const coach = await this.resolveCoach(userId);
 
     // Update profile fields (fullName, email, phone)
-    if (data.fullName !== undefined || data.email !== undefined || data.phone !== undefined) {
+    if (
+      data.fullName !== undefined ||
+      data.email !== undefined ||
+      data.phone !== undefined
+    ) {
       const profilePatch: Partial<ProfileEntity> = {};
       if (data.fullName !== undefined) profilePatch.fullName = data.fullName;
       if (data.email !== undefined) profilePatch.email = data.email!;
@@ -185,9 +200,12 @@ export class CoachPanelService {
     if (data.location !== undefined) patch.location = data.location ?? null;
     if (data.website !== undefined) patch.website = data.website ?? null;
     if (data.timezone !== undefined) patch.timezone = data.timezone ?? null;
-    if (data.acceptingClients !== undefined) patch.acceptingClients = data.acceptingClients ?? null;
-    if (data.yearsExperience !== undefined) patch.yearsExperience = data.yearsExperience ?? null;
-    if (data.certifications !== undefined) patch.certifications = data.certifications ?? null;
+    if (data.acceptingClients !== undefined)
+      patch.acceptingClients = data.acceptingClients ?? null;
+    if (data.yearsExperience !== undefined)
+      patch.yearsExperience = data.yearsExperience ?? null;
+    if (data.certifications !== undefined)
+      patch.certifications = data.certifications ?? null;
 
     if (Object.keys(patch).length > 0) {
       await this.coachRepo.update({ id: coach.id }, patch);
@@ -208,7 +226,10 @@ export class CoachPanelService {
     });
   }
 
-  async updateAvailability(userId: string, slots: AvailabilitySlot[]): Promise<AvailabilityEntity[]> {
+  async updateAvailability(
+    userId: string,
+    slots: AvailabilitySlot[],
+  ): Promise<AvailabilityEntity[]> {
     const coach = await this.resolveCoach(userId);
     const coachId = coach.id;
 
@@ -244,7 +265,10 @@ export class CoachPanelService {
     });
   }
 
-  async createBlock(userId: string, data: CreateBlockData): Promise<AvailabilityBlockEntity> {
+  async createBlock(
+    userId: string,
+    data: CreateBlockData,
+  ): Promise<AvailabilityBlockEntity> {
     const coach = await this.resolveCoach(userId);
 
     const entity = this.blockRepo.create({
@@ -267,7 +291,9 @@ export class CoachPanelService {
 
     // Ensure the block belongs to this coach
     if (block.coachId !== coach.id) {
-      throw new ForbiddenException('You do not have permission to delete this block');
+      throw new ForbiddenException(
+        'You do not have permission to delete this block',
+      );
     }
 
     await this.blockRepo.delete({ id: blockId });

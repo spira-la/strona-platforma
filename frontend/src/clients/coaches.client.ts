@@ -38,7 +38,9 @@ export interface CreateCoachData {
   acceptingClients?: boolean;
 }
 
-export type UpdateCoachData = Partial<Omit<Coach, 'id' | 'createdAt' | 'userId'>>;
+export type UpdateCoachData = Partial<
+  Omit<Coach, 'id' | 'createdAt' | 'userId'>
+>;
 
 interface ListResponse {
   success: boolean;
@@ -68,10 +70,14 @@ export const coachesClient = {
   },
 
   archive(id: string): Promise<Coach> {
-    return api.patch<ItemResponse>(`/coaches/${id}/archive`).then((r) => r.data);
+    return api
+      .patch<ItemResponse>(`/coaches/${id}/archive`)
+      .then((r) => r.data);
   },
 
   restore(id: string): Promise<Coach> {
-    return api.patch<ItemResponse>(`/coaches/${id}/restore`).then((r) => r.data);
+    return api
+      .patch<ItemResponse>(`/coaches/${id}/restore`)
+      .then((r) => r.data);
   },
 };

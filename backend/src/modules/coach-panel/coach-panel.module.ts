@@ -4,7 +4,10 @@ import { CoachEntity } from '../../db/entities/coach.entity.js';
 import { ProfileEntity } from '../../db/entities/profile.entity.js';
 import { BookingEntity } from '../../db/entities/booking.entity.js';
 import { CoachingServiceEntity } from '../../db/entities/coaching-service.entity.js';
-import { AvailabilityEntity, AvailabilityBlockEntity } from '../../db/entities/availability.entity.js';
+import {
+  AvailabilityEntity,
+  AvailabilityBlockEntity,
+} from '../../db/entities/availability.entity.js';
 import { OrderEntity } from '../../db/entities/order.entity.js';
 import { CoachPanelService } from './coach-panel.service.js';
 import { CoachPanelController } from './coach-panel.controller.js';

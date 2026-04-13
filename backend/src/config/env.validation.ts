@@ -6,7 +6,7 @@ const envSchema = z.object({
   DATABASE_PORT: z
     .string()
     .optional()
-    .transform((val) => (val ? parseInt(val, 10) : 5432))
+    .transform((val) => (val ? Number.parseInt(val, 10) : 5432))
     .pipe(z.number().int()),
   DATABASE_USER: z.string().min(1, 'DATABASE_USER is required'),
   DATABASE_PASSWORD: z.string().min(1, 'DATABASE_PASSWORD is required'),
@@ -18,19 +18,22 @@ const envSchema = z.object({
   PORT: z
     .string()
     .optional()
-    .transform((val) => (val ? parseInt(val, 10) : 3000))
-    .pipe(z.number().int().min(1).max(65535)),
+    .transform((val) => (val ? Number.parseInt(val, 10) : 3000))
+    .pipe(z.number().int().min(1).max(65_535)),
 
   // Supabase (optional until auth is configured)
+  // eslint-disable-next-line sonarjs/deprecation
   SUPABASE_URL: z.string().url().optional().or(z.literal('')),
   SUPABASE_ANON_KEY: z.string().optional().or(z.literal('')),
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional().or(z.literal('')),
 
   // Cloudflare R2
+  // eslint-disable-next-line sonarjs/deprecation
   R2_ENDPOINT: z.string().url().optional(),
   R2_ACCESS_KEY_ID: z.string().optional(),
   R2_SECRET_ACCESS_KEY: z.string().optional(),
   R2_BUCKET: z.string().optional(),
+  // eslint-disable-next-line sonarjs/deprecation
   R2_PUBLIC_URL: z.string().url().optional(),
 
   // SMTP (Zoho)
@@ -38,7 +41,7 @@ const envSchema = z.object({
   SMTP_PORT: z
     .string()
     .optional()
-    .transform((val) => (val ? parseInt(val, 10) : 465))
+    .transform((val) => (val ? Number.parseInt(val, 10) : 465))
     .pipe(z.number().int()),
   SMTP_USER: z.string().optional(),
   SMTP_PASS: z.string().optional(),

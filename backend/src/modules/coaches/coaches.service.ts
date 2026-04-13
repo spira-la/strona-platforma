@@ -239,7 +239,12 @@ export class CoachesService {
     }
 
     // Update profile fields if provided
-    if (coach.userId && (data.fullName !== undefined || data.email !== undefined || data.phone !== undefined)) {
+    if (
+      coach.userId &&
+      (data.fullName !== undefined ||
+        data.email !== undefined ||
+        data.phone !== undefined)
+    ) {
       const profileUpdate: Partial<ProfileEntity> = {};
       if (data.fullName !== undefined) profileUpdate.fullName = data.fullName;
       if (data.email !== undefined) profileUpdate.email = data.email!;
@@ -251,8 +256,10 @@ export class CoachesService {
     const payload: Partial<CoachEntity> = {};
 
     if (data.bio !== undefined) payload.bio = data.bio ?? null;
-    if (data.expertise !== undefined) payload.expertise = data.expertise ?? null;
-    if (data.languages !== undefined) payload.languages = data.languages ?? null;
+    if (data.expertise !== undefined)
+      payload.expertise = data.expertise ?? null;
+    if (data.languages !== undefined)
+      payload.languages = data.languages ?? null;
     if (data.location !== undefined) payload.location = data.location ?? null;
     if (data.website !== undefined) payload.website = data.website ?? null;
     if (data.timezone !== undefined) payload.timezone = data.timezone ?? null;

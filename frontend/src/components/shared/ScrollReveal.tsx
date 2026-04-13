@@ -29,30 +29,50 @@ interface ScrollRevealProps {
   threshold?: number;
 }
 
-const getHiddenStyles = (animation: Animation, distance: number): CSSProperties => {
-  const base: CSSProperties = { opacity: 0, willChange: 'opacity, transform, clip-path' };
+const getHiddenStyles = (
+  animation: Animation,
+  distance: number,
+): CSSProperties => {
+  const base: CSSProperties = {
+    opacity: 0,
+    willChange: 'opacity, transform, clip-path',
+  };
 
   switch (animation) {
-    case 'fade-up':
+    case 'fade-up': {
       return { ...base, transform: `translateY(${distance}px)` };
-    case 'fade-down':
+    }
+    case 'fade-down': {
       return { ...base, transform: `translateY(-${distance}px)` };
-    case 'fade-left':
+    }
+    case 'fade-left': {
       return { ...base, transform: `translateX(${distance}px)` };
-    case 'fade-right':
+    }
+    case 'fade-right': {
       return { ...base, transform: `translateX(-${distance}px)` };
-    case 'fade':
+    }
+    case 'fade': {
       return base;
-    case 'scale':
+    }
+    case 'scale': {
       return { ...base, transform: 'scale(0.97)' };
-    case 'blur':
-      return { ...base, filter: 'blur(10px)', transform: `translateY(${distance / 2}px)` };
-    case 'clip-up':
+    }
+    case 'blur': {
+      return {
+        ...base,
+        filter: 'blur(10px)',
+        transform: `translateY(${distance / 2}px)`,
+      };
+    }
+    case 'clip-up': {
       return { ...base, opacity: 1, clipPath: 'inset(100% 0 0 0)' };
-    case 'clip-left':
+    }
+    case 'clip-left': {
       return { ...base, opacity: 1, clipPath: 'inset(0 100% 0 0)' };
-    case 'clip-right':
+    }
+    case 'clip-right': {
       return { ...base, opacity: 1, clipPath: 'inset(0 0 0 100%)' };
+    }
   }
 };
 
@@ -80,8 +100,13 @@ export function ScrollReveal({
 }: ScrollRevealProps) {
   const { ref, isVisible } = useScrollReveal<HTMLDivElement>({ threshold });
 
-  const props = animation.startsWith('clip') ? 'clip-path' : 'opacity, transform, filter';
-  const transition = props.split(', ').map(p => `${p} ${duration}ms ${EASING} ${delay}ms`).join(', ');
+  const props = animation.startsWith('clip')
+    ? 'clip-path'
+    : 'opacity, transform, filter';
+  const transition = props
+    .split(', ')
+    .map((p) => `${p} ${duration}ms ${EASING} ${delay}ms`)
+    .join(', ');
 
   // Clip animations also need opacity transition for non-clip properties
   const fullTransition = animation.startsWith('clip')
@@ -90,7 +115,9 @@ export function ScrollReveal({
 
   const style: CSSProperties = {
     transition: fullTransition,
-    ...(isVisible ? getVisibleStyles(animation) : getHiddenStyles(animation, distance)),
+    ...(isVisible
+      ? getVisibleStyles(animation)
+      : getHiddenStyles(animation, distance)),
   };
 
   return (

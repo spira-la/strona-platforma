@@ -104,9 +104,11 @@ function SlotGroup({ label, slots, selected, onSelect }: SlotGroupProps) {
             'px-4 py-2 rounded-full text-sm font-medium border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] ';
 
           if (!available) {
-            classes += 'border-[#E8E4DF] text-[#C0BDB9] cursor-not-allowed bg-[#FAF8F5]';
+            classes +=
+              'border-[#E8E4DF] text-[#C0BDB9] cursor-not-allowed bg-[#FAF8F5]';
           } else if (isSelected) {
-            classes += 'border-[#B8944A] bg-[#B8944A] text-white cursor-pointer';
+            classes +=
+              'border-[#B8944A] bg-[#B8944A] text-white cursor-pointer';
           } else {
             classes +=
               'border-[#E8E4DF] text-[#2D2D2D] bg-white hover:border-[#B8944A] hover:text-[#B8944A] cursor-pointer';
@@ -120,7 +122,7 @@ function SlotGroup({ label, slots, selected, onSelect }: SlotGroupProps) {
               disabled={!available}
               onClick={() => available && onSelect(time)}
               aria-pressed={isSelected}
-              aria-label={`${time}${!available ? ' - niedostepna' : ''}`}
+              aria-label={`${time}${available ? '' : ' - niedostepna'}`}
               style={{
                 fontFamily: "'Lato', sans-serif",
                 animation: `slotAppear 600ms cubic-bezier(0.19, 1, 0.22, 1) ${index * 50}ms both`,
@@ -154,7 +156,8 @@ export function TimeSlotPicker({
       <div
         className="px-6 py-5"
         style={{
-          background: 'linear-gradient(135deg, #B8944A 0%, #D4B97A 50%, #8A6F2E 100%)',
+          background:
+            'linear-gradient(135deg, #B8944A 0%, #D4B97A 50%, #8A6F2E 100%)',
         }}
       >
         <p
@@ -209,7 +212,8 @@ export function TimeSlotPicker({
           <div
             className="mt-6 pt-5 border-t border-[#F0EDE8]"
             style={{
-              animation: 'summaryAppear 800ms cubic-bezier(0.19, 1, 0.22, 1) both',
+              animation:
+                'summaryAppear 800ms cubic-bezier(0.19, 1, 0.22, 1) both',
             }}
           >
             <div className="flex items-center gap-3 mb-4 p-3 rounded-lg bg-[rgba(184,148,74,0.06)] border border-[rgba(184,148,74,0.2)]">

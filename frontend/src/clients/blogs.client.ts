@@ -42,7 +42,10 @@ async function getAuthHeader(): Promise<Record<string, string>> {
 
 // ─── Upload helper ────────────────────────────────────────────────────────────
 
-async function uploadFile(endpoint: string, file: File): Promise<{ url: string }> {
+async function uploadFile(
+  endpoint: string,
+  file: File,
+): Promise<{ url: string }> {
   const authHeader = await getAuthHeader();
   const formData = new FormData();
   formData.append('file', file);
@@ -72,14 +75,17 @@ async function uploadFile(endpoint: string, file: File): Promise<{ url: string }
 export const blogsClient = {
   // Public endpoints — no auth required
   getPublished: (): Promise<BlogPost[]> =>
-    api.get<{ success: boolean; data: BlogPost[] }>('/blogs').then((r) => r.data),
+    api
+      .get<{ success: boolean; data: BlogPost[] }>('/blogs')
+      .then((r) => r.data),
 
   getBySlug: (slug: string): Promise<BlogPost> =>
-    api.get<{ success: boolean; data: BlogPost }>(`/blogs/${slug}`).then((r) => r.data),
+    api
+      .get<{ success: boolean; data: BlogPost }>(`/blogs/${slug}`)
+      .then((r) => r.data),
 
   // Protected endpoints
-  getMyPosts: (): Promise<BlogPost[]> =>
-    api.get<BlogPost[]>('/blogs/my'),
+  getMyPosts: (): Promise<BlogPost[]> => api.get<BlogPost[]>('/blogs/my'),
 
   getMyPost: (id: string): Promise<BlogPost> =>
     api.get<BlogPost>(`/blogs/my/${id}`),
@@ -90,8 +96,7 @@ export const blogsClient = {
   update: (id: string, data: UpdateBlogData): Promise<BlogPost> =>
     api.put<BlogPost>(`/blogs/${id}`, data),
 
-  remove: (id: string): Promise<void> =>
-    api.delete<void>(`/blogs/${id}`),
+  remove: (id: string): Promise<void> => api.delete<void>(`/blogs/${id}`),
 
   uploadEditorImage: (file: File): Promise<{ url: string }> =>
     uploadFile('/blogs/upload/image', file),

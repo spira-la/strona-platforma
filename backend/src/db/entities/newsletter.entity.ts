@@ -28,10 +28,19 @@ export class NewsletterSubscriberEntity {
   })
   status: SubscriberStatus | null;
 
-  @Column({ name: 'unsubscribe_token', type: 'text', unique: true, nullable: true })
+  @Column({
+    name: 'unsubscribe_token',
+    type: 'text',
+    unique: true,
+    nullable: true,
+  })
   unsubscribeToken: string | null;
 
-  @CreateDateColumn({ name: 'subscribed_at', type: 'timestamptz', nullable: true })
+  @CreateDateColumn({
+    name: 'subscribed_at',
+    type: 'timestamptz',
+    nullable: true,
+  })
   subscribedAt: Date | null;
 
   @Column({ name: 'unsubscribed_at', type: 'timestamptz', nullable: true })

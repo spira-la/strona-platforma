@@ -39,14 +39,14 @@ export class CloudflareCacheService {
         },
       );
 
-      if (!res.ok) {
+      if (res.ok) {
+        this.logger.log(`Cloudflare cache purged: ${urls.join(', ')}`);
+      } else {
         const body = await res.text();
         this.logger.error(`Cloudflare purge failed: ${res.status} ${body}`);
-      } else {
-        this.logger.log(`Cloudflare cache purged: ${urls.join(', ')}`);
       }
-    } catch (err) {
-      this.logger.error('Cloudflare purge error', err);
+    } catch (error) {
+      this.logger.error('Cloudflare purge error', error);
     }
   }
 
@@ -69,14 +69,14 @@ export class CloudflareCacheService {
         },
       );
 
-      if (!res.ok) {
+      if (res.ok) {
+        this.logger.log('Cloudflare cache fully purged');
+      } else {
         const body = await res.text();
         this.logger.error(`Cloudflare purge_all failed: ${res.status} ${body}`);
-      } else {
-        this.logger.log('Cloudflare cache fully purged');
       }
-    } catch (err) {
-      this.logger.error('Cloudflare purge_all error', err);
+    } catch (error) {
+      this.logger.error('Cloudflare purge_all error', error);
     }
   }
 }

@@ -52,7 +52,11 @@ export default function CoachBlog() {
 
   // ─── Query ───────────────────────────────────────────────────────────────
 
-  const { data: posts = [], isLoading, isError } = useQuery({
+  const {
+    data: posts = [],
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ['coach', 'blogs'],
     queryFn: () => blogsClient.getMyPosts(),
   });
@@ -151,7 +155,11 @@ export default function CoachBlog() {
       header: t('coach.blog.table.date'),
       render: (post) => (
         <span className="font-['Inter'] text-[13px] text-[#6B6B6B] whitespace-nowrap">
-          {formatDate(post.isPublished && post.publishedAt ? post.publishedAt : post.createdAt)}
+          {formatDate(
+            post.isPublished && post.publishedAt
+              ? post.publishedAt
+              : post.createdAt,
+          )}
         </span>
       ),
     },
@@ -266,10 +274,12 @@ export default function CoachBlog() {
             ].join(' ')}
             style={{ backgroundColor: TEAL }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#0F766E';
+              (e.currentTarget as HTMLButtonElement).style.backgroundColor =
+                '#0F766E';
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.backgroundColor = TEAL;
+              (e.currentTarget as HTMLButtonElement).style.backgroundColor =
+                TEAL;
             }}
           >
             <Plus size={16} />
@@ -288,9 +298,9 @@ export default function CoachBlog() {
         errorMessage={t('coach.blog.errors.loadFailed')}
         emptyIcon={FileText}
         emptyMessage={
-          search.trim() !== ''
-            ? t('coach.blog.empty.noResults')
-            : t('coach.blog.empty.noPosts')
+          search.trim() === ''
+            ? t('coach.blog.empty.noPosts')
+            : t('coach.blog.empty.noResults')
         }
         ariaLabel={t('coach.blog.title')}
       />
@@ -308,7 +318,11 @@ export default function CoachBlog() {
       />
 
       {/* Teal accent reference for static analysis */}
-      <div className="hidden" aria-hidden="true" style={{ color: TEAL_LIGHT }} />
+      <div
+        className="hidden"
+        aria-hidden="true"
+        style={{ color: TEAL_LIGHT }}
+      />
     </div>
   );
 }

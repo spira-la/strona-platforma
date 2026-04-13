@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BlogPostEntity, BlogCommentEntity } from '../../db/entities/blog.entity.js';
+import {
+  BlogPostEntity,
+  BlogCommentEntity,
+} from '../../db/entities/blog.entity.js';
 import { BlogsService } from './blogs.service.js';
 import { BlogsController } from './blogs.controller.js';
 

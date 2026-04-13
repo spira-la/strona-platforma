@@ -59,8 +59,8 @@ export class EmailService {
       await this.transporter.verify();
       this.logger.log('SMTP connection verified');
       return true;
-    } catch (err) {
-      this.logger.error('SMTP connection failed', (err as Error).message);
+    } catch (error) {
+      this.logger.error('SMTP connection failed', (error as Error).message);
       return false;
     }
   }

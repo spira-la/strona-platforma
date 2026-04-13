@@ -24,7 +24,11 @@ import {
 } from '@/components/admin';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { toast } from '@/stores/toast.store';
-import { couponsClient, type Coupon, type CreateCouponData } from '@/clients/coupons.client';
+import {
+  couponsClient,
+  type Coupon,
+  type CreateCouponData,
+} from '@/clients/coupons.client';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -32,8 +36,10 @@ import { couponsClient, type Coupon, type CreateCouponData } from '@/clients/cou
 
 function generateCode(): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
   return Array.from(
     { length: 8 },
+    // eslint-disable-next-line sonarjs/pseudo-random -- coupon codes are not security-sensitive
     () => chars[Math.floor(Math.random() * chars.length)],
   ).join('');
 }
@@ -109,7 +115,11 @@ function CopyButton({ text }: { text: string }) {
       onClick={handleCopy}
       title={t('admin.coupons.actions.copyCode')}
       className="ml-1.5 p-0.5 rounded text-[#AAAAAA] hover:text-[#B8963E] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
-      aria-label={copied ? t('admin.coupons.actions.copied') : t('admin.coupons.actions.copyCode')}
+      aria-label={
+        copied
+          ? t('admin.coupons.actions.copied')
+          : t('admin.coupons.actions.copyCode')
+      }
     >
       {copied ? (
         <Check size={13} className="text-green-600" />
@@ -142,7 +152,7 @@ function buildInitialForm(coupon?: Coupon): FormState {
       discountType: coupon.discountType,
       discountValue: String(coupon.discountValue),
       noLimit: coupon.maxUses === null,
-      maxUses: coupon.maxUses !== null ? String(coupon.maxUses) : '',
+      maxUses: coupon.maxUses === null ? '' : String(coupon.maxUses),
       noExpiry: coupon.expiresAt === null,
       expiresAt: coupon.expiresAt
         ? coupon.expiresAt.slice(0, 10) // yyyy-mm-dd
@@ -194,7 +204,9 @@ function CouponDialog({
   const [form, setForm] = useState<FormState>(() =>
     buildInitialForm(editingCoupon ?? undefined),
   );
-  const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof FormState, string>>
+  >({});
   const backdropRef = useRef<HTMLDivElement>(null);
   const firstInputRef = useRef<HTMLInputElement>(null);
 
@@ -232,7 +244,7 @@ function CouponDialog({
       next.code = t('admin.coupons.validation.codeRequired');
     }
     const val = Number(form.discountValue);
-    if (!form.discountValue || isNaN(val) || val <= 0) {
+    if (!form.discountValue || Number.isNaN(val) || val <= 0) {
       next.discountValue = t('admin.coupons.validation.valueRequired');
     }
     if (form.discountType === 'percentage' && val > 100) {
@@ -240,7 +252,7 @@ function CouponDialog({
     }
     if (!form.noLimit) {
       const uses = Number(form.maxUses);
-      if (!form.maxUses || isNaN(uses) || uses < 1) {
+      if (!form.maxUses || Number.isNaN(uses) || uses < 1) {
         next.maxUses = t('admin.coupons.validation.usesRequired');
       }
     }
@@ -276,13 +288,19 @@ function CouponDialog({
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-[2px]"
       role="dialog"
       aria-modal="true"
-      aria-label={editingCoupon ? t('admin.coupons.editCoupon') : t('admin.coupons.newCoupon')}
+      aria-label={
+        editingCoupon
+          ? t('admin.coupons.editCoupon')
+          : t('admin.coupons.newCoupon')
+      }
     >
       <div className="relative bg-white rounded-xl shadow-2xl w-full max-w-[500px] mx-4 max-h-[90vh] flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#F0EDE8] shrink-0">
           <h2 className="font-['Cormorant_Garamond'] font-bold text-[20px] text-[#2D2D2D]">
-            {editingCoupon ? t('admin.coupons.editCoupon') : t('admin.coupons.newCoupon')}
+            {editingCoupon
+              ? t('admin.coupons.editCoupon')
+              : t('admin.coupons.newCoupon')}
           </h2>
           <button
             type="button"
@@ -311,9 +329,7 @@ function CouponDialog({
                 id="coupon-code"
                 type="text"
                 value={form.code}
-                onChange={(e) =>
-                  setField('code', e.target.value.toUpperCase())
-                }
+                onChange={(e) => setField('code', e.target.value.toUpperCase())}
                 placeholder={t('admin.coupons.form.codePlaceholder')}
                 className={`${inputClass} flex-1 font-mono uppercase tracking-widest`}
                 autoComplete="off"
@@ -336,12 +352,16 @@ function CouponDialog({
           <div>
             <p className={labelClass}>{t('admin.coupons.form.discountType')}</p>
             <div className="flex gap-3">
-              {(
-                [
-                  { value: 'percentage' as const, label: t('admin.coupons.discountType.percentage') },
-                  { value: 'fixed' as const, label: t('admin.coupons.discountType.fixed') },
-                ]
-              ).map(({ value, label }) => (
+              {[
+                {
+                  value: 'percentage' as const,
+                  label: t('admin.coupons.discountType.percentage'),
+                },
+                {
+                  value: 'fixed' as const,
+                  label: t('admin.coupons.discountType.fixed'),
+                },
+              ].map(({ value, label }) => (
                 <label
                   key={value}
                   className={`flex items-center gap-2 cursor-pointer px-4 py-2 rounded-lg border transition-colors font-['Inter'] text-[14px] ${
@@ -496,7 +516,9 @@ function CouponDialog({
               className="flex items-center gap-2 px-5 py-2 rounded-lg bg-[#B8963E] hover:bg-[#8A6F2E] text-white font-['Inter'] text-[14px] font-medium transition-colors disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E] focus-visible:ring-offset-2"
             >
               {isSaving && <Loader2 size={15} className="animate-spin" />}
-              {editingCoupon ? t('admin.coupons.form.save') : t('admin.coupons.form.create')}
+              {editingCoupon
+                ? t('admin.coupons.form.save')
+                : t('admin.coupons.form.create')}
             </button>
           </div>
         </form>
@@ -516,12 +538,7 @@ interface CouponRowProps {
   isToggling: boolean;
 }
 
-function CouponRow({
-  coupon,
-  onEdit,
-  onToggle,
-  isToggling,
-}: CouponRowProps) {
+function CouponRow({ coupon, onEdit, onToggle, isToggling }: CouponRowProps) {
   const { t } = useTranslation();
   const expired = isExpired(coupon);
 
@@ -540,7 +557,9 @@ function CouponRow({
       {/* Type */}
       <td className="px-4 py-3.5">
         <span className="font-['Inter'] text-[13px] text-[#6B6B6B]">
-          {coupon.discountType === 'percentage' ? t('admin.coupons.discountType.percentage') : t('admin.coupons.discountType.fixed')}
+          {coupon.discountType === 'percentage'
+            ? t('admin.coupons.discountType.percentage')
+            : t('admin.coupons.discountType.fixed')}
         </span>
       </td>
 
@@ -570,8 +589,20 @@ function CouponRow({
       {/* Status */}
       <td className="px-4 py-3.5">
         <AdminStatusBadge
-          variant={isExpired(coupon) ? 'warning' : coupon.isActive ? 'success' : 'neutral'}
-          label={isExpired(coupon) ? t('admin.coupons.status.expired') : coupon.isActive ? t('admin.coupons.status.active') : t('admin.coupons.status.inactive')}
+          variant={
+            isExpired(coupon)
+              ? 'warning'
+              : coupon.isActive
+                ? 'success'
+                : 'neutral'
+          }
+          label={
+            isExpired(coupon)
+              ? t('admin.coupons.status.expired')
+              : coupon.isActive
+                ? t('admin.coupons.status.active')
+                : t('admin.coupons.status.inactive')
+          }
         />
       </td>
 
@@ -594,9 +625,17 @@ function CouponRow({
             type="button"
             onClick={() => onToggle(coupon)}
             disabled={isToggling}
-            title={coupon.isActive ? t('admin.coupons.actions.archive') : t('admin.coupons.actions.restore')}
+            title={
+              coupon.isActive
+                ? t('admin.coupons.actions.archive')
+                : t('admin.coupons.actions.restore')
+            }
             className="p-1.5 rounded text-[#8A8A8A] hover:text-[#B8963E] hover:bg-[#F9F6F0] transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
-            aria-label={coupon.isActive ? t('admin.coupons.actions.archiveCoupon') : t('admin.coupons.actions.restoreCoupon')}
+            aria-label={
+              coupon.isActive
+                ? t('admin.coupons.actions.archiveCoupon')
+                : t('admin.coupons.actions.restoreCoupon')
+            }
           >
             {coupon.isActive ? (
               <ToggleRight size={17} className="text-[#B8963E]" />
@@ -619,7 +658,9 @@ export default function AdminCoupons() {
   const queryClient = useQueryClient();
 
   const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'active' | 'inactive'>('active');
+  const [statusFilter, setStatusFilter] = useState<'active' | 'inactive'>(
+    'active',
+  );
   const [showDialog, setShowDialog] = useState(false);
   const [editingCoupon, setEditingCoupon] = useState<Coupon | null>(null);
   const [togglingCoupon, setTogglingCoupon] = useState<Coupon | null>(null);
@@ -640,7 +681,11 @@ export default function AdminCoupons() {
   const filtered = coupons.filter((c) => {
     if (statusFilter === 'active' && !c.isActive) return false;
     if (statusFilter === 'inactive' && c.isActive) return false;
-    if (search.trim() && !c.code.toUpperCase().includes(search.trim().toUpperCase())) return false;
+    if (
+      search.trim() &&
+      !c.code.toUpperCase().includes(search.trim().toUpperCase())
+    )
+      return false;
     return true;
   });
 
@@ -664,8 +709,13 @@ export default function AdminCoupons() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data: d }: { id: string; data: Partial<CreateCouponData> }) =>
-      couponsClient.update(id, d),
+    mutationFn: ({
+      id,
+      data: d,
+    }: {
+      id: string;
+      data: Partial<CreateCouponData>;
+    }) => couponsClient.update(id, d),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['coupons'] });
       setShowDialog(false);
@@ -762,8 +812,16 @@ export default function AdminCoupons() {
       <div className="mb-4">
         <AdminFilterTabs
           tabs={[
-            { value: 'active', label: t('admin.coupons.filter.active'), count: activeCount },
-            { value: 'inactive', label: t('admin.coupons.filter.inactive'), count: inactiveCount },
+            {
+              value: 'active',
+              label: t('admin.coupons.filter.active'),
+              count: activeCount,
+            },
+            {
+              value: 'inactive',
+              label: t('admin.coupons.filter.inactive'),
+              count: inactiveCount,
+            },
           ]}
           active={statusFilter}
           onChange={setStatusFilter}
@@ -816,7 +874,10 @@ export default function AdminCoupons() {
 
         {!isLoading && !isError && filtered.length > 0 && (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[640px]" aria-label={t('admin.coupons.table.label')}>
+            <table
+              className="w-full min-w-[640px]"
+              aria-label={t('admin.coupons.table.label')}
+            >
               <thead>
                 <tr className="bg-[#F9F6F0]">
                   {[

@@ -100,7 +100,9 @@ export class CouponsService {
       const upperCode = data.code.toUpperCase();
       const existing = await this.findByCode(upperCode);
       if (existing && existing.id !== id) {
-        throw new ConflictException(`Coupon code "${upperCode}" already exists`);
+        throw new ConflictException(
+          `Coupon code "${upperCode}" already exists`,
+        );
       }
       data = { ...data, code: upperCode };
     }
@@ -112,7 +114,8 @@ export class CouponsService {
       updatePayload.discountType = data.discountType as DiscountType;
     if (data.discountValue !== undefined)
       updatePayload.discountValue = data.discountValue;
-    if (data.maxUses !== undefined) updatePayload.maxUses = data.maxUses ?? null;
+    if (data.maxUses !== undefined)
+      updatePayload.maxUses = data.maxUses ?? null;
     if (data.isActive !== undefined) updatePayload.isActive = data.isActive;
     if ('expiresAt' in data) {
       updatePayload.expiresAt = data.expiresAt
@@ -165,7 +168,6 @@ export class CouponsService {
 
     if (
       coupon.maxUses !== null &&
-      coupon.maxUses !== undefined &&
       (coupon.currentUses ?? 0) >= coupon.maxUses
     ) {
       return {
@@ -176,19 +178,13 @@ export class CouponsService {
     }
 
     // Calculate discount amount in cents
-    let discountAmountCents: number;
-
-    if (coupon.discountType === DiscountType.PERCENTAGE) {
-      discountAmountCents = Math.round(
-        (totalAmountCents * coupon.discountValue) / 100,
-      );
-    } else {
-      // 'fixed' — discountValue is stored as cents
-      discountAmountCents = coupon.discountValue;
-    }
-
-    // Clamp so discount never exceeds total
-    discountAmountCents = Math.min(discountAmountCents, totalAmountCents);
+    const discountAmountCents = Math.min(
+      coupon.discountType === DiscountType.PERCENTAGE
+        ? Math.round((totalAmountCents * coupon.discountValue) / 100)
+        : // 'fixed' — discountValue is stored as cents
+          coupon.discountValue,
+      totalAmountCents,
+    );
 
     return {
       valid: true,

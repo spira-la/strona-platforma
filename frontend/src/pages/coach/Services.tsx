@@ -14,7 +14,10 @@ import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
 import { AdminStatCard } from '@/components/admin/AdminStatCard';
 import { AdminFilterTabs } from '@/components/admin/AdminFilterTabs';
 import { AdminFormDialog } from '@/components/admin/AdminFormDialog';
-import { AdminFormField, ADMIN_INPUT_CLASS } from '@/components/admin/AdminFormField';
+import {
+  AdminFormField,
+  ADMIN_INPUT_CLASS,
+} from '@/components/admin/AdminFormField';
 import { AdminTable } from '@/components/admin/AdminTable';
 import type { AdminTableColumn } from '@/components/admin/AdminTable';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
@@ -75,9 +78,14 @@ function CoachServiceEditDialog({
 }: CoachServiceEditDialogProps) {
   const { t } = useTranslation();
   const [form, setForm] = useState<EditFormState>(() => buildEditForm(service));
-  const [errors, setErrors] = useState<Partial<Record<keyof EditFormState, string>>>({});
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof EditFormState, string>>
+  >({});
 
-  const setField = <K extends keyof EditFormState>(key: K, value: EditFormState[K]) => {
+  const setField = <K extends keyof EditFormState>(
+    key: K,
+    value: EditFormState[K],
+  ) => {
     setForm((prev) => ({ ...prev, [key]: value }));
     setErrors((prev) => ({ ...prev, [key]: undefined }));
   };
@@ -85,11 +93,11 @@ function CoachServiceEditDialog({
   const validate = (): boolean => {
     const next: Partial<Record<keyof EditFormState, string>> = {};
     const duration = Number(form.durationMinutes);
-    if (!form.durationMinutes || isNaN(duration) || duration < 1) {
+    if (!form.durationMinutes || Number.isNaN(duration) || duration < 1) {
       next.durationMinutes = t('coach.services.validation.durationRequired');
     }
     const price = Number(form.priceCents);
-    if (!form.priceCents || isNaN(price) || price <= 0) {
+    if (!form.priceCents || Number.isNaN(price) || price <= 0) {
       next.priceCents = t('coach.services.validation.priceRequired');
     }
     setErrors(next);
@@ -176,7 +184,11 @@ interface AddServiceDialogProps {
   catalog: Service[];
   existingNames: Set<string>;
   onClose: () => void;
-  onAdd: (service: Service, durationMinutes: number, priceCents: number) => void;
+  onAdd: (
+    service: Service,
+    durationMinutes: number,
+    priceCents: number,
+  ) => void;
   isSaving: boolean;
 }
 
@@ -191,9 +203,13 @@ function AddServiceDialog({
   const [selected, setSelected] = useState<Service | null>(null);
   const [duration, setDuration] = useState('');
   const [price, setPrice] = useState('');
-  const [errors, setErrors] = useState<{ duration?: string; price?: string }>({});
+  const [errors, setErrors] = useState<{ duration?: string; price?: string }>(
+    {},
+  );
 
-  const available = catalog.filter((s) => s.isActive && !existingNames.has(s.name));
+  const available = catalog.filter(
+    (s) => s.isActive && !existingNames.has(s.name),
+  );
 
   const handleSelect = (s: Service) => {
     setSelected(s);
@@ -205,11 +221,11 @@ function AddServiceDialog({
   const validate = (): boolean => {
     const next: { duration?: string; price?: string } = {};
     const d = Number(duration);
-    if (!duration || isNaN(d) || d < 1) {
+    if (!duration || Number.isNaN(d) || d < 1) {
       next.duration = t('coach.services.validation.durationRequired');
     }
     const p = Number(price);
-    if (!price || isNaN(p) || p <= 0) {
+    if (!price || Number.isNaN(p) || p <= 0) {
       next.price = t('coach.services.validation.priceRequired');
     }
     setErrors(next);
@@ -262,7 +278,8 @@ function AddServiceDialog({
                 {s.name}
               </span>
               <span className="font-['Inter'] text-[12px] text-[#6B6B6B]">
-                {s.durationMinutes} {t('coach.services.durationUnit')} · {formatPrice(s.priceCents)}
+                {s.durationMinutes} {t('coach.services.durationUnit')} ·{' '}
+                {formatPrice(s.priceCents)}
               </span>
             </button>
           ))}
@@ -337,13 +354,21 @@ export default function CoachServices() {
 
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('active');
   const [showAdd, setShowAdd] = useState(false);
-  const [editingService, setEditingService] = useState<CoachService | null>(null);
-  const [confirmService, setConfirmService] = useState<CoachService | null>(null);
+  const [editingService, setEditingService] = useState<CoachService | null>(
+    null,
+  );
+  const [confirmService, setConfirmService] = useState<CoachService | null>(
+    null,
+  );
   const [togglingId, setTogglingId] = useState<string | null>(null);
 
   // ─── Queries ────────────────────────────────────────────────────────────────
 
-  const { data: coachServices = [], isLoading, isError } = useQuery({
+  const {
+    data: coachServices = [],
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ['coach-services'],
     queryFn: () => coachClient.getServices(),
   });
@@ -379,8 +404,13 @@ export default function CoachServices() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data: d }: { id: string; data: UpdateCoachServiceData }) =>
-      coachClient.updateService(id, d),
+    mutationFn: ({
+      id,
+      data: d,
+    }: {
+      id: string;
+      data: UpdateCoachServiceData;
+    }) => coachClient.updateService(id, d),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['coach-services'] });
       setEditingService(null);
@@ -417,12 +447,17 @@ export default function CoachServices() {
     },
   });
 
-  const isConfirmLoading = archiveMutation.isPending || restoreMutation.isPending;
+  const isConfirmLoading =
+    archiveMutation.isPending || restoreMutation.isPending;
   const isSaving = createMutation.isPending || updateMutation.isPending;
 
   // ─── Handlers ───────────────────────────────────────────────────────────────
 
-  const handleAdd = (service: Service, durationMinutes: number, priceCents: number) => {
+  const handleAdd = (
+    service: Service,
+    durationMinutes: number,
+    priceCents: number,
+  ) => {
     createMutation.mutate({
       name: service.name,
       description: service.description ?? undefined,
@@ -604,7 +639,8 @@ export default function CoachServices() {
           ].join(' ')}
           style={{ backgroundColor: TEAL }}
           onMouseEnter={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#0F766E';
+            (e.currentTarget as HTMLButtonElement).style.backgroundColor =
+              '#0F766E';
           }}
           onMouseLeave={(e) => {
             (e.currentTarget as HTMLButtonElement).style.backgroundColor = TEAL;

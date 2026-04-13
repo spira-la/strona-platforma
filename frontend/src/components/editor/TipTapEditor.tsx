@@ -50,7 +50,13 @@ interface ToolbarButtonProps {
   children: React.ReactNode;
 }
 
-function ToolbarButton({ onClick, active = false, disabled = false, title, children }: ToolbarButtonProps) {
+function ToolbarButton({
+  onClick,
+  active = false,
+  disabled = false,
+  title,
+  children,
+}: ToolbarButtonProps) {
   return (
     <button
       type="button"
@@ -76,12 +82,19 @@ function ToolbarButton({ onClick, active = false, disabled = false, title, child
 // ─── Separator ────────────────────────────────────────────────────────────────
 
 function ToolbarSeparator() {
-  return <span className="w-px h-5 bg-[#E8E4DF] mx-1 shrink-0" aria-hidden="true" />;
+  return (
+    <span className="w-px h-5 bg-[#E8E4DF] mx-1 shrink-0" aria-hidden="true" />
+  );
 }
 
 // ─── TipTapEditor ─────────────────────────────────────────────────────────────
 
-export function TipTapEditor({ content, onChange, onImageUpload, placeholder }: TipTapEditorProps) {
+export function TipTapEditor({
+  content,
+  onChange,
+  onImageUpload,
+  placeholder,
+}: TipTapEditorProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const editor = useEditor({
@@ -126,7 +139,10 @@ export function TipTapEditor({ content, onChange, onImageUpload, placeholder }: 
         const file = files[0];
         if (!file.type.startsWith('image/')) return false;
         event.preventDefault();
-        const pos = view.posAtCoords({ left: event.clientX, top: event.clientY });
+        const pos = view.posAtCoords({
+          left: event.clientX,
+          top: event.clientY,
+        });
         onImageUpload(file)
           .then((url) => {
             const { schema } = view.state;
@@ -186,7 +202,7 @@ export function TipTapEditor({ content, onChange, onImageUpload, placeholder }: 
   const handleSetLink = useCallback(() => {
     if (!editor) return;
     const previousUrl = editor.getAttributes('link').href as string | undefined;
-    const url = window.prompt('Wpisz URL:', previousUrl ?? 'https://');
+    const url = globalThis.prompt('Wpisz URL:', previousUrl ?? 'https://');
     if (url === null) return; // cancelled
     if (url === '') {
       editor.chain().focus().extendMarkRange('link').unsetLink().run();
@@ -298,21 +314,27 @@ export function TipTapEditor({ content, onChange, onImageUpload, placeholder }: 
           <ToolbarButton
             title="Nagłówek 1"
             active={editor.isActive('heading', { level: 1 })}
-            onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+            onClick={() =>
+              editor.chain().focus().toggleHeading({ level: 1 }).run()
+            }
           >
             <Heading1 size={15} />
           </ToolbarButton>
           <ToolbarButton
             title="Nagłówek 2"
             active={editor.isActive('heading', { level: 2 })}
-            onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+            onClick={() =>
+              editor.chain().focus().toggleHeading({ level: 2 }).run()
+            }
           >
             <Heading2 size={15} />
           </ToolbarButton>
           <ToolbarButton
             title="Nagłówek 3"
             active={editor.isActive('heading', { level: 3 })}
-            onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+            onClick={() =>
+              editor.chain().focus().toggleHeading({ level: 3 }).run()
+            }
           >
             <Heading3 size={15} />
           </ToolbarButton>
@@ -416,7 +438,9 @@ export function TipTapEditor({ content, onChange, onImageUpload, placeholder }: 
           <ToolbarButton
             title="Zaznaczenie"
             active={editor.isActive('highlight')}
-            onClick={() => editor.chain().focus().toggleHighlight({ color: '#FFF3B0' }).run()}
+            onClick={() =>
+              editor.chain().focus().toggleHighlight({ color: '#FFF3B0' }).run()
+            }
           >
             <Highlighter size={15} />
           </ToolbarButton>
@@ -424,10 +448,7 @@ export function TipTapEditor({ content, onChange, onImageUpload, placeholder }: 
           <ToolbarSeparator />
 
           {/* Image upload */}
-          <ToolbarButton
-            title="Wstaw obraz"
-            onClick={handleImageButtonClick}
-          >
+          <ToolbarButton title="Wstaw obraz" onClick={handleImageButtonClick}>
             <ImagePlus size={15} />
           </ToolbarButton>
         </div>

@@ -67,7 +67,6 @@ export function AdminFormDialog({
       aria-label={title}
     >
       <div className="relative bg-white rounded-xl shadow-2xl w-full max-w-[500px] mx-4 max-h-[90vh] flex flex-col">
-
         {/* Header */}
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#F0EDE8] shrink-0">
           <h2 className="font-['Cormorant_Garamond'] font-bold text-[20px] text-[#2D2D2D]">
@@ -107,13 +106,16 @@ export function AdminFormDialog({
               className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#B8963E] hover:bg-[#8A6F2E] text-white font-['Inter'] text-[14px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E] focus-visible:ring-offset-2 disabled:opacity-60"
             >
               {isLoading && (
-                <Loader2 size={15} className="animate-spin" aria-hidden="true" />
+                <Loader2
+                  size={15}
+                  className="animate-spin"
+                  aria-hidden="true"
+                />
               )}
               {submitLabel}
             </button>
           </div>
         </form>
-
       </div>
     </div>
   );

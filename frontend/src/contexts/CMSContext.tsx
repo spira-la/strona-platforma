@@ -60,7 +60,10 @@ function writeCache(entry: CacheEntry): void {
  * Resolves a dot-separated fieldPath inside an object.
  * e.g. getNestedValue({ story: { paragraph1: "Hello" } }, "story.paragraph1") === "Hello"
  */
-function getNestedValue(obj: Record<string, unknown>, fieldPath: string): string | undefined {
+function getNestedValue(
+  obj: Record<string, unknown>,
+  fieldPath: string,
+): string | undefined {
   const parts = fieldPath.split('.');
   let current: unknown = obj;
   for (const part of parts) {
@@ -85,12 +88,13 @@ function setNestedValue(
   let cursor: any = result;
   for (let i = 0; i < parts.length - 1; i++) {
     const key = parts[i];
-    cursor[key] = typeof cursor[key] === 'object' && cursor[key] !== null
-      ? { ...(cursor[key] as Record<string, unknown>) }
-      : {};
+    cursor[key] =
+      typeof cursor[key] === 'object' && cursor[key] !== null
+        ? { ...(cursor[key] as Record<string, unknown>) }
+        : {};
     cursor = cursor[key];
   }
-  cursor[parts[parts.length - 1]] = value;
+  cursor[parts.at(-1)] = value;
   return result;
 }
 
@@ -110,8 +114,8 @@ export function CMSProvider({ children }: CMSProviderProps) {
 
   // Check admin status from Supabase user metadata
   const isAdmin =
-    (user?.app_metadata?.role === 'admin') ||
-    (user?.user_metadata?.role === 'admin');
+    user?.app_metadata?.role === 'admin' ||
+    user?.user_metadata?.role === 'admin';
 
   const [content, setContent] = useState<
     Record<string, Record<CMSLanguage, Record<string, unknown>>>
@@ -134,7 +138,9 @@ export function CMSProvider({ children }: CMSProviderProps) {
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 3000);
 
-        const res = await fetch('/api/cms/content', { signal: controller.signal });
+        const res = await fetch('/api/cms/content', {
+          signal: controller.signal,
+        });
         clearTimeout(timeout);
 
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -190,7 +196,11 @@ export function CMSProvider({ children }: CMSProviderProps) {
   );
 
   const updateField = useCallback(
-    async (section: CMSSectionKey, fieldPath: string, value: string): Promise<void> => {
+    async (
+      section: CMSSectionKey,
+      fieldPath: string,
+      value: string,
+    ): Promise<void> => {
       const lang = i18n.language as CMSLanguage;
 
       // Optimistic update

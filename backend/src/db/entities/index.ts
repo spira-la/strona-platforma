@@ -22,7 +22,10 @@ export * from './language.entity';
 import { ProfileEntity } from './profile.entity';
 import { CoachEntity } from './coach.entity';
 import { CoachingServiceEntity } from './coaching-service.entity';
-import { AvailabilityEntity, AvailabilityBlockEntity } from './availability.entity';
+import {
+  AvailabilityEntity,
+  AvailabilityBlockEntity,
+} from './availability.entity';
 import { CouponEntity } from './coupon.entity';
 import { OrderEntity } from './order.entity';
 import { BookingEntity } from './booking.entity';
@@ -34,7 +37,11 @@ import { CmsContentEntity } from './cms-content.entity';
 import { FeatureFlagEntity } from './feature-flag.entity';
 import { CategoryEntity, ProductEntity } from './product.entity';
 import { PurchaseEntity, UserProgressEntity } from './purchase.entity';
-import { WebinarEntity, WebinarSessionEntity, WebinarRegistrationEntity } from './webinar.entity';
+import {
+  WebinarEntity,
+  WebinarSessionEntity,
+  WebinarRegistrationEntity,
+} from './webinar.entity';
 import { GiftEntity } from './gift.entity';
 import { ReviewEntity } from './review.entity';
 import { LanguageEntity } from './language.entity';

@@ -44,12 +44,14 @@ function generateSlug(title: string): string {
   const base = title
     .toLowerCase()
     .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '') // strip diacritics
-    .replace(/[^a-z0-9\s-]/g, '')
+    .replaceAll(/[\u0300-\u036F]/g, '') // strip diacritics
+    .replaceAll(/[^a-z0-9\s-]/g, '')
     .trim()
-    .replace(/[\s-]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+    .replaceAll(/[\s-]+/g, '-')
+    // eslint-disable-next-line sonarjs/slow-regex
+    .replaceAll(/^-+|-+$/g, '');
 
+  // eslint-disable-next-line sonarjs/pseudo-random -- used for non-security slug suffix generation
   const suffix = Math.random().toString(36).slice(2, 6);
   return `${base}-${suffix}`;
 }
@@ -96,9 +98,13 @@ export class BlogsService {
     }
 
     // Increment view count (fire-and-forget — do not block the response)
-    void this.blogRepo.increment({ id: post.id }, 'viewCount', 1).catch((err) => {
-      this.logger.warn(`Failed to increment viewCount for post ${post.id}: ${String(err)}`);
-    });
+    void this.blogRepo
+      .increment({ id: post.id }, 'viewCount', 1)
+      .catch((error) => {
+        this.logger.warn(
+          `Failed to increment viewCount for post ${post.id}: ${String(error)}`,
+        );
+      });
 
     return post;
   }
@@ -130,7 +136,9 @@ export class BlogsService {
     }
 
     if (post.authorId !== coachId) {
-      throw new ForbiddenException('You do not have permission to access this post');
+      throw new ForbiddenException(
+        'You do not have permission to access this post',
+      );
     }
 
     return post;
@@ -140,7 +148,10 @@ export class BlogsService {
    * Creates a new blog post for the authenticated coach.
    * Generates a slug from the title automatically.
    */
-  async create(coachId: string, data: CreateBlogPostData): Promise<BlogPostEntity> {
+  async create(
+    coachId: string,
+    data: CreateBlogPostData,
+  ): Promise<BlogPostEntity> {
     const slug = generateSlug(data.title);
 
     const entity = this.blogRepo.create({
@@ -163,7 +174,11 @@ export class BlogsService {
    * If isPublished transitions to true, sets publishedAt to now().
    * Throws ForbiddenException if the post belongs to another coach.
    */
-  async update(id: string, coachId: string, data: UpdateBlogPostData): Promise<BlogPostEntity> {
+  async update(
+    id: string,
+    coachId: string,
+    data: UpdateBlogPostData,
+  ): Promise<BlogPostEntity> {
     const post = await this.findOneByCoach(id, coachId);
 
     const patch: Partial<BlogPostEntity> = {};
@@ -171,7 +186,8 @@ export class BlogsService {
     if (data.title !== undefined) patch.title = data.title;
     if (data.content !== undefined) patch.content = data.content;
     if (data.excerpt !== undefined) patch.excerpt = data.excerpt;
-    if (data.coverImageUrl !== undefined) patch.coverImageUrl = data.coverImageUrl;
+    if (data.coverImageUrl !== undefined)
+      patch.coverImageUrl = data.coverImageUrl;
     if (data.tags !== undefined) patch.tags = data.tags;
 
     if (data.isPublished !== undefined) {
@@ -204,8 +220,14 @@ export class BlogsService {
    *
    * Returns the new likeCount.
    */
-  async toggleLike(postId: string, _userId: string, increment: boolean): Promise<number> {
-    const post = await this.blogRepo.findOne({ where: { id: postId, isPublished: true } });
+  async toggleLike(
+    postId: string,
+    _userId: string,
+    increment: boolean,
+  ): Promise<number> {
+    const post = await this.blogRepo.findOne({
+      where: { id: postId, isPublished: true },
+    });
 
     if (!post) {
       throw new NotFoundException(`Blog post "${postId}" not found`);
@@ -221,7 +243,9 @@ export class BlogsService {
       }
     }
 
-    const updated = await this.blogRepo.findOneOrFail({ where: { id: postId } });
+    const updated = await this.blogRepo.findOneOrFail({
+      where: { id: postId },
+    });
     return updated.likeCount ?? 0;
   }
 }

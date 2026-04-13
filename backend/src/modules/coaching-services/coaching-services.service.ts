@@ -21,7 +21,7 @@ export interface CreateServiceData {
   sortOrder?: number | null;
 }
 
-export interface UpdateServiceData extends Partial<CreateServiceData> {}
+export type UpdateServiceData = Partial<CreateServiceData>;
 
 @Injectable()
 export class CoachingServicesService {
@@ -84,10 +84,12 @@ export class CoachingServicesService {
       updatePayload.durationMinutes = data.durationMinutes;
     if (data.sessionCount !== undefined)
       updatePayload.sessionCount = data.sessionCount ?? null;
-    if (data.priceCents !== undefined) updatePayload.priceCents = data.priceCents;
+    if (data.priceCents !== undefined)
+      updatePayload.priceCents = data.priceCents;
     if (data.currency !== undefined)
       updatePayload.currency = data.currency ?? null;
-    if (data.coachId !== undefined) updatePayload.coachId = data.coachId ?? null;
+    if (data.coachId !== undefined)
+      updatePayload.coachId = data.coachId ?? null;
     if (data.isActive !== undefined) updatePayload.isActive = data.isActive;
     if (data.sortOrder !== undefined)
       updatePayload.sortOrder = data.sortOrder ?? null;

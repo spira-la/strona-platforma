@@ -11,21 +11,27 @@ interface LayoutProps {
 }
 
 /** Pages with dark hero background (image + overlay) — navbar text is white. */
-const DARK_HERO_PAGES = ['/', '/o-mnie', '/jak-pracuje', '/uslugi', '/blog', '/kontakt'];
-/** Pages with light hero background (cream/white) — navbar text stays dark but bg transparent. */
-const LIGHT_HERO_PAGES: string[] = [];
+const DARK_HERO_PAGES = new Set([
+  '/',
+  '/o-mnie',
+  '/jak-pracuje',
+  '/uslugi',
+  '/blog',
+  '/kontakt',
+]);
 
 export function Layout({ children }: LayoutProps) {
   useSmoothScroll();
   const { pathname } = useLocation();
-  const hasDarkHero = DARK_HERO_PAGES.includes(pathname);
-  const hasLightHero = LIGHT_HERO_PAGES.includes(pathname);
-  const hasHero = hasDarkHero || hasLightHero;
+  const hasDarkHero = DARK_HERO_PAGES.has(pathname);
+  const hasHero = hasDarkHero;
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar transparent={hasHero} darkHero={hasDarkHero} />
-      <main className={hasHero ? 'flex-1' : 'flex-1 pt-[72px]'}>{children}</main>
+      <main className={hasHero ? 'flex-1' : 'flex-1 pt-[72px]'}>
+        {children}
+      </main>
       <Footer />
       <CMSEditToolbar />
       <AuthModal />

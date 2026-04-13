@@ -62,10 +62,7 @@ export function AdminTable<T>({
         </div>
       ) : (
         <div className="overflow-x-auto">
-          <table
-            className="w-full min-w-[640px]"
-            aria-label={ariaLabel}
-          >
+          <table className="w-full min-w-[640px]" aria-label={ariaLabel}>
             <thead>
               <tr className="bg-[#F9F6F0]">
                 {columns.map((col) => (
@@ -73,7 +70,7 @@ export function AdminTable<T>({
                     key={col.key}
                     scope="col"
                     className={[
-                      'px-4 py-3 text-left font-[\'Inter\'] text-[11px] uppercase tracking-wider text-[#8A8A8A] font-semibold',
+                      "px-4 py-3 text-left font-['Inter'] text-[11px] uppercase tracking-wider text-[#8A8A8A] font-semibold",
                       col.className ?? '',
                     ].join(' ')}
                   >

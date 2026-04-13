@@ -40,7 +40,8 @@ function formatPrice(priceCents: number): string {
 
 function deriveAvgPrice(services: Service[]): string {
   if (services.length === 0) return '— zł';
-  const avg = services.reduce((sum, s) => sum + s.priceCents, 0) / services.length;
+  const avg =
+    services.reduce((sum, s) => sum + s.priceCents, 0) / services.length;
   return formatPrice(avg);
 }
 
@@ -115,7 +116,9 @@ function ServiceFormDialog({
   const [form, setForm] = useState<FormState>(() =>
     buildInitialForm(editingService ?? undefined),
   );
-  const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof FormState, string>>
+  >({});
 
   const setField = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -129,11 +132,11 @@ function ServiceFormDialog({
       next.name = t('admin.services.validation.nameRequired');
     }
     const duration = Number(form.durationMinutes);
-    if (!form.durationMinutes || isNaN(duration) || duration < 1) {
+    if (!form.durationMinutes || Number.isNaN(duration) || duration < 1) {
       next.durationMinutes = t('admin.services.validation.durationRequired');
     }
     const price = Number(form.price);
-    if (!form.price || isNaN(price) || price <= 0) {
+    if (!form.price || Number.isNaN(price) || price <= 0) {
       next.price = t('admin.services.validation.priceRequired');
     }
 
@@ -368,8 +371,13 @@ export default function AdminServices() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data: d }: { id: string; data: Partial<CreateServiceData> }) =>
-      servicesClient.update(id, d),
+    mutationFn: ({
+      id,
+      data: d,
+    }: {
+      id: string;
+      data: Partial<CreateServiceData>;
+    }) => servicesClient.update(id, d),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['services'] });
       setShowDialog(false);

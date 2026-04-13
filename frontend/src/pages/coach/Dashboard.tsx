@@ -1,7 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Calendar, Users, TrendingUp, CalendarCheck, ArrowRight } from 'lucide-react';
+import {
+  Calendar,
+  Users,
+  TrendingUp,
+  CalendarCheck,
+  ArrowRight,
+} from 'lucide-react';
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
 import { AdminStatCard } from '@/components/admin/AdminStatCard';
 import { coachClient } from '@/clients/coach.client';
@@ -13,7 +19,11 @@ function formatEarnings(amount: number): string {
 export default function CoachDashboard() {
   const { t } = useTranslation();
 
-  const { data: stats, isLoading, isError } = useQuery({
+  const {
+    data: stats,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ['coach', 'dashboard'],
     queryFn: coachClient.getDashboard,
   });
@@ -28,7 +38,9 @@ export default function CoachDashboard() {
       {/* ── Stat cards ───────────────────────────────────────────────────────── */}
       {isError && (
         <div className="mb-6 rounded-xl bg-red-50 border border-red-200 px-4 py-3">
-          <p className="font-['Inter'] text-[14px] text-red-600">{t('common.error')}</p>
+          <p className="font-['Inter'] text-[14px] text-red-600">
+            {t('common.error')}
+          </p>
         </div>
       )}
 
@@ -46,7 +58,9 @@ export default function CoachDashboard() {
         <AdminStatCard
           icon={TrendingUp}
           label={t('coach.dashboard.stats.thisMonthEarnings')}
-          value={isLoading ? '—' : formatEarnings(stats?.thisMonthEarnings ?? 0)}
+          value={
+            isLoading ? '—' : formatEarnings(stats?.thisMonthEarnings ?? 0)
+          }
         />
         <AdminStatCard
           icon={CalendarCheck}

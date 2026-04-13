@@ -142,7 +142,12 @@ function BlogCard({ post }: BlogCardProps) {
             className="flex items-center gap-1 font-['Lato'] text-[13px] font-semibold text-[#B8944A] hover:text-[#D4B97A] transition-colors"
             aria-label={`Czytaj wiecej: ${post.title}`}
           >
-            <EditableText section="blog" fieldPath="readMore" as="span" placeholder="Czytaj" />
+            <EditableText
+              section="blog"
+              fieldPath="readMore"
+              as="span"
+              placeholder="Czytaj"
+            />
             <ArrowRight size={13} aria-hidden="true" />
           </Link>
         </div>
@@ -171,11 +176,16 @@ function HeroSection() {
       <div
         className="absolute inset-0"
         style={{
-          background: 'linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.55) 100%)',
+          background:
+            'linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.55) 100%)',
         }}
         aria-hidden="true"
       />
-      <ScrollReveal animation="fade" delay={200} className="relative z-10 flex flex-col items-center text-center px-6 py-16 max-w-[780px] mx-auto gap-5">
+      <ScrollReveal
+        animation="fade"
+        delay={200}
+        className="relative z-10 flex flex-col items-center text-center px-6 py-16 max-w-[780px] mx-auto gap-5"
+      >
         <EditableText
           section="blog"
           fieldPath="hero.title"
@@ -197,66 +207,69 @@ function HeroSection() {
 
 function FeaturedPostSection() {
   return (
-    <section className="bg-white py-14 md:py-20" aria-label="Wyrozniony artykul">
+    <section
+      className="bg-white py-14 md:py-20"
+      aria-label="Wyrozniony artykul"
+    >
       <div className="max-w-[1100px] mx-auto px-6">
         <ScrollReveal animation="fade-up">
-        <div className="flex flex-col md:flex-row gap-0 rounded-lg overflow-hidden border border-[#E8E4DF] shadow-sm">
-          {/* Image */}
-          <div className="md:w-[45%] relative overflow-hidden min-h-[280px]">
-            <img
-              src={FEATURED_POST.imageUrl}
-              alt={FEATURED_POST.title}
-              className="w-full h-full object-cover absolute inset-0"
-            />
-          </div>
-          {/* Content */}
-          <div className="md:w-[55%] flex flex-col justify-center gap-5 p-8 md:p-12 bg-[#FAF8F5]">
-            <span className="inline-block self-start font-['Lato'] text-[11px] font-bold tracking-[0.1em] uppercase text-white bg-[#B8944A] rounded-full px-4 py-1.5">
-              <EditableText
-                section="blog"
-                fieldPath="featured.badge"
-                as="span"
-                placeholder="Najnowszy wpis"
+          <div className="flex flex-col md:flex-row gap-0 rounded-lg overflow-hidden border border-[#E8E4DF] shadow-sm">
+            {/* Image */}
+            <div className="md:w-[45%] relative overflow-hidden min-h-[280px]">
+              <img
+                src={FEATURED_POST.imageUrl}
+                alt={FEATURED_POST.title}
+                className="w-full h-full object-cover absolute inset-0"
               />
-            </span>
-            <EditableText
-              section="blog"
-              fieldPath="featured.title"
-              as="h2"
-              className="font-['Cormorant_Garamond'] text-[24px] md:text-[28px] font-bold text-[#2D2D2D] leading-snug"
-              placeholder={FEATURED_POST.title}
-            />
-            <EditableText
-              section="blog"
-              fieldPath="featured.excerpt"
-              as="p"
-              className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7]"
-              placeholder={FEATURED_POST.excerpt}
-            />
-            <div className="flex items-center gap-2">
-              <span className="font-['Lato'] text-[13px] text-[#8A8A8A] flex items-center gap-1.5">
-                <Calendar size={13} aria-hidden="true" />
-                {FEATURED_POST.date}
-              </span>
             </div>
-            <Link
-              to={FEATURED_POST.slug}
-              className="inline-flex items-center gap-2 self-start font-['Lato'] text-[14px] font-semibold text-[#B8944A] hover:text-[#D4B97A] transition-colors group"
-            >
+            {/* Content */}
+            <div className="md:w-[55%] flex flex-col justify-center gap-5 p-8 md:p-12 bg-[#FAF8F5]">
+              <span className="inline-block self-start font-['Lato'] text-[11px] font-bold tracking-[0.1em] uppercase text-white bg-[#B8944A] rounded-full px-4 py-1.5">
+                <EditableText
+                  section="blog"
+                  fieldPath="featured.badge"
+                  as="span"
+                  placeholder="Najnowszy wpis"
+                />
+              </span>
               <EditableText
                 section="blog"
-                fieldPath="featured.cta"
-                as="span"
-                placeholder="Czytaj wiecej"
+                fieldPath="featured.title"
+                as="h2"
+                className="font-['Cormorant_Garamond'] text-[24px] md:text-[28px] font-bold text-[#2D2D2D] leading-snug"
+                placeholder={FEATURED_POST.title}
               />
-              <ArrowRight
-                size={15}
-                className="transition-transform group-hover:translate-x-1"
-                aria-hidden="true"
+              <EditableText
+                section="blog"
+                fieldPath="featured.excerpt"
+                as="p"
+                className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7]"
+                placeholder={FEATURED_POST.excerpt}
               />
-            </Link>
+              <div className="flex items-center gap-2">
+                <span className="font-['Lato'] text-[13px] text-[#8A8A8A] flex items-center gap-1.5">
+                  <Calendar size={13} aria-hidden="true" />
+                  {FEATURED_POST.date}
+                </span>
+              </div>
+              <Link
+                to={FEATURED_POST.slug}
+                className="inline-flex items-center gap-2 self-start font-['Lato'] text-[14px] font-semibold text-[#B8944A] hover:text-[#D4B97A] transition-colors group"
+              >
+                <EditableText
+                  section="blog"
+                  fieldPath="featured.cta"
+                  as="span"
+                  placeholder="Czytaj wiecej"
+                />
+                <ArrowRight
+                  size={15}
+                  className="transition-transform group-hover:translate-x-1"
+                  aria-hidden="true"
+                />
+              </Link>
+            </div>
           </div>
-        </div>
         </ScrollReveal>
       </div>
     </section>
@@ -265,7 +278,10 @@ function FeaturedPostSection() {
 
 function ArticleGridSection() {
   return (
-    <section className="bg-[#FAF8F5] py-14 md:py-20" aria-label="Artykuly i refleksje">
+    <section
+      className="bg-[#FAF8F5] py-14 md:py-20"
+      aria-label="Artykuly i refleksje"
+    >
       <div className="max-w-[1100px] mx-auto px-6">
         <ScrollReveal animation="fade-up">
           <div className="flex flex-col items-center text-center gap-3 mb-12">
@@ -307,60 +323,73 @@ function NewsletterSection() {
   }
 
   return (
-    <section className="bg-white py-14 md:py-20" aria-label="Zapis do newslettera">
+    <section
+      className="bg-white py-14 md:py-20"
+      aria-label="Zapis do newslettera"
+    >
       <ScrollReveal animation="fade-up">
-      <div className="max-w-[680px] mx-auto px-6 flex flex-col items-center text-center gap-6">
-        <div className="flex items-center justify-center w-14 h-14 rounded-full bg-[#B8944A]/[0.1] text-[#B8944A]">
-          <Mail size={24} aria-hidden="true" />
-        </div>
-        <EditableText
-          section="blog"
-          fieldPath="newsletter.title"
-          as="h2"
-          className="font-['Cormorant_Garamond'] text-[26px] md:text-[32px] font-bold text-[#2D2D2D]"
-          placeholder="Refleksje prosto do Twojej skrzynki"
-        />
-        <EditableText
-          section="blog"
-          fieldPath="newsletter.description"
-          as="p"
-          className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7]"
-          placeholder="Co tydzien nowy artykul, praktyczne narzedzia i refleksje, ktore wspieraja Twoja droge. Bez spamu, tylko tresc z glebią."
-        />
-
-        {submitted ? (
-          <div className="w-full max-w-[480px] rounded-lg bg-[#B8944A]/[0.1] border border-[#B8944A]/30 px-6 py-4">
-            <p className="font-['Lato'] text-[15px] font-semibold text-[#B8944A]">
-              <EditableText section="newsletter" fieldPath="successMsg" as="span" placeholder="Dziękujemy za zapis! Sprawdź swoją skrzynkę." />
-            </p>
+        <div className="max-w-[680px] mx-auto px-6 flex flex-col items-center text-center gap-6">
+          <div className="flex items-center justify-center w-14 h-14 rounded-full bg-[#B8944A]/[0.1] text-[#B8944A]">
+            <Mail size={24} aria-hidden="true" />
           </div>
-        ) : (
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col sm:flex-row gap-3 w-full max-w-[480px]"
-            noValidate
-          >
-            <label htmlFor="newsletter-email" className="sr-only">
-              Adres e-mail
-            </label>
-            <input
-              id="newsletter-email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Twoj adres e-mail"
-              required
-              className="flex-1 font-['Lato'] text-[14px] text-[#2D2D2D] placeholder:text-[#8A8A8A] bg-[#FAF8F5] border border-[#E8E4DF] rounded-lg px-4 py-3 outline-none focus:border-[#B8944A] focus:ring-2 focus:ring-[#B8944A]/20 transition"
-            />
-            <button
-              type="submit"
-              className="font-['Lato'] text-[14px] font-semibold text-white bg-[#B8944A] hover:bg-[#D4B97A] rounded-lg px-6 py-3 transition-colors whitespace-nowrap"
+          <EditableText
+            section="blog"
+            fieldPath="newsletter.title"
+            as="h2"
+            className="font-['Cormorant_Garamond'] text-[26px] md:text-[32px] font-bold text-[#2D2D2D]"
+            placeholder="Refleksje prosto do Twojej skrzynki"
+          />
+          <EditableText
+            section="blog"
+            fieldPath="newsletter.description"
+            as="p"
+            className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7]"
+            placeholder="Co tydzien nowy artykul, praktyczne narzedzia i refleksje, ktore wspieraja Twoja droge. Bez spamu, tylko tresc z glebią."
+          />
+
+          {submitted ? (
+            <div className="w-full max-w-[480px] rounded-lg bg-[#B8944A]/[0.1] border border-[#B8944A]/30 px-6 py-4">
+              <p className="font-['Lato'] text-[15px] font-semibold text-[#B8944A]">
+                <EditableText
+                  section="newsletter"
+                  fieldPath="successMsg"
+                  as="span"
+                  placeholder="Dziękujemy za zapis! Sprawdź swoją skrzynkę."
+                />
+              </p>
+            </div>
+          ) : (
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col sm:flex-row gap-3 w-full max-w-[480px]"
+              noValidate
             >
-              <EditableText section="newsletter" fieldPath="submitButton" as="span" placeholder="Zapisz się" />
-            </button>
-          </form>
-        )}
-      </div>
+              <label htmlFor="newsletter-email" className="sr-only">
+                Adres e-mail
+              </label>
+              <input
+                id="newsletter-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Twoj adres e-mail"
+                required
+                className="flex-1 font-['Lato'] text-[14px] text-[#2D2D2D] placeholder:text-[#8A8A8A] bg-[#FAF8F5] border border-[#E8E4DF] rounded-lg px-4 py-3 outline-none focus:border-[#B8944A] focus:ring-2 focus:ring-[#B8944A]/20 transition"
+              />
+              <button
+                type="submit"
+                className="font-['Lato'] text-[14px] font-semibold text-white bg-[#B8944A] hover:bg-[#D4B97A] rounded-lg px-6 py-3 transition-colors whitespace-nowrap"
+              >
+                <EditableText
+                  section="newsletter"
+                  fieldPath="submitButton"
+                  as="span"
+                  placeholder="Zapisz się"
+                />
+              </button>
+            </form>
+          )}
+        </div>
       </ScrollReveal>
     </section>
   );

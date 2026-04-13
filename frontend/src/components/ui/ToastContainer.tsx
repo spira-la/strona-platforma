@@ -60,7 +60,8 @@ function ToastItem({ toast, onRemove }: ToastItemProps) {
     el.style.opacity = '0';
     // Defer so the browser paints the initial state before transitioning
     const raf = requestAnimationFrame(() => {
-      el.style.transition = 'transform 280ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms ease';
+      el.style.transition =
+        'transform 280ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms ease';
       el.style.transform = 'translateX(0)';
       el.style.opacity = '1';
     });
@@ -81,7 +82,13 @@ function ToastItem({ toast, onRemove }: ToastItemProps) {
       ].join(' ')}
     >
       {/* Left color bar */}
-      <div className={['w-1 flex-shrink-0 self-stretch rounded-l-xl', barColor].join(' ')} aria-hidden="true" />
+      <div
+        className={[
+          'w-1 flex-shrink-0 self-stretch rounded-l-xl',
+          barColor,
+        ].join(' ')}
+        aria-hidden="true"
+      />
 
       {/* Icon */}
       <div className="flex-shrink-0 p-3 pl-3">
@@ -89,9 +96,7 @@ function ToastItem({ toast, onRemove }: ToastItemProps) {
       </div>
 
       {/* Message */}
-      <p
-        className="flex-1 py-3 pr-2 text-sm leading-snug text-[#2D2D2D] font-['Inter',sans-serif] break-words"
-      >
+      <p className="flex-1 py-3 pr-2 text-sm leading-snug text-[#2D2D2D] font-['Inter',sans-serif] break-words">
         {toast.message}
       </p>
 

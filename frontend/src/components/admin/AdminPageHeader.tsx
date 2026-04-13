@@ -11,7 +11,11 @@ interface AdminPageHeaderProps {
  * Renders the page title (Cormorant Garamond), an optional description,
  * and an optional action element (e.g. a button) aligned to the right.
  */
-export function AdminPageHeader({ title, description, action }: AdminPageHeaderProps) {
+export function AdminPageHeader({
+  title,
+  description,
+  action,
+}: AdminPageHeaderProps) {
   return (
     <div className="flex items-start justify-between gap-4 mb-8">
       <div className="min-w-0">
@@ -36,9 +40,7 @@ export function AdminPageHeader({ title, description, action }: AdminPageHeaderP
       </div>
 
       {action && (
-        <div className="flex-shrink-0 flex items-center gap-3">
-          {action}
-        </div>
+        <div className="flex-shrink-0 flex items-center gap-3">{action}</div>
       )}
     </div>
   );

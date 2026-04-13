@@ -1,6 +1,11 @@
 import { api } from '@/clients/api';
 import { supabase } from '@/config/supabase';
-import type { CMSContentResponse, CMSLanguage, CMSSectionKey, CMSUpdateResponse } from '@/types/cms.types';
+import type {
+  CMSContentResponse,
+  CMSLanguage,
+  CMSSectionKey,
+  CMSUpdateResponse,
+} from '@/types/cms.types';
 
 interface CMSImageUploadResponse {
   url: string;

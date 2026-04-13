@@ -26,13 +26,13 @@ import {
 // Request body interfaces
 // ---------------------------------------------------------------------------
 
-interface UpdateProfileBody extends UpdateProfileData {}
+type UpdateProfileBody = UpdateProfileData;
 
 interface UpdateAvailabilityBody {
   slots: AvailabilitySlot[];
 }
 
-interface CreateBlockBody extends CreateBlockData {}
+type CreateBlockBody = CreateBlockData;
 
 // ---------------------------------------------------------------------------
 // Controller
@@ -120,7 +120,10 @@ export class CoachPanelController {
     @CurrentUser() user: User,
     @Body() body: UpdateAvailabilityBody,
   ) {
-    const data = await this.coachPanel.updateAvailability(user.id, body.slots ?? []);
+    const data = await this.coachPanel.updateAvailability(
+      user.id,
+      body.slots ?? [],
+    );
     return { success: true, data };
   }
 
@@ -145,10 +148,7 @@ export class CoachPanelController {
    */
   @Post('availability/blocks')
   @HttpCode(HttpStatus.CREATED)
-  async createBlock(
-    @CurrentUser() user: User,
-    @Body() body: CreateBlockBody,
-  ) {
+  async createBlock(@CurrentUser() user: User, @Body() body: CreateBlockBody) {
     const data = await this.coachPanel.createBlock(user.id, body);
     return { success: true, data };
   }
@@ -159,10 +159,7 @@ export class CoachPanelController {
    */
   @Delete('availability/blocks/:id')
   @HttpCode(HttpStatus.OK)
-  async deleteBlock(
-    @CurrentUser() user: User,
-    @Param('id') id: string,
-  ) {
+  async deleteBlock(@CurrentUser() user: User, @Param('id') id: string) {
     await this.coachPanel.deleteBlock(user.id, id);
     return { success: true, data: null };
   }

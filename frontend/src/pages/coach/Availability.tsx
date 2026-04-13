@@ -4,7 +4,10 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, X, Save, Loader2, CalendarOff, Clock } from 'lucide-react';
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
 import { AdminFormDialog } from '@/components/admin/AdminFormDialog';
-import { AdminFormField, ADMIN_INPUT_CLASS } from '@/components/admin/AdminFormField';
+import {
+  AdminFormField,
+  ADMIN_INPUT_CLASS,
+} from '@/components/admin/AdminFormField';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { toast } from '@/stores/toast.store';
 import {
@@ -66,8 +69,14 @@ interface BlockFormDialogProps {
 
 function BlockFormDialog({ onClose, onSave, isSaving }: BlockFormDialogProps) {
   const { t } = useTranslation();
-  const [form, setForm] = useState<BlockFormState>({ startAt: '', endAt: '', reason: '' });
-  const [errors, setErrors] = useState<Partial<Record<keyof BlockFormState, string>>>({});
+  const [form, setForm] = useState<BlockFormState>({
+    startAt: '',
+    endAt: '',
+    reason: '',
+  });
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof BlockFormState, string>>
+  >({});
 
   const setField = <K extends keyof BlockFormState>(key: K, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -76,8 +85,10 @@ function BlockFormDialog({ onClose, onSave, isSaving }: BlockFormDialogProps) {
 
   const validate = (): boolean => {
     const next: Partial<Record<keyof BlockFormState, string>> = {};
-    if (!form.startAt) next.startAt = t('coach.availability.validation.startRequired');
-    if (!form.endAt) next.endAt = t('coach.availability.validation.endRequired');
+    if (!form.startAt)
+      next.startAt = t('coach.availability.validation.startRequired');
+    if (!form.endAt)
+      next.endAt = t('coach.availability.validation.endRequired');
     if (form.startAt && form.endAt && form.startAt >= form.endAt) {
       next.endAt = t('coach.availability.validation.endAfterStart');
     }
@@ -227,23 +238,23 @@ function DayCard({
               <input
                 type="time"
                 value={slot.startTime}
-                onChange={(e) => onChangeSlot(dayOfWeek, idx, 'startTime', e.target.value)}
+                onChange={(e) =>
+                  onChangeSlot(dayOfWeek, idx, 'startTime', e.target.value)
+                }
                 aria-label={t('coach.availability.startTime')}
-                className={[
-                  ADMIN_INPUT_CLASS,
-                  'flex-1 text-[13px]',
-                ].join(' ')}
+                className={[ADMIN_INPUT_CLASS, 'flex-1 text-[13px]'].join(' ')}
               />
-              <span className="font-['Inter'] text-[12px] text-[#AAAAAA]">–</span>
+              <span className="font-['Inter'] text-[12px] text-[#AAAAAA]">
+                –
+              </span>
               <input
                 type="time"
                 value={slot.endTime}
-                onChange={(e) => onChangeSlot(dayOfWeek, idx, 'endTime', e.target.value)}
+                onChange={(e) =>
+                  onChangeSlot(dayOfWeek, idx, 'endTime', e.target.value)
+                }
                 aria-label={t('coach.availability.endTime')}
-                className={[
-                  ADMIN_INPUT_CLASS,
-                  'flex-1 text-[13px]',
-                ].join(' ')}
+                className={[ADMIN_INPUT_CLASS, 'flex-1 text-[13px]'].join(' ')}
               />
               <button
                 type="button"
@@ -301,7 +312,9 @@ export default function CoachAvailability() {
     queryFn: () => coachClient.getBlocks(),
   });
 
-  // Initialise local state when data loads
+  // Initialise local state when data loads — calling setState here is intentional:
+  // we are initialising the schedule editor from server data once it arrives.
+
   useEffect(() => {
     if (!isLoadingSlots) {
       setDaySlots(buildDaySlots(availabilitySlots));
@@ -361,7 +374,10 @@ export default function CoachAvailability() {
   const handleAddSlot = (dayOfWeek: number) => {
     setDaySlots((prev) => ({
       ...prev,
-      [dayOfWeek]: [...(prev[dayOfWeek] ?? []), { startTime: '09:00', endTime: '17:00' }],
+      [dayOfWeek]: [
+        ...(prev[dayOfWeek] ?? []),
+        { startTime: '09:00', endTime: '17:00' },
+      ],
     }));
     setDirty(true);
   };
@@ -397,7 +413,11 @@ export default function CoachAvailability() {
       const day = Number(dayStr);
       for (const slot of slotList) {
         if (slot.startTime && slot.endTime) {
-          slots.push({ dayOfWeek: day, startTime: slot.startTime, endTime: slot.endTime });
+          slots.push({
+            dayOfWeek: day,
+            startTime: slot.startTime,
+            endTime: slot.endTime,
+          });
         }
       }
     }
@@ -430,7 +450,10 @@ export default function CoachAvailability() {
       />
 
       {/* Weekly schedule */}
-      <section aria-label={t('coach.availability.weeklySchedule')} className="mb-10">
+      <section
+        aria-label={t('coach.availability.weeklySchedule')}
+        className="mb-10"
+      >
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-['Inter'] text-[16px] font-semibold text-[#2D2D2D] flex items-center gap-2">
             <Clock size={18} style={{ color: TEAL }} aria-hidden="true" />
@@ -474,11 +497,13 @@ export default function CoachAvailability() {
             style={{ backgroundColor: TEAL }}
             onMouseEnter={(e) => {
               if (!(e.currentTarget as HTMLButtonElement).disabled) {
-                (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#0F766E';
+                (e.currentTarget as HTMLButtonElement).style.backgroundColor =
+                  '#0F766E';
               }
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.backgroundColor = TEAL;
+              (e.currentTarget as HTMLButtonElement).style.backgroundColor =
+                TEAL;
             }}
           >
             {saveMutation.isPending ? (
@@ -495,7 +520,11 @@ export default function CoachAvailability() {
       <section aria-label={t('coach.availability.blockedDates')}>
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-['Inter'] text-[16px] font-semibold text-[#2D2D2D] flex items-center gap-2">
-            <CalendarOff size={18} className="text-[#6B6B6B]" aria-hidden="true" />
+            <CalendarOff
+              size={18}
+              className="text-[#6B6B6B]"
+              aria-hidden="true"
+            />
             {t('coach.availability.blockedDates')}
           </h2>
           <button
@@ -504,10 +533,12 @@ export default function CoachAvailability() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-['Inter'] text-[13px] font-medium text-white transition-colors"
             style={{ backgroundColor: TEAL }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#0F766E';
+              (e.currentTarget as HTMLButtonElement).style.backgroundColor =
+                '#0F766E';
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.backgroundColor = TEAL;
+              (e.currentTarget as HTMLButtonElement).style.backgroundColor =
+                TEAL;
             }}
           >
             <Plus size={15} />
@@ -540,7 +571,8 @@ export default function CoachAvailability() {
                 >
                   <div>
                     <div className="font-['Inter'] text-[14px] font-medium text-[#2D2D2D]">
-                      {formatDateTime(block.startAt)} — {formatDateTime(block.endAt)}
+                      {formatDateTime(block.startAt)} —{' '}
+                      {formatDateTime(block.endAt)}
                     </div>
                     {block.reason && (
                       <div className="font-['Inter'] text-[12px] text-[#8A8A8A] mt-0.5">

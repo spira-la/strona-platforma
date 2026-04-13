@@ -55,7 +55,11 @@ function ThankYouSection() {
       className="bg-[#FAF8F5] pt-16 pb-10 md:pt-24 md:pb-14"
       aria-label="Podziekowanie za zakup"
     >
-      <ScrollReveal animation="fade" delay={200} className="max-w-[780px] mx-auto px-6 flex flex-col items-center text-center gap-5">
+      <ScrollReveal
+        animation="fade"
+        delay={200}
+        className="max-w-[780px] mx-auto px-6 flex flex-col items-center text-center gap-5"
+      >
         <div className="flex items-center justify-center w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600">
           <CheckCircle size={32} aria-hidden="true" />
         </div>
@@ -82,62 +86,82 @@ function OrderSummarySection() {
   return (
     <section className="bg-[#FAF8F5] py-8" aria-label="Podsumowanie zamowienia">
       <ScrollReveal animation="fade-up" delay={300}>
-      <div className="max-w-[600px] mx-auto px-6">
-        <div
-          className="rounded-lg overflow-hidden"
-          style={{
-            background: 'linear-gradient(135deg, #B8944A 0%, #D4B97A 100%)',
-          }}
-        >
-          <div className="px-8 py-7 flex flex-col gap-5">
-            <EditableText
-              section="confirmation"
-              fieldPath="order.packageName"
-              as="h2"
-              className="font-['Cormorant_Garamond'] text-[24px] font-bold text-white"
-              placeholder="Pakiet 8 Sesji"
-            />
-            <div className="flex flex-col gap-3">
-              {[
-                { labelField: 'order.label.sessions', labelDefault: 'Liczba sesji', valueField: 'order.value.sessions', valueDefault: '8' },
-                { labelField: 'order.label.price', labelDefault: 'Cena', valueField: 'order.value.price', valueDefault: '960 zl' },
-                { labelField: 'order.label.payment', labelDefault: 'Metoda platnosci', valueField: 'order.value.payment', valueDefault: 'Karta' },
-              ].map(({ labelField, labelDefault, valueField, valueDefault }) => (
-                <div key={labelField} className="flex items-center justify-between gap-4">
+        <div className="max-w-[600px] mx-auto px-6">
+          <div
+            className="rounded-lg overflow-hidden"
+            style={{
+              background: 'linear-gradient(135deg, #B8944A 0%, #D4B97A 100%)',
+            }}
+          >
+            <div className="px-8 py-7 flex flex-col gap-5">
+              <EditableText
+                section="confirmation"
+                fieldPath="order.packageName"
+                as="h2"
+                className="font-['Cormorant_Garamond'] text-[24px] font-bold text-white"
+                placeholder="Pakiet 8 Sesji"
+              />
+              <div className="flex flex-col gap-3">
+                {[
+                  {
+                    labelField: 'order.label.sessions',
+                    labelDefault: 'Liczba sesji',
+                    valueField: 'order.value.sessions',
+                    valueDefault: '8',
+                  },
+                  {
+                    labelField: 'order.label.price',
+                    labelDefault: 'Cena',
+                    valueField: 'order.value.price',
+                    valueDefault: '960 zl',
+                  },
+                  {
+                    labelField: 'order.label.payment',
+                    labelDefault: 'Metoda platnosci',
+                    valueField: 'order.value.payment',
+                    valueDefault: 'Karta',
+                  },
+                ].map(
+                  ({ labelField, labelDefault, valueField, valueDefault }) => (
+                    <div
+                      key={labelField}
+                      className="flex items-center justify-between gap-4"
+                    >
+                      <EditableText
+                        section="confirmation"
+                        fieldPath={labelField}
+                        as="span"
+                        className="font-['Lato'] text-[14px] text-white/75"
+                        placeholder={labelDefault}
+                      />
+                      <EditableText
+                        section="confirmation"
+                        fieldPath={valueField}
+                        as="span"
+                        className="font-['Lato'] text-[14px] font-semibold text-white"
+                        placeholder={valueDefault}
+                      />
+                    </div>
+                  ),
+                )}
+              </div>
+              <div className="border-t border-white/25 pt-4">
+                <div className="flex items-center justify-between gap-4">
                   <EditableText
                     section="confirmation"
-                    fieldPath={labelField}
+                    fieldPath="order.label.orderNumber"
                     as="span"
-                    className="font-['Lato'] text-[14px] text-white/75"
-                    placeholder={labelDefault}
+                    className="font-['Lato'] text-[13px] text-white/60"
+                    placeholder="Numer zamowienia"
                   />
-                  <EditableText
-                    section="confirmation"
-                    fieldPath={valueField}
-                    as="span"
-                    className="font-['Lato'] text-[14px] font-semibold text-white"
-                    placeholder={valueDefault}
-                  />
+                  <span className="font-['Lato'] text-[13px] text-white/60 font-mono">
+                    #SPR-2026-0001
+                  </span>
                 </div>
-              ))}
-            </div>
-            <div className="border-t border-white/25 pt-4">
-              <div className="flex items-center justify-between gap-4">
-                <EditableText
-                  section="confirmation"
-                  fieldPath="order.label.orderNumber"
-                  as="span"
-                  className="font-['Lato'] text-[13px] text-white/60"
-                  placeholder="Numer zamowienia"
-                />
-                <span className="font-['Lato'] text-[13px] text-white/60 font-mono">
-                  #SPR-2026-0001
-                </span>
               </div>
             </div>
           </div>
         </div>
-      </div>
       </ScrollReveal>
     </section>
   );
@@ -196,40 +220,43 @@ function NextStepsSection() {
 
 function MotivationalCTASection() {
   return (
-    <section className="bg-[#FAF8F5] py-14 md:py-20" aria-label="Zacheta do dzialania">
+    <section
+      className="bg-[#FAF8F5] py-14 md:py-20"
+      aria-label="Zacheta do dzialania"
+    >
       <ScrollReveal animation="fade">
-      <div className="max-w-[680px] mx-auto px-6 flex flex-col items-center text-center gap-6">
-        <EditableText
-          section="confirmation"
-          fieldPath="cta.title"
-          as="h2"
-          className="font-['Cormorant_Garamond'] text-[26px] md:text-[32px] font-bold text-[#2D2D2D] leading-snug"
-          placeholder="Zaczyna sie Twoja piekna podroz do siebie"
-        />
-        <EditableText
-          section="confirmation"
-          fieldPath="cta.description"
-          as="p"
-          className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7]"
-          placeholder="Dzieki za zaufanie. Jestesmy tu, by towarzyszyc Ci w kazdym kroku tej drogi. Razem odkryjemy, co jest w Tobie mozliwe."
-        />
-        <Link
-          to="/o-mnie"
-          className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-[#B8944A] hover:text-[#D4B97A] transition-colors group"
-        >
+        <div className="max-w-[680px] mx-auto px-6 flex flex-col items-center text-center gap-6">
           <EditableText
             section="confirmation"
-            fieldPath="cta.link"
-            as="span"
-            placeholder="Poznaj moje podejscie"
+            fieldPath="cta.title"
+            as="h2"
+            className="font-['Cormorant_Garamond'] text-[26px] md:text-[32px] font-bold text-[#2D2D2D] leading-snug"
+            placeholder="Zaczyna sie Twoja piekna podroz do siebie"
           />
-          <ArrowRight
-            size={15}
-            className="transition-transform group-hover:translate-x-1"
-            aria-hidden="true"
+          <EditableText
+            section="confirmation"
+            fieldPath="cta.description"
+            as="p"
+            className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7]"
+            placeholder="Dzieki za zaufanie. Jestesmy tu, by towarzyszyc Ci w kazdym kroku tej drogi. Razem odkryjemy, co jest w Tobie mozliwe."
           />
-        </Link>
-      </div>
+          <Link
+            to="/o-mnie"
+            className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-[#B8944A] hover:text-[#D4B97A] transition-colors group"
+          >
+            <EditableText
+              section="confirmation"
+              fieldPath="cta.link"
+              as="span"
+              placeholder="Poznaj moje podejscie"
+            />
+            <ArrowRight
+              size={15}
+              className="transition-transform group-hover:translate-x-1"
+              aria-hidden="true"
+            />
+          </Link>
+        </div>
       </ScrollReveal>
     </section>
   );
@@ -239,24 +266,24 @@ function QuoteSection() {
   return (
     <section className="bg-white py-12 md:py-16" aria-label="Cytat">
       <ScrollReveal animation="fade" duration={900}>
-      <div className="max-w-[600px] mx-auto px-6 flex flex-col items-center text-center gap-4">
-        <div className="w-10 h-0.5 bg-[#B8944A]" aria-hidden="true" />
-        <EditableText
-          section="confirmation"
-          fieldPath="quote.text"
-          as="blockquote"
-          className="font-['Cormorant_Garamond'] text-[20px] md:text-[22px] italic text-[#2D2D2D] leading-[1.6]"
-          placeholder="Kazdy krok, z glebokosci siebie, jest krokiem ku wolnosci."
-        />
-        <EditableText
-          section="confirmation"
-          fieldPath="quote.author"
-          as="cite"
-          className="font-['Lato'] text-[13px] text-[#8A8A8A] not-italic"
-          placeholder="Spirala"
-        />
-        <div className="w-10 h-0.5 bg-[#B8944A]" aria-hidden="true" />
-      </div>
+        <div className="max-w-[600px] mx-auto px-6 flex flex-col items-center text-center gap-4">
+          <div className="w-10 h-0.5 bg-[#B8944A]" aria-hidden="true" />
+          <EditableText
+            section="confirmation"
+            fieldPath="quote.text"
+            as="blockquote"
+            className="font-['Cormorant_Garamond'] text-[20px] md:text-[22px] italic text-[#2D2D2D] leading-[1.6]"
+            placeholder="Kazdy krok, z glebokosci siebie, jest krokiem ku wolnosci."
+          />
+          <EditableText
+            section="confirmation"
+            fieldPath="quote.author"
+            as="cite"
+            className="font-['Lato'] text-[13px] text-[#8A8A8A] not-italic"
+            placeholder="Spirala"
+          />
+          <div className="w-10 h-0.5 bg-[#B8944A]" aria-hidden="true" />
+        </div>
       </ScrollReveal>
     </section>
   );

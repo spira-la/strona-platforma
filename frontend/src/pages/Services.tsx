@@ -129,13 +129,21 @@ function ServiceCard({
 type BookingStep = 'date' | 'time' | 'confirmed';
 
 /** Animated wrapper for booking step transitions */
-function BookingTransition({ children, show }: { children: React.ReactNode; show: boolean }) {
+function BookingTransition({
+  children,
+  show,
+}: {
+  children: React.ReactNode;
+  show: boolean;
+}) {
   return (
     <div
       className="transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)]"
       style={{
         opacity: show ? 1 : 0,
-        transform: show ? 'translateY(0) scale(1)' : 'translateY(16px) scale(0.98)',
+        transform: show
+          ? 'translateY(0) scale(1)'
+          : 'translateY(16px) scale(0.98)',
         filter: show ? 'none' : 'blur(4px)',
         pointerEvents: show ? 'auto' : 'none',
       }}
@@ -197,20 +205,19 @@ function BookingSection() {
         </div>
 
         {/* Confirmed state */}
-        <BookingTransition show={step === 'confirmed' && !!selectedDate && !!selectedTime}>
+        <BookingTransition
+          show={step === 'confirmed' && !!selectedDate && !!selectedTime}
+        >
           <div className="max-w-[448px] mx-auto text-center p-10 rounded-lg bg-white border border-[#E8E4DF] shadow-sm">
             <div className="flex items-center justify-center w-16 h-16 rounded-full bg-[rgba(184,148,74,0.1)] text-[#B8944A] mx-auto mb-5">
               <Calendar size={28} />
             </div>
-            <h3
-              className="text-xl font-black uppercase tracking-tight text-[#2D2D2D] mb-3 [font-family:'Cormorant_Garamond',serif]"
-            >
+            <h3 className="text-xl font-black uppercase tracking-tight text-[#2D2D2D] mb-3 [font-family:'Cormorant_Garamond',serif]">
               Termin wybrany
             </h3>
-            <p
-              className="text-sm text-[#6B6B6B] mb-6 [font-family:'Lato',sans-serif]"
-            >
-              Twoja sesja zostala wstepnie zarezerwowana. Otrzymasz potwierdzenie na adres e-mail.
+            <p className="text-sm text-[#6B6B6B] mb-6 [font-family:'Lato',sans-serif]">
+              Twoja sesja zostala wstepnie zarezerwowana. Otrzymasz
+              potwierdzenie na adres e-mail.
             </p>
             <button
               type="button"
@@ -239,8 +246,12 @@ function BookingSection() {
                 className="absolute inset-0 flex items-center justify-center rounded-lg border border-dashed border-[#D4B97A] bg-[rgba(184,148,74,0.04)] p-10 text-center transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)]"
                 style={{
                   opacity: step === 'time' && selectedDate ? 0 : 1,
-                  transform: step === 'time' && selectedDate ? 'scale(0.95)' : 'scale(1)',
-                  pointerEvents: step === 'time' && selectedDate ? 'none' : 'auto',
+                  transform:
+                    step === 'time' && selectedDate
+                      ? 'scale(0.95)'
+                      : 'scale(1)',
+                  pointerEvents:
+                    step === 'time' && selectedDate ? 'none' : 'auto',
                 }}
               >
                 <div className="flex flex-col items-center gap-3">
@@ -261,8 +272,12 @@ function BookingSection() {
                 className="transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)]"
                 style={{
                   opacity: step === 'time' && selectedDate ? 1 : 0,
-                  transform: step === 'time' && selectedDate ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.97)',
-                  filter: step === 'time' && selectedDate ? 'none' : 'blur(6px)',
+                  transform:
+                    step === 'time' && selectedDate
+                      ? 'translateY(0) scale(1)'
+                      : 'translateY(20px) scale(0.97)',
+                  filter:
+                    step === 'time' && selectedDate ? 'none' : 'blur(6px)',
                 }}
               >
                 {selectedDate && (
@@ -289,7 +304,7 @@ function BookingSection() {
 
 export default function Services() {
   function scrollToBooking() {
-    const el = document.getElementById('rezerwacja');
+    const el = document.querySelector('#rezerwacja');
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -325,7 +340,11 @@ export default function Services() {
           aria-hidden="true"
         />
 
-        <ScrollReveal animation="fade" delay={200} className="relative z-10 max-w-[672px] mx-auto flex flex-col items-center gap-6">
+        <ScrollReveal
+          animation="fade"
+          delay={200}
+          className="relative z-10 max-w-[672px] mx-auto flex flex-col items-center gap-6"
+        >
           <SectionBadge label="Uslugi" />
 
           <EditableText
@@ -441,7 +460,11 @@ export default function Services() {
           aria-hidden="true"
         />
 
-        <ScrollReveal animation="fade" duration={900} className="relative z-10 flex flex-col items-center gap-6 max-w-[576px]">
+        <ScrollReveal
+          animation="fade"
+          duration={900}
+          className="relative z-10 flex flex-col items-center gap-6 max-w-[576px]"
+        >
           <EditableText
             section="services"
             fieldPath="ctaTitle"

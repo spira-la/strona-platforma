@@ -17,9 +17,17 @@ const TEAL = '#0D9488';
 // Status badge
 // ---------------------------------------------------------------------------
 
-type SessionStatus = 'confirmed' | 'completed' | 'cancelled' | 'no-show' | string;
+type SessionStatus =
+  | 'confirmed'
+  | 'completed'
+  | 'cancelled'
+  | 'no-show'
+  | string;
 
-const STATUS_STYLES: Record<string, { bg: string; text: string; border: string }> = {
+const STATUS_STYLES: Record<
+  string,
+  { bg: string; text: string; border: string }
+> = {
   confirmed: { bg: '#F0FDFA', text: TEAL, border: '#0D9488' },
   completed: { bg: '#F0FDF4', text: '#16A34A', border: '#16A34A' },
   cancelled: { bg: '#FEF2F2', text: '#DC2626', border: '#DC2626' },
@@ -38,7 +46,9 @@ function SessionStatusBadge({ status }: SessionStatusBadgeProps) {
     border: '#E8E4DF',
   };
 
-  const label = t(`coach.sessions.statusLabel.${status}`, { defaultValue: status });
+  const label = t(`coach.sessions.statusLabel.${status}`, {
+    defaultValue: status,
+  });
 
   return (
     <span
@@ -75,7 +85,7 @@ function formatDateTime(iso: string): string {
 function calcDurationMinutes(startAt: string, endAt: string): number {
   try {
     return Math.round(
-      (new Date(endAt).getTime() - new Date(startAt).getTime()) / 60000,
+      (new Date(endAt).getTime() - new Date(startAt).getTime()) / 60_000,
     );
   } catch {
     return 0;
@@ -127,7 +137,9 @@ export default function CoachSessions() {
           <div className="font-['Inter'] text-[14px] font-medium text-[#2D2D2D]">
             {s.clientName}
           </div>
-          <div className="font-['Inter'] text-[12px] text-[#8A8A8A]">{s.clientEmail}</div>
+          <div className="font-['Inter'] text-[12px] text-[#8A8A8A]">
+            {s.clientEmail}
+          </div>
         </div>
       ),
     },
@@ -154,7 +166,8 @@ export default function CoachSessions() {
       header: t('coach.sessions.table.duration'),
       render: (s) => (
         <span className="font-['Inter'] text-[13px] text-[#6B6B6B] whitespace-nowrap">
-          {calcDurationMinutes(s.startAt, s.endAt)} {t('coach.sessions.durationUnit')}
+          {calcDurationMinutes(s.startAt, s.endAt)}{' '}
+          {t('coach.sessions.durationUnit')}
         </span>
       ),
     },

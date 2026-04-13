@@ -4,7 +4,7 @@ import '@/styles/spirala-theme.css';
 import '@/config/i18n';
 import App from '@/App';
 
-const root = document.getElementById('root');
+const root = document.querySelector('#root');
 if (!root) throw new Error('Root element not found');
 
 createRoot(root).render(
@@ -12,4 +12,3 @@ createRoot(root).render(
     <App />
   </StrictMode>,
 );
-

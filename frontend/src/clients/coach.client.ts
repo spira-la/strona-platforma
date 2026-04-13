@@ -117,7 +117,9 @@ export const coachClient = {
   getAvailability: (): Promise<CoachAvailabilitySlot[]> =>
     api.get<CoachAvailabilitySlot[]>('/coach/me/availability'),
 
-  updateAvailability: (slots: CreateAvailabilitySlotData[]): Promise<CoachAvailabilitySlot[]> =>
+  updateAvailability: (
+    slots: CreateAvailabilitySlotData[],
+  ): Promise<CoachAvailabilitySlot[]> =>
     api.put<CoachAvailabilitySlot[]>('/coach/me/availability', slots),
 
   getBlocks: (): Promise<CoachBlock[]> =>
@@ -135,7 +137,10 @@ export const coachClient = {
   createService: (data: CreateCoachServiceData): Promise<CoachService> =>
     api.post<CoachService>('/coach/me/services', data),
 
-  updateService: (id: string, data: UpdateCoachServiceData): Promise<CoachService> =>
+  updateService: (
+    id: string,
+    data: UpdateCoachServiceData,
+  ): Promise<CoachService> =>
     api.put<CoachService>(`/coach/me/services/${id}`, data),
 
   archiveService: (id: string): Promise<CoachService> =>

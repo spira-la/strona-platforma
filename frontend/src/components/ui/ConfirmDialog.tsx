@@ -18,9 +18,11 @@ export interface ConfirmDialogProps {
 
 // ─── Per-variant confirm button styles ───────────────────────────────────────
 
-const CONFIRM_VARIANTS: Record<NonNullable<ConfirmDialogProps['variant']>, string> = {
-  danger:
-    'bg-red-600 hover:bg-red-700 text-white focus-visible:ring-red-500',
+const CONFIRM_VARIANTS: Record<
+  NonNullable<ConfirmDialogProps['variant']>,
+  string
+> = {
+  danger: 'bg-red-600 hover:bg-red-700 text-white focus-visible:ring-red-500',
   warning:
     'bg-amber-500 hover:bg-amber-600 text-white focus-visible:ring-amber-400',
   default:
@@ -143,7 +145,10 @@ export function ConfirmDialog({
             ].join(' ')}
           >
             {isLoading && (
-              <Loader2 className="h-4 w-4 animate-spin flex-shrink-0" aria-hidden="true" />
+              <Loader2
+                className="h-4 w-4 animate-spin flex-shrink-0"
+                aria-hidden="true"
+              />
             )}
             {confirmLabel}
           </button>

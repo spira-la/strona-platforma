@@ -37,9 +37,9 @@ function generateSlug(name: string): string {
   return name
     .toLowerCase()
     .trim()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
+    .replaceAll(/[^\w\s-]/g, '')
+    .replaceAll(/\s+/g, '-')
+    .replaceAll(/-+/g, '-');
 }
 
 // ---------------------------------------------------------------------------
@@ -105,8 +105,11 @@ function CategoryFormDialog({
   const [form, setForm] = useState<FormState>(() =>
     buildInitialForm(editingCategory ?? undefined),
   );
-  const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
-  const [slugManuallyEdited, setSlugManuallyEdited] = useState(!!editingCategory);
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof FormState, string>>
+  >({});
+  const [slugManuallyEdited, setSlugManuallyEdited] =
+    useState(!!editingCategory);
 
   const setField = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -356,7 +359,8 @@ export default function AdminCategories() {
     },
   });
 
-  const isConfirmLoading = archiveMutation.isPending || restoreMutation.isPending;
+  const isConfirmLoading =
+    archiveMutation.isPending || restoreMutation.isPending;
 
   // ─── Handlers ───────────────────────────────────────────────────────────────
 
@@ -391,10 +395,10 @@ export default function AdminCategories() {
   const handleToggleConfirm = () => {
     if (!confirmCategory) return;
     setTogglingId(confirmCategory.id);
-    if (confirmCategory.isActive !== false) {
-      archiveMutation.mutate(confirmCategory.id);
-    } else {
+    if (confirmCategory.isActive === false) {
       restoreMutation.mutate(confirmCategory.id);
+    } else {
+      archiveMutation.mutate(confirmCategory.id);
     }
     setConfirmCategory(null);
   };
@@ -426,7 +430,10 @@ export default function AdminCategories() {
       key: 'description',
       header: t('admin.categories.table.description'),
       render: (c) => (
-        <span className="font-['Inter'] text-[13px] text-[#6B6B6B]" title={c.description ?? ''}>
+        <span
+          className="font-['Inter'] text-[13px] text-[#6B6B6B]"
+          title={c.description ?? ''}
+        >
           {c.description
             ? c.description.length > 60
               ? `${c.description.slice(0, 60)}…`
@@ -449,11 +456,11 @@ export default function AdminCategories() {
       header: t('admin.categories.table.status'),
       render: (c) => (
         <AdminStatusBadge
-          variant={c.isActive !== false ? 'success' : 'neutral'}
+          variant={c.isActive === false ? 'neutral' : 'success'}
           label={
-            c.isActive !== false
-              ? t('admin.categories.status.active')
-              : t('admin.categories.status.archived')
+            c.isActive === false
+              ? t('admin.categories.status.archived')
+              : t('admin.categories.status.active')
           }
         />
       ),
@@ -478,21 +485,21 @@ export default function AdminCategories() {
             onClick={() => handleToggleRequest(c)}
             disabled={togglingId === c.id}
             title={
-              c.isActive !== false
-                ? t('admin.categories.actions.archive')
-                : t('admin.categories.actions.restore')
+              c.isActive === false
+                ? t('admin.categories.actions.restore')
+                : t('admin.categories.actions.archive')
             }
             aria-label={
-              c.isActive !== false
-                ? t('admin.categories.actions.archiveCategory')
-                : t('admin.categories.actions.restoreCategory')
+              c.isActive === false
+                ? t('admin.categories.actions.restoreCategory')
+                : t('admin.categories.actions.archiveCategory')
             }
             className="p-1.5 rounded text-[#8A8A8A] hover:text-[#B8963E] hover:bg-[#F9F6F0] transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
           >
-            {c.isActive !== false ? (
-              <ToggleRight size={17} className="text-[#B8963E]" />
-            ) : (
+            {c.isActive === false ? (
               <ToggleLeft size={17} />
+            ) : (
+              <ToggleRight size={17} className="text-[#B8963E]" />
             )}
           </button>
         </div>
@@ -592,21 +599,21 @@ export default function AdminCategories() {
       <ConfirmDialog
         open={!!confirmCategory}
         title={
-          confirmCategory?.isActive !== false
-            ? t('admin.categories.actions.archiveCategory')
-            : t('admin.categories.actions.restoreCategory')
+          confirmCategory?.isActive === false
+            ? t('admin.categories.actions.restoreCategory')
+            : t('admin.categories.actions.archiveCategory')
         }
         message={`${
-          confirmCategory?.isActive !== false
-            ? t('admin.categories.confirm.archive')
-            : t('admin.categories.confirm.restore')
+          confirmCategory?.isActive === false
+            ? t('admin.categories.confirm.restore')
+            : t('admin.categories.confirm.archive')
         } "${confirmCategory?.name ?? ''}"?`}
         confirmLabel={
-          confirmCategory?.isActive !== false
-            ? t('admin.categories.actions.archive')
-            : t('admin.categories.actions.restore')
+          confirmCategory?.isActive === false
+            ? t('admin.categories.actions.restore')
+            : t('admin.categories.actions.archive')
         }
-        variant={confirmCategory?.isActive !== false ? 'warning' : 'default'}
+        variant={confirmCategory?.isActive === false ? 'default' : 'warning'}
         isLoading={isConfirmLoading}
         onConfirm={handleToggleConfirm}
         onCancel={() => setConfirmCategory(null)}

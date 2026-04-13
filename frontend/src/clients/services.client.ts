@@ -62,10 +62,14 @@ export const servicesClient = {
   },
 
   archive(id: string): Promise<Service> {
-    return api.patch<ItemResponse>(`/services/${id}/archive`).then((r) => r.data);
+    return api
+      .patch<ItemResponse>(`/services/${id}/archive`)
+      .then((r) => r.data);
   },
 
   restore(id: string): Promise<Service> {
-    return api.patch<ItemResponse>(`/services/${id}/restore`).then((r) => r.data);
+    return api
+      .patch<ItemResponse>(`/services/${id}/restore`)
+      .then((r) => r.data);
   },
 };

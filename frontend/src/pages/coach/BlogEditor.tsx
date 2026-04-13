@@ -2,16 +2,14 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  ArrowLeft,
-  Loader2,
-  ImagePlus,
-  X,
-  Save,
-} from 'lucide-react';
+import { ArrowLeft, Loader2, ImagePlus, X, Save } from 'lucide-react';
 import { TipTapEditor } from '@/components/editor/TipTapEditor';
 import { toast } from '@/stores/toast.store';
-import { blogsClient, type CreateBlogData, type UpdateBlogData } from '@/clients/blogs.client';
+import {
+  blogsClient,
+  type CreateBlogData,
+  type UpdateBlogData,
+} from '@/clients/blogs.client';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -23,11 +21,11 @@ function slugify(text: string): string {
   return text
     .toLowerCase()
     .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '') // strip diacritics
-    .replace(/[^a-z0-9\s-]/g, '')
+    .replaceAll(/[\u0300-\u036F]/g, '') // strip diacritics
+    .replaceAll(/[^a-z0-9\s-]/g, '')
     .trim()
-    .replace(/[\s_]+/g, '-')
-    .replace(/-+/g, '-');
+    .replaceAll(/[\s_]+/g, '-')
+    .replaceAll(/-+/g, '-');
 }
 
 // ─── Tag chip ─────────────────────────────────────────────────────────────────
@@ -62,7 +60,8 @@ const INPUT_CLASS = [
   'transition-colors',
 ].join(' ');
 
-const LABEL_CLASS = "block font-['Inter'] text-[13px] font-medium text-[#444444] mb-1.5";
+const LABEL_CLASS =
+  "block font-['Inter'] text-[13px] font-medium text-[#444444] mb-1.5";
 
 // ─── BlogEditor ───────────────────────────────────────────────────────────────
 
@@ -141,7 +140,9 @@ export default function CoachBlogEditor() {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['coach', 'blogs'] });
       void queryClient.invalidateQueries({ queryKey: ['coach', 'blogs', id] });
-      toast.success(t('admin.common.updated', { defaultValue: 'Zaktualizowano' }));
+      toast.success(
+        t('admin.common.updated', { defaultValue: 'Zaktualizowano' }),
+      );
     },
     onError: (err) => {
       toast.error(err instanceof Error ? err.message : t('admin.common.error'));
@@ -185,8 +186,10 @@ export default function CoachBlogEditor() {
     try {
       const { url } = await blogsClient.uploadCoverImage(file);
       setCoverImageUrl(url);
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : t('admin.common.error'));
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : t('admin.common.error'),
+      );
     } finally {
       setIsUploadingCover(false);
       e.target.value = '';
@@ -217,7 +220,10 @@ export default function CoachBlogEditor() {
   if (isEditMode && isLoadingPost && !existingPost) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 animate-spin text-[#0D9488]" aria-label="Ładowanie" />
+        <Loader2
+          className="w-8 h-8 animate-spin text-[#0D9488]"
+          aria-label="Ładowanie"
+        />
       </div>
     );
   }
@@ -239,7 +245,9 @@ export default function CoachBlogEditor() {
             <ArrowLeft size={16} />
           </button>
           <h1 className="font-['Cormorant_Garamond',serif] font-bold text-2xl text-[#2D2D2D] leading-tight truncate">
-            {isEditMode ? t('coach.blogEditor.editTitle') : t('coach.blogEditor.newTitle')}
+            {isEditMode
+              ? t('coach.blogEditor.editTitle')
+              : t('coach.blogEditor.newTitle')}
           </h1>
         </div>
 
@@ -248,7 +256,9 @@ export default function CoachBlogEditor() {
           {/* Publish toggle */}
           <label className="flex items-center gap-2 cursor-pointer select-none">
             <span className="font-['Inter'] text-[14px] text-[#6B6B6B]">
-              {isPublished ? t('coach.blogEditor.publish') : t('coach.blogEditor.draft')}
+              {isPublished
+                ? t('coach.blogEditor.publish')
+                : t('coach.blogEditor.draft')}
             </span>
             <button
               type="button"
@@ -284,10 +294,13 @@ export default function CoachBlogEditor() {
             ].join(' ')}
             style={{ backgroundColor: TEAL }}
             onMouseEnter={(e) => {
-              if (!isSaving) (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#0F766E';
+              if (!isSaving)
+                (e.currentTarget as HTMLButtonElement).style.backgroundColor =
+                  '#0F766E';
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.backgroundColor = TEAL;
+              (e.currentTarget as HTMLButtonElement).style.backgroundColor =
+                TEAL;
             }}
           >
             {isSaving ? (
@@ -295,7 +308,9 @@ export default function CoachBlogEditor() {
             ) : (
               <Save size={15} />
             )}
-            {isSaving ? t('coach.blogEditor.saving') : t('coach.blogEditor.save')}
+            {isSaving
+              ? t('coach.blogEditor.saving')
+              : t('coach.blogEditor.save')}
           </button>
         </div>
       </div>
@@ -425,7 +440,11 @@ export default function CoachBlogEditor() {
             {tags.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-2">
                 {tags.map((tag) => (
-                  <TagChip key={tag} tag={tag} onRemove={() => removeTag(tag)} />
+                  <TagChip
+                    key={tag}
+                    tag={tag}
+                    onRemove={() => removeTag(tag)}
+                  />
                 ))}
               </div>
             )}

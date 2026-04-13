@@ -1,14 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  MessageSquare,
-  MailOpen,
-  Mail,
-  Trash2,
-  Eye,
-  X,
-} from 'lucide-react';
+import { MessageSquare, MailOpen, Mail, Trash2, Eye, X } from 'lucide-react';
 import {
   AdminPageHeader,
   AdminStatCard,
@@ -19,10 +12,7 @@ import {
 import type { AdminTableColumn } from '@/components/admin';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { toast } from '@/stores/toast.store';
-import {
-  contactClient,
-  type ContactMessage,
-} from '@/clients/contact.client';
+import { contactClient, type ContactMessage } from '@/clients/contact.client';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -90,9 +80,14 @@ function MessageViewDialog({ message, onClose }: MessageViewDialogProps) {
           {/* Meta */}
           <dl className="grid grid-cols-1 gap-2 text-[13px]">
             <div className="flex gap-2">
-              <dt className="text-[#8A8A8A] font-medium min-w-[80px]">Email:</dt>
+              <dt className="text-[#8A8A8A] font-medium min-w-[80px]">
+                Email:
+              </dt>
               <dd className="text-[#2D2D2D] break-all">
-                <a href={`mailto:${message.email}`} className="hover:text-[#B8963E] underline">
+                <a
+                  href={`mailto:${message.email}`}
+                  className="hover:text-[#B8963E] underline"
+                >
                   {message.email}
                 </a>
               </dd>
@@ -109,7 +104,9 @@ function MessageViewDialog({ message, onClose }: MessageViewDialogProps) {
               <dt className="text-[#8A8A8A] font-medium min-w-[80px]">
                 {t('admin.contact.messageDialog.date')}:
               </dt>
-              <dd className="text-[#2D2D2D]">{formatDate(message.createdAt)}</dd>
+              <dd className="text-[#2D2D2D]">
+                {formatDate(message.createdAt)}
+              </dd>
             </div>
           </dl>
 
@@ -148,8 +145,12 @@ export default function AdminContact() {
   const queryClient = useQueryClient();
 
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('unread');
-  const [viewingMessage, setViewingMessage] = useState<ContactMessage | null>(null);
-  const [deletingMessage, setDeletingMessage] = useState<ContactMessage | null>(null);
+  const [viewingMessage, setViewingMessage] = useState<ContactMessage | null>(
+    null,
+  );
+  const [deletingMessage, setDeletingMessage] = useState<ContactMessage | null>(
+    null,
+  );
 
   // ─── Query ──────────────────────────────────────────────────────────────────
 
@@ -226,7 +227,7 @@ export default function AdminContact() {
         <span
           className={[
             "font-['Inter'] text-[14px] text-[#2D2D2D]",
-            !m.isRead ? 'font-semibold' : 'font-normal',
+            m.isRead ? 'font-normal' : 'font-semibold',
           ].join(' ')}
         >
           {m.name}
@@ -281,11 +282,11 @@ export default function AdminContact() {
       header: t('admin.contact.table.status'),
       render: (m) => (
         <AdminStatusBadge
-          variant={!m.isRead ? 'warning' : 'neutral'}
+          variant={m.isRead ? 'neutral' : 'warning'}
           label={
-            !m.isRead
-              ? t('admin.contact.status.unread')
-              : t('admin.contact.status.read')
+            m.isRead
+              ? t('admin.contact.status.read')
+              : t('admin.contact.status.unread')
           }
         />
       ),
@@ -295,7 +296,7 @@ export default function AdminContact() {
       header: t('admin.contact.table.actions'),
       render: (m) => {
         const isTogglingRead =
-          (markReadMutation.isPending || markUnreadMutation.isPending);
+          markReadMutation.isPending || markUnreadMutation.isPending;
 
         return (
           <div className="flex items-center gap-1">

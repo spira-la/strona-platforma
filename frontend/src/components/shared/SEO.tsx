@@ -39,12 +39,17 @@ export function SEO({
     : `${SITE_NAME} — Coaching & Terapia`;
 
   // Normalize canonical: strip trailing slash for consistency, except empty root
-  const canonicalUrl = canonical != null
-    ? (() => {
-        const raw = canonical.startsWith('http') ? canonical : `${SITE_URL}${canonical}`;
-        return raw === SITE_URL || raw === `${SITE_URL}/` ? SITE_URL : raw.replace(/\/$/, '');
-      })()
-    : undefined;
+  const canonicalUrl =
+    canonical == null
+      ? undefined
+      : (() => {
+          const raw = canonical.startsWith('http')
+            ? canonical
+            : `${SITE_URL}${canonical}`;
+          return raw === SITE_URL || raw === `${SITE_URL}/`
+            ? SITE_URL
+            : raw.replace(/\/$/, '');
+        })();
 
   const ogImageUrl = ogImage.startsWith('http')
     ? ogImage
@@ -80,7 +85,10 @@ export function SEO({
 
       {/* Article-specific */}
       {article?.publishedTime && (
-        <meta property="article:published_time" content={article.publishedTime} />
+        <meta
+          property="article:published_time"
+          content={article.publishedTime}
+        />
       )}
       {article?.modifiedTime && (
         <meta property="article:modified_time" content={article.modifiedTime} />

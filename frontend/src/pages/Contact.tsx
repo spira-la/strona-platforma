@@ -30,7 +30,9 @@ const contactSchema = z.object({
     .max(20, 'Numer telefonu jest za dlugi')
     .optional()
     .or(z.literal('')),
-  subject: z.enum(['coaching', 'terapia', 'strona', 'wspolpraca', 'inne'], { message: 'Wybierz temat wiadomosci' }),
+  subject: z.enum(['coaching', 'terapia', 'strona', 'wspolpraca', 'inne'], {
+    message: 'Wybierz temat wiadomosci',
+  }),
   message: z
     .string()
     .min(10, 'Wiadomosc musi miec co najmniej 10 znakow')
@@ -104,12 +106,17 @@ function PricingBannerSection() {
       className="relative overflow-hidden py-14 md:py-20"
       aria-label="Oferta strony internetowej"
       style={{
-        background: 'linear-gradient(135deg, #B8944A 0%, #D4B97A 60%, #B8944A 100%)',
+        background:
+          'linear-gradient(135deg, #B8944A 0%, #D4B97A 60%, #B8944A 100%)',
       }}
     >
       <div className="max-w-[1100px] mx-auto px-6 flex flex-col md:flex-row items-center gap-10 md:gap-16">
         {/* Text */}
-        <ScrollReveal animation="fade" delay={200} className="flex-1 flex flex-col gap-5 text-center md:text-left">
+        <ScrollReveal
+          animation="fade"
+          delay={200}
+          className="flex-1 flex flex-col gap-5 text-center md:text-left"
+        >
           <span className="inline-block self-center md:self-start font-['Lato'] text-[11px] font-bold tracking-[0.1em] uppercase text-[#B8944A] bg-white rounded-full px-4 py-1.5">
             Oferta specjalna
           </span>
@@ -156,7 +163,14 @@ function PricingBannerSection() {
           <div className="w-full aspect-[4/3] rounded-lg bg-white/20 border border-white/30 flex items-center justify-center">
             <div className="flex flex-col items-center gap-3 text-white/60">
               <Globe size={40} aria-hidden="true" />
-              <span className="font-['Lato'] text-[13px]"><EditableText section="contact" fieldPath="previewLabel" as="span" placeholder="Podgląd strony" /></span>
+              <span className="font-['Lato'] text-[13px]">
+                <EditableText
+                  section="contact"
+                  fieldPath="previewLabel"
+                  as="span"
+                  placeholder="Podgląd strony"
+                />
+              </span>
             </div>
           </div>
         </div>
@@ -167,7 +181,10 @@ function PricingBannerSection() {
 
 function ProcessSection() {
   return (
-    <section className="bg-[#FAF8F5] py-14 md:py-20" aria-label="Proces tworzenia strony">
+    <section
+      className="bg-[#FAF8F5] py-14 md:py-20"
+      aria-label="Proces tworzenia strony"
+    >
       <div className="max-w-[1100px] mx-auto px-6">
         <ScrollReveal animation="fade-up">
           <div className="flex flex-col items-center text-center gap-3 mb-12">
@@ -250,7 +267,14 @@ function ContactInfoColumn() {
             <Mail size={18} aria-hidden="true" />
           </div>
           <div>
-            <p className="font-['Lato'] text-[12px] text-[#8A8A8A] uppercase tracking-wide"><EditableText section="contact" fieldPath="infoEmailLabel" as="span" placeholder="E-mail" /></p>
+            <p className="font-['Lato'] text-[12px] text-[#8A8A8A] uppercase tracking-wide">
+              <EditableText
+                section="contact"
+                fieldPath="infoEmailLabel"
+                as="span"
+                placeholder="E-mail"
+              />
+            </p>
             <EditableText
               section="contact"
               fieldPath="info.email"
@@ -270,7 +294,14 @@ function ContactInfoColumn() {
             <Phone size={18} aria-hidden="true" />
           </div>
           <div>
-            <p className="font-['Lato'] text-[12px] text-[#8A8A8A] uppercase tracking-wide"><EditableText section="contact" fieldPath="infoPhoneLabel" as="span" placeholder="Telefon" /></p>
+            <p className="font-['Lato'] text-[12px] text-[#8A8A8A] uppercase tracking-wide">
+              <EditableText
+                section="contact"
+                fieldPath="infoPhoneLabel"
+                as="span"
+                placeholder="Telefon"
+              />
+            </p>
             <EditableText
               section="contact"
               fieldPath="info.phone"
@@ -286,7 +317,14 @@ function ContactInfoColumn() {
             <Clock size={18} aria-hidden="true" />
           </div>
           <div>
-            <p className="font-['Lato'] text-[12px] text-[#8A8A8A] uppercase tracking-wide"><EditableText section="contact" fieldPath="infoHoursLabel" as="span" placeholder="Godziny" /></p>
+            <p className="font-['Lato'] text-[12px] text-[#8A8A8A] uppercase tracking-wide">
+              <EditableText
+                section="contact"
+                fieldPath="infoHoursLabel"
+                as="span"
+                placeholder="Godziny"
+              />
+            </p>
             <EditableText
               section="contact"
               fieldPath="info.hours"
@@ -300,7 +338,12 @@ function ContactInfoColumn() {
 
       <div className="flex flex-col gap-2">
         <p className="font-['Lato'] text-[12px] text-[#8A8A8A] uppercase tracking-wide">
-          <EditableText section="contact" fieldPath="infoSocialLabel" as="span" placeholder="Social media" />
+          <EditableText
+            section="contact"
+            fieldPath="infoSocialLabel"
+            as="span"
+            placeholder="Social media"
+          />
         </p>
         <div className="flex items-center gap-3">
           <a
@@ -310,7 +353,21 @@ function ContactInfoColumn() {
             aria-label="Instagram"
             className="flex items-center justify-center w-9 h-9 rounded-full border border-[#E8E4DF] text-[#6B6B6B] hover:text-[#B8944A] hover:border-[#B8944A] transition-colors"
           >
-            <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><circle cx="12" cy="12" r="5" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>
+            <svg
+              width={16}
+              height={16}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+              <circle cx="12" cy="12" r="5" />
+              <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+            </svg>
           </a>
           <a
             href="https://facebook.com"
@@ -319,7 +376,19 @@ function ContactInfoColumn() {
             aria-label="Facebook"
             className="flex items-center justify-center w-9 h-9 rounded-full border border-[#E8E4DF] text-[#6B6B6B] hover:text-[#B8944A] hover:border-[#B8944A] transition-colors"
           >
-            <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>
+            <svg
+              width={16}
+              height={16}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+            </svg>
           </a>
         </div>
       </div>
@@ -328,7 +397,9 @@ function ContactInfoColumn() {
 }
 
 function ContactFormColumn() {
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [submitStatus, setSubmitStatus] = useState<
+    'idle' | 'success' | 'error'
+  >('idle');
 
   const {
     register,
@@ -339,7 +410,7 @@ function ContactFormColumn() {
     resolver: zodResolver(contactSchema),
   });
 
-  async function onSubmit(_data: ContactFormData) {
+  async function onSubmit(_formData: ContactFormData) {
     try {
       // API call placeholder — will be wired to backend in future iteration
       await new Promise<void>((resolve) => setTimeout(resolve, 800));
@@ -369,31 +440,60 @@ function ContactFormColumn() {
 
       {submitStatus === 'success' && (
         <div className="flex items-start gap-3 rounded-lg bg-emerald-50 border border-emerald-200 px-5 py-4 mb-6">
-          <CheckCircle size={18} className="text-emerald-600 mt-0.5 flex-shrink-0" aria-hidden="true" />
+          <CheckCircle
+            size={18}
+            className="text-emerald-600 mt-0.5 flex-shrink-0"
+            aria-hidden="true"
+          />
           <p className="font-['Lato'] text-[14px] text-emerald-700">
-            <EditableText section="contact" fieldPath="formSuccessMsg" as="span" placeholder="Wiadomość została wysłana! Odpowiem w ciągu 24 godzin." />
+            <EditableText
+              section="contact"
+              fieldPath="formSuccessMsg"
+              as="span"
+              placeholder="Wiadomość została wysłana! Odpowiem w ciągu 24 godzin."
+            />
           </p>
         </div>
       )}
 
       {submitStatus === 'error' && (
         <div className="flex items-start gap-3 rounded-lg bg-red-50 border border-red-200 px-5 py-4 mb-6">
-          <AlertCircle size={18} className="text-red-500 mt-0.5 flex-shrink-0" aria-hidden="true" />
+          <AlertCircle
+            size={18}
+            className="text-red-500 mt-0.5 flex-shrink-0"
+            aria-hidden="true"
+          />
           <p className="font-['Lato'] text-[14px] text-red-600">
-            <EditableText section="contact" fieldPath="formErrorMsg" as="span" placeholder="Coś poszło nie tak. Spróbuj ponownie lub napisz bezpośrednio na e-mail." />
+            <EditableText
+              section="contact"
+              fieldPath="formErrorMsg"
+              as="span"
+              placeholder="Coś poszło nie tak. Spróbuj ponownie lub napisz bezpośrednio na e-mail."
+            />
           </p>
         </div>
       )}
 
-      <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-5">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        className="flex flex-col gap-5"
+      >
         {/* Full name */}
         <div>
           <label
             htmlFor="contact-name"
             className="block font-['Lato'] text-[13px] font-semibold text-[#2D2D2D] mb-1.5"
           >
-            <EditableText section="contact" fieldPath="formNameLabel" as="span" placeholder="Imię i nazwisko" />
-            <span className="text-[#B8944A] ml-0.5" aria-hidden="true">*</span>
+            <EditableText
+              section="contact"
+              fieldPath="formNameLabel"
+              as="span"
+              placeholder="Imię i nazwisko"
+            />
+            <span className="text-[#B8944A] ml-0.5" aria-hidden="true">
+              *
+            </span>
           </label>
           <input
             id="contact-name"
@@ -418,8 +518,15 @@ function ContactFormColumn() {
             htmlFor="contact-email"
             className="block font-['Lato'] text-[13px] font-semibold text-[#2D2D2D] mb-1.5"
           >
-            <EditableText section="contact" fieldPath="formEmailLabel" as="span" placeholder="E-mail" />
-            <span className="text-[#B8944A] ml-0.5" aria-hidden="true">*</span>
+            <EditableText
+              section="contact"
+              fieldPath="formEmailLabel"
+              as="span"
+              placeholder="E-mail"
+            />
+            <span className="text-[#B8944A] ml-0.5" aria-hidden="true">
+              *
+            </span>
           </label>
           <input
             id="contact-email"
@@ -444,8 +551,20 @@ function ContactFormColumn() {
             htmlFor="contact-phone"
             className="block font-['Lato'] text-[13px] font-semibold text-[#2D2D2D] mb-1.5"
           >
-            <EditableText section="contact" fieldPath="formPhoneLabel" as="span" placeholder="Telefon" />
-            <span className="font-['Lato'] text-[12px] font-normal text-[#8A8A8A] ml-1.5"><EditableText section="contact" fieldPath="formPhoneOptional" as="span" placeholder="(opcjonalnie)" /></span>
+            <EditableText
+              section="contact"
+              fieldPath="formPhoneLabel"
+              as="span"
+              placeholder="Telefon"
+            />
+            <span className="font-['Lato'] text-[12px] font-normal text-[#8A8A8A] ml-1.5">
+              <EditableText
+                section="contact"
+                fieldPath="formPhoneOptional"
+                as="span"
+                placeholder="(opcjonalnie)"
+              />
+            </span>
           </label>
           <input
             id="contact-phone"
@@ -463,8 +582,15 @@ function ContactFormColumn() {
             htmlFor="contact-subject"
             className="block font-['Lato'] text-[13px] font-semibold text-[#2D2D2D] mb-1.5"
           >
-            <EditableText section="contact" fieldPath="formSubjectLabel" as="span" placeholder="Temat" />
-            <span className="text-[#B8944A] ml-0.5" aria-hidden="true">*</span>
+            <EditableText
+              section="contact"
+              fieldPath="formSubjectLabel"
+              as="span"
+              placeholder="Temat"
+            />
+            <span className="text-[#B8944A] ml-0.5" aria-hidden="true">
+              *
+            </span>
           </label>
           <select
             id="contact-subject"
@@ -474,7 +600,9 @@ function ContactFormColumn() {
             aria-invalid={!!errors.subject}
             aria-describedby={errors.subject ? 'error-subject' : undefined}
           >
-            <option value="" disabled>Wybierz temat...</option>
+            <option value="" disabled>
+              Wybierz temat...
+            </option>
             <option value="coaching">Coaching</option>
             <option value="terapia">Terapia</option>
             <option value="strona">Strona internetowa</option>
@@ -494,8 +622,15 @@ function ContactFormColumn() {
             htmlFor="contact-message"
             className="block font-['Lato'] text-[13px] font-semibold text-[#2D2D2D] mb-1.5"
           >
-            <EditableText section="contact" fieldPath="formMessageLabel" as="span" placeholder="Wiadomość" />
-            <span className="text-[#B8944A] ml-0.5" aria-hidden="true">*</span>
+            <EditableText
+              section="contact"
+              fieldPath="formMessageLabel"
+              as="span"
+              placeholder="Wiadomość"
+            />
+            <span className="text-[#B8944A] ml-0.5" aria-hidden="true">
+              *
+            </span>
           </label>
           <textarea
             id="contact-message"
@@ -518,7 +653,16 @@ function ContactFormColumn() {
           disabled={isSubmitting}
           className="font-['Lato'] text-[15px] font-semibold text-white bg-[#B8944A] hover:bg-[#D4B97A] disabled:opacity-60 disabled:cursor-not-allowed rounded-lg px-6 py-3.5 transition-colors"
         >
-          {isSubmitting ? 'Wysyłanie...' : <EditableText section="contact" fieldPath="formSubmitButton" as="span" placeholder="Wyślij wiadomość" />}
+          {isSubmitting ? (
+            'Wysyłanie...'
+          ) : (
+            <EditableText
+              section="contact"
+              fieldPath="formSubmitButton"
+              as="span"
+              placeholder="Wyślij wiadomość"
+            />
+          )}
         </button>
       </form>
     </div>
@@ -527,7 +671,10 @@ function ContactFormColumn() {
 
 function ContactSection() {
   return (
-    <section className="bg-white py-14 md:py-20" aria-label="Formularz kontaktowy">
+    <section
+      className="bg-white py-14 md:py-20"
+      aria-label="Formularz kontaktowy"
+    >
       <div className="max-w-[1100px] mx-auto px-6">
         <ScrollReveal animation="fade-up">
           <div className="flex flex-col items-center text-center gap-3 mb-12">

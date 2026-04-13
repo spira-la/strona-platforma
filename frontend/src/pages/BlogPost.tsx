@@ -48,7 +48,11 @@ function PostSkeleton() {
 function PostNotFound() {
   return (
     <div className="max-w-[780px] mx-auto px-6 py-24 text-center">
-      <SEO title="Artykuł nie znaleziony" description="Artykuł nie został znaleziony." noindex={true} />
+      <SEO
+        title="Artykuł nie znaleziony"
+        description="Artykuł nie został znaleziony."
+        noindex={true}
+      />
       <p
         className="text-6xl font-bold text-[#B8963E] mb-4"
         style={{ fontFamily: "'Cormorant Garamond', serif" }}
@@ -61,7 +65,10 @@ function PostNotFound() {
       >
         Artykuł nie został znaleziony
       </h1>
-      <p className="text-[#6B6B6B] mb-8" style={{ fontFamily: "'Lato', sans-serif" }}>
+      <p
+        className="text-[#6B6B6B] mb-8"
+        style={{ fontFamily: "'Lato', sans-serif" }}
+      >
         Sprawdź czy adres jest poprawny lub wróć do listy artykułów.
       </p>
       <Link
@@ -218,7 +225,9 @@ export default function BlogPost() {
             prose-blockquote:border-l-[#B8963E] prose-blockquote:text-[#6B6B6B]
             prose-img:rounded-lg
           "
-          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content ?? '') }}
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(post.content ?? ''),
+          }}
         />
 
         {/* Tags */}

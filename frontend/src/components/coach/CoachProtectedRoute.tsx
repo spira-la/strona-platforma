@@ -11,7 +11,9 @@ function CoachLoadingSpinner() {
           role="status"
           aria-label="Ładowanie..."
         />
-        <p className="font-['Inter'] text-[14px] text-[#8A8A8A]">Weryfikacja uprawnień…</p>
+        <p className="font-['Inter'] text-[14px] text-[#8A8A8A]">
+          Weryfikacja uprawnień…
+        </p>
       </div>
     </div>
   );

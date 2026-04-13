@@ -29,7 +29,12 @@ export class ReviewEntity {
   @Column({ type: 'text', nullable: true })
   content: string | null;
 
-  @Column({ name: 'is_published', type: 'boolean', default: true, nullable: true })
+  @Column({
+    name: 'is_published',
+    type: 'boolean',
+    default: true,
+    nullable: true,
+  })
   isPublished: boolean | null;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz', nullable: true })

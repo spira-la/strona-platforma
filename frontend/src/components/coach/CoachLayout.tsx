@@ -38,19 +38,44 @@ const NAV_SECTIONS: NavSection[] = [
   {
     sectionKey: 'coach.nav.sections.main',
     items: [
-      { path: '/coach', icon: LayoutDashboard, labelKey: 'coach.nav.dashboard', end: true },
-      { path: '/coach/sessions', icon: Calendar, labelKey: 'coach.nav.sessions' },
+      {
+        path: '/coach',
+        icon: LayoutDashboard,
+        labelKey: 'coach.nav.dashboard',
+        end: true,
+      },
+      {
+        path: '/coach/sessions',
+        icon: Calendar,
+        labelKey: 'coach.nav.sessions',
+      },
       { path: '/coach/blog', icon: PenLine, labelKey: 'coach.nav.blog' },
-      { path: '/coach/newsletter', icon: Mail, labelKey: 'coach.nav.newsletter' },
-      { path: '/coach/invoices', icon: Receipt, labelKey: 'coach.nav.invoices' },
+      {
+        path: '/coach/newsletter',
+        icon: Mail,
+        labelKey: 'coach.nav.newsletter',
+      },
+      {
+        path: '/coach/invoices',
+        icon: Receipt,
+        labelKey: 'coach.nav.invoices',
+      },
     ],
   },
   {
     sectionKey: 'coach.nav.sections.config',
     items: [
       { path: '/coach/profile', icon: User, labelKey: 'coach.nav.profile' },
-      { path: '/coach/availability', icon: Clock, labelKey: 'coach.nav.availability' },
-      { path: '/coach/services', icon: Briefcase, labelKey: 'coach.nav.services' },
+      {
+        path: '/coach/availability',
+        icon: Clock,
+        labelKey: 'coach.nav.availability',
+      },
+      {
+        path: '/coach/services',
+        icon: Briefcase,
+        labelKey: 'coach.nav.services',
+      },
     ],
   },
 ];
@@ -82,13 +107,15 @@ function NavItemLink({ item, collapsed, onNavigate }: NavItemLinkProps) {
       end={item.end}
       title={collapsed ? label : undefined}
       onClick={onNavigate}
-      className={({ isActive }) => [
-        'flex items-center gap-3 rounded-lg text-sm font-medium transition-colors duration-150',
-        collapsed ? 'px-[18px] py-2.5 justify-center' : 'px-3 py-2.5',
-        isActive
-          ? 'bg-[#0D9488]/10 text-[#0D9488] font-semibold border-l-[3px] border-[#0D9488]'
-          : 'text-[#6B6B6B] hover:bg-[#F0FDFA] hover:text-[#2D2D2D]',
-      ].join(' ')}
+      className={({ isActive }) =>
+        [
+          'flex items-center gap-3 rounded-lg text-sm font-medium transition-colors duration-150',
+          collapsed ? 'px-[18px] py-2.5 justify-center' : 'px-3 py-2.5',
+          isActive
+            ? 'bg-[#0D9488]/10 text-[#0D9488] font-semibold border-l-[3px] border-[#0D9488]'
+            : 'text-[#6B6B6B] hover:bg-[#F0FDFA] hover:text-[#2D2D2D]',
+        ].join(' ')
+      }
     >
       <Icon className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
       {!collapsed && <span>{label}</span>}
@@ -118,11 +145,17 @@ function SidebarNav({ collapsed, onNavigate }: SidebarNavProps) {
               {t(section.sectionKey)}
             </p>
           )}
-          {collapsed && <div className="px-3 mb-1 h-[16px]" aria-hidden="true" />}
+          {collapsed && (
+            <div className="px-3 mb-1 h-[16px]" aria-hidden="true" />
+          )}
           <ul className="space-y-0.5" role="list">
             {section.items.map((item) => (
               <li key={item.path}>
-                <NavItemLink item={item} collapsed={collapsed} onNavigate={onNavigate} />
+                <NavItemLink
+                  item={item}
+                  collapsed={collapsed}
+                  onNavigate={onNavigate}
+                />
               </li>
             ))}
           </ul>
@@ -140,7 +173,11 @@ interface SidebarFooterProps {
   onToggleCollapse: () => void;
 }
 
-function SidebarFooter({ collapsed, onBack, onToggleCollapse }: SidebarFooterProps) {
+function SidebarFooter({
+  collapsed,
+  onBack,
+  onToggleCollapse,
+}: SidebarFooterProps) {
   const { t, i18n } = useTranslation();
 
   const handleLangChange = (code: string) => {
@@ -166,10 +203,16 @@ function SidebarFooter({ collapsed, onBack, onToggleCollapse }: SidebarFooterPro
         ].join(' ')}
       >
         {!collapsed && (
-          <Globe className="h-4 w-4 text-[#AAAAAA] flex-shrink-0 mr-1" aria-hidden="true" />
+          <Globe
+            className="h-4 w-4 text-[#AAAAAA] flex-shrink-0 mr-1"
+            aria-hidden="true"
+          />
         )}
         {collapsed && (
-          <Globe className="h-4 w-4 text-[#AAAAAA] flex-shrink-0 mb-0.5" aria-hidden="true" />
+          <Globe
+            className="h-4 w-4 text-[#AAAAAA] flex-shrink-0 mb-0.5"
+            aria-hidden="true"
+          />
         )}
         {LANGUAGES.map((lang) => (
           <button
@@ -202,14 +245,21 @@ function SidebarFooter({ collapsed, onBack, onToggleCollapse }: SidebarFooterPro
       <button
         type="button"
         onClick={onToggleCollapse}
-        aria-label={collapsed ? t('coach.nav.expandSidebar') : t('coach.nav.collapseSidebar')}
+        aria-label={
+          collapsed
+            ? t('coach.nav.expandSidebar')
+            : t('coach.nav.collapseSidebar')
+        }
         className={footerBtnClass()}
       >
         {collapsed ? (
           <ChevronsRight className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
         ) : (
           <>
-            <ChevronsLeft className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
+            <ChevronsLeft
+              className="h-4 w-4 flex-shrink-0"
+              aria-hidden="true"
+            />
             <span>{t('coach.nav.collapseSidebar')}</span>
           </>
         )}
@@ -303,7 +353,6 @@ export function CoachLayout() {
 
   return (
     <div className="flex h-screen overflow-hidden bg-[#F9F6F0]">
-
       {/* ── Desktop Sidebar ─────────────────────────────────────────────────── */}
       <aside
         className={[
@@ -399,7 +448,10 @@ export function CoachLayout() {
         <div className="px-3 py-3 border-t border-[#E8E4DF] flex-shrink-0 space-y-1">
           {/* Language switcher (mobile) */}
           <div className="flex items-center gap-1 px-3 py-2 rounded-lg">
-            <Globe className="h-4 w-4 text-[#AAAAAA] flex-shrink-0 mr-1" aria-hidden="true" />
+            <Globe
+              className="h-4 w-4 text-[#AAAAAA] flex-shrink-0 mr-1"
+              aria-hidden="true"
+            />
             {LANGUAGES.map((lang) => (
               <button
                 key={lang.code}

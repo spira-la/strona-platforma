@@ -2,8 +2,14 @@ import { useEffect, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
-import { AdminFormField, ADMIN_INPUT_CLASS } from '@/components/admin/AdminFormField';
-import { coachClient, type UpdateCoachProfileData } from '@/clients/coach.client';
+import {
+  AdminFormField,
+  ADMIN_INPUT_CLASS,
+} from '@/components/admin/AdminFormField';
+import {
+  coachClient,
+  type UpdateCoachProfileData,
+} from '@/clients/coach.client';
 import { toast } from '@/stores/toast.store';
 
 // ─── Timezone options ─────────────────────────────────────────────────────────
@@ -75,7 +81,10 @@ interface ToggleProps {
 
 function Toggle({ id, checked, onChange, label }: ToggleProps) {
   return (
-    <label htmlFor={id} className="flex items-center gap-3 cursor-pointer select-none">
+    <label
+      htmlFor={id}
+      className="flex items-center gap-3 cursor-pointer select-none"
+    >
       <div className="relative flex-shrink-0">
         <input
           id={id}
@@ -127,7 +136,9 @@ export default function CoachProfile() {
   const [certificationsRaw, setCertificationsRaw] = useState('');
   const [acceptingClients, setAcceptingClients] = useState(true);
 
-  // Populate form when profile loads
+  // Populate form when profile loads — calling setState here is intentional:
+  // we are initialising uncontrolled form fields from server data once it arrives.
+
   useEffect(() => {
     if (!profile) return;
     setFullName(profile.fullName ?? '');
@@ -137,7 +148,9 @@ export default function CoachProfile() {
     setLocation(profile.location ?? '');
     setWebsite(profile.website ?? '');
     setTimezone(profile.timezone ?? 'Europe/Warsaw');
-    setYearsExperience(profile.yearsExperience != null ? String(profile.yearsExperience) : '');
+    setYearsExperience(
+      profile.yearsExperience == null ? '' : String(profile.yearsExperience),
+    );
     setLanguagesRaw(joinTags(profile.languages));
     setExpertiseRaw(joinTags(profile.expertise));
     setCertificationsRaw(joinTags(profile.certifications));
@@ -146,7 +159,8 @@ export default function CoachProfile() {
 
   // ── Save mutation ─────────────────────────────────────────────────────────────
   const { mutate, isPending } = useMutation({
-    mutationFn: (data: UpdateCoachProfileData) => coachClient.updateProfile(data),
+    mutationFn: (data: UpdateCoachProfileData) =>
+      coachClient.updateProfile(data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['coach', 'profile'] });
       toast.success(t('common.saved'));
@@ -159,7 +173,8 @@ export default function CoachProfile() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const yearsNum = yearsExperience !== '' ? parseInt(yearsExperience, 10) : undefined;
+    const yearsNum =
+      yearsExperience === '' ? undefined : Number.parseInt(yearsExperience, 10);
 
     mutate({
       fullName: fullName || undefined,
@@ -207,9 +222,11 @@ export default function CoachProfile() {
       />
 
       <form onSubmit={handleSubmit} className="max-w-2xl space-y-6" noValidate>
-
         {/* Full name */}
-        <AdminFormField label={t('coach.profile.fullName')} htmlFor="profile-fullname">
+        <AdminFormField
+          label={t('coach.profile.fullName')}
+          htmlFor="profile-fullname"
+        >
           <input
             id="profile-fullname"
             type="text"
@@ -221,7 +238,10 @@ export default function CoachProfile() {
         </AdminFormField>
 
         {/* Email */}
-        <AdminFormField label={t('coach.profile.email')} htmlFor="profile-email">
+        <AdminFormField
+          label={t('coach.profile.email')}
+          htmlFor="profile-email"
+        >
           <input
             id="profile-email"
             type="email"
@@ -233,7 +253,10 @@ export default function CoachProfile() {
         </AdminFormField>
 
         {/* Phone */}
-        <AdminFormField label={t('coach.profile.phone')} htmlFor="profile-phone">
+        <AdminFormField
+          label={t('coach.profile.phone')}
+          htmlFor="profile-phone"
+        >
           <input
             id="profile-phone"
             type="tel"
@@ -257,7 +280,10 @@ export default function CoachProfile() {
         </AdminFormField>
 
         {/* Location */}
-        <AdminFormField label={t('coach.profile.location')} htmlFor="profile-location">
+        <AdminFormField
+          label={t('coach.profile.location')}
+          htmlFor="profile-location"
+        >
           <input
             id="profile-location"
             type="text"
@@ -269,7 +295,10 @@ export default function CoachProfile() {
         </AdminFormField>
 
         {/* Website */}
-        <AdminFormField label={t('coach.profile.website')} htmlFor="profile-website">
+        <AdminFormField
+          label={t('coach.profile.website')}
+          htmlFor="profile-website"
+        >
           <input
             id="profile-website"
             type="url"
@@ -281,7 +310,10 @@ export default function CoachProfile() {
         </AdminFormField>
 
         {/* Timezone */}
-        <AdminFormField label={t('coach.profile.timezone')} htmlFor="profile-timezone">
+        <AdminFormField
+          label={t('coach.profile.timezone')}
+          htmlFor="profile-timezone"
+        >
           <select
             id="profile-timezone"
             value={timezone}
@@ -297,7 +329,10 @@ export default function CoachProfile() {
         </AdminFormField>
 
         {/* Years of experience */}
-        <AdminFormField label={t('coach.profile.yearsExperience')} htmlFor="profile-years">
+        <AdminFormField
+          label={t('coach.profile.yearsExperience')}
+          htmlFor="profile-years"
+        >
           <input
             id="profile-years"
             type="number"
@@ -311,7 +346,10 @@ export default function CoachProfile() {
         </AdminFormField>
 
         {/* Languages */}
-        <AdminFormField label={t('coach.profile.languages')} htmlFor="profile-languages">
+        <AdminFormField
+          label={t('coach.profile.languages')}
+          htmlFor="profile-languages"
+        >
           <input
             id="profile-languages"
             type="text"
@@ -324,7 +362,10 @@ export default function CoachProfile() {
         </AdminFormField>
 
         {/* Expertise */}
-        <AdminFormField label={t('coach.profile.expertise')} htmlFor="profile-expertise">
+        <AdminFormField
+          label={t('coach.profile.expertise')}
+          htmlFor="profile-expertise"
+        >
           <input
             id="profile-expertise"
             type="text"
@@ -337,7 +378,10 @@ export default function CoachProfile() {
         </AdminFormField>
 
         {/* Certifications */}
-        <AdminFormField label={t('coach.profile.certifications')} htmlFor="profile-certifications">
+        <AdminFormField
+          label={t('coach.profile.certifications')}
+          htmlFor="profile-certifications"
+        >
           <input
             id="profile-certifications"
             type="text"

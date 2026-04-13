@@ -23,7 +23,10 @@ import { Roles } from '../../common/decorators/roles.decorator.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import { StorageService } from '../../core/storage.service.js';
 import { BlogsService } from './blogs.service.js';
-import type { CreateBlogPostData, UpdateBlogPostData } from './blogs.service.js';
+import type {
+  CreateBlogPostData,
+  UpdateBlogPostData,
+} from './blogs.service.js';
 
 // ---------------------------------------------------------------------------
 // Controller

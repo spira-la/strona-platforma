@@ -42,29 +42,70 @@ const NAV_SECTIONS: NavSection[] = [
   {
     sectionKey: 'admin.nav.sections.management',
     items: [
-      { path: '/admin', icon: LayoutDashboard, labelKey: 'admin.nav.dashboard', end: true },
-      { path: '/admin/sessions', icon: Calendar, labelKey: 'admin.nav.sessions' },
-      { path: '/admin/invoices', icon: Receipt, labelKey: 'admin.nav.invoices' },
+      {
+        path: '/admin',
+        icon: LayoutDashboard,
+        labelKey: 'admin.nav.dashboard',
+        end: true,
+      },
+      {
+        path: '/admin/sessions',
+        icon: Calendar,
+        labelKey: 'admin.nav.sessions',
+      },
+      {
+        path: '/admin/invoices',
+        icon: Receipt,
+        labelKey: 'admin.nav.invoices',
+      },
       { path: '/admin/coupons', icon: Ticket, labelKey: 'admin.nav.coupons' },
-      { path: '/admin/contact', icon: MessageSquare, labelKey: 'admin.nav.contact' },
+      {
+        path: '/admin/contact',
+        icon: MessageSquare,
+        labelKey: 'admin.nav.contact',
+      },
       { path: '/admin/seo', icon: Search, labelKey: 'admin.nav.seo' },
     ],
   },
   {
     sectionKey: 'admin.nav.sections.content',
     items: [
-      { path: '/admin/services', icon: Briefcase, labelKey: 'admin.nav.services' },
+      {
+        path: '/admin/services',
+        icon: Briefcase,
+        labelKey: 'admin.nav.services',
+      },
       { path: '/admin/blog', icon: PenLine, labelKey: 'admin.nav.blog' },
-      { path: '/admin/newsletter', icon: Mail, labelKey: 'admin.nav.newsletter' },
-      { path: '/admin/availability', icon: Clock, labelKey: 'admin.nav.availability' },
+      {
+        path: '/admin/newsletter',
+        icon: Mail,
+        labelKey: 'admin.nav.newsletter',
+      },
+      {
+        path: '/admin/availability',
+        icon: Clock,
+        labelKey: 'admin.nav.availability',
+      },
     ],
   },
   {
     sectionKey: 'admin.nav.sections.catalog',
     items: [
-      { path: '/admin/categories', icon: FolderOpen, labelKey: 'admin.nav.categories' },
-      { path: '/admin/languages', icon: Globe, labelKey: 'admin.nav.languages' },
-      { path: '/admin/coaches', icon: UserCircle, labelKey: 'admin.nav.coaches' },
+      {
+        path: '/admin/categories',
+        icon: FolderOpen,
+        labelKey: 'admin.nav.categories',
+      },
+      {
+        path: '/admin/languages',
+        icon: Globe,
+        labelKey: 'admin.nav.languages',
+      },
+      {
+        path: '/admin/coaches',
+        icon: UserCircle,
+        labelKey: 'admin.nav.coaches',
+      },
     ],
   },
 ];
@@ -96,13 +137,15 @@ function NavItemLink({ item, collapsed, onNavigate }: NavItemLinkProps) {
       end={item.end}
       title={collapsed ? label : undefined}
       onClick={onNavigate}
-      className={({ isActive }) => [
-        'flex items-center gap-3 rounded-lg text-sm font-medium transition-colors duration-150',
-        collapsed ? 'px-[18px] py-2.5 justify-center' : 'px-3 py-2.5',
-        isActive
-          ? 'bg-[#B8963E]/10 text-[#B8963E] font-semibold border-l-2 border-[#B8963E]'
-          : 'text-[#6B6B6B] hover:bg-[#F9F6F0] hover:text-[#2D2D2D]',
-      ].join(' ')}
+      className={({ isActive }) =>
+        [
+          'flex items-center gap-3 rounded-lg text-sm font-medium transition-colors duration-150',
+          collapsed ? 'px-[18px] py-2.5 justify-center' : 'px-3 py-2.5',
+          isActive
+            ? 'bg-[#B8963E]/10 text-[#B8963E] font-semibold border-l-2 border-[#B8963E]'
+            : 'text-[#6B6B6B] hover:bg-[#F9F6F0] hover:text-[#2D2D2D]',
+        ].join(' ')
+      }
     >
       <Icon className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
       {!collapsed && <span>{label}</span>}
@@ -132,11 +175,17 @@ function SidebarNav({ collapsed, onNavigate }: SidebarNavProps) {
               {t(section.sectionKey)}
             </p>
           )}
-          {collapsed && <div className="px-3 mb-1 h-[16px]" aria-hidden="true" />}
+          {collapsed && (
+            <div className="px-3 mb-1 h-[16px]" aria-hidden="true" />
+          )}
           <ul className="space-y-0.5" role="list">
             {section.items.map((item) => (
               <li key={item.path}>
-                <NavItemLink item={item} collapsed={collapsed} onNavigate={onNavigate} />
+                <NavItemLink
+                  item={item}
+                  collapsed={collapsed}
+                  onNavigate={onNavigate}
+                />
               </li>
             ))}
           </ul>
@@ -154,7 +203,11 @@ interface SidebarFooterProps {
   onToggleCollapse: () => void;
 }
 
-function SidebarFooter({ collapsed, onBack, onToggleCollapse }: SidebarFooterProps) {
+function SidebarFooter({
+  collapsed,
+  onBack,
+  onToggleCollapse,
+}: SidebarFooterProps) {
   const { t, i18n } = useTranslation();
 
   const handleLangChange = (code: string) => {
@@ -180,10 +233,16 @@ function SidebarFooter({ collapsed, onBack, onToggleCollapse }: SidebarFooterPro
         ].join(' ')}
       >
         {!collapsed && (
-          <Globe className="h-4 w-4 text-[#AAAAAA] flex-shrink-0 mr-1" aria-hidden="true" />
+          <Globe
+            className="h-4 w-4 text-[#AAAAAA] flex-shrink-0 mr-1"
+            aria-hidden="true"
+          />
         )}
         {collapsed && (
-          <Globe className="h-4 w-4 text-[#AAAAAA] flex-shrink-0 mb-0.5" aria-hidden="true" />
+          <Globe
+            className="h-4 w-4 text-[#AAAAAA] flex-shrink-0 mb-0.5"
+            aria-hidden="true"
+          />
         )}
         {LANGUAGES.map((lang) => (
           <button
@@ -216,14 +275,21 @@ function SidebarFooter({ collapsed, onBack, onToggleCollapse }: SidebarFooterPro
       <button
         type="button"
         onClick={onToggleCollapse}
-        aria-label={collapsed ? t('admin.nav.expandSidebar') : t('admin.nav.collapseSidebar')}
+        aria-label={
+          collapsed
+            ? t('admin.nav.expandSidebar')
+            : t('admin.nav.collapseSidebar')
+        }
         className={footerBtnClass()}
       >
         {collapsed ? (
           <ChevronsRight className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
         ) : (
           <>
-            <ChevronsLeft className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
+            <ChevronsLeft
+              className="h-4 w-4 flex-shrink-0"
+              aria-hidden="true"
+            />
             <span>{t('admin.nav.collapseSidebar')}</span>
           </>
         )}
@@ -317,7 +383,6 @@ export function AdminLayout() {
 
   return (
     <div className="flex h-screen overflow-hidden bg-[#F9F6F0]">
-
       {/* ── Desktop Sidebar ─────────────────────────────────────────────────── */}
       <aside
         className={[
@@ -413,7 +478,10 @@ export function AdminLayout() {
         <div className="px-3 py-3 border-t border-[#E8E4DF] flex-shrink-0 space-y-1">
           {/* Language switcher (mobile) */}
           <div className="flex items-center gap-1 px-3 py-2 rounded-lg">
-            <Globe className="h-4 w-4 text-[#AAAAAA] flex-shrink-0 mr-1" aria-hidden="true" />
+            <Globe
+              className="h-4 w-4 text-[#AAAAAA] flex-shrink-0 mr-1"
+              aria-hidden="true"
+            />
             {LANGUAGES.map((lang) => (
               <button
                 key={lang.code}

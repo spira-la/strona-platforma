@@ -120,19 +120,29 @@ interface CoachCreateDialogProps {
   isSaving: boolean;
 }
 
-function CoachCreateDialog({ onClose, onSave, isSaving }: CoachCreateDialogProps) {
+function CoachCreateDialog({
+  onClose,
+  onSave,
+  isSaving,
+}: CoachCreateDialogProps) {
   const { t } = useTranslation();
   const [step, setStep] = useState<1 | 2>(1);
   const [step1, setStep1] = useState<CreateStep1>(buildStep1);
   const [step2, setStep2] = useState<CreateStep2>(buildStep2);
   const [errors, setErrors] = useState<Partial<Record<string, string>>>({});
 
-  const setS1 = <K extends keyof CreateStep1>(key: K, value: CreateStep1[K]) => {
+  const setS1 = <K extends keyof CreateStep1>(
+    key: K,
+    value: CreateStep1[K],
+  ) => {
     setStep1((prev) => ({ ...prev, [key]: value }));
     setErrors((prev) => ({ ...prev, [key]: undefined }));
   };
 
-  const setS2 = <K extends keyof CreateStep2>(key: K, value: CreateStep2[K]) => {
+  const setS2 = <K extends keyof CreateStep2>(
+    key: K,
+    value: CreateStep2[K],
+  ) => {
     setStep2((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -143,6 +153,7 @@ function CoachCreateDialog({ onClose, onSave, isSaving }: CoachCreateDialogProps
     }
     if (!step1.email.trim()) {
       next.email = t('admin.coaches.validation.emailRequired');
+      // eslint-disable-next-line sonarjs/slow-regex -- simple email format check on user input with bounded length
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(step1.email.trim())) {
       next.email = t('admin.coaches.validation.emailInvalid');
     }
@@ -164,26 +175,27 @@ function CoachCreateDialog({ onClose, onSave, isSaving }: CoachCreateDialogProps
       email: step1.email.trim(),
       phone: step1.phone.trim() || undefined,
       bio: step1.bio.trim() || undefined,
-      expertise: step1.expertise ? parseCommaSeparated(step1.expertise) : undefined,
+      expertise: step1.expertise
+        ? parseCommaSeparated(step1.expertise)
+        : undefined,
       certifications: step1.certifications
         ? parseCommaSeparated(step1.certifications)
         : undefined,
       yearsExperience: step1.yearsExperience
-        ? parseInt(step1.yearsExperience, 10)
+        ? Number.parseInt(step1.yearsExperience, 10)
         : undefined,
       location: step2.location.trim() || undefined,
       timezone: step2.timezone || 'Europe/Warsaw',
-      languages: step2.languages ? parseCommaSeparated(step2.languages) : undefined,
+      languages: step2.languages
+        ? parseCommaSeparated(step2.languages)
+        : undefined,
       acceptingClients: step2.acceptingClients,
     };
     onSave(payload);
   };
 
   const stepLabel = t('admin.coaches.wizard.step', { current: step, total: 2 });
-  const title =
-    step === 1
-      ? `${t('admin.coaches.newCoach')} — ${stepLabel}`
-      : `${t('admin.coaches.newCoach')} — ${stepLabel}`;
+  const title = `${t('admin.coaches.newCoach')} — ${stepLabel}`;
 
   return (
     <AdminFormDialog
@@ -197,9 +209,7 @@ function CoachCreateDialog({ onClose, onSave, isSaving }: CoachCreateDialogProps
           ? t('admin.coaches.wizard.next')
           : t('admin.coaches.form.create')
       }
-      cancelLabel={
-        step === 2 ? t('admin.coaches.wizard.back') : undefined
-      }
+      cancelLabel={step === 2 ? t('admin.coaches.wizard.back') : undefined}
       onCancel={step === 2 ? handleBack : undefined}
     >
       {/* Step indicator */}
@@ -212,8 +222,8 @@ function CoachCreateDialog({ onClose, onSave, isSaving }: CoachCreateDialogProps
                 s === step
                   ? 'bg-[#B8963E] text-white'
                   : s < step
-                  ? 'bg-[#8A6F2E] text-white'
-                  : 'bg-[#E8E4DF] text-[#8A8A8A]',
+                    ? 'bg-[#8A6F2E] text-white'
+                    : 'bg-[#E8E4DF] text-[#8A8A8A]',
               ].join(' ')}
             >
               {s}
@@ -228,7 +238,9 @@ function CoachCreateDialog({ onClose, onSave, isSaving }: CoachCreateDialogProps
             )}
           </div>
         ))}
-        <span className="ml-1 font-['Inter'] text-[12px] text-[#8A8A8A]">{stepLabel}</span>
+        <span className="ml-1 font-['Inter'] text-[12px] text-[#8A8A8A]">
+          {stepLabel}
+        </span>
       </div>
 
       {step === 1 && (
@@ -266,7 +278,10 @@ function CoachCreateDialog({ onClose, onSave, isSaving }: CoachCreateDialogProps
             />
           </AdminFormField>
 
-          <AdminFormField label={t('admin.coaches.form.phone')} htmlFor="coach-phone">
+          <AdminFormField
+            label={t('admin.coaches.form.phone')}
+            htmlFor="coach-phone"
+          >
             <input
               id="coach-phone"
               type="text"
@@ -278,7 +293,10 @@ function CoachCreateDialog({ onClose, onSave, isSaving }: CoachCreateDialogProps
             />
           </AdminFormField>
 
-          <AdminFormField label={t('admin.coaches.form.bio')} htmlFor="coach-bio">
+          <AdminFormField
+            label={t('admin.coaches.form.bio')}
+            htmlFor="coach-bio"
+          >
             <textarea
               id="coach-bio"
               rows={3}
@@ -442,7 +460,8 @@ function buildEditForm(coach: Coach): EditFormState {
     languages: (coach.languages ?? []).join(', '),
     location: coach.location ?? '',
     timezone: coach.timezone,
-    yearsExperience: coach.yearsExperience != null ? String(coach.yearsExperience) : '',
+    yearsExperience:
+      coach.yearsExperience == null ? '' : String(coach.yearsExperience),
     acceptingClients: coach.acceptingClients,
   };
 }
@@ -458,11 +477,19 @@ interface CoachEditDialogProps {
   isSaving: boolean;
 }
 
-function CoachEditDialog({ coach, onClose, onSave, isSaving }: CoachEditDialogProps) {
+function CoachEditDialog({
+  coach,
+  onClose,
+  onSave,
+  isSaving,
+}: CoachEditDialogProps) {
   const { t } = useTranslation();
   const [form, setForm] = useState<EditFormState>(() => buildEditForm(coach));
 
-  const setField = <K extends keyof EditFormState>(key: K, value: EditFormState[K]) => {
+  const setField = <K extends keyof EditFormState>(
+    key: K,
+    value: EditFormState[K],
+  ) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -478,7 +505,9 @@ function CoachEditDialog({ coach, onClose, onSave, isSaving }: CoachEditDialogPr
       languages: parseCommaSeparated(form.languages),
       location: form.location.trim() || null,
       timezone: form.timezone.trim() || 'Europe/Warsaw',
-      yearsExperience: form.yearsExperience ? parseInt(form.yearsExperience, 10) : null,
+      yearsExperience: form.yearsExperience
+        ? Number.parseInt(form.yearsExperience, 10)
+        : null,
       acceptingClients: form.acceptingClients,
     });
   };
@@ -492,7 +521,10 @@ function CoachEditDialog({ coach, onClose, onSave, isSaving }: CoachEditDialogPr
       isLoading={isSaving}
       submitLabel={t('admin.coaches.form.save')}
     >
-      <AdminFormField label={t('admin.coaches.form.fullName')} htmlFor="edit-coach-fullName">
+      <AdminFormField
+        label={t('admin.coaches.form.fullName')}
+        htmlFor="edit-coach-fullName"
+      >
         <input
           id="edit-coach-fullName"
           type="text"
@@ -504,7 +536,10 @@ function CoachEditDialog({ coach, onClose, onSave, isSaving }: CoachEditDialogPr
         />
       </AdminFormField>
 
-      <AdminFormField label={t('admin.coaches.form.email')} htmlFor="edit-coach-email">
+      <AdminFormField
+        label={t('admin.coaches.form.email')}
+        htmlFor="edit-coach-email"
+      >
         <input
           id="edit-coach-email"
           type="email"
@@ -515,7 +550,10 @@ function CoachEditDialog({ coach, onClose, onSave, isSaving }: CoachEditDialogPr
         />
       </AdminFormField>
 
-      <AdminFormField label={t('admin.coaches.form.phone')} htmlFor="edit-coach-phone">
+      <AdminFormField
+        label={t('admin.coaches.form.phone')}
+        htmlFor="edit-coach-phone"
+      >
         <input
           id="edit-coach-phone"
           type="text"
@@ -526,7 +564,10 @@ function CoachEditDialog({ coach, onClose, onSave, isSaving }: CoachEditDialogPr
         />
       </AdminFormField>
 
-      <AdminFormField label={t('admin.coaches.form.bio')} htmlFor="edit-coach-bio">
+      <AdminFormField
+        label={t('admin.coaches.form.bio')}
+        htmlFor="edit-coach-bio"
+      >
         <textarea
           id="edit-coach-bio"
           rows={3}
@@ -688,7 +729,10 @@ export default function AdminCoaches() {
     if (statusFilter === 'archived' && c.isActive) return false;
     if (search.trim()) {
       const q = search.trim().toLowerCase();
-      if (!c.fullName.toLowerCase().includes(q) && !c.email.toLowerCase().includes(q)) {
+      if (
+        !c.fullName.toLowerCase().includes(q) &&
+        !c.email.toLowerCase().includes(q)
+      ) {
         return false;
       }
     }
@@ -749,7 +793,8 @@ export default function AdminCoaches() {
     },
   });
 
-  const isConfirmLoading = archiveMutation.isPending || restoreMutation.isPending;
+  const isConfirmLoading =
+    archiveMutation.isPending || restoreMutation.isPending;
 
   // ─── Handlers ───────────────────────────────────────────────────────────────
 
@@ -805,7 +850,9 @@ export default function AdminCoaches() {
           <div className="font-['Inter'] text-[14px] font-medium text-[#2D2D2D]">
             {c.fullName}
           </div>
-          <div className="font-['Inter'] text-[12px] text-[#8A8A8A]">{c.email}</div>
+          <div className="font-['Inter'] text-[12px] text-[#8A8A8A]">
+            {c.email}
+          </div>
         </div>
       ),
     },

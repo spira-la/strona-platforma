@@ -1,7 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Menu, X, Globe, ChevronDown, LogOut, User, LayoutDashboard } from 'lucide-react';
+import {
+  Menu,
+  X,
+  Globe,
+  ChevronDown,
+  LogOut,
+  User,
+  LayoutDashboard,
+} from 'lucide-react';
 import { EditableText } from '@/components/cms/EditableText';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAuthStore } from '@/stores/auth.store';
@@ -15,10 +23,30 @@ interface NavLink {
 }
 
 const NAV_LINKS: NavLink[] = [
-  { href: '/o-mnie', labelKey: 'common.about', fieldPath: 'link1', editable: 'O Mnie' },
-  { href: '/jak-pracuje', labelKey: 'common.howIWork', fieldPath: 'link2', editable: 'Jak Pracuję' },
-  { href: '/uslugi', labelKey: 'common.services', fieldPath: 'link3', editable: 'Usługi' },
-  { href: '/blog', labelKey: 'common.blog', fieldPath: 'link4', editable: 'Blog' },
+  {
+    href: '/o-mnie',
+    labelKey: 'common.about',
+    fieldPath: 'link1',
+    editable: 'O Mnie',
+  },
+  {
+    href: '/jak-pracuje',
+    labelKey: 'common.howIWork',
+    fieldPath: 'link2',
+    editable: 'Jak Pracuję',
+  },
+  {
+    href: '/uslugi',
+    labelKey: 'common.services',
+    fieldPath: 'link3',
+    editable: 'Usługi',
+  },
+  {
+    href: '/blog',
+    labelKey: 'common.blog',
+    fieldPath: 'link4',
+    editable: 'Blog',
+  },
 ];
 
 const LANGUAGES = [
@@ -54,7 +82,9 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Close drawer on route change
+  // Close drawer on route change — calling setState here is intentional:
+  // we are synchronising UI overlay state with the router (an external system).
+
   useEffect(() => {
     setDrawerOpen(false);
     setLangOpen(false);
@@ -65,10 +95,18 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
   useEffect(() => {
     if (!langOpen && !userMenuOpen) return;
     const handler = (e: MouseEvent) => {
-      if (langOpen && langRef.current && !langRef.current.contains(e.target as Node)) {
+      if (
+        langOpen &&
+        langRef.current &&
+        !langRef.current.contains(e.target as Node)
+      ) {
         setLangOpen(false);
       }
-      if (userMenuOpen && userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+      if (
+        userMenuOpen &&
+        userMenuRef.current &&
+        !userMenuRef.current.contains(e.target as Node)
+      ) {
         setUserMenuOpen(false);
       }
     };
@@ -76,7 +114,10 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
     return () => document.removeEventListener('mousedown', handler);
   }, [langOpen, userMenuOpen]);
 
-  const userInitial = user?.user_metadata?.full_name?.[0]?.toUpperCase() ?? user?.email?.[0]?.toUpperCase() ?? 'U';
+  const userInitial =
+    user?.user_metadata?.full_name?.[0]?.toUpperCase() ??
+    user?.email?.[0]?.toUpperCase() ??
+    'U';
   const userName = user?.user_metadata?.full_name ?? user?.email ?? '';
 
   const handleSignOut = async () => {
@@ -88,7 +129,8 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
   const isTransparentMode = transparent && !scrolled;
   const useWhiteText = isTransparentMode && darkHero;
 
-  const currentLang = LANGUAGES.find((l) => l.code === i18n.language) ?? LANGUAGES[0];
+  const currentLang =
+    LANGUAGES.find((l) => l.code === i18n.language) ?? LANGUAGES[0];
 
   const handleLangChange = (code: string) => {
     void i18n.changeLanguage(code);
@@ -119,8 +161,15 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
             className="flex items-center gap-2 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded"
             aria-label="Spirala — strona główna"
           >
-            <img src={spiralaIcon} alt="" className="h-9 w-auto" aria-hidden="true" />
-            <span className={`font-['Cormorant_Garamond'] text-[22px] font-bold tracking-[-0.5px] ${useWhiteText ? 'text-white hover:text-white/80' : 'text-[#B8944A] hover:text-[#8A6F2E]'}`}>
+            <img
+              src={spiralaIcon}
+              alt=""
+              className="h-9 w-auto"
+              aria-hidden="true"
+            />
+            <span
+              className={`font-['Cormorant_Garamond'] text-[22px] font-bold tracking-[-0.5px] ${useWhiteText ? 'text-white hover:text-white/80' : 'text-[#B8944A] hover:text-[#8A6F2E]'}`}
+            >
               Spirala
             </span>
           </Link>
@@ -134,8 +183,12 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                   className={[
                     "font-['Lato'] text-[14px] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded",
                     useWhiteText
-                      ? (isActive(link.href) ? 'text-white font-medium' : 'text-white/70 hover:text-white')
-                      : (isActive(link.href) ? 'text-[#B8944A] font-medium' : 'text-[#8A8A8A] hover:text-[#2D2D2D]'),
+                      ? isActive(link.href)
+                        ? 'text-white font-medium'
+                        : 'text-white/70 hover:text-white'
+                      : isActive(link.href)
+                        ? 'text-[#B8944A] font-medium'
+                        : 'text-[#8A8A8A] hover:text-[#2D2D2D]',
                   ].join(' ')}
                   aria-current={isActive(link.href) ? 'page' : undefined}
                 >
@@ -175,13 +228,19 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                   className="absolute right-0 top-full mt-2 w-[72px] bg-white border border-[#F0EDE8] rounded-lg shadow-lg py-1 z-10"
                 >
                   {LANGUAGES.map((lang) => (
-                    <li key={lang.code} role="option" aria-selected={lang.code === i18n.language}>
+                    <li
+                      key={lang.code}
+                      role="option"
+                      aria-selected={lang.code === i18n.language}
+                    >
                       <button
                         type="button"
                         onClick={() => handleLangChange(lang.code)}
                         className={[
                           "w-full text-left px-3 py-1.5 font-['Lato'] text-[13px] transition-colors duration-150 hover:bg-[#FAF8F5]",
-                          lang.code === i18n.language ? 'text-[#B8944A] font-medium' : 'text-[#6B6B6B]',
+                          lang.code === i18n.language
+                            ? 'text-[#B8944A] font-medium'
+                            : 'text-[#6B6B6B]',
                         ].join(' ')}
                       >
                         {lang.label}
@@ -203,19 +262,33 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                   aria-expanded={userMenuOpen}
                   aria-label="Menu użytkownika"
                 >
-                  <span className={`w-8 h-8 rounded-full flex items-center justify-center font-['Lato'] text-[13px] font-bold ${useWhiteText ? 'bg-white/20 text-white' : 'bg-[#B8944A]/15 text-[#B8944A]'}`}>
+                  <span
+                    className={`w-8 h-8 rounded-full flex items-center justify-center font-['Lato'] text-[13px] font-bold ${useWhiteText ? 'bg-white/20 text-white' : 'bg-[#B8944A]/15 text-[#B8944A]'}`}
+                  >
                     {userInitial}
                   </span>
-                  <ChevronDown size={12} className={`transition-transform duration-200 ${userMenuOpen ? 'rotate-180' : ''} ${useWhiteText ? 'text-white/70' : 'text-[#8A8A8A]'}`} aria-hidden="true" />
+                  <ChevronDown
+                    size={12}
+                    className={`transition-transform duration-200 ${userMenuOpen ? 'rotate-180' : ''} ${useWhiteText ? 'text-white/70' : 'text-[#8A8A8A]'}`}
+                    aria-hidden="true"
+                  />
                 </button>
 
                 {userMenuOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-[200px] bg-white border border-[#F0EDE8] rounded-lg shadow-lg py-2 z-10" role="menu">
+                  <div
+                    className="absolute right-0 top-full mt-2 w-[200px] bg-white border border-[#F0EDE8] rounded-lg shadow-lg py-2 z-10"
+                    role="menu"
+                  >
                     <div className="px-3 py-2 border-b border-[#F0EDE8]">
-                      <p className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D] truncate">{userName}</p>
-                      <p className="font-['Lato'] text-[11px] text-[#8A8A8A] truncate">{user?.email}</p>
+                      <p className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D] truncate">
+                        {userName}
+                      </p>
+                      <p className="font-['Lato'] text-[11px] text-[#8A8A8A] truncate">
+                        {user?.email}
+                      </p>
                     </div>
-                    {(user?.app_metadata?.role === 'coach' || user?.app_metadata?.role === 'admin') && (
+                    {(user?.app_metadata?.role === 'coach' ||
+                      user?.app_metadata?.role === 'admin') && (
                       <Link
                         to="/coach"
                         className="w-full flex items-center gap-2 px-3 py-2 font-['Lato'] text-[13px] text-[#B8944A] hover:bg-[#FAF8F5] hover:text-[#8A6F2E] transition-colors"
@@ -255,7 +328,11 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                 onClick={openLogin}
                 className="font-['Lato'] text-[13px] font-medium text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-full px-6 py-[10px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
               >
-                <User size={14} className="inline mr-1.5 -mt-0.5" aria-hidden="true" />
+                <User
+                  size={14}
+                  className="inline mr-1.5 -mt-0.5"
+                  aria-hidden="true"
+                />
                 Zaloguj się
               </button>
             )}
@@ -270,7 +347,11 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
             aria-controls="mobile-drawer"
             aria-label={drawerOpen ? 'Zamknij menu' : 'Otwórz menu'}
           >
-            {drawerOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
+            {drawerOpen ? (
+              <X size={22} aria-hidden="true" />
+            ) : (
+              <Menu size={22} aria-hidden="true" />
+            )}
           </button>
         </nav>
       </header>
@@ -293,7 +374,9 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
         className={[
           'fixed top-[72px] left-0 right-0 z-40 bg-white border-b border-[#F0EDE8] shadow-lg md:hidden',
           'transition-all duration-300 ease-in-out overflow-hidden',
-          drawerOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none',
+          drawerOpen
+            ? 'max-h-[500px] opacity-100'
+            : 'max-h-0 opacity-0 pointer-events-none',
         ].join(' ')}
       >
         <ul className="flex flex-col px-4 pt-4 pb-6 gap-1" role="list">
@@ -346,7 +429,9 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                     <span className="w-8 h-8 rounded-full bg-[#B8944A]/15 text-[#B8944A] flex items-center justify-center font-['Lato'] text-[13px] font-bold">
                       {userInitial}
                     </span>
-                    <span className="font-['Lato'] text-[14px] text-[#2D2D2D] truncate max-w-[180px]">{userName}</span>
+                    <span className="font-['Lato'] text-[14px] text-[#2D2D2D] truncate max-w-[180px]">
+                      {userName}
+                    </span>
                   </div>
                   <button
                     type="button"
@@ -357,7 +442,8 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                     Wyloguj
                   </button>
                 </div>
-                {(user?.app_metadata?.role === 'coach' || user?.app_metadata?.role === 'admin') && (
+                {(user?.app_metadata?.role === 'coach' ||
+                  user?.app_metadata?.role === 'admin') && (
                   <Link
                     to="/coach"
                     className="flex items-center gap-2 font-['Lato'] text-[13px] font-semibold text-[#B8944A] hover:text-[#8A6F2E] transition-colors px-1 py-1"
@@ -379,7 +465,10 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
             ) : (
               <button
                 type="button"
-                onClick={() => { setDrawerOpen(false); openLogin(); }}
+                onClick={() => {
+                  setDrawerOpen(false);
+                  openLogin();
+                }}
                 className="flex items-center justify-center w-full font-['Lato'] text-[14px] font-medium text-white bg-[#B8944A] hover:bg-[#8A6F2E] transition-colors duration-200 rounded-full px-6 py-[11px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
               >
                 <User size={14} className="mr-1.5" aria-hidden="true" />
