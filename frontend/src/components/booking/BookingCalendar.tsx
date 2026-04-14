@@ -102,7 +102,7 @@ export function BookingCalendar({
 
   // Build calendar grid cells (nulls = leading empty cells)
   const cells: (number | null)[] = [
-    ...Array.from<null>({ length: firstWeekday }, () => null),
+    ...(Array.from({ length: firstWeekday }, () => null) as null[]),
     ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
   ];
 
