@@ -94,7 +94,8 @@ function setNestedValue(
         : {};
     cursor = cursor[key];
   }
-  cursor[parts.at(-1)] = value;
+  const lastKey = parts.at(-1);
+  if (lastKey !== undefined) cursor[lastKey] = value;
   return result;
 }
 
