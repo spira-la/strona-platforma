@@ -68,6 +68,18 @@ export class CmsController {
     await this.cloudflareCache.purgeUrls([`${siteUrl}/api/cms/content`]);
   }
 
+  private async purgeImageUrls(
+    section: string,
+    fieldPath: string,
+  ): Promise<void> {
+    const storage = this.cms.getStorage();
+    const urls = [
+      storage.getPublicUrl(`cms/${section}/${fieldPath}.webp`),
+      storage.getPublicUrl(`cms/${section}/${fieldPath}-thumb.webp`),
+    ];
+    await this.cloudflareCache.purgeUrls(urls);
+  }
+
   // -------------------------------------------------------------------------
   // Endpoints
   // -------------------------------------------------------------------------
@@ -234,7 +246,14 @@ export class CmsController {
       url,
     );
 
-    await this.purgeCmsContent();
+    // Purge BOTH the CMS JSON response (old field value) and the R2
+    // image URLs themselves — Cloudflare caches the binary at the R2
+    // public URL too, so an overwritten object would still serve the
+    // stale copy without an explicit purge.
+    await Promise.all([
+      this.purgeCmsContent(),
+      this.purgeImageUrls(section, fieldPath),
+    ]);
 
     return {
       success: true,
@@ -274,7 +293,12 @@ export class CmsController {
     await Promise.all([storage.delete(mainKey), storage.delete(thumbKey)]);
     await this.cms.deleteField(section, language, fieldPath);
 
-    await this.purgeCmsContent();
+    // Purge both the CMS JSON response and the R2 image URLs — without
+    // the second purge Cloudflare keeps serving the deleted binary.
+    await Promise.all([
+      this.purgeCmsContent(),
+      this.purgeImageUrls(section, fieldPath),
+    ]);
 
     return {
       success: true,
