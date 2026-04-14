@@ -128,48 +128,73 @@ export function CMSProvider({ children }: CMSProviderProps) {
   // Track latest version to keep cache consistent
   const versionRef = useRef<number>(readCache()?.version ?? 0);
 
-  useEffect(() => {
-    let cancelled = false;
+  // Fetches the full content payload (expensive; cached by Cloudflare).
+  const fetchContent = useCallback(async (): Promise<void> => {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 3000);
 
-    async function fetchContent() {
-      // Skip API call entirely when backend is not available.
-      // In dev without backend, just use placeholders.
-      try {
-        // Quick check: if the API base is proxied and backend isn't running, abort fast
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 3000);
+      const res = await fetch('/api/cms/content', {
+        signal: controller.signal,
+      });
+      clearTimeout(timeout);
 
-        const res = await fetch('/api/cms/content', {
-          signal: controller.signal,
-        });
-        clearTimeout(timeout);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-        const response = await res.json();
-        if (cancelled) return;
-
-        setContent(response.content);
-        versionRef.current = response.version;
-        writeCache({
-          content: response.content,
-          version: response.version,
-          savedAt: Date.now(),
-        });
-        setError(null);
-      } catch {
-        if (cancelled) return;
-        // Silently fall back to cache/placeholders — no console error
-      } finally {
-        if (!cancelled) setIsLoading(false);
-      }
+      const response = await res.json();
+      setContent(response.content);
+      versionRef.current = response.version;
+      writeCache({
+        content: response.content,
+        version: response.version,
+        savedAt: Date.now(),
+      });
+      setError(null);
+    } catch {
+      // Silently fall back to cache/placeholders — no console error
+    } finally {
+      setIsLoading(false);
     }
-
-    void fetchContent();
-    return () => {
-      cancelled = true;
-    };
   }, []);
+
+  // Checks the server's current version (cheap, uncached) and only
+  // refetches the full content when it differs from what we have
+  // cached locally. This keeps Cloudflare doing its job for the heavy
+  // payload while guaranteeing edits propagate within one request.
+  const syncIfStale = useCallback(async (): Promise<void> => {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 3000);
+
+      const res = await fetch('/api/cms/version', {
+        signal: controller.signal,
+        cache: 'no-store',
+      });
+      clearTimeout(timeout);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+      const { version } = (await res.json()) as { version: number };
+      if (version === versionRef.current) {
+        setIsLoading(false);
+      } else {
+        await fetchContent();
+      }
+    } catch {
+      // No network — keep whatever we have in local state
+      setIsLoading(false);
+    }
+  }, [fetchContent]);
+
+  useEffect(() => {
+    // If we have a cached copy render from it instantly and just
+    // verify freshness in the background. On a cold cache we must
+    // fetch the full content before the page has anything to show.
+    if (versionRef.current > 0) {
+      void syncIfStale();
+    } else {
+      void fetchContent();
+    }
+  }, [fetchContent, syncIfStale]);
 
   const setEditMode = useCallback(
     (enabled: boolean) => {
@@ -217,15 +242,21 @@ export function CMSProvider({ children }: CMSProviderProps) {
         };
       });
 
-      // Persist to API
-      await cmsClient.updateField(section, lang, fieldPath, value);
+      // Persist to API. The response carries the new server version
+      // so we can bump the local version ref and keep the cache valid
+      // (no forced refetch needed — the optimistic state is correct).
+      const { version } = await cmsClient.updateField(
+        section,
+        lang,
+        fieldPath,
+        value,
+      );
+      versionRef.current = version;
 
-      // Refresh cache with updated content — re-read state lazily via a
-      // functional updater to avoid stale closure over `content`
       setContent((current) => {
         writeCache({
           content: current,
-          version: versionRef.current,
+          version,
           savedAt: Date.now(),
         });
         return current;
@@ -242,6 +273,7 @@ export function CMSProvider({ children }: CMSProviderProps) {
     setEditMode,
     getFieldValue,
     updateField,
+    refresh: fetchContent,
   };
 
   return <CMSContext.Provider value={value}>{children}</CMSContext.Provider>;
