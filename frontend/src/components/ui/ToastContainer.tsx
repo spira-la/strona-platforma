@@ -127,7 +127,7 @@ export function ToastContainer() {
   return (
     <div
       aria-label="Powiadomienia"
-      className="fixed bottom-6 right-6 z-50 flex flex-col-reverse gap-2 items-end pointer-events-none"
+      className="fixed bottom-6 right-6 z-[200] flex flex-col-reverse gap-2 items-end pointer-events-none"
     >
       {toasts.map((t) => (
         <div key={t.id} className="pointer-events-auto">

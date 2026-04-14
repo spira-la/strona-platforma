@@ -18,6 +18,7 @@ export * from './webinar.entity';
 export * from './gift.entity';
 export * from './review.entity';
 export * from './language.entity';
+export * from './admin-email.entity';
 
 import { ProfileEntity } from './profile.entity';
 import { CoachEntity } from './coach.entity';
@@ -45,6 +46,7 @@ import {
 import { GiftEntity } from './gift.entity';
 import { ReviewEntity } from './review.entity';
 import { LanguageEntity } from './language.entity';
+import { AdminEmailEntity } from './admin-email.entity';
 
 export const ALL_ENTITIES = [
   ProfileEntity,
@@ -72,4 +74,5 @@ export const ALL_ENTITIES = [
   GiftEntity,
   ReviewEntity,
   LanguageEntity,
+  AdminEmailEntity,
 ];

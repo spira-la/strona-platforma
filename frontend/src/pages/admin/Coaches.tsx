@@ -29,6 +29,7 @@ import {
   type CreateCoachData,
   type UpdateCoachData,
 } from '@/clients/coaches.client';
+import { languagesClient, type Language } from '@/clients/languages.client';
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -69,6 +70,75 @@ function parseCommaSeparated(value: string): string[] {
 }
 
 // ---------------------------------------------------------------------------
+// LanguageMultiSelect — chips from Languages CRUD
+// ---------------------------------------------------------------------------
+
+interface LanguageMultiSelectProps {
+  selected: string[];
+  onChange: (next: string[]) => void;
+}
+
+function LanguageMultiSelect({ selected, onChange }: LanguageMultiSelectProps) {
+  const { t } = useTranslation();
+  const { data, isLoading } = useQuery({
+    queryKey: ['languages'],
+    queryFn: () => languagesClient.getAll(),
+  });
+
+  const options: Language[] = (data ?? []).filter((l) => l.isActive !== false);
+
+  const toggle = (code: string) => {
+    if (selected.includes(code)) {
+      onChange(selected.filter((c) => c !== code));
+    } else {
+      onChange([...selected, code]);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="font-['Inter'] text-[12px] text-[#8A8A8A] py-1">
+        {t('common.loading')}
+      </div>
+    );
+  }
+
+  if (options.length === 0) {
+    return (
+      <div className="font-['Inter'] text-[12px] text-[#8A8A8A] py-1">
+        {t('admin.coaches.form.noLanguages')}
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      {options.map((lang) => {
+        const active = selected.includes(lang.code);
+        return (
+          <button
+            key={lang.id}
+            type="button"
+            onClick={() => toggle(lang.code)}
+            aria-pressed={active}
+            className={[
+              'px-3 py-1.5 rounded-full font-["Inter"] text-[13px] transition-colors',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]',
+              active
+                ? 'bg-[#B8963E] text-white border border-[#B8963E]'
+                : 'bg-white text-[#6B6B6B] border border-[#E8E4DF] hover:border-[#B8963E] hover:text-[#B8963E]',
+            ].join(' ')}
+          >
+            {lang.flag ? `${lang.flag} ` : ''}
+            {lang.name}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Create wizard — form state
 // ---------------------------------------------------------------------------
 
@@ -85,7 +155,7 @@ interface CreateStep1 {
 interface CreateStep2 {
   location: string;
   timezone: string;
-  languages: string;
+  languages: string[];
   acceptingClients: boolean;
 }
 
@@ -105,7 +175,7 @@ function buildStep2(): CreateStep2 {
   return {
     location: '',
     timezone: 'Europe/Warsaw',
-    languages: '',
+    languages: [],
     acceptingClients: true,
   };
 }
@@ -186,9 +256,7 @@ function CoachCreateDialog({
         : undefined,
       location: step2.location.trim() || undefined,
       timezone: step2.timezone || 'Europe/Warsaw',
-      languages: step2.languages
-        ? parseCommaSeparated(step2.languages)
-        : undefined,
+      languages: step2.languages.length > 0 ? step2.languages : undefined,
       acceptingClients: step2.acceptingClients,
     };
     onSave(payload);
@@ -391,39 +459,42 @@ function CoachCreateDialog({
             label={t('admin.coaches.form.languages')}
             htmlFor="coach-languages"
           >
-            <input
-              id="coach-languages"
-              type="text"
-              value={step2.languages}
-              onChange={(e) => setS2('languages', e.target.value)}
-              placeholder={t('admin.coaches.form.languagesPlaceholder')}
-              className={ADMIN_INPUT_CLASS}
+            <LanguageMultiSelect
+              selected={step2.languages}
+              onChange={(next) => setS2('languages', next)}
             />
           </AdminFormField>
 
           {/* Accepting clients toggle */}
-          <div className="flex items-center justify-between py-2 px-3 bg-[#F9F6F0] rounded-lg">
-            <span className="font-['Inter'] text-[14px] text-[#444444]">
-              {t('admin.coaches.form.acceptingClients')}
-            </span>
-            <button
-              type="button"
-              role="switch"
-              aria-checked={step2.acceptingClients}
-              onClick={() => setS2('acceptingClients', !step2.acceptingClients)}
-              className={[
-                'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]',
-                step2.acceptingClients ? 'bg-[#B8963E]' : 'bg-[#DDDDDD]',
-              ].join(' ')}
-            >
-              <span
+          <div className="py-2 px-3 bg-[#F9F6F0] rounded-lg">
+            <div className="flex items-center justify-between">
+              <span className="font-['Inter'] text-[14px] text-[#444444]">
+                {t('admin.coaches.form.acceptingClients')}
+              </span>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={step2.acceptingClients}
+                onClick={() =>
+                  setS2('acceptingClients', !step2.acceptingClients)
+                }
                 className={[
-                  'inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform',
-                  step2.acceptingClients ? 'translate-x-6' : 'translate-x-1',
+                  'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]',
+                  step2.acceptingClients ? 'bg-[#B8963E]' : 'bg-[#DDDDDD]',
                 ].join(' ')}
-              />
-            </button>
+              >
+                <span
+                  className={[
+                    'inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform',
+                    step2.acceptingClients ? 'translate-x-6' : 'translate-x-1',
+                  ].join(' ')}
+                />
+              </button>
+            </div>
+            <p className="mt-1.5 font-['Inter'] text-[12px] text-[#8A8A8A] leading-snug">
+              {t('admin.coaches.form.acceptingClientsHelp')}
+            </p>
           </div>
         </>
       )}
@@ -442,7 +513,7 @@ interface EditFormState {
   bio: string;
   expertise: string;
   certifications: string;
-  languages: string;
+  languages: string[];
   location: string;
   timezone: string;
   yearsExperience: string;
@@ -457,7 +528,7 @@ function buildEditForm(coach: Coach): EditFormState {
     bio: coach.bio ?? '',
     expertise: (coach.expertise ?? []).join(', '),
     certifications: (coach.certifications ?? []).join(', '),
-    languages: (coach.languages ?? []).join(', '),
+    languages: coach.languages ?? [],
     location: coach.location ?? '',
     timezone: coach.timezone,
     yearsExperience:
@@ -502,7 +573,7 @@ function CoachEditDialog({
       bio: form.bio.trim() || null,
       expertise: parseCommaSeparated(form.expertise),
       certifications: parseCommaSeparated(form.certifications),
-      languages: parseCommaSeparated(form.languages),
+      languages: form.languages,
       location: form.location.trim() || null,
       timezone: form.timezone.trim() || 'Europe/Warsaw',
       yearsExperience: form.yearsExperience
@@ -610,13 +681,9 @@ function CoachEditDialog({
         label={t('admin.coaches.form.languages')}
         htmlFor="edit-coach-languages"
       >
-        <input
-          id="edit-coach-languages"
-          type="text"
-          value={form.languages}
-          onChange={(e) => setField('languages', e.target.value)}
-          placeholder={t('admin.coaches.form.languagesPlaceholder')}
-          className={ADMIN_INPUT_CLASS}
+        <LanguageMultiSelect
+          selected={form.languages}
+          onChange={(next) => setField('languages', next)}
         />
       </AdminFormField>
 
@@ -668,28 +735,33 @@ function CoachEditDialog({
       </AdminFormField>
 
       {/* Accepting clients toggle */}
-      <div className="flex items-center justify-between py-2 px-3 bg-[#F9F6F0] rounded-lg">
-        <span className="font-['Inter'] text-[14px] text-[#444444]">
-          {t('admin.coaches.form.acceptingClients')}
-        </span>
-        <button
-          type="button"
-          role="switch"
-          aria-checked={form.acceptingClients}
-          onClick={() => setField('acceptingClients', !form.acceptingClients)}
-          className={[
-            'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]',
-            form.acceptingClients ? 'bg-[#B8963E]' : 'bg-[#DDDDDD]',
-          ].join(' ')}
-        >
-          <span
+      <div className="py-2 px-3 bg-[#F9F6F0] rounded-lg">
+        <div className="flex items-center justify-between">
+          <span className="font-['Inter'] text-[14px] text-[#444444]">
+            {t('admin.coaches.form.acceptingClients')}
+          </span>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={form.acceptingClients}
+            onClick={() => setField('acceptingClients', !form.acceptingClients)}
             className={[
-              'inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform',
-              form.acceptingClients ? 'translate-x-6' : 'translate-x-1',
+              'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]',
+              form.acceptingClients ? 'bg-[#B8963E]' : 'bg-[#DDDDDD]',
             ].join(' ')}
-          />
-        </button>
+          >
+            <span
+              className={[
+                'inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform',
+                form.acceptingClients ? 'translate-x-6' : 'translate-x-1',
+              ].join(' ')}
+            />
+          </button>
+        </div>
+        <p className="mt-1.5 font-['Inter'] text-[12px] text-[#8A8A8A] leading-snug">
+          {t('admin.coaches.form.acceptingClientsHelp')}
+        </p>
       </div>
     </AdminFormDialog>
   );

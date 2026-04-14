@@ -216,13 +216,21 @@ export class CmsController {
     const mainKey = `cms/${section}/${fieldPath}.webp`;
     const thumbKey = `cms/${section}/${fieldPath}-thumb.webp`;
 
-    // Upload both to R2 in parallel
-    const [url, thumbnailUrl] = await Promise.all([
+    // Upload both to R2 in parallel. The keys are deterministic so R2
+    // overwrites existing objects — no orphans from replacement.
+    const [baseUrl, baseThumbUrl] = await Promise.all([
       storage.upload(mainKey, mainBuffer, 'image/webp'),
       storage.upload(thumbKey, thumbBuffer, 'image/webp'),
     ]);
 
-    // Persist the public URL in CMS JSONB
+    // Cache-bust: keys are deterministic, so the public URL is stable
+    // across replacements and the browser/CDN would serve a stale copy.
+    // Append a version param derived from upload time.
+    const cacheBust = Date.now().toString();
+    const url = `${baseUrl}?v=${cacheBust}`;
+    const thumbnailUrl = `${baseThumbUrl}?v=${cacheBust}`;
+
+    // Persist the versioned public URL in CMS JSONB
     const result = await this.cms.updateField(
       section,
       language,
@@ -263,13 +271,12 @@ export class CmsController {
     const mainKey = `cms/${section}/${fieldPath}.webp`;
     const thumbKey = `cms/${section}/${fieldPath}-thumb.webp`;
 
-    // Delete both R2 objects and clear the CMS field in parallel.
-    // R2 delete is idempotent — missing files do not throw.
-    await Promise.all([
-      storage.delete(mainKey),
-      storage.delete(thumbKey),
-      this.cms.deleteField(section, language, fieldPath),
-    ]);
+    // Delete R2 objects FIRST, then clear the DB. If R2 fails the DB
+    // still reflects the (still-present) image URL and nothing is
+    // half-deleted. R2 delete is idempotent — missing files do not
+    // throw — so the main image + thumbnail are removed in parallel.
+    await Promise.all([storage.delete(mainKey), storage.delete(thumbKey)]);
+    await this.cms.deleteField(section, language, fieldPath);
 
     this.purgeCmsContent();
 
