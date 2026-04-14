@@ -62,11 +62,10 @@ export class CmsController {
   // Helpers
   // -------------------------------------------------------------------------
 
-  private purgeCmsContent(): void {
+  private async purgeCmsContent(): Promise<void> {
     const siteUrl = this.config.get<string>('SITE_URL') ?? '';
-    if (siteUrl) {
-      void this.cloudflareCache.purgeUrls([`${siteUrl}/api/cms/content`]);
-    }
+    if (!siteUrl) return;
+    await this.cloudflareCache.purgeUrls([`${siteUrl}/api/cms/content`]);
   }
 
   // -------------------------------------------------------------------------
@@ -77,15 +76,12 @@ export class CmsController {
    * GET /api/cms/content
    * Public — returns all CMS content.
    *
-   * Cache-Control: tell Cloudflare to cache for 1 hour (s-maxage) and serve
-   * stale while revalidating for up to 24 h.  Browser gets max-age=0 so it
-   * always revalidates, but Cloudflare handles the heavy lifting.
+   * Cache-Control: always fresh. Edits must reflect immediately; the
+   * doc is a single small JSON so the cost of bypassing caches is
+   * negligible and it avoids stale reads after updates/deletes.
    */
   @Get('content')
-  @Header(
-    'Cache-Control',
-    'public, s-maxage=3600, stale-while-revalidate=86400',
-  )
+  @Header('Cache-Control', 'no-store, no-cache, must-revalidate')
   async getContent() {
     const doc = await this.cms.getContent();
     return {
@@ -111,7 +107,7 @@ export class CmsController {
       value,
     );
 
-    this.purgeCmsContent();
+    await this.purgeCmsContent();
 
     return {
       success: true,
@@ -130,7 +126,7 @@ export class CmsController {
     const { section, language, content } = body;
     const result = await this.cms.updateSection(section, language, content);
 
-    this.purgeCmsContent();
+    await this.purgeCmsContent();
 
     return {
       success: true,
@@ -150,7 +146,7 @@ export class CmsController {
     const result = await this.cms.initialize(body.content, body.force);
 
     if (result.created) {
-      this.purgeCmsContent();
+      await this.purgeCmsContent();
     }
 
     return {
@@ -238,7 +234,7 @@ export class CmsController {
       url,
     );
 
-    this.purgeCmsContent();
+    await this.purgeCmsContent();
 
     return {
       success: true,
@@ -278,7 +274,7 @@ export class CmsController {
     await Promise.all([storage.delete(mainKey), storage.delete(thumbKey)]);
     await this.cms.deleteField(section, language, fieldPath);
 
-    this.purgeCmsContent();
+    await this.purgeCmsContent();
 
     return {
       success: true,
