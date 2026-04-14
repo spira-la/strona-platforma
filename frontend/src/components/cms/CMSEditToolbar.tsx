@@ -13,8 +13,8 @@ export function CMSEditToolbar() {
   const { isEditMode, setEditMode } = useCMS();
 
   const isAdmin =
-    (user?.app_metadata?.role === 'admin') ||
-    (user?.user_metadata?.role === 'admin');
+    user?.app_metadata?.role === 'admin' ||
+    user?.user_metadata?.role === 'admin';
 
   if (!isAdmin) return null;
 

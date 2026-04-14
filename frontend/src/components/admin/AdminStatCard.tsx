@@ -4,7 +4,11 @@ interface AdminStatCardProps {
   value: string | number;
 }
 
-export function AdminStatCard({ icon: Icon, label, value }: AdminStatCardProps) {
+export function AdminStatCard({
+  icon: Icon,
+  label,
+  value,
+}: AdminStatCardProps) {
   return (
     <div className="bg-white border border-[#E8E4DF] rounded-xl p-6">
       <div className="flex items-center gap-4">

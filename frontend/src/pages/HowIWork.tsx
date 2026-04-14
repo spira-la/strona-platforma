@@ -1,4 +1,11 @@
-import { ChevronDown, Compass, Layers, MessageCircle, Shield } from 'lucide-react';
+import {
+  ChevronDown,
+  Compass,
+  Layers,
+  MessageCircle,
+  Shield,
+} from 'lucide-react';
+import { SEO } from '@/components/shared/SEO';
 import { useState } from 'react';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableBackground } from '@/components/cms/EditableBackground';
@@ -30,7 +37,14 @@ interface PrincipleCardProps {
   descPlaceholder: string;
 }
 
-function PrincipleCard({ icon, section, titleField, titlePlaceholder, descField, descPlaceholder }: PrincipleCardProps) {
+function PrincipleCard({
+  icon,
+  section,
+  titleField,
+  titlePlaceholder,
+  descField,
+  descPlaceholder,
+}: PrincipleCardProps) {
   return (
     <div className="flex flex-col gap-4 p-6 rounded-lg bg-[#FAF8F5] border border-[#F0EDE8]">
       <div
@@ -67,7 +81,15 @@ interface ProcessStepProps {
   descPlaceholder: string;
 }
 
-function ProcessStep({ number, isLast, section, titleField, titlePlaceholder, descField, descPlaceholder }: ProcessStepProps) {
+function ProcessStep({
+  number,
+  isLast,
+  section,
+  titleField,
+  titlePlaceholder,
+  descField,
+  descPlaceholder,
+}: ProcessStepProps) {
   return (
     <li className="flex gap-5">
       <div className="flex flex-col items-center flex-shrink-0">
@@ -111,7 +133,13 @@ interface FaqItemProps {
   answerPlaceholder: string;
 }
 
-function FaqItem({ section, questionField, questionPlaceholder, answerField, answerPlaceholder }: FaqItemProps) {
+function FaqItem({
+  section,
+  questionField,
+  questionPlaceholder,
+  answerField,
+  answerPlaceholder,
+}: FaqItemProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -159,6 +187,11 @@ function FaqItem({ section, questionField, questionPlaceholder, answerField, ans
 export default function HowIWork() {
   return (
     <main className="min-h-screen bg-white text-[#2D2D2D]">
+      <SEO
+        title="Jak pracuję"
+        description="Moje podejście do pracy — terapia somatyczna, coaching transformacyjny i psychobiologia stresu."
+        canonical="/jak-pracuje"
+      />
 
       {/* ------------------------------------------------------------------ */}
       {/* HERO — nature image with overlay title                              */}
@@ -176,11 +209,18 @@ export default function HowIWork() {
         />
         <div
           className="absolute inset-0"
-          style={{ background: 'linear-gradient(to bottom, rgba(20,16,10,0.65) 0%, rgba(30,22,8,0.75) 100%)' }}
+          style={{
+            background:
+              'linear-gradient(to bottom, rgba(20,16,10,0.65) 0%, rgba(30,22,8,0.75) 100%)',
+          }}
           aria-hidden="true"
         />
 
-        <ScrollReveal animation="fade" delay={200} className="relative z-10 flex flex-col items-center gap-6 max-w-[672px]">
+        <ScrollReveal
+          animation="fade"
+          delay={200}
+          className="relative z-10 flex flex-col items-center gap-6 max-w-[672px]"
+        >
           <SectionBadge label="Metoda pracy" />
 
           <EditableText
@@ -231,7 +271,11 @@ export default function HowIWork() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
             {/* Card 1 */}
-            <ScrollReveal animation="fade-up" delay={stagger(0)} className="rounded-lg overflow-hidden flex flex-col border border-[#E8E4DF] bg-white">
+            <ScrollReveal
+              animation="fade-up"
+              delay={stagger(0)}
+              className="rounded-lg overflow-hidden flex flex-col border border-[#E8E4DF] bg-white"
+            >
               <div className="relative h-52 overflow-hidden">
                 <EditableImage
                   section="howIWork"
@@ -242,7 +286,10 @@ export default function HowIWork() {
                 />
                 <div
                   className="absolute inset-0"
-                  style={{ background: 'linear-gradient(to top, rgba(20,16,10,0.45) 0%, transparent 60%)' }}
+                  style={{
+                    background:
+                      'linear-gradient(to top, rgba(20,16,10,0.45) 0%, transparent 60%)',
+                  }}
                   aria-hidden="true"
                 />
               </div>
@@ -265,7 +312,11 @@ export default function HowIWork() {
             </ScrollReveal>
 
             {/* Card 2 */}
-            <ScrollReveal animation="fade-up" delay={stagger(1)} className="rounded-lg overflow-hidden flex flex-col border border-[#E8E4DF] bg-white">
+            <ScrollReveal
+              animation="fade-up"
+              delay={stagger(1)}
+              className="rounded-lg overflow-hidden flex flex-col border border-[#E8E4DF] bg-white"
+            >
               <div className="relative h-52 overflow-hidden">
                 <EditableImage
                   section="howIWork"
@@ -276,7 +327,10 @@ export default function HowIWork() {
                 />
                 <div
                   className="absolute inset-0"
-                  style={{ background: 'linear-gradient(to top, rgba(20,16,10,0.45) 0%, transparent 60%)' }}
+                  style={{
+                    background:
+                      'linear-gradient(to top, rgba(20,16,10,0.45) 0%, transparent 60%)',
+                  }}
                   aria-hidden="true"
                 />
               </div>
@@ -460,42 +514,45 @@ export default function HowIWork() {
           </ScrollReveal>
 
           <ScrollReveal animation="fade-up" delay={100}>
-            <ul className="flex flex-col gap-3" aria-label="Lista pytań i odpowiedzi">
-            <FaqItem
-              section="howIWork"
-              questionField="faq1Q"
-              questionPlaceholder="Jak wygląda typowa sesja?"
-              answerField="faq1A"
-              answerPlaceholder="Zaczynamy od check-in — kilku minut na to, by sprawdzić, co dzieje się w ciele i w głowie. Następnie pracujemy z tym, co aktualnie jest dla Ciebie najważniejsze. Sesja trwa 60–90 minut i odbywa się online lub stacjonarnie."
-            />
-            <FaqItem
-              section="howIWork"
-              questionField="faq2Q"
-              questionPlaceholder="Czy coaching to to samo co terapia?"
-              answerField="faq2A"
-              answerPlaceholder="Nie — choć się uzupełniają. Terapia skupia się na leczeniu i przepracowaniu przeszłości, coaching na budowaniu pożądanej przyszłości. W mojej pracy łączę oba podejścia, dostosowując je do potrzeb klienta."
-            />
-            <FaqItem
-              section="howIWork"
-              questionField="faq3Q"
-              questionPlaceholder="Jak szybko można spodziewać się efektów?"
-              answerField="faq3A"
-              answerPlaceholder="Pierwsze zmiany wiele osób odczuwa już po kilku sesjach — w postaci większej jasności, spokoju lub nowego spojrzenia na sytuację. Głębsza transformacja wymaga czasu i regularnej pracy."
-            />
-            <FaqItem
-              section="howIWork"
-              questionField="faq4Q"
-              questionPlaceholder="Czy sesje są poufne?"
-              answerField="faq4A"
-              answerPlaceholder="Tak, absolutnie. Przestrzegam zasad etyki zawodowej i pełnej poufności. Nic, co zostanie powiedziane na sesji, nie opuszcza tej przestrzeni bez Twojej wyraźnej zgody."
-            />
-            <FaqItem
-              section="howIWork"
-              questionField="faq5Q"
-              questionPlaceholder="Czy mogę pracować z Tobą online?"
-              answerField="faq5A"
-              answerPlaceholder="Tak — oferuję sesje zarówno online (Google Meet / Zoom), jak i stacjonarnie. Efektywność pracy online jest równie wysoka jak stacjonarnie."
-            />
+            <ul
+              className="flex flex-col gap-3"
+              aria-label="Lista pytań i odpowiedzi"
+            >
+              <FaqItem
+                section="howIWork"
+                questionField="faq1Q"
+                questionPlaceholder="Jak wygląda typowa sesja?"
+                answerField="faq1A"
+                answerPlaceholder="Zaczynamy od check-in — kilku minut na to, by sprawdzić, co dzieje się w ciele i w głowie. Następnie pracujemy z tym, co aktualnie jest dla Ciebie najważniejsze. Sesja trwa 60–90 minut i odbywa się online lub stacjonarnie."
+              />
+              <FaqItem
+                section="howIWork"
+                questionField="faq2Q"
+                questionPlaceholder="Czy coaching to to samo co terapia?"
+                answerField="faq2A"
+                answerPlaceholder="Nie — choć się uzupełniają. Terapia skupia się na leczeniu i przepracowaniu przeszłości, coaching na budowaniu pożądanej przyszłości. W mojej pracy łączę oba podejścia, dostosowując je do potrzeb klienta."
+              />
+              <FaqItem
+                section="howIWork"
+                questionField="faq3Q"
+                questionPlaceholder="Jak szybko można spodziewać się efektów?"
+                answerField="faq3A"
+                answerPlaceholder="Pierwsze zmiany wiele osób odczuwa już po kilku sesjach — w postaci większej jasności, spokoju lub nowego spojrzenia na sytuację. Głębsza transformacja wymaga czasu i regularnej pracy."
+              />
+              <FaqItem
+                section="howIWork"
+                questionField="faq4Q"
+                questionPlaceholder="Czy sesje są poufne?"
+                answerField="faq4A"
+                answerPlaceholder="Tak, absolutnie. Przestrzegam zasad etyki zawodowej i pełnej poufności. Nic, co zostanie powiedziane na sesji, nie opuszcza tej przestrzeni bez Twojej wyraźnej zgody."
+              />
+              <FaqItem
+                section="howIWork"
+                questionField="faq5Q"
+                questionPlaceholder="Czy mogę pracować z Tobą online?"
+                answerField="faq5A"
+                answerPlaceholder="Tak — oferuję sesje zarówno online (Google Meet / Zoom), jak i stacjonarnie. Efektywność pracy online jest równie wysoka jak stacjonarnie."
+              />
             </ul>
           </ScrollReveal>
         </div>
@@ -517,11 +574,18 @@ export default function HowIWork() {
         />
         <div
           className="absolute inset-0"
-          style={{ background: 'linear-gradient(135deg, rgba(20,14,4,0.78) 0%, rgba(40,28,8,0.72) 100%)' }}
+          style={{
+            background:
+              'linear-gradient(135deg, rgba(20,14,4,0.78) 0%, rgba(40,28,8,0.72) 100%)',
+          }}
           aria-hidden="true"
         />
 
-        <ScrollReveal animation="fade" duration={900} className="relative z-10 flex flex-col items-center gap-6 max-w-[576px]">
+        <ScrollReveal
+          animation="fade"
+          duration={900}
+          className="relative z-10 flex flex-col items-center gap-6 max-w-[576px]"
+        >
           <EditableText
             section="howIWork"
             fieldPath="ctaHeading"

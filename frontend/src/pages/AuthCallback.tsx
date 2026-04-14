@@ -57,8 +57,8 @@ export default function AuthCallback() {
       await updatePassword(data.password);
       clearRecoveryMode();
       setSuccess(true);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Wystąpił błąd');
+    } catch (error_) {
+      setError(error_ instanceof Error ? error_.message : 'Wystąpił błąd');
     } finally {
       setIsSubmitting(false);
     }
@@ -70,7 +70,9 @@ export default function AuthCallback() {
       <div className="min-h-screen flex items-center justify-center bg-[#F9F6F0]">
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 border-2 border-[#B8944A] border-t-transparent rounded-full animate-spin" />
-          <p className="font-['Lato'] text-[15px] text-[#6B6B6B]">Potwierdzanie...</p>
+          <p className="font-['Lato'] text-[15px] text-[#6B6B6B]">
+            Potwierdzanie...
+          </p>
         </div>
       </div>
     );
@@ -81,9 +83,22 @@ export default function AuthCallback() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#F9F6F0] px-4">
         <div className="bg-white rounded-xl shadow-2xl w-full max-w-[420px] p-8 text-center">
-          <img src={spiralaLogo} alt="" className="w-20 h-20 mx-auto mb-4 object-contain" />
+          <img
+            src={spiralaLogo}
+            alt=""
+            className="w-20 h-20 mx-auto mb-4 object-contain"
+          />
           <div className="w-14 h-14 rounded-full bg-[#B8944A]/10 flex items-center justify-center mx-auto mb-4">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#B8944A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#B8944A"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </div>
@@ -91,7 +106,8 @@ export default function AuthCallback() {
             Hasło zmienione
           </h1>
           <p className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-relaxed mb-6">
-            Twoje hasło zostało pomyślnie zaktualizowane. Możesz teraz korzystać z konta.
+            Twoje hasło zostało pomyślnie zaktualizowane. Możesz teraz korzystać
+            z konta.
           </p>
           <button
             type="button"
@@ -130,7 +146,10 @@ export default function AuthCallback() {
           )}
 
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="new-password" className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D]">
+            <label
+              htmlFor="new-password"
+              className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D]"
+            >
               Nowe hasło
             </label>
             <input
@@ -142,12 +161,17 @@ export default function AuthCallback() {
               placeholder="Min. 6 znaków"
             />
             {errors.password && (
-              <span className="font-['Lato'] text-[12px] text-red-500">{errors.password.message}</span>
+              <span className="font-['Lato'] text-[12px] text-red-500">
+                {errors.password.message}
+              </span>
             )}
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="confirm-new-password" className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D]">
+            <label
+              htmlFor="confirm-new-password"
+              className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D]"
+            >
               Potwierdź hasło
             </label>
             <input
@@ -159,7 +183,9 @@ export default function AuthCallback() {
               placeholder="Powtórz hasło"
             />
             {errors.confirmPassword && (
-              <span className="font-['Lato'] text-[12px] text-red-500">{errors.confirmPassword.message}</span>
+              <span className="font-['Lato'] text-[12px] text-red-500">
+                {errors.confirmPassword.message}
+              </span>
             )}
           </div>
 

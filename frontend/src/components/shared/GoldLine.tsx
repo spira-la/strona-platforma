@@ -23,7 +23,9 @@ export function GoldLine({
   delay = 0,
   className = '',
 }: GoldLineProps) {
-  const { ref, isVisible } = useScrollReveal<HTMLDivElement>({ threshold: 0.5 });
+  const { ref, isVisible } = useScrollReveal<HTMLDivElement>({
+    threshold: 0.5,
+  });
 
   return (
     <div

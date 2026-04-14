@@ -95,13 +95,14 @@ export function BookingCalendar({
 
   function isUnavailable(date: Date): boolean {
     if (isWeekend(date)) return true;
-    if (date < new Date(today.getFullYear(), today.getMonth(), today.getDate())) return true;
+    if (date < new Date(today.getFullYear(), today.getMonth(), today.getDate()))
+      return true;
     return unavailableDates.some((d) => isSameDay(d, date));
   }
 
   // Build calendar grid cells (nulls = leading empty cells)
   const cells: (number | null)[] = [
-    ...Array<null>(firstWeekday).fill(null),
+    ...Array.from<null>({ length: firstWeekday }, () => null),
     ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
   ];
 
@@ -116,7 +117,8 @@ export function BookingCalendar({
       <div
         className="px-6 py-5"
         style={{
-          background: 'linear-gradient(135deg, #B8944A 0%, #D4B97A 50%, #8A6F2E 100%)',
+          background:
+            'linear-gradient(135deg, #B8944A 0%, #D4B97A 50%, #8A6F2E 100%)',
         }}
       >
         <p
@@ -175,7 +177,12 @@ export function BookingCalendar({
         </div>
 
         {/* Calendar grid */}
-        <div key={`${viewYear}-${viewMonth}`} className="grid grid-cols-7 gap-y-1" role="grid" aria-label="Kalendarz">
+        <div
+          key={`${viewYear}-${viewMonth}`}
+          className="grid grid-cols-7 gap-y-1"
+          role="grid"
+          aria-label="Kalendarz"
+        >
           {cells.map((day, idx) => {
             if (day === null) {
               return <div key={`empty-${idx}`} aria-hidden="true" />;
@@ -183,7 +190,9 @@ export function BookingCalendar({
 
             const date = new Date(viewYear, viewMonth, day);
             const todayFlag = isSameDay(date, today);
-            const selectedFlag = selectedDate ? isSameDay(date, selectedDate) : false;
+            const selectedFlag = selectedDate
+              ? isSameDay(date, selectedDate)
+              : false;
             const unavailableFlag = isUnavailable(date);
 
             let cellClasses =
@@ -197,7 +206,8 @@ export function BookingCalendar({
               cellClasses +=
                 'ring-2 ring-[#B8944A] text-[#B8944A] font-semibold hover:bg-[#B8944A] hover:text-white cursor-pointer';
             } else {
-              cellClasses += 'text-[#2D2D2D] hover:bg-[#FAF8F5] hover:text-[#B8944A] cursor-pointer';
+              cellClasses +=
+                'text-[#2D2D2D] hover:bg-[#FAF8F5] hover:text-[#B8944A] cursor-pointer';
             }
 
             return (
@@ -205,7 +215,7 @@ export function BookingCalendar({
                 key={`day-${day}`}
                 role="gridcell"
                 style={{
-                  animation: `slotAppear 500ms cubic-bezier(0.19, 1, 0.22, 1) ${(Math.floor(idx / 7) * 30) + ((idx % 7) * 15)}ms both`,
+                  animation: `slotAppear 500ms cubic-bezier(0.19, 1, 0.22, 1) ${Math.floor(idx / 7) * 30 + (idx % 7) * 15}ms both`,
                 }}
               >
                 <button
@@ -238,7 +248,10 @@ export function BookingCalendar({
 function LegendItem({ color, label }: { color: string; label: string }) {
   return (
     <div className="flex items-center gap-1.5">
-      <span className={`w-2 h-2 rounded-full flex-shrink-0 ${color}`} aria-hidden="true" />
+      <span
+        className={`w-2 h-2 rounded-full flex-shrink-0 ${color}`}
+        aria-hidden="true"
+      />
       <span
         className="text-[11px] text-[#8A8A8A]"
         style={{ fontFamily: "'Lato', sans-serif" }}

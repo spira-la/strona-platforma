@@ -34,7 +34,12 @@ export class GiftEntity {
   @Column({ name: 'redeem_code', type: 'text', unique: true })
   redeemCode: string;
 
-  @Column({ name: 'is_redeemed', type: 'boolean', default: false, nullable: true })
+  @Column({
+    name: 'is_redeemed',
+    type: 'boolean',
+    default: false,
+    nullable: true,
+  })
   isRedeemed: boolean | null;
 
   @Column({ name: 'redeemed_by', type: 'uuid', nullable: true })

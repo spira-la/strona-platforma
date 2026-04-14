@@ -12,6 +12,8 @@ import type { Request } from 'express';
 import type { User } from '@supabase/supabase-js';
 import { ROLES_KEY, UserRole } from '../decorators/roles.decorator.js';
 import { ProfileEntity } from '../../db/entities/profile.entity.js';
+import { AdminEmailEntity } from '../../db/entities/admin-email.entity.js';
+import { UserRole as UserRoleEnum } from '../../db/entities/enums.js';
 
 /**
  * Checks that the authenticated user (set by SupabaseAuthGuard) has one of
@@ -46,23 +48,65 @@ export class RolesGuard implements CanActivate {
       );
     }
 
-    // Look up the user's role from the profiles table
-    const profile = await this.dataSource
-      .getRepository(ProfileEntity)
-      .findOne({ where: { id: user.id }, select: { role: true } });
+    const isAllowlistedAdmin = await this.isAllowlistedAdmin(user.email);
+    const profile = await this.ensureProfile(user, isAllowlistedAdmin);
 
-    if (!profile) {
-      throw new ForbiddenException('User profile not found');
-    }
+    const userRole = (profile.role ?? UserRoleEnum.USER) as UserRole;
+    const grantsAdmin = requiredRoles.includes('admin') && isAllowlistedAdmin;
 
-    const userRole = profile.role as UserRole;
-
-    if (!requiredRoles.includes(userRole)) {
+    if (!grantsAdmin && !requiredRoles.includes(userRole)) {
       throw new ForbiddenException(
         `Access denied. Required roles: ${requiredRoles.join(', ')}`,
       );
     }
 
     return true;
+  }
+
+  private async isAllowlistedAdmin(
+    email: string | undefined,
+  ): Promise<boolean> {
+    const normalized = (email ?? '').toLowerCase();
+    if (normalized.length === 0) return false;
+    return this.dataSource
+      .getRepository(AdminEmailEntity)
+      .createQueryBuilder('ae')
+      .where('lower(ae.email) = :email', { email: normalized })
+      .getExists();
+  }
+
+  // Self-heals the `profiles` row on first authenticated access. Supabase
+  // triggers handle this in hosted envs; this covers local Postgres and
+  // any user that pre-dates the trigger.
+  private async ensureProfile(
+    user: User,
+    isAllowlistedAdmin: boolean,
+  ): Promise<ProfileEntity> {
+    const profileRepo = this.dataSource.getRepository(ProfileEntity);
+    const existing = await profileRepo.findOne({
+      where: { id: user.id },
+      select: { role: true, email: true },
+    });
+
+    if (!existing) {
+      const initialRole = isAllowlistedAdmin
+        ? UserRoleEnum.ADMIN
+        : UserRoleEnum.USER;
+      await profileRepo.insert({
+        id: user.id,
+        email: user.email ?? `${user.id}@unknown.local`,
+        fullName:
+          (user.user_metadata as { full_name?: string } | undefined)
+            ?.full_name ?? null,
+        role: initialRole,
+      });
+      return { role: initialRole, email: user.email ?? '' } as ProfileEntity;
+    }
+
+    if (isAllowlistedAdmin && existing.role !== UserRoleEnum.ADMIN) {
+      await profileRepo.update({ id: user.id }, { role: UserRoleEnum.ADMIN });
+      existing.role = UserRoleEnum.ADMIN;
+    }
+    return existing;
   }
 }

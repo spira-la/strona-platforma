@@ -24,7 +24,7 @@ interface CreateCategoryDto {
   isActive?: boolean | null;
 }
 
-interface UpdateCategoryDto extends Partial<CreateCategoryDto> {}
+type UpdateCategoryDto = Partial<CreateCategoryDto>;
 
 // ---------------------------------------------------------------------------
 // Controller

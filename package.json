@@ -1,0 +1,25 @@
+{
+  "name": "spirala-monorepo",
+  "private": true,
+  "scripts": {
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "dompurify": "^3.3.3"
+  },
+  "devDependencies": {
+    "@types/dompurify": "^3.0.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2"
+  },
+  "lint-staged": {
+    "frontend/src/**/*.{ts,tsx}": [
+      "frontend/node_modules/.bin/prettier --write --config frontend/.prettierrc",
+      "frontend/node_modules/.bin/eslint --fix --config frontend/eslint.config.js"
+    ],
+    "backend/src/**/*.ts": [
+      "backend/node_modules/.bin/prettier --write --config backend/.prettierrc",
+      "backend/node_modules/.bin/eslint --fix --config backend/eslint.config.mjs"
+    ]
+  }
+}

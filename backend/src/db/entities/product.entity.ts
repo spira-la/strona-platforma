@@ -88,7 +88,12 @@ export class ProductEntity {
   @Column({ name: 'stripe_price_id', type: 'text', nullable: true })
   stripePriceId: string | null;
 
-  @Column({ name: 'is_published', type: 'boolean', default: false, nullable: true })
+  @Column({
+    name: 'is_published',
+    type: 'boolean',
+    default: false,
+    nullable: true,
+  })
   isPublished: boolean | null;
 
   @Column({ name: 'author_id', type: 'uuid', nullable: true })

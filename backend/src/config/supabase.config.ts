@@ -6,12 +6,11 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
  * Used for server-side JWT verification (auth.getUser) and
  * operations that should respect RLS policies.
  */
-export function createSupabaseClient(
-  config: ConfigService,
-): SupabaseClient {
+export function createSupabaseClient(config: ConfigService): SupabaseClient {
   const url = config.getOrThrow<string>('SUPABASE_URL');
   const anonKey = config.getOrThrow<string>('SUPABASE_ANON_KEY');
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return createClient(url, anonKey, {
     auth: {
       autoRefreshToken: false,
@@ -26,12 +25,11 @@ export function createSupabaseClient(
  * Bypasses RLS — use only for trusted backend operations
  * (e.g. creating users, syncing profiles, admin actions).
  */
-export function createSupabaseAdmin(
-  config: ConfigService,
-): SupabaseClient {
+export function createSupabaseAdmin(config: ConfigService): SupabaseClient {
   const url = config.getOrThrow<string>('SUPABASE_URL');
   const serviceRoleKey = config.getOrThrow<string>('SUPABASE_SERVICE_ROLE_KEY');
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return createClient(url, serviceRoleKey, {
     auth: {
       autoRefreshToken: false,

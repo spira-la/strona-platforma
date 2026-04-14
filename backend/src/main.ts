@@ -6,8 +6,8 @@ import { AppModule } from './app.module.js';
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
 
-  // Global API prefix
-  app.setGlobalPrefix('api');
+  // Global API prefix — sitemap.xml is excluded so it resolves at root, not /api/sitemap.xml
+  app.setGlobalPrefix('api', { exclude: ['sitemap.xml'] });
 
   // CORS — origins are tightened in production via env
   app.enableCors({
@@ -45,4 +45,3 @@ async function bootstrap(): Promise<void> {
 }
 
 bootstrap();
-

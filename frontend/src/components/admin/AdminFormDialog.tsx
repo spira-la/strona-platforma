@@ -10,6 +10,8 @@ interface AdminFormDialogProps {
   isLoading?: boolean;
   submitLabel: string;
   cancelLabel?: string;
+  /** When provided, the cancel button calls this instead of onClose */
+  onCancel?: () => void;
   children: React.ReactNode;
 }
 
@@ -21,11 +23,13 @@ export function AdminFormDialog({
   isLoading = false,
   submitLabel,
   cancelLabel,
+  onCancel,
   children,
 }: AdminFormDialogProps) {
   const { t } = useTranslation();
   const backdropRef = useRef<HTMLDivElement>(null);
   const resolvedCancelLabel = cancelLabel ?? t('common.cancel');
+  const handleCancelClick = onCancel ?? onClose;
 
   // Escape key
   useEffect(() => {
@@ -63,7 +67,6 @@ export function AdminFormDialog({
       aria-label={title}
     >
       <div className="relative bg-white rounded-xl shadow-2xl w-full max-w-[500px] mx-4 max-h-[90vh] flex flex-col">
-
         {/* Header */}
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#F0EDE8] shrink-0">
           <h2 className="font-['Cormorant_Garamond'] font-bold text-[20px] text-[#2D2D2D]">
@@ -91,7 +94,7 @@ export function AdminFormDialog({
           <div className="flex justify-end gap-3 pt-1 pb-1">
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleCancelClick}
               disabled={isLoading}
               className="px-4 py-2 rounded-lg border border-[#E8E4DF] font-['Inter'] text-[14px] font-medium text-[#6B6B6B] hover:bg-[#F9F6F0] hover:text-[#2D2D2D] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E] disabled:opacity-50"
             >
@@ -103,13 +106,16 @@ export function AdminFormDialog({
               className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#B8963E] hover:bg-[#8A6F2E] text-white font-['Inter'] text-[14px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E] focus-visible:ring-offset-2 disabled:opacity-60"
             >
               {isLoading && (
-                <Loader2 size={15} className="animate-spin" aria-hidden="true" />
+                <Loader2
+                  size={15}
+                  className="animate-spin"
+                  aria-hidden="true"
+                />
               )}
               {submitLabel}
             </button>
           </div>
         </form>
-
       </div>
     </div>
   );

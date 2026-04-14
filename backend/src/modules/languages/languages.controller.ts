@@ -24,7 +24,7 @@ interface CreateLanguageDto {
   isActive?: boolean | null;
 }
 
-interface UpdateLanguageDto extends Partial<CreateLanguageDto> {}
+type UpdateLanguageDto = Partial<CreateLanguageDto>;
 
 // ---------------------------------------------------------------------------
 // Controller

@@ -18,7 +18,7 @@ export interface CreateCategoryData {
   isActive?: boolean | null;
 }
 
-export interface UpdateCategoryData extends Partial<CreateCategoryData> {}
+export type UpdateCategoryData = Partial<CreateCategoryData>;
 
 @Injectable()
 export class CategoriesService {
@@ -73,10 +73,14 @@ export class CategoriesService {
 
     if (data.name !== undefined) updatePayload.name = data.name;
     if (data.slug !== undefined) updatePayload.slug = data.slug;
-    if (data.description !== undefined) updatePayload.description = data.description ?? null;
-    if (data.parentId !== undefined) updatePayload.parentId = data.parentId ?? null;
-    if (data.sortOrder !== undefined) updatePayload.sortOrder = data.sortOrder ?? null;
-    if (data.isActive !== undefined) updatePayload.isActive = data.isActive ?? null;
+    if (data.description !== undefined)
+      updatePayload.description = data.description ?? null;
+    if (data.parentId !== undefined)
+      updatePayload.parentId = data.parentId ?? null;
+    if (data.sortOrder !== undefined)
+      updatePayload.sortOrder = data.sortOrder ?? null;
+    if (data.isActive !== undefined)
+      updatePayload.isActive = data.isActive ?? null;
 
     await this.repo.update({ id }, updatePayload);
 

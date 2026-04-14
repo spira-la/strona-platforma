@@ -37,7 +37,9 @@ export function SplitText({
   cmsField,
 }: SplitTextProps) {
   const { isEditMode } = useCMS();
-  const { ref, isVisible } = useScrollReveal<HTMLDivElement>({ threshold: 0.2 });
+  const { ref, isVisible } = useScrollReveal<HTMLDivElement>({
+    threshold: 0.2,
+  });
 
   // In CMS edit mode, render an EditableText instead of the animation
   if (isEditMode && cmsSection && cmsField) {
@@ -53,7 +55,7 @@ export function SplitText({
     );
   }
 
-  const pieces = splitBy === 'word' ? text.split(' ') : text.split('');
+  const pieces = splitBy === 'word' ? text.split(' ') : [...text];
   const easing = 'cubic-bezier(0.19, 1, 0.22, 1)';
 
   return (

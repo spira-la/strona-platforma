@@ -6,13 +6,16 @@ import {
   Delete,
   Body,
   Query,
+  Header,
   HttpCode,
   UseInterceptors,
   UploadedFile,
   BadRequestException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { FileInterceptor } from '@nestjs/platform-express';
 import sharp from 'sharp';
+import { CloudflareCacheService } from '../../core/cloudflare-cache.service.js';
 import { CmsService } from './cms.service.js';
 
 // ---------------------------------------------------------------------------
@@ -43,25 +46,46 @@ interface ImageUploadBody {
   language: string;
 }
 
-interface DeleteImageDto {
-  section: string;
-  fieldPath: string;
-  language: string;
-}
-
 // ---------------------------------------------------------------------------
 // Controller
 // ---------------------------------------------------------------------------
 
 @Controller('cms')
 export class CmsController {
-  constructor(private readonly cms: CmsService) {}
+  constructor(
+    private readonly cms: CmsService,
+    private readonly cloudflareCache: CloudflareCacheService,
+    private readonly config: ConfigService,
+  ) {}
+
+  // -------------------------------------------------------------------------
+  // Helpers
+  // -------------------------------------------------------------------------
+
+  private purgeCmsContent(): void {
+    const siteUrl = this.config.get<string>('SITE_URL') ?? '';
+    if (siteUrl) {
+      void this.cloudflareCache.purgeUrls([`${siteUrl}/api/cms/content`]);
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Endpoints
+  // -------------------------------------------------------------------------
 
   /**
    * GET /api/cms/content
    * Public — returns all CMS content.
+   *
+   * Cache-Control: tell Cloudflare to cache for 1 hour (s-maxage) and serve
+   * stale while revalidating for up to 24 h.  Browser gets max-age=0 so it
+   * always revalidates, but Cloudflare handles the heavy lifting.
    */
   @Get('content')
+  @Header(
+    'Cache-Control',
+    'public, s-maxage=3600, stale-while-revalidate=86400',
+  )
   async getContent() {
     const doc = await this.cms.getContent();
     return {
@@ -86,6 +110,9 @@ export class CmsController {
       fieldPath,
       value,
     );
+
+    this.purgeCmsContent();
+
     return {
       success: true,
       message: 'Field updated successfully',
@@ -102,6 +129,9 @@ export class CmsController {
   async updateSection(@Body() body: UpdateSectionDto) {
     const { section, language, content } = body;
     const result = await this.cms.updateSection(section, language, content);
+
+    this.purgeCmsContent();
+
     return {
       success: true,
       message: 'Section updated successfully',
@@ -118,6 +148,11 @@ export class CmsController {
   @HttpCode(200)
   async initialize(@Body() body: InitializeDto) {
     const result = await this.cms.initialize(body.content, body.force);
+
+    if (result.created) {
+      this.purgeCmsContent();
+    }
+
     return {
       success: true,
       message: result.created
@@ -159,7 +194,9 @@ export class CmsController {
     const { section, fieldPath, language } = body;
 
     if (!section || !fieldPath || !language) {
-      throw new BadRequestException('section, fieldPath and language are required');
+      throw new BadRequestException(
+        'section, fieldPath and language are required',
+      );
     }
 
     const storage = this.cms.getStorage();
@@ -179,14 +216,29 @@ export class CmsController {
     const mainKey = `cms/${section}/${fieldPath}.webp`;
     const thumbKey = `cms/${section}/${fieldPath}-thumb.webp`;
 
-    // Upload both to R2 in parallel
-    const [url, thumbnailUrl] = await Promise.all([
+    // Upload both to R2 in parallel. The keys are deterministic so R2
+    // overwrites existing objects — no orphans from replacement.
+    const [baseUrl, baseThumbUrl] = await Promise.all([
       storage.upload(mainKey, mainBuffer, 'image/webp'),
       storage.upload(thumbKey, thumbBuffer, 'image/webp'),
     ]);
 
-    // Persist the public URL in CMS JSONB
-    const result = await this.cms.updateField(section, language, fieldPath, url);
+    // Cache-bust: keys are deterministic, so the public URL is stable
+    // across replacements and the browser/CDN would serve a stale copy.
+    // Append a version param derived from upload time.
+    const cacheBust = Date.now().toString();
+    const url = `${baseUrl}?v=${cacheBust}`;
+    const thumbnailUrl = `${baseThumbUrl}?v=${cacheBust}`;
+
+    // Persist the versioned public URL in CMS JSONB
+    const result = await this.cms.updateField(
+      section,
+      language,
+      fieldPath,
+      url,
+    );
+
+    this.purgeCmsContent();
 
     return {
       success: true,
@@ -208,9 +260,10 @@ export class CmsController {
     @Query('fieldPath') fieldPath: string,
     @Query('language') language: string,
   ) {
-
     if (!section || !fieldPath || !language) {
-      throw new BadRequestException('section, fieldPath and language are required');
+      throw new BadRequestException(
+        'section, fieldPath and language are required',
+      );
     }
 
     const storage = this.cms.getStorage();
@@ -218,13 +271,14 @@ export class CmsController {
     const mainKey = `cms/${section}/${fieldPath}.webp`;
     const thumbKey = `cms/${section}/${fieldPath}-thumb.webp`;
 
-    // Delete both R2 objects and clear the CMS field in parallel.
-    // R2 delete is idempotent — missing files do not throw.
-    await Promise.all([
-      storage.delete(mainKey),
-      storage.delete(thumbKey),
-      this.cms.deleteField(section, language, fieldPath),
-    ]);
+    // Delete R2 objects FIRST, then clear the DB. If R2 fails the DB
+    // still reflects the (still-present) image URL and nothing is
+    // half-deleted. R2 delete is idempotent — missing files do not
+    // throw — so the main image + thumbnail are removed in parallel.
+    await Promise.all([storage.delete(mainKey), storage.delete(thumbKey)]);
+    await this.cms.deleteField(section, language, fieldPath);
+
+    this.purgeCmsContent();
 
     return {
       success: true,

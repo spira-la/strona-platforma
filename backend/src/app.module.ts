@@ -11,6 +11,10 @@ import { EmailModule } from './modules/email/email.module.js';
 import { CategoriesModule } from './modules/categories/categories.module.js';
 import { LanguagesModule } from './modules/languages/languages.module.js';
 import { ContactModule } from './modules/contact/contact.module.js';
+import { CoachPanelModule } from './modules/coach-panel/coach-panel.module.js';
+import { CoachesModule } from './modules/coaches/coaches.module.js';
+import { BlogsModule } from './modules/blogs/blogs.module.js';
+import { SitemapModule } from './modules/sitemap/sitemap.module.js';
 import { AppController } from './app.controller.js';
 
 @Module({
@@ -24,7 +28,8 @@ import { AppController } from './app.controller.js';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
-        const schema = config.get<string>('DATABASE_SCHEMA') ?? 'spirala_dev_schema';
+        const schema =
+          config.get<string>('DATABASE_SCHEMA') ?? 'spirala_dev_schema';
         const useSSL = config.get<string>('DATABASE_SSL') === 'true';
         return {
           type: 'postgres' as const,
@@ -39,10 +44,12 @@ import { AppController } from './app.controller.js';
           migrationsRun: true,
           migrations: [__dirname + '/db/migrations/*.js'],
           uuidExtension: 'pgcrypto' as const,
-          ...(useSSL ? {
-            ssl: { rejectUnauthorized: false },
-            extra: { ssl: { rejectUnauthorized: false } },
-          } : {}),
+          ...(useSSL
+            ? {
+                ssl: { rejectUnauthorized: false },
+                extra: { ssl: { rejectUnauthorized: false } },
+              }
+            : {}),
           logging: config.get<string>('NODE_ENV') === 'development',
         };
       },
@@ -55,6 +62,10 @@ import { AppController } from './app.controller.js';
     CategoriesModule,
     LanguagesModule,
     ContactModule,
+    CoachPanelModule,
+    CoachesModule,
+    BlogsModule,
+    SitemapModule,
   ],
   controllers: [AppController],
 })

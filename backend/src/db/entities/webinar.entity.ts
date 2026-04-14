@@ -31,7 +31,12 @@ export class WebinarEntity {
   @Column({ name: 'shadow_host_id', type: 'uuid', nullable: true })
   shadowHostId: string | null;
 
-  @Column({ name: 'admin_speaker_ids', type: 'uuid', array: true, nullable: true })
+  @Column({
+    name: 'admin_speaker_ids',
+    type: 'uuid',
+    array: true,
+    nullable: true,
+  })
   adminSpeakerIds: string[] | null;
 
   @Column({
@@ -108,6 +113,10 @@ export class WebinarRegistrationEntity {
   @Column({ name: 'user_id', type: 'uuid', nullable: true })
   userId: string | null;
 
-  @CreateDateColumn({ name: 'registered_at', type: 'timestamptz', nullable: true })
+  @CreateDateColumn({
+    name: 'registered_at',
+    type: 'timestamptz',
+    nullable: true,
+  })
   registeredAt: Date | null;
 }

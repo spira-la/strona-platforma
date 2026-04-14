@@ -54,10 +54,14 @@ export const languagesClient = {
   },
 
   archive(id: string): Promise<Language> {
-    return api.patch<ItemResponse>(`/languages/${id}/archive`).then((r) => r.data);
+    return api
+      .patch<ItemResponse>(`/languages/${id}/archive`)
+      .then((r) => r.data);
   },
 
   restore(id: string): Promise<Language> {
-    return api.patch<ItemResponse>(`/languages/${id}/restore`).then((r) => r.data);
+    return api
+      .patch<ItemResponse>(`/languages/${id}/restore`)
+      .then((r) => r.data);
   },
 };

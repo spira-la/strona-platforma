@@ -18,7 +18,7 @@ export interface CreateLanguageData {
   isActive?: boolean | null;
 }
 
-export interface UpdateLanguageData extends Partial<CreateLanguageData> {}
+export type UpdateLanguageData = Partial<CreateLanguageData>;
 
 @Injectable()
 export class LanguagesService {
@@ -73,10 +73,13 @@ export class LanguagesService {
 
     if (data.code !== undefined) updatePayload.code = data.code;
     if (data.name !== undefined) updatePayload.name = data.name;
-    if (data.nativeName !== undefined) updatePayload.nativeName = data.nativeName ?? null;
+    if (data.nativeName !== undefined)
+      updatePayload.nativeName = data.nativeName ?? null;
     if (data.flag !== undefined) updatePayload.flag = data.flag ?? null;
-    if (data.sortOrder !== undefined) updatePayload.sortOrder = data.sortOrder ?? null;
-    if (data.isActive !== undefined) updatePayload.isActive = data.isActive ?? null;
+    if (data.sortOrder !== undefined)
+      updatePayload.sortOrder = data.sortOrder ?? null;
+    if (data.isActive !== undefined)
+      updatePayload.isActive = data.isActive ?? null;
 
     await this.repo.update({ id }, updatePayload);
 

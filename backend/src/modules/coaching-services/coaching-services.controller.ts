@@ -27,7 +27,7 @@ interface CreateServiceDto {
   sortOrder?: number | null;
 }
 
-interface UpdateServiceDto extends Partial<CreateServiceDto> {}
+type UpdateServiceDto = Partial<CreateServiceDto>;
 
 // ---------------------------------------------------------------------------
 // Controller

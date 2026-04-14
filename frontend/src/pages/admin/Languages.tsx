@@ -96,7 +96,9 @@ function LanguageFormDialog({
   const [form, setForm] = useState<FormState>(() =>
     buildInitialForm(editingLanguage ?? undefined),
   );
-  const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof FormState, string>>
+  >({});
 
   const setField = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -356,7 +358,8 @@ export default function AdminLanguages() {
     },
   });
 
-  const isConfirmLoading = archiveMutation.isPending || restoreMutation.isPending;
+  const isConfirmLoading =
+    archiveMutation.isPending || restoreMutation.isPending;
 
   // ─── Handlers ───────────────────────────────────────────────────────────────
 
@@ -391,10 +394,10 @@ export default function AdminLanguages() {
   const handleToggleConfirm = () => {
     if (!confirmLanguage) return;
     setTogglingId(confirmLanguage.id);
-    if (confirmLanguage.isActive !== false) {
-      archiveMutation.mutate(confirmLanguage.id);
-    } else {
+    if (confirmLanguage.isActive === false) {
       restoreMutation.mutate(confirmLanguage.id);
+    } else {
+      archiveMutation.mutate(confirmLanguage.id);
     }
     setConfirmLanguage(null);
   };
@@ -446,11 +449,11 @@ export default function AdminLanguages() {
       header: t('admin.languages.table.status'),
       render: (l) => (
         <AdminStatusBadge
-          variant={l.isActive !== false ? 'success' : 'neutral'}
+          variant={l.isActive === false ? 'neutral' : 'success'}
           label={
-            l.isActive !== false
-              ? t('admin.languages.status.active')
-              : t('admin.languages.status.archived')
+            l.isActive === false
+              ? t('admin.languages.status.archived')
+              : t('admin.languages.status.active')
           }
         />
       ),
@@ -475,21 +478,21 @@ export default function AdminLanguages() {
             onClick={() => handleToggleRequest(l)}
             disabled={togglingId === l.id}
             title={
-              l.isActive !== false
-                ? t('admin.languages.actions.archive')
-                : t('admin.languages.actions.restore')
+              l.isActive === false
+                ? t('admin.languages.actions.restore')
+                : t('admin.languages.actions.archive')
             }
             aria-label={
-              l.isActive !== false
-                ? t('admin.languages.actions.archiveLanguage')
-                : t('admin.languages.actions.restoreLanguage')
+              l.isActive === false
+                ? t('admin.languages.actions.restoreLanguage')
+                : t('admin.languages.actions.archiveLanguage')
             }
             className="p-1.5 rounded text-[#8A8A8A] hover:text-[#B8963E] hover:bg-[#F9F6F0] transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
           >
-            {l.isActive !== false ? (
-              <ToggleRight size={17} className="text-[#B8963E]" />
-            ) : (
+            {l.isActive === false ? (
               <ToggleLeft size={17} />
+            ) : (
+              <ToggleRight size={17} className="text-[#B8963E]" />
             )}
           </button>
         </div>
@@ -589,21 +592,21 @@ export default function AdminLanguages() {
       <ConfirmDialog
         open={!!confirmLanguage}
         title={
-          confirmLanguage?.isActive !== false
-            ? t('admin.languages.actions.archiveLanguage')
-            : t('admin.languages.actions.restoreLanguage')
+          confirmLanguage?.isActive === false
+            ? t('admin.languages.actions.restoreLanguage')
+            : t('admin.languages.actions.archiveLanguage')
         }
         message={`${
-          confirmLanguage?.isActive !== false
-            ? t('admin.languages.confirm.archive')
-            : t('admin.languages.confirm.restore')
+          confirmLanguage?.isActive === false
+            ? t('admin.languages.confirm.restore')
+            : t('admin.languages.confirm.archive')
         } "${confirmLanguage?.name ?? ''}"?`}
         confirmLabel={
-          confirmLanguage?.isActive !== false
-            ? t('admin.languages.actions.archive')
-            : t('admin.languages.actions.restore')
+          confirmLanguage?.isActive === false
+            ? t('admin.languages.actions.restore')
+            : t('admin.languages.actions.archive')
         }
-        variant={confirmLanguage?.isActive !== false ? 'warning' : 'default'}
+        variant={confirmLanguage?.isActive === false ? 'default' : 'warning'}
         isLoading={isConfirmLoading}
         onConfirm={handleToggleConfirm}
         onCancel={() => setConfirmLanguage(null)}

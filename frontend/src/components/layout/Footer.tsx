@@ -5,15 +5,35 @@ import spiralaIcon from '@/assets/spirala-icon.png';
 
 function InstagramIcon({ size = 18 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><circle cx="12" cy="12" r="5" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+      <circle cx="12" cy="12" r="5" />
+      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
     </svg>
   );
 }
 
 function FacebookIcon({ size = 18 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
     </svg>
   );
@@ -21,8 +41,19 @@ function FacebookIcon({ size = 18 }: { size?: number }) {
 
 function LinkedInIcon({ size = 18 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect width="4" height="12" x="2" y="9" /><circle cx="4" cy="4" r="2" />
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect width="4" height="12" x="2" y="9" />
+      <circle cx="4" cy="4" r="2" />
     </svg>
   );
 }
@@ -44,7 +75,11 @@ const FOOTER_COLUMNS: FooterColumn[] = [
     titleDefault: 'Nawigacja',
     links: [
       { href: '/o-mnie', fieldPath: 'col1Link1', labelDefault: 'O Mnie' },
-      { href: '/jak-pracuje', fieldPath: 'col1Link2', labelDefault: 'Jak Pracuję' },
+      {
+        href: '/jak-pracuje',
+        fieldPath: 'col1Link2',
+        labelDefault: 'Jak Pracuję',
+      },
       { href: '/uslugi', fieldPath: 'col1Link3', labelDefault: 'Usługi' },
     ],
   },
@@ -53,7 +88,11 @@ const FOOTER_COLUMNS: FooterColumn[] = [
     titleDefault: 'Oferta',
     links: [
       { href: '/uslugi', fieldPath: 'col2Link1', labelDefault: 'Sesja 1 na 1' },
-      { href: '/uslugi#pakiety', fieldPath: 'col2Link2', labelDefault: 'Pakiety sesji' },
+      {
+        href: '/uslugi#pakiety',
+        fieldPath: 'col2Link2',
+        labelDefault: 'Pakiety sesji',
+      },
       { href: '/blog', fieldPath: 'col2Link3', labelDefault: 'Blog' },
     ],
   },
@@ -61,7 +100,11 @@ const FOOTER_COLUMNS: FooterColumn[] = [
     titleField: 'col3Title',
     titleDefault: 'Kontakt',
     links: [
-      { href: '/kontakt', fieldPath: 'col3Link1', labelDefault: 'Formularz kontaktowy' },
+      {
+        href: '/kontakt',
+        fieldPath: 'col3Link1',
+        labelDefault: 'Formularz kontaktowy',
+      },
       {
         href: 'mailto:kontakt@spira-la.com',
         fieldPath: 'col3Link2',
@@ -102,7 +145,6 @@ export function Footer() {
       {/* Top section */}
       <div className="mx-auto px-6 md:px-[120px] pt-12 pb-10">
         <div className="flex flex-col gap-10 lg:flex-row lg:justify-between lg:gap-20">
-
           {/* Left: logo + description + social */}
           <div className="flex flex-col gap-4 lg:max-w-[280px]">
             <Link
@@ -110,7 +152,12 @@ export function Footer() {
               className="flex items-center gap-2 self-start transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded"
               aria-label="Spirala — strona główna"
             >
-              <img src={spiralaIcon} alt="" className="h-8 w-auto" aria-hidden="true" />
+              <img
+                src={spiralaIcon}
+                alt=""
+                className="h-8 w-auto"
+                aria-hidden="true"
+              />
               <span className="font-['Cormorant_Garamond'] text-[20px] font-bold tracking-[-0.5px] text-[#B8944A] hover:text-[#8A6F2E]">
                 Spirala
               </span>
@@ -123,7 +170,10 @@ export function Footer() {
             </p>
 
             {/* Social icons */}
-            <div className="flex items-center gap-4 mt-1" aria-label="Media społecznościowe">
+            <div
+              className="flex items-center gap-4 mt-1"
+              aria-label="Media społecznościowe"
+            >
               {SOCIAL_LINKS.map(({ href, label, Icon }) => (
                 <a
                   key={label}
@@ -156,7 +206,10 @@ export function Footer() {
                           href={link.href}
                           className="font-['Lato'] text-[14px] text-[#6B6B6B] hover:text-[#B8944A] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded"
                         >
-                          <EditableText section="footer" fieldPath={link.fieldPath}>
+                          <EditableText
+                            section="footer"
+                            fieldPath={link.fieldPath}
+                          >
                             {link.labelDefault}
                           </EditableText>
                         </a>
@@ -165,7 +218,10 @@ export function Footer() {
                           to={link.href}
                           className="font-['Lato'] text-[14px] text-[#6B6B6B] hover:text-[#B8944A] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded"
                         >
-                          <EditableText section="footer" fieldPath={link.fieldPath}>
+                          <EditableText
+                            section="footer"
+                            fieldPath={link.fieldPath}
+                          >
                             {link.labelDefault}
                           </EditableText>
                         </Link>
@@ -180,7 +236,10 @@ export function Footer() {
       </div>
 
       {/* Divider */}
-      <div className="mx-6 md:mx-[120px] h-px bg-[#D4B97A]/50" aria-hidden="true" />
+      <div
+        className="mx-6 md:mx-[120px] h-px bg-[#D4B97A]/50"
+        aria-hidden="true"
+      />
 
       {/* Bottom bar */}
       <div className="mx-auto px-6 md:px-[120px] py-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

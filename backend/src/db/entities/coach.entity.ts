@@ -34,7 +34,12 @@ export class CoachEntity {
   @Column({ type: 'text', default: 'Europe/Warsaw', nullable: true })
   timezone: string | null;
 
-  @Column({ name: 'accepting_clients', type: 'boolean', default: true, nullable: true })
+  @Column({
+    name: 'accepting_clients',
+    type: 'boolean',
+    default: true,
+    nullable: true,
+  })
   acceptingClients: boolean | null;
 
   @Column({ name: 'stripe_connect_id', type: 'text', nullable: true })

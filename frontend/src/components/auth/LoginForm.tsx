@@ -30,8 +30,10 @@ export function LoginForm() {
     try {
       await signIn(data.email, data.password);
       closeModals();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Wystąpił błąd logowania');
+    } catch (error_) {
+      setError(
+        error_ instanceof Error ? error_.message : 'Wystąpił błąd logowania',
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -55,7 +57,10 @@ export function LoginForm() {
       )}
 
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="login-email" className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D]">
+        <label
+          htmlFor="login-email"
+          className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D]"
+        >
           Adres e-mail
         </label>
         <input
@@ -67,12 +72,17 @@ export function LoginForm() {
           placeholder="twoj@email.com"
         />
         {errors.email && (
-          <span className="font-['Lato'] text-[12px] text-red-500">{errors.email.message}</span>
+          <span className="font-['Lato'] text-[12px] text-red-500">
+            {errors.email.message}
+          </span>
         )}
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="login-password" className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D]">
+        <label
+          htmlFor="login-password"
+          className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D]"
+        >
           Hasło
         </label>
         <input
@@ -84,7 +94,9 @@ export function LoginForm() {
           placeholder="••••••••"
         />
         {errors.password && (
-          <span className="font-['Lato'] text-[12px] text-red-500">{errors.password.message}</span>
+          <span className="font-['Lato'] text-[12px] text-red-500">
+            {errors.password.message}
+          </span>
         )}
       </div>
 

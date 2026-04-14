@@ -1,11 +1,17 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { SEO } from '@/components/shared/SEO';
 
 export default function NotFound() {
   const { t } = useTranslation();
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-[#F9F6F0] px-4 text-center">
+      <SEO
+        title="404"
+        description="Strona nie została znaleziona."
+        noindex={true}
+      />
       <h1
         className="text-8xl font-bold text-[#B8963E]"
         style={{ fontFamily: "'Cormorant Garamond', serif" }}

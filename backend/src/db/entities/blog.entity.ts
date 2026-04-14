@@ -24,8 +24,8 @@ export class BlogPostEntity {
   @Column({ type: 'text', unique: true })
   slug: string;
 
-  @Column({ type: 'jsonb' })
-  content: Record<string, unknown>;
+  @Column({ type: 'text', nullable: true })
+  content: string | null;
 
   @Column({ type: 'text', nullable: true })
   excerpt: string | null;
@@ -33,7 +33,12 @@ export class BlogPostEntity {
   @Column({ name: 'cover_image_url', type: 'text', nullable: true })
   coverImageUrl: string | null;
 
-  @Column({ name: 'is_published', type: 'boolean', default: false, nullable: true })
+  @Column({
+    name: 'is_published',
+    type: 'boolean',
+    default: false,
+    nullable: true,
+  })
   isPublished: boolean | null;
 
   @Column({ name: 'published_at', type: 'timestamptz', nullable: true })
@@ -70,7 +75,12 @@ export class BlogCommentEntity {
   @Column({ type: 'text' })
   content: string;
 
-  @Column({ name: 'is_approved', type: 'boolean', default: false, nullable: true })
+  @Column({
+    name: 'is_approved',
+    type: 'boolean',
+    default: false,
+    nullable: true,
+  })
   isApproved: boolean | null;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz', nullable: true })

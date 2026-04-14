@@ -20,14 +20,34 @@ export const useAuthStore = create<AuthUIState>((set) => ({
   isForgotPasswordOpen: false,
 
   openLogin: () =>
-    set({ activeView: 'login', isLoginModalOpen: true, isRegisterModalOpen: false, isForgotPasswordOpen: false }),
+    set({
+      activeView: 'login',
+      isLoginModalOpen: true,
+      isRegisterModalOpen: false,
+      isForgotPasswordOpen: false,
+    }),
 
   openRegister: () =>
-    set({ activeView: 'register', isRegisterModalOpen: true, isLoginModalOpen: false, isForgotPasswordOpen: false }),
+    set({
+      activeView: 'register',
+      isRegisterModalOpen: true,
+      isLoginModalOpen: false,
+      isForgotPasswordOpen: false,
+    }),
 
   openForgotPassword: () =>
-    set({ activeView: 'forgotPassword', isForgotPasswordOpen: true, isLoginModalOpen: false, isRegisterModalOpen: false }),
+    set({
+      activeView: 'forgotPassword',
+      isForgotPasswordOpen: true,
+      isLoginModalOpen: false,
+      isRegisterModalOpen: false,
+    }),
 
   closeModals: () =>
-    set({ activeView: null, isLoginModalOpen: false, isRegisterModalOpen: false, isForgotPasswordOpen: false }),
+    set({
+      activeView: null,
+      isLoginModalOpen: false,
+      isRegisterModalOpen: false,
+      isForgotPasswordOpen: false,
+    }),
 }));

@@ -16,7 +16,7 @@ const useSSL = process.env.DATABASE_SSL === 'true';
 export default new DataSource({
   type: 'postgres',
   host: process.env.DATABASE_HOST ?? 'localhost',
-  port: parseInt(process.env.DATABASE_PORT ?? '5432', 10),
+  port: Number.parseInt(process.env.DATABASE_PORT ?? '5432', 10),
   username: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
@@ -24,9 +24,11 @@ export default new DataSource({
   entities: [__dirname + '/../db/entities/*.{ts,js}'],
   migrations: [__dirname + '/../db/migrations/*.{ts,js}'],
   uuidExtension: 'pgcrypto',
-  ...(useSSL ? {
-    ssl: { rejectUnauthorized: false },
-    extra: { ssl: { rejectUnauthorized: false } },
-  } : {}),
+  ...(useSSL
+    ? {
+        ssl: { rejectUnauthorized: false },
+        extra: { ssl: { rejectUnauthorized: false } },
+      }
+    : {}),
   logging: process.env.NODE_ENV === 'development',
 });

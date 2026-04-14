@@ -8,7 +8,12 @@ interface AdminFormFieldProps {
   children: React.ReactNode;
 }
 
-export function AdminFormField({ label, htmlFor, error, children }: AdminFormFieldProps) {
+export function AdminFormField({
+  label,
+  htmlFor,
+  error,
+  children,
+}: AdminFormFieldProps) {
   return (
     <div>
       <label
@@ -19,7 +24,10 @@ export function AdminFormField({ label, htmlFor, error, children }: AdminFormFie
       </label>
       {children}
       {error && (
-        <p className="mt-1 font-['Inter'] text-[12px] text-red-500" role="alert">
+        <p
+          className="mt-1 font-['Inter'] text-[12px] text-red-500"
+          role="alert"
+        >
           {error}
         </p>
       )}

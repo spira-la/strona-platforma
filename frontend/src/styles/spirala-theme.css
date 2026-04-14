@@ -1,27 +1,27 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   /* Brand Colors */
-  --color-brand-gold: #B8944A;
-  --color-brand-gold-light: #D4B97A;
-  --color-brand-gold-dark: #8A6F2E;
-  --color-brand-navy: #173A5E;
+  --color-brand-gold: #b8944a;
+  --color-brand-gold-light: #d4b97a;
+  --color-brand-gold-dark: #8a6f2e;
+  --color-brand-navy: #173a5e;
 
   /* Background Colors */
-  --color-bg-cream: #FAF8F5;
-  --color-bg-warm: #F5F3EF;
-  --color-bg-white: #FFFFFF;
+  --color-bg-cream: #faf8f5;
+  --color-bg-warm: #f5f3ef;
+  --color-bg-white: #ffffff;
 
   /* Border Colors */
-  --color-border-subtle: #F0EDE8;
-  --color-border-warm: #E8E4DF;
+  --color-border-subtle: #f0ede8;
+  --color-border-warm: #e8e4df;
 
   /* Text Colors */
-  --color-text-primary: #2D2D2D;
-  --color-text-secondary: #6B6B6B;
-  --color-text-muted: #8A8A8A;
-  --color-text-on-dark: #FFFFFF;
-  --color-text-on-dark-muted: #C8D6E5;
+  --color-text-primary: #2d2d2d;
+  --color-text-secondary: #6b6b6b;
+  --color-text-muted: #8a8a8a;
+  --color-text-on-dark: #ffffff;
+  --color-text-on-dark-muted: #c8d6e5;
 
   /* Spacing Scale */
   --spacing-xs: 8px;
@@ -50,7 +50,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
 }
 
@@ -104,7 +109,8 @@ h1, h2, h3, h4, h5, h6 {
 /* ──────────────────────────────────────────────
    Lenis smooth scroll base
    ────────────────────────────────────────────── */
-html.lenis, html.lenis body {
+html.lenis,
+html.lenis body {
   height: auto;
 }
 

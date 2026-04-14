@@ -16,13 +16,17 @@ interface UseScrollRevealOptions {
 export function useScrollReveal<T extends HTMLElement = HTMLDivElement>(
   options: UseScrollRevealOptions = {},
 ) {
-  const { threshold = 0.01, once = true, rootMargin = '0px 0px 50px 0px' } = options;
+  const {
+    threshold = 0.01,
+    once = true,
+    rootMargin = '0px 0px 50px 0px',
+  } = options;
   const ref = useRef<T>(null);
 
   // Skip animations entirely if user prefers reduced motion
   const prefersReduced =
-    typeof window !== 'undefined' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    globalThis.window !== undefined &&
+    globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const [isVisible, setIsVisible] = useState(prefersReduced);
 
@@ -41,7 +45,6 @@ export function useScrollReveal<T extends HTMLElement = HTMLDivElement>(
         // Element is visible — trigger with a tiny delay so the hidden
         // styles paint first and the CSS transition actually runs.
         setTimeout(() => setIsVisible(true), 60);
-        return;
       }
     });
 

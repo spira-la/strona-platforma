@@ -51,9 +51,7 @@ export const couponsClient = {
   },
 
   create(data: CreateCouponData): Promise<Coupon> {
-    return api
-      .post<CouponResponse>('/coupons', data)
-      .then((res) => res.data);
+    return api.post<CouponResponse>('/coupons', data).then((res) => res.data);
   },
 
   update(id: string, data: UpdateCouponData): Promise<Coupon> {

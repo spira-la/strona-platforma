@@ -66,5 +66,9 @@ export interface CMSContextValue {
   isEditMode: boolean;
   setEditMode: (enabled: boolean) => void;
   getFieldValue: (section: CMSSectionKey, fieldPath: string) => string;
-  updateField: (section: CMSSectionKey, fieldPath: string, value: string) => Promise<void>;
+  updateField: (
+    section: CMSSectionKey,
+    fieldPath: string,
+    value: string,
+  ) => Promise<void>;
 }

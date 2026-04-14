@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { SEO } from '@/components/shared/SEO';
 import { ArrowRight, ShieldCheck, Lock, Heart } from 'lucide-react';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableImage } from '@/components/cms/EditableImage';
@@ -18,9 +19,7 @@ interface SectionBadgeProps {
 
 function SectionBadge({ children }: SectionBadgeProps) {
   return (
-    <span
-      className="inline-block font-['Lato'] text-[12px] font-semibold tracking-[0.08em] uppercase text-[#B8944A] bg-[#B8944A]/[0.125] rounded-full px-4 py-1.5"
-    >
+    <span className="inline-block font-['Lato'] text-[12px] font-semibold tracking-[0.08em] uppercase text-[#B8944A] bg-[#B8944A]/[0.125] rounded-full px-4 py-1.5">
       {children}
     </span>
   );
@@ -108,7 +107,11 @@ function AboutSection() {
     >
       <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-[60px]">
         {/* Image */}
-        <ScrollReveal animation="clip-left" delay={300} className="flex-shrink-0 w-full md:w-[480px]">
+        <ScrollReveal
+          animation="clip-left"
+          delay={300}
+          className="flex-shrink-0 w-full md:w-[480px]"
+        >
           <EditableImage
             section="about"
             fieldPath="photo"
@@ -120,9 +123,17 @@ function AboutSection() {
         </ScrollReveal>
 
         {/* Text */}
-        <ScrollReveal animation="clip-right" delay={500} className="flex flex-col items-start gap-5 flex-1">
+        <ScrollReveal
+          animation="clip-right"
+          delay={500}
+          className="flex flex-col items-start gap-5 flex-1"
+        >
           <SectionBadge>
-            <EditableText section="about" fieldPath="badge" placeholder="O mnie" />
+            <EditableText
+              section="about"
+              fieldPath="badge"
+              placeholder="O mnie"
+            />
           </SectionBadge>
 
           <EditableText
@@ -162,7 +173,11 @@ function AboutSection() {
             to="/o-mnie"
             className="mt-1 inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-full px-8 py-[14px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
           >
-            <EditableText section="about" fieldPath="ctaLabel" placeholder="Czytam dalej" />
+            <EditableText
+              section="about"
+              fieldPath="ctaLabel"
+              placeholder="Czytam dalej"
+            />
             <ArrowRight size={14} aria-hidden="true" />
           </Link>
         </ScrollReveal>
@@ -182,7 +197,12 @@ interface WorkStepProps {
   defaultDescription: string;
 }
 
-function WorkStepCard({ number, fieldBase, defaultTitle, defaultDescription }: WorkStepProps) {
+function WorkStepCard({
+  number,
+  fieldBase,
+  defaultTitle,
+  defaultDescription,
+}: WorkStepProps) {
   return (
     <article className="border border-[#E8E4DF] rounded-[12px] p-8 flex flex-col gap-4">
       <div
@@ -250,9 +270,16 @@ function HowIWorkSection() {
     >
       <div className="max-w-[1200px] mx-auto flex flex-col items-center gap-10">
         {/* Header */}
-        <ScrollReveal animation="fade-up" className="flex flex-col items-center gap-4 text-center">
+        <ScrollReveal
+          animation="fade-up"
+          className="flex flex-col items-center gap-4 text-center"
+        >
           <SectionBadge>
-            <EditableText section="howIWork" fieldPath="badge" placeholder="Proces" />
+            <EditableText
+              section="howIWork"
+              fieldPath="badge"
+              placeholder="Proces"
+            />
           </SectionBadge>
 
           <EditableText
@@ -286,7 +313,11 @@ function HowIWorkSection() {
         {/* Steps grid */}
         <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5">
           {WORK_STEPS.map((step, i) => (
-            <ScrollReveal key={step.number} animation="clip-up" delay={stagger(i)}>
+            <ScrollReveal
+              key={step.number}
+              animation="clip-up"
+              delay={stagger(i)}
+            >
               <WorkStepCard {...step} />
             </ScrollReveal>
           ))}
@@ -297,7 +328,11 @@ function HowIWorkSection() {
           to="/jak-pracuje"
           className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-full px-8 py-[14px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
         >
-          <EditableText section="howIWork" fieldPath="ctaLabel" placeholder="Czytam dalej" />
+          <EditableText
+            section="howIWork"
+            fieldPath="ctaLabel"
+            placeholder="Czytam dalej"
+          />
           <ArrowRight size={14} aria-hidden="true" />
         </Link>
       </div>
@@ -367,7 +402,11 @@ function ServiceCard({
           to={href}
           className="mt-1 inline-flex items-center gap-2 font-['Lato'] text-[13px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-full px-6 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2 self-start"
         >
-          <EditableText section="services" fieldPath={`${fieldBase}Cta`} placeholder={defaultCta} />
+          <EditableText
+            section="services"
+            fieldPath={`${fieldBase}Cta`}
+            placeholder={defaultCta}
+          />
           <ArrowRight size={13} aria-hidden="true" />
         </Link>
       </div>
@@ -383,9 +422,16 @@ function ServicesSection() {
     >
       <div className="max-w-[1200px] mx-auto flex flex-col items-center gap-10">
         {/* Header */}
-        <ScrollReveal animation="fade-up" className="flex flex-col items-center gap-4 text-center">
+        <ScrollReveal
+          animation="fade-up"
+          className="flex flex-col items-center gap-4 text-center"
+        >
           <SectionBadge>
-            <EditableText section="services" fieldPath="badge" placeholder="Usługi" />
+            <EditableText
+              section="services"
+              fieldPath="badge"
+              placeholder="Usługi"
+            />
           </SectionBadge>
 
           <EditableText
@@ -458,7 +504,11 @@ function ServicesSection() {
             to="/kontakt"
             className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-full px-8 py-[14px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
           >
-            <EditableText section="services" fieldPath="bottomCtaLabel" placeholder="Piszę do Ciebie" />
+            <EditableText
+              section="services"
+              fieldPath="bottomCtaLabel"
+              placeholder="Piszę do Ciebie"
+            />
             <ArrowRight size={14} aria-hidden="true" />
           </Link>
         </div>
@@ -568,9 +618,16 @@ function TestimonialsSection() {
     >
       <div className="max-w-[1200px] mx-auto flex flex-col items-center gap-10">
         {/* Header */}
-        <ScrollReveal animation="fade-up" className="flex flex-col items-center gap-4 text-center">
+        <ScrollReveal
+          animation="fade-up"
+          className="flex flex-col items-center gap-4 text-center"
+        >
           <SectionBadge>
-            <EditableText section="testimonials" fieldPath="badge" placeholder="Opinie klientek" />
+            <EditableText
+              section="testimonials"
+              fieldPath="badge"
+              placeholder="Opinie klientek"
+            />
           </SectionBadge>
 
           <EditableText
@@ -594,7 +651,11 @@ function TestimonialsSection() {
         {/* Cards */}
         <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-5">
           {TESTIMONIALS.map((t, i) => (
-            <ScrollReveal key={t.fieldBase} animation="clip-up" delay={stagger(i, 200)}>
+            <ScrollReveal
+              key={t.fieldBase}
+              animation="clip-up"
+              delay={stagger(i, 200)}
+            >
               <TestimonialCard {...t} />
             </ScrollReveal>
           ))}
@@ -675,7 +736,11 @@ function BlogCard({
               to="/blog"
               className="inline-flex items-center gap-1.5 font-['Lato'] text-[13px] font-semibold text-[#B8944A] hover:text-[#8A6F2E] transition-colors duration-200 focus-visible:outline-none focus-visible:underline"
             >
-              <EditableText section="blog" fieldPath="readMoreFeatured" placeholder="Czytaj więcej" />
+              <EditableText
+                section="blog"
+                fieldPath="readMoreFeatured"
+                placeholder="Czytaj więcej"
+              />
               <ArrowRight size={13} aria-hidden="true" />
             </Link>
           </div>
@@ -727,7 +792,11 @@ function BlogCard({
             to="/blog"
             className="inline-flex items-center gap-1 font-['Lato'] text-[12px] font-semibold text-[#B8944A] hover:text-[#8A6F2E] transition-colors duration-200 focus-visible:outline-none focus-visible:underline"
           >
-            <EditableText section="blog" fieldPath="readMore" placeholder="Czytaj" />
+            <EditableText
+              section="blog"
+              fieldPath="readMore"
+              placeholder="Czytaj"
+            />
             <ArrowRight size={12} aria-hidden="true" />
           </Link>
         </div>
@@ -744,7 +813,10 @@ function BlogSection() {
     >
       <div className="max-w-[1200px] mx-auto flex flex-col gap-10">
         {/* Header */}
-        <ScrollReveal animation="fade-up" className="flex flex-col items-center gap-4 text-center">
+        <ScrollReveal
+          animation="fade-up"
+          className="flex flex-col items-center gap-4 text-center"
+        >
           <SectionBadge>
             <EditableText section="blog" fieldPath="badge" placeholder="Blog" />
           </SectionBadge>
@@ -828,7 +900,11 @@ function BlogSection() {
             to="/blog"
             className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-[#B8944A] border border-[#B8944A] hover:bg-[#B8944A] hover:text-white active:bg-[#8A6F2E] active:border-[#8A6F2E] transition-colors duration-200 rounded-full px-8 py-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
           >
-            <EditableText section="blog" fieldPath="viewAllLabel" placeholder="Wszystkie artykuły" />
+            <EditableText
+              section="blog"
+              fieldPath="viewAllLabel"
+              placeholder="Wszystkie artykuły"
+            />
             <ArrowRight size={14} aria-hidden="true" />
           </Link>
         </div>
@@ -865,7 +941,10 @@ function CtaSection() {
       />
 
       {/* Content */}
-      <div id="cta-heading" className="relative z-10 flex flex-col items-center text-center gap-6 max-w-[700px]">
+      <div
+        id="cta-heading"
+        className="relative z-10 flex flex-col items-center text-center gap-6 max-w-[700px]"
+      >
         {/* Gold decorative line */}
         <GoldLine width={60} height={3} delay={100} />
 
@@ -896,7 +975,11 @@ function CtaSection() {
               to="/uslugi"
               className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-lg px-8 py-[14px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
             >
-              <EditableText section="cta" fieldPath="primaryCtaLabel" placeholder="Wybieram termin" />
+              <EditableText
+                section="cta"
+                fieldPath="primaryCtaLabel"
+                placeholder="Wybieram termin"
+              />
               <ArrowRight size={14} aria-hidden="true" />
             </Link>
           </ScrollReveal>
@@ -906,7 +989,11 @@ function CtaSection() {
               to="/kontakt"
               className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-[#B8944A] border-2 border-[#B8944A] hover:bg-[#B8944A] hover:text-white active:bg-[#8A6F2E] active:border-[#8A6F2E] transition-colors duration-200 rounded-lg px-8 py-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
             >
-              <EditableText section="cta" fieldPath="secondaryCtaLabel" placeholder="Napisz do mnie" />
+              <EditableText
+                section="cta"
+                fieldPath="secondaryCtaLabel"
+                placeholder="Napisz do mnie"
+              />
             </Link>
           </ScrollReveal>
         </div>
@@ -915,7 +1002,11 @@ function CtaSection() {
         <ScrollReveal animation="fade" delay={1200} duration={1000}>
           <div className="flex flex-col sm:flex-row items-center gap-5 mt-4">
             <div className="flex items-center gap-2">
-              <ShieldCheck size={16} className="text-[#C8D6E5]" aria-hidden="true" />
+              <ShieldCheck
+                size={16}
+                className="text-[#C8D6E5]"
+                aria-hidden="true"
+              />
               <EditableText
                 section="cta"
                 fieldPath="trust1"
@@ -947,7 +1038,7 @@ function CtaSection() {
           </div>
         </ScrollReveal>
       </div>
-      </section>
+    </section>
   );
 }
 
@@ -971,6 +1062,7 @@ function NewsletterBridge() {
 export default function Home() {
   return (
     <main>
+      <SEO canonical="/" />
       <HeroSection />
       <AboutSection />
       <HowIWorkSection />

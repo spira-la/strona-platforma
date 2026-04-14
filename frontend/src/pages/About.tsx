@@ -1,4 +1,5 @@
 import { Heart, Leaf, Zap } from 'lucide-react';
+import { SEO } from '@/components/shared/SEO';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableBackground } from '@/components/cms/EditableBackground';
 import { EditableImage } from '@/components/cms/EditableImage';
@@ -29,7 +30,14 @@ interface ValueCardProps {
   descPlaceholder: string;
 }
 
-function ValueCard({ icon, section, titleField, titlePlaceholder, descField, descPlaceholder }: ValueCardProps) {
+function ValueCard({
+  icon,
+  section,
+  titleField,
+  titlePlaceholder,
+  descField,
+  descPlaceholder,
+}: ValueCardProps) {
   return (
     <div className="flex flex-col items-center text-center px-6 py-8 rounded-lg bg-[#FAF8F5] border border-[#F0EDE8]">
       <div className="flex items-center justify-center w-14 h-14 rounded-full mb-5 bg-[rgba(184,148,74,0.1)] text-[#B8944A]">
@@ -62,7 +70,14 @@ interface QualificationCardProps {
   descPlaceholder: string;
 }
 
-function QualificationCard({ number, section, titleField, titlePlaceholder, descField, descPlaceholder }: QualificationCardProps) {
+function QualificationCard({
+  number,
+  section,
+  titleField,
+  titlePlaceholder,
+  descField,
+  descPlaceholder,
+}: QualificationCardProps) {
   return (
     <div className="flex gap-5 p-6 rounded-lg bg-white border border-[#E8E4DF]">
       <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold bg-[#B8944A] text-white [font-family:'Lato',sans-serif]">
@@ -96,10 +111,19 @@ interface CertificationItemProps {
   yearPlaceholder: string;
 }
 
-function CertificationItem({ section, labelField, labelPlaceholder, yearField, yearPlaceholder }: CertificationItemProps) {
+function CertificationItem({
+  section,
+  labelField,
+  labelPlaceholder,
+  yearField,
+  yearPlaceholder,
+}: CertificationItemProps) {
   return (
     <li className="flex items-start gap-4 py-4 border-b border-[#F0EDE8]">
-      <span className="flex-shrink-0 w-2 h-2 rounded-full mt-2 bg-[#B8944A]" aria-hidden="true" />
+      <span
+        className="flex-shrink-0 w-2 h-2 rounded-full mt-2 bg-[#B8944A]"
+        aria-hidden="true"
+      />
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-1">
         <EditableText
           section={section}
@@ -127,6 +151,11 @@ function CertificationItem({ section, labelField, labelPlaceholder, yearField, y
 export default function About() {
   return (
     <main className="min-h-screen bg-white text-[#2D2D2D]">
+      <SEO
+        title="O mnie"
+        description="Poznaj Anetę — psycholog kliniczny, coach i terapeuta somatyczny. Wieloletnie doświadczenie w pracy z ciałem i transformacji."
+        canonical="/o-mnie"
+      />
 
       {/* ------------------------------------------------------------------ */}
       {/* HERO                                                                 */}
@@ -147,17 +176,40 @@ export default function About() {
         <div
           className="absolute inset-0"
           style={{
-            background: 'linear-gradient(to top, rgba(0,0,0,0.67), rgba(0,0,0,0.27))',
+            background:
+              'linear-gradient(to top, rgba(0,0,0,0.67), rgba(0,0,0,0.27))',
           }}
           aria-hidden="true"
         />
 
-        <ScrollReveal animation="fade" delay={200} duration={800} className="relative z-10 flex flex-col items-center gap-5 px-6 md:px-[120px]">
+        <ScrollReveal
+          animation="fade"
+          delay={200}
+          duration={800}
+          className="relative z-10 flex flex-col items-center gap-5 px-6 md:px-[120px]"
+        >
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-[13px] [font-family:'Lato',sans-serif]" aria-label="Breadcrumb">
-            <span className="text-white/50"><EditableText section="about" fieldPath="breadcrumbHome" as="span" placeholder="Strona główna" /></span>
+          <nav
+            className="flex items-center gap-2 text-[13px] [font-family:'Lato',sans-serif]"
+            aria-label="Breadcrumb"
+          >
+            <span className="text-white/50">
+              <EditableText
+                section="about"
+                fieldPath="breadcrumbHome"
+                as="span"
+                placeholder="Strona główna"
+              />
+            </span>
             <span className="text-white/30">/</span>
-            <span className="text-white/80"><EditableText section="about" fieldPath="breadcrumbCurrent" as="span" placeholder="O mnie" /></span>
+            <span className="text-white/80">
+              <EditableText
+                section="about"
+                fieldPath="breadcrumbCurrent"
+                as="span"
+                placeholder="O mnie"
+              />
+            </span>
           </nav>
 
           <EditableText
@@ -181,13 +233,13 @@ export default function About() {
       {/* ------------------------------------------------------------------ */}
       {/* ABOUT — PHOTO + BIO                                                 */}
       {/* ------------------------------------------------------------------ */}
-      <section
-        className="px-6 py-16 sm:py-24 bg-white"
-        aria-label="Biografia"
-      >
+      <section className="px-6 py-16 sm:py-24 bg-white" aria-label="Biografia">
         <div className="max-w-[1024px] mx-auto flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
           {/* Photo */}
-          <ScrollReveal animation="scale" className="flex-shrink-0 w-full lg:w-80 xl:w-96">
+          <ScrollReveal
+            animation="scale"
+            className="flex-shrink-0 w-full lg:w-80 xl:w-96"
+          >
             <div
               className="relative rounded-[20px] overflow-hidden aspect-[4/5] w-full"
               style={{ boxShadow: '0 20px 60px rgba(184,148,74,0.15)' }}
@@ -208,7 +260,11 @@ export default function About() {
           </ScrollReveal>
 
           {/* Bio */}
-          <ScrollReveal animation="fade-left" delay={150} className="flex flex-col gap-6 flex-1">
+          <ScrollReveal
+            animation="fade-left"
+            delay={150}
+            className="flex flex-col gap-6 flex-1"
+          >
             <SectionBadge label="O mnie" />
 
             <EditableText
@@ -248,7 +304,9 @@ export default function About() {
                 section="about"
                 fieldPath="bioQuote"
                 as="p"
-                placeholder={'„Zmiana nie zaczyna się w głowie — zaczyna się w ciele i w odważnej decyzji, by siebie wysłuchać."'}
+                placeholder={
+                  '„Zmiana nie zaczyna się w głowie — zaczyna się w ciele i w odważnej decyzji, by siebie wysłuchać."'
+                }
                 className="text-base sm:text-lg italic leading-relaxed text-[#B8944A] [font-family:'Cormorant_Garamond',serif]"
               />
             </blockquote>
@@ -264,7 +322,10 @@ export default function About() {
         aria-label="Wartości"
       >
         <div className="max-w-[1024px] mx-auto">
-          <ScrollReveal animation="fade-up" className="flex flex-col items-center text-center gap-4 mb-12">
+          <ScrollReveal
+            animation="fade-up"
+            className="flex flex-col items-center text-center gap-4 mb-12"
+          >
             <SectionBadge label="Moje podejście" />
             <EditableText
               section="about"
@@ -325,7 +386,10 @@ export default function About() {
         aria-label="Specjalizacje"
       >
         <div className="max-w-[1024px] mx-auto">
-          <ScrollReveal animation="fade-up" className="flex flex-col items-center text-center gap-4 mb-12">
+          <ScrollReveal
+            animation="fade-up"
+            className="flex flex-col items-center text-center gap-4 mb-12"
+          >
             <SectionBadge label="Specjalizacje" />
             <EditableText
               section="about"
@@ -389,7 +453,10 @@ export default function About() {
         aria-label="Wykształcenie i certyfikaty"
       >
         <div className="max-w-[768px] mx-auto">
-          <ScrollReveal animation="fade-up" className="flex flex-col items-center text-center gap-4 mb-10">
+          <ScrollReveal
+            animation="fade-up"
+            className="flex flex-col items-center text-center gap-4 mb-10"
+          >
             <SectionBadge label="Wykształcenie" />
             <EditableText
               section="about"
@@ -400,7 +467,10 @@ export default function About() {
             />
           </ScrollReveal>
 
-          <ul className="flex flex-col" aria-label="Lista certyfikatów i wykształcenia">
+          <ul
+            className="flex flex-col"
+            aria-label="Lista certyfikatów i wykształcenia"
+          >
             <ScrollReveal animation="fade-up" delay={stagger(0)}>
               <CertificationItem
                 section="about"
@@ -470,7 +540,11 @@ export default function About() {
           aria-hidden="true"
         />
 
-        <ScrollReveal animation="fade" duration={900} className="relative z-10 flex flex-col items-center gap-6 max-w-[576px]">
+        <ScrollReveal
+          animation="fade"
+          duration={900}
+          className="relative z-10 flex flex-col items-center gap-6 max-w-[576px]"
+        >
           <EditableText
             section="about"
             fieldPath="ctaHeading"

@@ -1,9 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useCMS } from '@/contexts/CMSContext';
 import type { EditableTextProps } from '@/types/cms.types';
 
@@ -32,15 +27,19 @@ export function EditableText({
   richText: _richText = false,
   render,
 }: EditableTextProps) {
-  const { isLoading, isEditMode, getFieldValue, updateField, content } = useCMS();
+  const { isLoading, isEditMode, getFieldValue, updateField, content } =
+    useCMS();
 
   const resolvedValue = getFieldValue(section, fieldPath);
   const hasContent = Object.keys(content).length > 0;
 
   // Derive a string from the children prop for use as fallback text.
-  const childrenText = typeof children === 'string'
-    ? children
-    : React.Children.toArray(children).map((c) => (typeof c === 'string' ? c : '')).join('');
+  const childrenText =
+    typeof children === 'string'
+      ? children
+      : React.Children.toArray(children)
+          .map((c) => (typeof c === 'string' ? c : ''))
+          .join('');
 
   const [isEditing, setIsEditing] = useState(false);
   const [draftValue, setDraftValue] = useState('');
@@ -60,7 +59,8 @@ export function EditableText({
 
   const startEditing = useCallback(() => {
     if (!isEditMode) return;
-    const hasNoValue = resolvedValue === fieldPath || resolvedValue.trim() === '';
+    const hasNoValue =
+      resolvedValue === fieldPath || resolvedValue.trim() === '';
     // Pre-fill with existing CMS value, or the placeholder/fallback as reference
     const prefill = hasNoValue
       ? (placeholder ?? childrenText ?? '')
@@ -121,17 +121,32 @@ export function EditableText({
   // Automatically add w-full for block tags so text wraps correctly.
   // Block-level elements inside flex containers collapse without explicit width.
   // Add w-full unless the caller already set an explicit width (w-[...], w-1/2, etc.)
-  const BLOCK_TAGS = new Set(['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'blockquote', 'li']);
+  const BLOCK_TAGS = new Set([
+    'p',
+    'h1',
+    'h2',
+    'h3',
+    'h4',
+    'h5',
+    'h6',
+    'div',
+    'blockquote',
+    'li',
+  ]);
   const needsFullWidth = BLOCK_TAGS.has(Tag as string);
-  const hasExplicitWidth = className ? /(?:^|\s)w-(?:\[|full|screen|auto|\d)/.test(className) : false;
-  const resolvedClassName = needsFullWidth && !hasExplicitWidth
-    ? `w-full ${className ?? ''}`
-    : className;
+  const hasExplicitWidth = className
+    ? /(?:^|\s)w-(?:\[|full|screen|auto|\d)/.test(className)
+    : false;
+  const resolvedClassName =
+    needsFullWidth && !hasExplicitWidth
+      ? `w-full ${className ?? ''}`
+      : className;
 
   // When the field has no CMS content, fall back to: placeholder → children text → fieldPath
   // Also treat empty/whitespace-only strings as "no content" so the placeholder shows instead of blank space
   const fallback = placeholder ?? (childrenText || undefined) ?? resolvedValue;
-  const hasNoContent = resolvedValue === fieldPath || resolvedValue.trim() === '';
+  const hasNoContent =
+    resolvedValue === fieldPath || resolvedValue.trim() === '';
   const displayContent = hasNoContent ? fallback : resolvedValue;
 
   // -------------------------------------------------------------------------
@@ -232,10 +247,18 @@ export function EditableText({
   // Read-only mode
   // -------------------------------------------------------------------------
   if (render) {
-    return React.createElement(Tag, { id, className: resolvedClassName }, render(displayContent));
+    return React.createElement(
+      Tag,
+      { id, className: resolvedClassName },
+      render(displayContent),
+    );
   }
 
-  return React.createElement(Tag, { id, className: resolvedClassName }, displayContent);
+  return React.createElement(
+    Tag,
+    { id, className: resolvedClassName },
+    displayContent,
+  );
 }
 
 export default EditableText;
