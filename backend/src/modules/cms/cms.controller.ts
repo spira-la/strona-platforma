@@ -85,15 +85,29 @@ export class CmsController {
   // -------------------------------------------------------------------------
 
   /**
+   * GET /api/cms/version
+   * Public — returns only the current content version. Uncached so a
+   * client can cheaply detect whether its locally-cached /content is
+   * stale without downloading the full JSONB document.
+   */
+  @Get('version')
+  @Header('Cache-Control', 'no-store, no-cache, must-revalidate')
+  async getVersion() {
+    const doc = await this.cms.getContent();
+    return { success: true, version: doc.version, updatedAt: doc.updatedAt };
+  }
+
+  /**
    * GET /api/cms/content
-   * Public — returns all CMS content.
-   *
-   * Cache-Control: always fresh. Edits must reflect immediately; the
-   * doc is a single small JSON so the cost of bypassing caches is
-   * negligible and it avoids stale reads after updates/deletes.
+   * Public — returns all CMS content. Cached heavily; invalidation is
+   * driven by (a) Cloudflare purge on every write and (b) clients
+   * doing a version check against /cms/version before using the cache.
    */
   @Get('content')
-  @Header('Cache-Control', 'no-store, no-cache, must-revalidate')
+  @Header(
+    'Cache-Control',
+    'public, s-maxage=3600, stale-while-revalidate=86400',
+  )
   async getContent() {
     const doc = await this.cms.getContent();
     return {

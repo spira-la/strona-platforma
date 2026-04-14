@@ -71,4 +71,5 @@ export interface CMSContextValue {
     fieldPath: string,
     value: string,
   ) => Promise<void>;
+  refresh: () => Promise<void>;
 }
