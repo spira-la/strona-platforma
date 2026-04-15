@@ -456,7 +456,7 @@ function CtaSection() {
             />
           </Link>
           <a
-            href="mailto:kontakt@spira-la.com"
+            href="mailto:contact@spira-la.com"
             className="inline-flex items-center justify-center px-7 py-3 rounded-lg font-['Lato'] text-[14px] font-semibold text-[#B8944A] border border-[#B8944A] hover:bg-[#B8944A]/[0.06] transition-colors"
           >
             <EditableText
