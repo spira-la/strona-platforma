@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { SEO } from '@/components/shared/SEO';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -150,12 +151,17 @@ function PricingBannerSection() {
               placeholder="jednorazowo"
             />
           </div>
-          <a
-            href="#kontakt-formularz"
+          <Link
+            to="/tworzenie-stron"
             className="inline-block self-center md:self-start font-['Lato'] text-[14px] font-semibold text-[#B8944A] bg-white hover:bg-[#FAF8F5] rounded-lg px-6 py-3 transition-colors"
           >
-            Zapytaj o szczegoly
-          </a>
+            <EditableText
+              section="contact"
+              fieldPath="pricing.cta"
+              as="span"
+              placeholder="Zobacz ofertę"
+            />
+          </Link>
         </ScrollReveal>
 
         {/* Mockup placeholder */}

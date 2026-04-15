@@ -18,7 +18,8 @@ export type CMSSectionKey =
   | 'cta'
   | 'testimonials'
   | 'auth'
-  | 'notFound';
+  | 'notFound'
+  | 'webDesign';
 
 export interface CMSContentResponse {
   success: boolean;

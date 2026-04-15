@@ -19,6 +19,7 @@ const Services = lazy(() => import('@/pages/Services'));
 const Blog = lazy(() => import('@/pages/Blog'));
 const BlogPost = lazy(() => import('@/pages/BlogPost'));
 const Contact = lazy(() => import('@/pages/Contact'));
+const WebDesignOffer = lazy(() => import('@/pages/WebDesignOffer'));
 const Confirmation = lazy(() => import('@/pages/Confirmation'));
 const AuthCallback = lazy(() => import('@/pages/AuthCallback'));
 
@@ -364,6 +365,14 @@ function AppRoutes() {
           element={
             <Suspense fallback={<LoadingFallback />}>
               <Contact />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/tworzenie-stron"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <WebDesignOffer />
             </Suspense>
           }
         />

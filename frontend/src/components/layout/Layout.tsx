@@ -18,6 +18,7 @@ const DARK_HERO_PAGES = new Set([
   '/uslugi',
   '/blog',
   '/kontakt',
+  '/tworzenie-stron',
 ]);
 
 export function Layout({ children }: LayoutProps) {
