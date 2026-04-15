@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { supabase } from '@/config/supabase';
 import { useAuth } from '@/contexts/AuthContext';
+import { EditableText } from '@/components/cms/EditableText';
 import spiralaLogo from '@/assets/spirala.png';
 
 const passwordSchema = z
@@ -114,7 +115,9 @@ export default function AuthCallback() {
             onClick={() => navigate('/', { replace: true })}
             className="font-['Lato'] text-[15px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] transition-colors duration-200 rounded-lg px-8 py-3"
           >
-            Przejdź do strony głównej
+            <EditableText section="auth" fieldPath="goHome">
+              Przejdź do strony głównej
+            </EditableText>
           </button>
         </div>
       </div>
@@ -194,7 +197,15 @@ export default function AuthCallback() {
             disabled={isSubmitting}
             className="font-['Lato'] text-[15px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] disabled:opacity-60 disabled:cursor-not-allowed transition-colors duration-200 rounded-lg px-6 py-3 mt-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
           >
-            {isSubmitting ? 'Zapisywanie...' : 'Zmień hasło'}
+            {isSubmitting ? (
+              <EditableText section="auth" fieldPath="saving">
+                Zapisywanie...
+              </EditableText>
+            ) : (
+              <EditableText section="auth" fieldPath="changePassword">
+                Zmień hasło
+              </EditableText>
+            )}
           </button>
         </form>
       </div>

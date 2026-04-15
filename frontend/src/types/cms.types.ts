@@ -16,7 +16,9 @@ export type CMSSectionKey =
   | 'booking'
   | 'newsletter'
   | 'cta'
-  | 'testimonials';
+  | 'testimonials'
+  | 'auth'
+  | 'notFound';
 
 export interface CMSContentResponse {
   success: boolean;

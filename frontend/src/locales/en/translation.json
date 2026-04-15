@@ -28,7 +28,10 @@
     "positionAndSize": "Position & size",
     "horizontal": "Horizontal",
     "vertical": "Vertical",
-    "size": "Size"
+    "size": "Size",
+    "overlay": "Overlay (darkness)",
+    "overlayTop": "Top",
+    "overlayBottom": "Bottom"
   },
   "navbar": {
     "cta": "Book a session"

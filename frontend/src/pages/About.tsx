@@ -2,6 +2,7 @@ import { Heart, Leaf, Zap } from 'lucide-react';
 import { SEO } from '@/components/shared/SEO';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableBackground } from '@/components/cms/EditableBackground';
+import { EditableOverlay } from '@/components/cms/EditableOverlay';
 import { EditableImage } from '@/components/cms/EditableImage';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
 import ane2Photo from '@/assets/Ane2.jpg';
@@ -172,14 +173,12 @@ export default function About() {
           className="absolute inset-0"
           aria-hidden={true}
         />
-        {/* Dark gradient overlay */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'linear-gradient(to top, rgba(0,0,0,0.67), rgba(0,0,0,0.27))',
-          }}
-          aria-hidden="true"
+        {/* Dark gradient overlay — CMS-editable */}
+        <EditableOverlay
+          section="about"
+          fieldPath="heroBg"
+          defaultTop={27}
+          defaultBottom={67}
         />
 
         <ScrollReveal

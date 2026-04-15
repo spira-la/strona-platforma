@@ -296,7 +296,9 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                         onClick={() => setUserMenuOpen(false)}
                       >
                         <LayoutDashboard size={14} aria-hidden="true" />
-                        Panel coach
+                        <EditableText section="navbar" fieldPath="coachPanel">
+                          Panel coach
+                        </EditableText>
                       </Link>
                     )}
                     {user?.app_metadata?.role === 'admin' && (
@@ -307,7 +309,9 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                         onClick={() => setUserMenuOpen(false)}
                       >
                         <LayoutDashboard size={14} aria-hidden="true" />
-                        Panel admin
+                        <EditableText section="navbar" fieldPath="adminPanel">
+                          Panel admin
+                        </EditableText>
                       </Link>
                     )}
                     <button
@@ -317,7 +321,9 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                       role="menuitem"
                     >
                       <LogOut size={14} aria-hidden="true" />
-                      Wyloguj się
+                      <EditableText section="navbar" fieldPath="logout">
+                        Wyloguj się
+                      </EditableText>
                     </button>
                   </div>
                 )}
@@ -333,7 +339,9 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                   className="inline mr-1.5 -mt-0.5"
                   aria-hidden="true"
                 />
-                Zaloguj się
+                <EditableText section="navbar" fieldPath="login">
+                  Zaloguj się
+                </EditableText>
               </button>
             )}
           </div>
@@ -439,7 +447,9 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                     className="flex items-center gap-1 font-['Lato'] text-[13px] text-[#8A8A8A] hover:text-[#2D2D2D] transition-colors"
                   >
                     <LogOut size={14} aria-hidden="true" />
-                    Wyloguj
+                    <EditableText section="navbar" fieldPath="logoutShort">
+                      Wyloguj
+                    </EditableText>
                   </button>
                 </div>
                 {(user?.app_metadata?.role === 'coach' ||
@@ -449,7 +459,9 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                     className="flex items-center gap-2 font-['Lato'] text-[13px] font-semibold text-[#B8944A] hover:text-[#8A6F2E] transition-colors px-1 py-1"
                   >
                     <LayoutDashboard size={14} aria-hidden="true" />
-                    Panel coach
+                    <EditableText section="navbar" fieldPath="coachPanel">
+                      Panel coach
+                    </EditableText>
                   </Link>
                 )}
                 {user?.app_metadata?.role === 'admin' && (
@@ -458,7 +470,9 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                     className="flex items-center gap-2 font-['Lato'] text-[13px] font-semibold text-[#B8944A] hover:text-[#8A6F2E] transition-colors px-1 py-1"
                   >
                     <LayoutDashboard size={14} aria-hidden="true" />
-                    Panel admin
+                    <EditableText section="navbar" fieldPath="adminPanel">
+                      Panel admin
+                    </EditableText>
                   </Link>
                 )}
               </div>
@@ -472,7 +486,9 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                 className="flex items-center justify-center w-full font-['Lato'] text-[14px] font-medium text-white bg-[#B8944A] hover:bg-[#8A6F2E] transition-colors duration-200 rounded-full px-6 py-[11px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
               >
                 <User size={14} className="mr-1.5" aria-hidden="true" />
-                Zaloguj się
+                <EditableText section="navbar" fieldPath="login">
+                  Zaloguj się
+                </EditableText>
               </button>
             )}
           </li>
