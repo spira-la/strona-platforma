@@ -28,7 +28,10 @@
     "positionAndSize": "Posición y tamaño",
     "horizontal": "Horizontal",
     "vertical": "Vertical",
-    "size": "Tamaño"
+    "size": "Tamaño",
+    "overlay": "Capa de oscuridad",
+    "overlayTop": "Arriba",
+    "overlayBottom": "Abajo"
   },
   "navbar": {
     "cta": "Reservar sesión"

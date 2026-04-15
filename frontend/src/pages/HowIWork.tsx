@@ -9,6 +9,7 @@ import { SEO } from '@/components/shared/SEO';
 import { useState } from 'react';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableBackground } from '@/components/cms/EditableBackground';
+import { EditableOverlay } from '@/components/cms/EditableOverlay';
 import { EditableImage } from '@/components/cms/EditableImage';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
 import ane3Photo from '@/assets/Ane3.jpg';
@@ -207,13 +208,12 @@ export default function HowIWork() {
           className="absolute inset-0"
           aria-hidden={true}
         />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'linear-gradient(to bottom, rgba(20,16,10,0.65) 0%, rgba(30,22,8,0.75) 100%)',
-          }}
-          aria-hidden="true"
+        <EditableOverlay
+          section="howIWork"
+          fieldPath="heroBg"
+          color="25,19,9"
+          defaultTop={65}
+          defaultBottom={75}
         />
 
         <ScrollReveal
@@ -572,13 +572,12 @@ export default function HowIWork() {
           className="absolute inset-0"
           aria-hidden={true}
         />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'linear-gradient(135deg, rgba(20,14,4,0.78) 0%, rgba(40,28,8,0.72) 100%)',
-          }}
-          aria-hidden="true"
+        <EditableOverlay
+          section="howIWork"
+          fieldPath="ctaBg"
+          color="30,21,6"
+          defaultTop={72}
+          defaultBottom={78}
         />
 
         <ScrollReveal

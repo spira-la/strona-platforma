@@ -1,21 +1,271 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import {
+  Bold,
+  Italic,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  Type,
+  RotateCcw,
+} from 'lucide-react';
 import { useCMS } from '@/contexts/CMSContext';
 import type { EditableTextProps } from '@/types/cms.types';
 
-/**
- * EditableText renders a CMS-managed string as any HTML element.
- *
- * Non-admin mode: renders content transparently with no interactivity overhead.
- * Admin edit mode: gold border on hover, click to edit inline, Escape to
- * cancel, Ctrl+Enter or blur to save.
- *
- * Loading behaviour:
- * - No cache + still loading → render nothing (avoid layout shift)
- * - Cache available + revalidating → render cached content immediately
- *
- * `children` are treated as a plaintext fallback when no CMS content exists,
- * maintaining backward compatibility with the placeholder stub.
- */
+// ---------------------------------------------------------------------------
+// Style helpers — sibling CMS fields of the form `{fieldPath}{Suffix}`
+// ---------------------------------------------------------------------------
+
+type Align = 'left' | 'center' | 'right';
+
+interface TextStyleState {
+  bold: boolean;
+  italic: boolean;
+  align: Align | '';
+  size: number; // multiplier relative to the base CSS font-size (1 = inherit)
+  color: string; // hex or empty string
+  maxWidth: number; // 0 = no constraint, otherwise pixels
+  maxHeight: number; // 0 = no constraint, otherwise pixels
+}
+
+function clamp(n: number, min: number, max: number): number {
+  return Math.max(min, Math.min(max, n));
+}
+
+function parseStyle(
+  read: (field: string) => string,
+  fieldPath: string,
+): TextStyleState {
+  const raw = (suffix: string): string => {
+    const v = read(`${fieldPath}${suffix}`);
+    return v === `${fieldPath}${suffix}` ? '' : v;
+  };
+  const sizeRaw = raw('Size');
+  const parsed = Number.parseFloat(sizeRaw);
+  const mwRaw = Number.parseFloat(raw('MaxWidth'));
+  const mhRaw = Number.parseFloat(raw('MaxHeight'));
+  return {
+    bold: raw('Bold') === '1',
+    italic: raw('Italic') === '1',
+    align: (raw('Align') as Align) || '',
+    size: Number.isFinite(parsed) && parsed > 0 ? clamp(parsed, 0.5, 2.5) : 1,
+    color: raw('Color'),
+    maxWidth: Number.isFinite(mwRaw) && mwRaw > 0 ? mwRaw : 0,
+    maxHeight: Number.isFinite(mhRaw) && mhRaw > 0 ? mhRaw : 0,
+  };
+}
+
+function toCssStyle(s: TextStyleState): React.CSSProperties {
+  const style: React.CSSProperties = {};
+  if (s.bold) style.fontWeight = 700;
+  if (s.italic) style.fontStyle = 'italic';
+  if (s.align) style.textAlign = s.align;
+  if (s.size !== 1) style.fontSize = `${s.size}em`;
+  if (s.color) style.color = s.color;
+  if (s.maxWidth > 0) style.maxWidth = `${s.maxWidth}px`;
+  if (s.maxHeight > 0) {
+    style.maxHeight = `${s.maxHeight}px`;
+    style.overflow = 'auto';
+  }
+  return style;
+}
+
+// ---------------------------------------------------------------------------
+// Format popover — admin-only
+// ---------------------------------------------------------------------------
+
+interface FormatPopoverProps {
+  style: TextStyleState;
+  onPatch: (patch: Partial<TextStyleState>) => void;
+  onReset: () => void;
+  onClose: () => void;
+}
+
+function FormatPopover({
+  style,
+  onPatch,
+  onReset,
+  onClose,
+}: FormatPopoverProps) {
+  const alignOptions: { value: Align; Icon: React.ElementType }[] = [
+    { value: 'left', Icon: AlignLeft },
+    { value: 'center', Icon: AlignCenter },
+    { value: 'right', Icon: AlignRight },
+  ];
+
+  return (
+    <div
+      className="w-[240px] bg-white rounded-xl shadow-2xl border border-[#E8E4DF] p-3 flex flex-col gap-2.5"
+      onClick={(e) => e.stopPropagation()}
+      onMouseDown={(e) => e.stopPropagation()}
+    >
+      {/* Inline toggles: B, I, align */}
+      <div className="flex items-center gap-1">
+        <button
+          type="button"
+          aria-pressed={style.bold}
+          onClick={() => onPatch({ bold: !style.bold })}
+          className={`w-7 h-7 flex items-center justify-center rounded text-[12px] font-bold transition-colors ${
+            style.bold
+              ? 'bg-[#B8963E] text-white'
+              : 'bg-gray-100 text-[#6B6B6B] hover:bg-gray-200'
+          }`}
+          title="Bold"
+        >
+          <Bold size={13} />
+        </button>
+        <button
+          type="button"
+          aria-pressed={style.italic}
+          onClick={() => onPatch({ italic: !style.italic })}
+          className={`w-7 h-7 flex items-center justify-center rounded transition-colors ${
+            style.italic
+              ? 'bg-[#B8963E] text-white'
+              : 'bg-gray-100 text-[#6B6B6B] hover:bg-gray-200'
+          }`}
+          title="Italic"
+        >
+          <Italic size={13} />
+        </button>
+        <span className="mx-1 w-px h-5 bg-[#E8E4DF]" aria-hidden="true" />
+        {alignOptions.map(({ value, Icon }) => (
+          <button
+            key={value}
+            type="button"
+            aria-pressed={style.align === value}
+            onClick={() =>
+              onPatch({ align: style.align === value ? '' : value })
+            }
+            className={`w-7 h-7 flex items-center justify-center rounded transition-colors ${
+              style.align === value
+                ? 'bg-[#B8963E] text-white'
+                : 'bg-gray-100 text-[#6B6B6B] hover:bg-gray-200'
+            }`}
+            title={`Align ${value}`}
+          >
+            <Icon size={13} />
+          </button>
+        ))}
+      </div>
+
+      {/* Size slider */}
+      <div>
+        <div className="flex items-center justify-between mb-1">
+          <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter']">
+            Size
+          </p>
+          <span className="text-[10px] text-[#8A8A8A] font-['Inter'] font-medium">
+            {Math.round(style.size * 100)}%
+          </span>
+        </div>
+        <input
+          type="range"
+          min={50}
+          max={250}
+          step={5}
+          value={Math.round(style.size * 100)}
+          onChange={(e) => onPatch({ size: Number(e.target.value) / 100 })}
+          className="w-full h-1.5 rounded-full appearance-none bg-gray-200 cursor-pointer"
+          style={{ accentColor: '#B8963E' }}
+        />
+      </div>
+
+      {/* Max width */}
+      <div>
+        <div className="flex items-center justify-between mb-1">
+          <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter']">
+            Max width
+          </p>
+          <span className="text-[10px] text-[#8A8A8A] font-['Inter'] font-medium">
+            {style.maxWidth > 0 ? `${style.maxWidth}px` : 'auto'}
+          </span>
+        </div>
+        <input
+          type="range"
+          min={0}
+          max={1200}
+          step={20}
+          value={style.maxWidth}
+          onChange={(e) => onPatch({ maxWidth: Number(e.target.value) })}
+          className="w-full h-1.5 rounded-full appearance-none bg-gray-200 cursor-pointer"
+          style={{ accentColor: '#B8963E' }}
+        />
+      </div>
+
+      {/* Max height */}
+      <div>
+        <div className="flex items-center justify-between mb-1">
+          <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter']">
+            Max height
+          </p>
+          <span className="text-[10px] text-[#8A8A8A] font-['Inter'] font-medium">
+            {style.maxHeight > 0 ? `${style.maxHeight}px` : 'auto'}
+          </span>
+        </div>
+        <input
+          type="range"
+          min={0}
+          max={800}
+          step={10}
+          value={style.maxHeight}
+          onChange={(e) => onPatch({ maxHeight: Number(e.target.value) })}
+          className="w-full h-1.5 rounded-full appearance-none bg-gray-200 cursor-pointer"
+          style={{ accentColor: '#B8963E' }}
+        />
+      </div>
+
+      {/* Color picker */}
+      <div className="flex items-center justify-between">
+        <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter']">
+          Color
+        </p>
+        <div className="flex items-center gap-1">
+          <input
+            type="color"
+            value={style.color || '#2D2D2D'}
+            onChange={(e) => onPatch({ color: e.target.value })}
+            className="w-7 h-7 rounded border border-[#E8E4DF] cursor-pointer bg-white p-0"
+            title="Pick color"
+          />
+          {style.color && (
+            <button
+              type="button"
+              onClick={() => onPatch({ color: '' })}
+              className="px-1.5 py-0.5 text-[10px] text-[#6B6B6B] hover:text-[#B8963E]"
+              title="Use default color"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="flex items-center justify-between pt-1.5 border-t border-[#F0EDE8]">
+        <button
+          type="button"
+          onClick={onReset}
+          className="flex items-center gap-1 text-[10px] font-medium text-[#6B6B6B] hover:text-[#B8963E] transition-colors"
+        >
+          <RotateCcw size={10} />
+          Reset
+        </button>
+        <button
+          type="button"
+          onClick={onClose}
+          className="px-3 py-1 rounded-md text-[11px] font-medium text-white bg-[#B8963E] hover:bg-[#8A6F2E] transition-colors font-['Inter']"
+        >
+          Done
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// EditableText
+// ---------------------------------------------------------------------------
+
 export function EditableText({
   section,
   fieldPath,
@@ -42,9 +292,34 @@ export function EditableText({
           .join('');
 
   const [isEditing, setIsEditing] = useState(false);
+  const [showFormat, setShowFormat] = useState(false);
+  const [rect, setRect] = useState<DOMRect | null>(null);
   const [draftValue, setDraftValue] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const wrapperRef = useRef<HTMLSpanElement>(null);
+
+  // Keep the portal-rendered format button pinned to the text element
+  // on scroll / resize / layout shifts. Always-on while in edit mode.
+  useEffect(() => {
+    if (!isEditMode) return;
+    const update = () => {
+      if (wrapperRef.current)
+        setRect(wrapperRef.current.getBoundingClientRect());
+    };
+    update();
+    // Occasional re-check catches late layout changes (fonts loading,
+    // lazy images, CMS content hydrating) without a ResizeObserver
+    // on every element.
+    const interval = globalThis.setInterval(update, 1000);
+    window.addEventListener('scroll', update, true);
+    window.addEventListener('resize', update);
+    return () => {
+      globalThis.clearInterval(interval);
+      window.removeEventListener('scroll', update, true);
+      window.removeEventListener('resize', update);
+    };
+  }, [isEditMode]);
 
   // Auto-size textarea height and focus when entering edit mode
   useEffect(() => {
@@ -57,11 +332,60 @@ export function EditableText({
     }
   }, [isEditing]);
 
+  // Sibling-field style
+  const textStyle = parseStyle(
+    (field) => getFieldValue(section, field),
+    fieldPath,
+  );
+
+  const patchStyle = useCallback(
+    (patch: Partial<TextStyleState>) => {
+      const writes: Array<[string, string]> = [];
+      if ('bold' in patch)
+        writes.push([`${fieldPath}Bold`, patch.bold ? '1' : '']);
+      if ('italic' in patch)
+        writes.push([`${fieldPath}Italic`, patch.italic ? '1' : '']);
+      if ('align' in patch)
+        writes.push([`${fieldPath}Align`, patch.align ?? '']);
+      if ('size' in patch && typeof patch.size === 'number')
+        writes.push([
+          `${fieldPath}Size`,
+          patch.size === 1 ? '' : String(patch.size),
+        ]);
+      if ('color' in patch)
+        writes.push([`${fieldPath}Color`, patch.color ?? '']);
+      if ('maxWidth' in patch && typeof patch.maxWidth === 'number')
+        writes.push([
+          `${fieldPath}MaxWidth`,
+          patch.maxWidth > 0 ? String(patch.maxWidth) : '',
+        ]);
+      if ('maxHeight' in patch && typeof patch.maxHeight === 'number')
+        writes.push([
+          `${fieldPath}MaxHeight`,
+          patch.maxHeight > 0 ? String(patch.maxHeight) : '',
+        ]);
+
+      void Promise.all(writes.map(([f, v]) => updateField(section, f, v)));
+    },
+    [fieldPath, section, updateField],
+  );
+
+  const resetStyle = useCallback(() => {
+    void Promise.all([
+      updateField(section, `${fieldPath}Bold`, ''),
+      updateField(section, `${fieldPath}Italic`, ''),
+      updateField(section, `${fieldPath}Align`, ''),
+      updateField(section, `${fieldPath}Size`, ''),
+      updateField(section, `${fieldPath}Color`, ''),
+      updateField(section, `${fieldPath}MaxWidth`, ''),
+      updateField(section, `${fieldPath}MaxHeight`, ''),
+    ]);
+  }, [section, fieldPath, updateField]);
+
   const startEditing = useCallback(() => {
     if (!isEditMode) return;
     const hasNoValue =
       resolvedValue === fieldPath || resolvedValue.trim() === '';
-    // Pre-fill with existing CMS value, or the placeholder/fallback as reference
     const prefill = hasNoValue
       ? (placeholder ?? childrenText ?? '')
       : resolvedValue;
@@ -77,17 +401,13 @@ export function EditableText({
   const saveEditing = useCallback(async () => {
     if (!isEditing) return;
     const trimmed = draftValue.trim();
-
-    // Skip API call when nothing changed
     const isUnchanged =
       trimmed === resolvedValue ||
       (trimmed === '' && resolvedValue === fieldPath);
-
     if (isUnchanged) {
       setIsEditing(false);
       return;
     }
-
     setIsSaving(true);
     try {
       await updateField(section, fieldPath, trimmed);
@@ -111,16 +431,12 @@ export function EditableText({
   );
 
   // During initial load with no cache and no fallback — return null to avoid layout shift.
-  // But if we have a placeholder or children, always render them immediately.
   const hasFallback = !!(placeholder || children);
   if (isLoading && !hasContent && !hasFallback) {
     return null;
   }
 
-  // Block-level elements inside flex containers collapse without explicit width.
-  // Automatically add w-full for block tags so text wraps correctly.
-  // Block-level elements inside flex containers collapse without explicit width.
-  // Add w-full unless the caller already set an explicit width (w-[...], w-1/2, etc.)
+  // Auto-add w-full for block tags inside flex parents
   const BLOCK_TAGS = new Set([
     'p',
     'h1',
@@ -142,15 +458,15 @@ export function EditableText({
       ? `w-full ${className ?? ''}`
       : className;
 
-  // When the field has no CMS content, fall back to: placeholder → children text → fieldPath
-  // Also treat empty/whitespace-only strings as "no content" so the placeholder shows instead of blank space
   const fallback = placeholder ?? (childrenText || undefined) ?? resolvedValue;
   const hasNoContent =
     resolvedValue === fieldPath || resolvedValue.trim() === '';
   const displayContent = hasNoContent ? fallback : resolvedValue;
 
+  const inlineStyle = toCssStyle(textStyle);
+
   // -------------------------------------------------------------------------
-  // Admin edit mode — active textarea with save/cancel buttons
+  // Edit mode — active textarea
   // -------------------------------------------------------------------------
   if (isEditMode && isEditing) {
     return (
@@ -214,32 +530,93 @@ export function EditableText({
   }
 
   // -------------------------------------------------------------------------
-  // Admin edit mode — hoverable, clickable element
-  // Prevents event from reaching parent links/buttons
+  // Edit mode — hoverable with format button
   // -------------------------------------------------------------------------
   if (isEditMode) {
-    return React.createElement(
-      Tag,
-      {
-        id,
-        className: `relative cursor-pointer rounded transition-[outline,box-shadow] outline outline-1 outline-transparent hover:outline-[#B8963E]/70 hover:shadow-[0_0_0_3px_rgba(184,150,62,0.12)] ${resolvedClassName ?? ''}`,
-        onClick: (e: React.MouseEvent) => {
-          e.preventDefault();
-          e.stopPropagation();
-          startEditing();
-        },
-        title: `Edit: ${section} → ${fieldPath}`,
-        role: 'button',
-        tabIndex: 0,
-        onKeyDown: (e: React.KeyboardEvent) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            e.stopPropagation();
-            startEditing();
-          }
-        },
-      },
-      render ? render(displayContent) : displayContent,
+    // Floating UI rendered into document.body so it escapes any
+    // `overflow: hidden` ancestor (chips, rounded pills, sections with
+    // clipping). Positioned with `fixed` coordinates from the wrapper's
+    // bounding rect.
+    const portalTarget = typeof document === 'undefined' ? null : document.body;
+
+    const floatingUi =
+      portalTarget && rect
+        ? createPortal(
+            <>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowFormat((v) => !v);
+                }}
+                className={`fixed z-[9999] w-6 h-6 flex items-center justify-center rounded-full shadow-lg border border-white/20 backdrop-blur-sm transition-colors ${
+                  showFormat
+                    ? 'bg-[#B8963E] text-white'
+                    : 'bg-black/70 text-white hover:bg-[#B8963E]'
+                }`}
+                style={{
+                  top: rect.top - 28,
+                  left: rect.right - 24,
+                }}
+                title="Format text"
+                aria-label="Format text"
+              >
+                <Type size={12} />
+              </button>
+
+              {showFormat && (
+                <div
+                  className="fixed z-[9999]"
+                  style={{
+                    top: rect.bottom + 4,
+                    left: Math.max(
+                      8,
+                      Math.min(rect.left, window.innerWidth - 252),
+                    ),
+                  }}
+                >
+                  <FormatPopover
+                    style={textStyle}
+                    onPatch={patchStyle}
+                    onReset={resetStyle}
+                    onClose={() => setShowFormat(false)}
+                  />
+                </div>
+              )}
+            </>,
+            portalTarget,
+          )
+        : null;
+
+    return (
+      <span ref={wrapperRef} className="relative inline-block align-baseline">
+        {React.createElement(
+          Tag,
+          {
+            id,
+            style: inlineStyle,
+            className: `relative cursor-pointer rounded transition-[outline,box-shadow] outline outline-1 outline-transparent hover:outline-[#B8963E]/70 hover:shadow-[0_0_0_3px_rgba(184,150,62,0.12)] ${resolvedClassName ?? ''}`,
+            onClick: (e: React.MouseEvent) => {
+              e.preventDefault();
+              e.stopPropagation();
+              startEditing();
+            },
+            title: `Edit: ${section} → ${fieldPath}`,
+            role: 'button',
+            tabIndex: 0,
+            onKeyDown: (e: React.KeyboardEvent) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                e.stopPropagation();
+                startEditing();
+              }
+            },
+          },
+          render ? render(displayContent) : displayContent,
+        )}
+        {floatingUi}
+      </span>
     );
   }
 
@@ -249,14 +626,14 @@ export function EditableText({
   if (render) {
     return React.createElement(
       Tag,
-      { id, className: resolvedClassName },
+      { id, style: inlineStyle, className: resolvedClassName },
       render(displayContent),
     );
   }
 
   return React.createElement(
     Tag,
-    { id, className: resolvedClassName },
+    { id, style: inlineStyle, className: resolvedClassName },
     displayContent,
   );
 }

@@ -94,6 +94,11 @@ const FOOTER_COLUMNS: FooterColumn[] = [
         labelDefault: 'Pakiety sesji',
       },
       { href: '/blog', fieldPath: 'col2Link3', labelDefault: 'Blog' },
+      {
+        href: '/tworzenie-stron',
+        fieldPath: 'col2Link4',
+        labelDefault: 'Tworzenie stron',
+      },
     ],
   },
   {

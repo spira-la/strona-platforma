@@ -4,6 +4,7 @@ import { SEO } from '@/components/shared/SEO';
 import { ArrowRight, Calendar, Mail } from 'lucide-react';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableBackground } from '@/components/cms/EditableBackground';
+import { EditableOverlay } from '@/components/cms/EditableOverlay';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
 
 // ---------------------------------------------------------------------------
@@ -173,13 +174,11 @@ function HeroSection() {
         className="absolute inset-0"
         aria-hidden={true}
       />
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            'linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.55) 100%)',
-        }}
-        aria-hidden="true"
+      <EditableOverlay
+        section="blog"
+        fieldPath="heroBg"
+        defaultTop={55}
+        defaultBottom={78}
       />
       <ScrollReveal
         animation="fade"

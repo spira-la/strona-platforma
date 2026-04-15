@@ -4,6 +4,7 @@ import { ArrowRight, ShieldCheck, Lock, Heart } from 'lucide-react';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableImage } from '@/components/cms/EditableImage';
 import { EditableBackground } from '@/components/cms/EditableBackground';
+import { EditableOverlay } from '@/components/cms/EditableOverlay';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
 import { SplitText } from '@/components/shared/SplitText';
 import { GoldLine } from '@/components/shared/GoldLine';
@@ -44,14 +45,12 @@ function HeroSection() {
         aria-hidden={true}
       />
 
-      {/* Dark gradient overlay: bottom darker → top slightly lighter */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            'linear-gradient(to top, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.60) 100%)',
-        }}
-        aria-hidden="true"
+      {/* Dark gradient overlay — CMS-editable (top/bottom opacity) */}
+      <EditableOverlay
+        section="hero"
+        fieldPath="heroBg"
+        defaultTop={60}
+        defaultBottom={80}
       />
 
       {/* Content */}
@@ -931,13 +930,11 @@ function CtaSection() {
         className="absolute inset-0"
         aria-hidden={true}
       />
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            'linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.65) 100%)',
-        }}
-        aria-hidden="true"
+      <EditableOverlay
+        section="cta"
+        fieldPath="ctaBg"
+        defaultTop={65}
+        defaultBottom={82}
       />
 
       {/* Content */}

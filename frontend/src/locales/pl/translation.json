@@ -28,7 +28,10 @@
     "positionAndSize": "Pozycja i rozmiar",
     "horizontal": "Poziomo",
     "vertical": "Pionowo",
-    "size": "Rozmiar"
+    "size": "Rozmiar",
+    "overlay": "Nakładka (ciemność)",
+    "overlayTop": "Góra",
+    "overlayBottom": "Dół"
   },
   "navbar": {
     "cta": "Umów wizytę"
