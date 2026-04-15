@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { randomUUID } from 'node:crypto';
 import { CacheService } from '../../core/cache.service.js';
 import { CoachEntity } from '../../db/entities/coach.entity.js';
 import { ProfileEntity } from '../../db/entities/profile.entity.js';
@@ -187,8 +188,14 @@ export class CoachesService {
         );
       }
     } else {
-      // Create a new profile for this coach
+      // Create a new profile for this coach. `profiles.id` mirrors
+      // `auth.users.id` for self-registered users, but coaches can be
+      // added before they sign up — generate a UUID here so the FK
+      // constraint is satisfied. When the coach later signs up with
+      // this email, an admin can re-link by updating profile.id to
+      // match auth.users.id.
       profile = this.profileRepo.create({
+        id: randomUUID(),
         fullName: data.fullName,
         email: data.email,
         phone: data.phone ?? null,
