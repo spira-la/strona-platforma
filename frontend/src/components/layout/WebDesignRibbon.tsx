@@ -3,36 +3,43 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 import { EditableText } from '@/components/cms/EditableText';
 
 /**
- * Discreet ribbon shown before the footer on every public page.
- * Points visitors to the dedicated web-design offer at /tworzenie-stron
- * without competing with the main navigation.
+ * Pre-footer section promoting the web-design offer. Sits at the bottom
+ * of every public page except /tworzenie-stron itself, acting as a soft
+ * sales hook for visitors who just browsed Aneta's site.
  */
 export function WebDesignRibbon() {
   return (
-    <aside
+    <section
       aria-label="Oferta tworzenia stron internetowych"
-      className="border-t border-b border-[#E8E4DF] bg-[#FAF8F5]"
+      className="bg-[#F6EFE3] border-t border-[#E8DEC7]"
     >
-      <div className="max-w-[1100px] mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
-        <div className="flex items-center gap-3">
-          <span
-            className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-[#B8944A]/[0.12] text-[#B8944A]"
-            aria-hidden="true"
-          >
-            <Sparkles size={15} />
-          </span>
-          <EditableText
-            section="webDesign"
-            fieldPath="ribbon.text"
-            as="p"
-            className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-snug"
-            placeholder="Podoba Ci się ta strona? Mogę zrobić taką dla Ciebie."
-          />
-        </div>
+      <div className="max-w-[1100px] mx-auto px-6 py-14 md:py-20 flex flex-col items-center gap-6 text-center">
+        <span
+          className="flex items-center justify-center w-12 h-12 rounded-full bg-[#B8944A]/[0.15] text-[#B8944A]"
+          aria-hidden="true"
+        >
+          <Sparkles size={22} />
+        </span>
+
+        <EditableText
+          section="webDesign"
+          fieldPath="ribbon.title"
+          as="h2"
+          className="font-['Cormorant_Garamond'] text-[28px] md:text-[36px] font-bold text-[#2D2D2D] leading-tight"
+          placeholder="Podoba Ci się ta strona?"
+        />
+
+        <EditableText
+          section="webDesign"
+          fieldPath="ribbon.description"
+          as="p"
+          className="font-['Lato'] text-[15px] md:text-[17px] text-[#6B6B6B] leading-[1.7] max-w-[600px]"
+          placeholder="Projektuję i wdrażam takie strony dla coachów, terapeutów i specjalistów — z panelem CMS, wielojęzycznością i pełnym wsparciem technicznym."
+        />
 
         <Link
           to="/tworzenie-stron"
-          className="inline-flex items-center gap-1.5 font-['Lato'] text-[13px] font-semibold text-[#B8944A] hover:text-[#8A6F2E] transition-colors whitespace-nowrap"
+          className="inline-flex items-center gap-2 mt-2 px-7 py-3 rounded-lg font-['Lato'] text-[14px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] transition-colors shadow-sm"
         >
           <EditableText
             section="webDesign"
@@ -40,10 +47,10 @@ export function WebDesignRibbon() {
             as="span"
             placeholder="Zobacz ofertę"
           />
-          <ArrowRight size={14} aria-hidden="true" />
+          <ArrowRight size={15} aria-hidden="true" />
         </Link>
       </div>
-    </aside>
+    </section>
   );
 }
 
