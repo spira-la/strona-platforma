@@ -509,7 +509,7 @@ export function EditableText({
   // -------------------------------------------------------------------------
   if (isEditMode) {
     return (
-      <span className="relative inline-block align-baseline">
+      <span className="group relative inline-block align-baseline">
         {React.createElement(
           Tag,
           {
@@ -535,7 +535,8 @@ export function EditableText({
           render ? render(displayContent) : displayContent,
         )}
 
-        {/* Floating format trigger */}
+        {/* Floating format trigger — only appears on hover, floats above
+            the text so it never overlaps it. */}
         <button
           type="button"
           onClick={(e) => {
@@ -543,10 +544,10 @@ export function EditableText({
             e.stopPropagation();
             setShowFormat((v) => !v);
           }}
-          className={`absolute -top-2 -right-2 z-40 w-6 h-6 flex items-center justify-center rounded-full shadow-lg border border-white/20 backdrop-blur-sm transition-colors ${
+          className={`absolute -top-7 right-0 z-40 w-6 h-6 flex items-center justify-center rounded-full shadow-lg border border-white/20 backdrop-blur-sm transition-opacity duration-150 focus-visible:opacity-100 ${
             showFormat
-              ? 'bg-[#B8963E] text-white'
-              : 'bg-black/70 text-white hover:bg-[#B8963E]'
+              ? 'bg-[#B8963E] text-white opacity-100'
+              : 'bg-black/70 text-white hover:bg-[#B8963E] opacity-0 group-hover:opacity-100'
           }`}
           title="Format text"
           aria-label="Format text"
