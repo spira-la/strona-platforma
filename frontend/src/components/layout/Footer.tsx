@@ -103,12 +103,12 @@ const FOOTER_COLUMNS: FooterColumn[] = [
 
 const SOCIAL_LINKS = [
   {
-    href: 'https://instagram.com',
+    href: 'https://www.instagram.com/anetamroczkospirala/',
     label: 'Instagram',
     Icon: InstagramIcon,
   },
   {
-    href: 'https://facebook.com',
+    href: 'https://www.facebook.com/AnetaMroczko.Spirala',
     label: 'Facebook',
     Icon: FacebookIcon,
   },

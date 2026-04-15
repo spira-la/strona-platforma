@@ -157,7 +157,7 @@ function ContactInfoColumn() {
         </p>
         <div className="flex items-center gap-3">
           <a
-            href="https://instagram.com"
+            href="https://www.instagram.com/anetamroczkospirala/"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
@@ -180,7 +180,7 @@ function ContactInfoColumn() {
             </svg>
           </a>
           <a
-            href="https://facebook.com"
+            href="https://www.facebook.com/AnetaMroczko.Spirala"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Facebook"
