@@ -293,29 +293,33 @@ export function EditableText({
 
   const [isEditing, setIsEditing] = useState(false);
   const [showFormat, setShowFormat] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
   const [rect, setRect] = useState<DOMRect | null>(null);
   const [draftValue, setDraftValue] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const wrapperRef = useRef<HTMLSpanElement>(null);
 
-  // Recompute bounding rect whenever the floating UI is visible, so the
-  // portal-rendered button follows the text on scroll/resize.
+  // Keep the portal-rendered format button pinned to the text element
+  // on scroll / resize / layout shifts. Always-on while in edit mode.
   useEffect(() => {
-    if (!isHovered && !showFormat) return;
+    if (!isEditMode) return;
     const update = () => {
       if (wrapperRef.current)
         setRect(wrapperRef.current.getBoundingClientRect());
     };
     update();
+    // Occasional re-check catches late layout changes (fonts loading,
+    // lazy images, CMS content hydrating) without a ResizeObserver
+    // on every element.
+    const interval = globalThis.setInterval(update, 1000);
     window.addEventListener('scroll', update, true);
     window.addEventListener('resize', update);
     return () => {
+      globalThis.clearInterval(interval);
       window.removeEventListener('scroll', update, true);
       window.removeEventListener('resize', update);
     };
-  }, [isHovered, showFormat]);
+  }, [isEditMode]);
 
   // Auto-size textarea height and focus when entering edit mode
   useEffect(() => {
@@ -533,11 +537,10 @@ export function EditableText({
     // `overflow: hidden` ancestor (chips, rounded pills, sections with
     // clipping). Positioned with `fixed` coordinates from the wrapper's
     // bounding rect.
-    const showTrigger = isHovered || showFormat;
     const portalTarget = typeof document === 'undefined' ? null : document.body;
 
     const floatingUi =
-      portalTarget && rect && showTrigger
+      portalTarget && rect
         ? createPortal(
             <>
               <button
@@ -547,8 +550,6 @@ export function EditableText({
                   e.stopPropagation();
                   setShowFormat((v) => !v);
                 }}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
                 className={`fixed z-[9999] w-6 h-6 flex items-center justify-center rounded-full shadow-lg border border-white/20 backdrop-blur-sm transition-colors ${
                   showFormat
                     ? 'bg-[#B8963E] text-white'
@@ -574,8 +575,6 @@ export function EditableText({
                       Math.min(rect.left, window.innerWidth - 252),
                     ),
                   }}
-                  onMouseEnter={() => setIsHovered(true)}
-                  onMouseLeave={() => setIsHovered(false)}
                 >
                   <FormatPopover
                     style={textStyle}
@@ -591,12 +590,7 @@ export function EditableText({
         : null;
 
     return (
-      <span
-        ref={wrapperRef}
-        className="relative inline-block align-baseline"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
+      <span ref={wrapperRef} className="relative inline-block align-baseline">
         {React.createElement(
           Tag,
           {
