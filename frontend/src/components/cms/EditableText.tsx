@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Bold,
   Italic,
@@ -94,7 +95,7 @@ function FormatPopover({
 
   return (
     <div
-      className="absolute z-50 top-full mt-1 left-0 w-[240px] bg-white rounded-xl shadow-2xl border border-[#E8E4DF] p-3 flex flex-col gap-2.5"
+      className="w-[240px] bg-white rounded-xl shadow-2xl border border-[#E8E4DF] p-3 flex flex-col gap-2.5"
       onClick={(e) => e.stopPropagation()}
       onMouseDown={(e) => e.stopPropagation()}
     >
@@ -292,9 +293,29 @@ export function EditableText({
 
   const [isEditing, setIsEditing] = useState(false);
   const [showFormat, setShowFormat] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [rect, setRect] = useState<DOMRect | null>(null);
   const [draftValue, setDraftValue] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const wrapperRef = useRef<HTMLSpanElement>(null);
+
+  // Recompute bounding rect whenever the floating UI is visible, so the
+  // portal-rendered button follows the text on scroll/resize.
+  useEffect(() => {
+    if (!isHovered && !showFormat) return;
+    const update = () => {
+      if (wrapperRef.current)
+        setRect(wrapperRef.current.getBoundingClientRect());
+    };
+    update();
+    window.addEventListener('scroll', update, true);
+    window.addEventListener('resize', update);
+    return () => {
+      window.removeEventListener('scroll', update, true);
+      window.removeEventListener('resize', update);
+    };
+  }, [isHovered, showFormat]);
 
   // Auto-size textarea height and focus when entering edit mode
   useEffect(() => {
@@ -508,8 +529,74 @@ export function EditableText({
   // Edit mode — hoverable with format button
   // -------------------------------------------------------------------------
   if (isEditMode) {
+    // Floating UI rendered into document.body so it escapes any
+    // `overflow: hidden` ancestor (chips, rounded pills, sections with
+    // clipping). Positioned with `fixed` coordinates from the wrapper's
+    // bounding rect.
+    const showTrigger = isHovered || showFormat;
+    const portalTarget = typeof document === 'undefined' ? null : document.body;
+
+    const floatingUi =
+      portalTarget && rect && showTrigger
+        ? createPortal(
+            <>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowFormat((v) => !v);
+                }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className={`fixed z-[9999] w-6 h-6 flex items-center justify-center rounded-full shadow-lg border border-white/20 backdrop-blur-sm transition-colors ${
+                  showFormat
+                    ? 'bg-[#B8963E] text-white'
+                    : 'bg-black/70 text-white hover:bg-[#B8963E]'
+                }`}
+                style={{
+                  top: rect.top - 28,
+                  left: rect.right - 24,
+                }}
+                title="Format text"
+                aria-label="Format text"
+              >
+                <Type size={12} />
+              </button>
+
+              {showFormat && (
+                <div
+                  className="fixed z-[9999]"
+                  style={{
+                    top: rect.bottom + 4,
+                    left: Math.max(
+                      8,
+                      Math.min(rect.left, window.innerWidth - 252),
+                    ),
+                  }}
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                >
+                  <FormatPopover
+                    style={textStyle}
+                    onPatch={patchStyle}
+                    onReset={resetStyle}
+                    onClose={() => setShowFormat(false)}
+                  />
+                </div>
+              )}
+            </>,
+            portalTarget,
+          )
+        : null;
+
     return (
-      <span className="group relative inline-block align-baseline">
+      <span
+        ref={wrapperRef}
+        className="relative inline-block align-baseline"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         {React.createElement(
           Tag,
           {
@@ -534,35 +621,7 @@ export function EditableText({
           },
           render ? render(displayContent) : displayContent,
         )}
-
-        {/* Floating format trigger — only appears on hover, floats above
-            the text so it never overlaps it. */}
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setShowFormat((v) => !v);
-          }}
-          className={`absolute -top-7 right-0 z-40 w-6 h-6 flex items-center justify-center rounded-full shadow-lg border border-white/20 backdrop-blur-sm transition-opacity duration-150 focus-visible:opacity-100 ${
-            showFormat
-              ? 'bg-[#B8963E] text-white opacity-100'
-              : 'bg-black/70 text-white hover:bg-[#B8963E] opacity-0 group-hover:opacity-100'
-          }`}
-          title="Format text"
-          aria-label="Format text"
-        >
-          <Type size={12} />
-        </button>
-
-        {showFormat && (
-          <FormatPopover
-            style={textStyle}
-            onPatch={patchStyle}
-            onReset={resetStyle}
-            onClose={() => setShowFormat(false)}
-          />
-        )}
+        {floatingUi}
       </span>
     );
   }
