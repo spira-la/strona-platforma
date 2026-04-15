@@ -95,7 +95,7 @@ export function EditableOverlay({
           <button
             type="button"
             onClick={() => setShowControls((s) => !s)}
-            className={`absolute bottom-3 right-[124px] z-30 flex items-center justify-center w-7 h-7 rounded-md text-white transition-colors backdrop-blur-sm shadow-lg border border-white/20 ${
+            className={`absolute bottom-3 right-[172px] z-30 flex items-center justify-center w-7 h-7 rounded-md text-white transition-colors backdrop-blur-sm shadow-lg border border-white/20 ${
               showControls ? 'bg-[#B8963E]' : 'bg-black/70 hover:bg-[#B8963E]'
             }`}
             title={t('cms.overlay')}
@@ -106,7 +106,7 @@ export function EditableOverlay({
 
           {showControls && (
             <div
-              className="absolute bottom-12 right-[124px] z-40 bg-white rounded-xl shadow-2xl p-3 pb-2 flex flex-col gap-3 border border-[#E8E4DF] min-w-[200px]"
+              className="absolute bottom-12 right-[172px] z-40 bg-white rounded-xl shadow-2xl p-3 pb-2 flex flex-col gap-3 border border-[#E8E4DF] min-w-[200px]"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex flex-col gap-3">

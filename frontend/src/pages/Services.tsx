@@ -138,7 +138,8 @@ function BookingTransition({
 }) {
   return (
     <div
-      className="transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)]"
+      aria-hidden={!show}
+      className="transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] overflow-hidden"
       style={{
         opacity: show ? 1 : 0,
         transform: show
@@ -146,6 +147,9 @@ function BookingTransition({
           : 'translateY(16px) scale(0.98)',
         filter: show ? 'none' : 'blur(4px)',
         pointerEvents: show ? 'auto' : 'none',
+        // Collapse the element out of the flow when hidden so sibling
+        // blocks do not get pushed down by an invisible placeholder.
+        maxHeight: show ? undefined : 0,
       }}
     >
       {children}
