@@ -1,0 +1,53 @@
+services:
+  # -------- Dev Redis --------
+  spirala-redis-dev:
+    image: redis:7-alpine
+    container_name: spirala-redis-dev
+    ports:
+      - "45010:6379"
+    command: redis-server --appendonly yes --maxmemory 128mb --maxmemory-policy allkeys-lru
+    restart: unless-stopped
+    networks:
+      - spirala-dev-network
+    volumes:
+      - spirala-redis-dev-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  # -------- Prod Redis --------
+  spirala-redis:
+    image: redis:7-alpine
+    container_name: spirala-redis
+    ports:
+      - "45011:6379"
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    restart: unless-stopped
+    networks:
+      - spirala-prod-network
+    volumes:
+      - spirala-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+volumes:
+  # External — never recreated. If these don't exist yet on the server, remove
+  # the `external: true` and run docker compose up once to create them, then
+  # restore external: true to prevent accidental deletion.
+  spirala-redis-dev-data:
+    external: true
+  spirala-redis-data:
+    external: true
+
+networks:
+  spirala-dev-network:
+    external: true
+  spirala-prod-network:
+    external: true

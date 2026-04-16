@@ -87,7 +87,7 @@ echo "--- Deploying backend ---"
   npm ci
   npm run db:migrate 2>&1 || echo "WARNING: migration failed or no pending migrations"
 
-  docker compose -f "$BACKEND_COMPOSE" build --no-cache
+  export DOCKER_BUILDKIT=1 COMPOSE_DOCKER_CLI_BUILD=1; docker compose -f "$BACKEND_COMPOSE" build
   docker compose -f "$BACKEND_COMPOSE" up -d --force-recreate
 )
 
@@ -115,7 +115,8 @@ if [ "$TARGET" = "prod" ]; then
   )
 fi
 
-docker compose -f "$FRONTEND_COMPOSE" build --no-cache
+export DOCKER_BUILDKIT=1 COMPOSE_DOCKER_CLI_BUILD=1
+docker compose -f "$FRONTEND_COMPOSE" build
 docker compose -f "$FRONTEND_COMPOSE" up -d --force-recreate
 
 sleep 3
