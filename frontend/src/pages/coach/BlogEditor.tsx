@@ -486,11 +486,6 @@ export default function CoachBlogEditor() {
                   <h2 className="font-['Cormorant_Garamond',serif] text-[28px] font-bold text-[#2D2D2D] border-b-2 border-[#E8E4DF] pb-2">
                     {activeTranslation.title ?? '—'}
                   </h2>
-                  {activeTranslation.excerpt && (
-                    <p className="font-['Inter'] text-[14px] text-[#6B6B6B] italic border-l-2 border-[#B8963E] pl-4">
-                      {activeTranslation.excerpt}
-                    </p>
-                  )}
                   <div
                     className="prose prose-base max-w-none font-['Lato'] text-[#3F3F3F] leading-relaxed"
                     dangerouslySetInnerHTML={{
