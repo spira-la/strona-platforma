@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import ImageExt from '@tiptap/extension-image';
@@ -127,6 +127,7 @@ export function TipTapEditor({
       CharacterCount,
     ],
     content,
+    immediatelyRender: false,
     editorProps: {
       attributes: {
         class: 'tiptap-editor-content focus:outline-none',
@@ -173,6 +174,13 @@ export function TipTapEditor({
       onChange(ed.getHTML());
     },
   });
+
+  // Sync content prop into editor when it arrives after mount (e.g. async fetch)
+  useEffect(() => {
+    if (editor && content && editor.getHTML() !== content) {
+      editor.commands.setContent(content, false);
+    }
+  }, [editor, content]);
 
   // ─── Image upload via button ─────────────────────────────────────────────
 

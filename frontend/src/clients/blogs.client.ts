@@ -3,6 +3,16 @@ import { supabase } from '@/config/supabase';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
+export type BlogPostStatus = 'draft' | 'published' | 'archived';
+
+export interface BlogCategory {
+  id: string;
+  name: string;
+  nameEn: string | null;
+  nameEs: string | null;
+  slug: string;
+}
+
 export interface BlogPost {
   id: string;
   authorId: string | null;
@@ -11,9 +21,9 @@ export interface BlogPost {
   content: string | null;
   excerpt: string | null;
   coverImageUrl: string | null;
-  isPublished: boolean;
+  status: BlogPostStatus;
   publishedAt: string | null;
-  tags: string[] | null;
+  categories: BlogCategory[];
   viewCount: number;
   likeCount: number;
   createdAt: string;
@@ -25,8 +35,8 @@ export interface CreateBlogData {
   content: string;
   excerpt?: string;
   coverImageUrl?: string;
-  tags?: string[];
-  isPublished?: boolean;
+  categoryIds?: string[];
+  status?: BlogPostStatus;
 }
 
 export type UpdateBlogData = Partial<CreateBlogData>;
@@ -85,16 +95,25 @@ export const blogsClient = {
       .then((r) => r.data),
 
   // Protected endpoints
-  getMyPosts: (): Promise<BlogPost[]> => api.get<BlogPost[]>('/blogs/my'),
+  getMyPosts: (): Promise<BlogPost[]> =>
+    api
+      .get<{ success: boolean; data: BlogPost[] }>('/blogs/my')
+      .then((r) => r.data),
 
   getMyPost: (id: string): Promise<BlogPost> =>
-    api.get<BlogPost>(`/blogs/my/${id}`),
+    api
+      .get<{ success: boolean; data: BlogPost }>(`/blogs/my/${id}`)
+      .then((r) => r.data),
 
   create: (data: CreateBlogData): Promise<BlogPost> =>
-    api.post<BlogPost>('/blogs', data),
+    api
+      .post<{ success: boolean; data: BlogPost }>('/blogs', data)
+      .then((r) => r.data),
 
   update: (id: string, data: UpdateBlogData): Promise<BlogPost> =>
-    api.put<BlogPost>(`/blogs/${id}`, data),
+    api
+      .put<{ success: boolean; data: BlogPost }>(`/blogs/${id}`, data)
+      .then((r) => r.data),
 
   remove: (id: string): Promise<void> => api.delete<void>(`/blogs/${id}`),
 
@@ -103,4 +122,22 @@ export const blogsClient = {
 
   uploadCoverImage: (file: File): Promise<{ url: string }> =>
     uploadFile('/blogs/upload/cover', file),
+
+  // Translation
+  translatePost: (
+    id: string,
+    targetLang: string,
+    sourceLang?: string,
+  ): Promise<{ success: boolean; message: string }> =>
+    api.post(`/blogs/${id}/translate`, { targetLang, sourceLang }),
+
+  getTranslationStatus: (
+    id: string,
+  ): Promise<{ lang: string; translatedAt: string }[]> =>
+    api
+      .get<{
+        success: boolean;
+        data: { lang: string; translatedAt: string }[];
+      }>(`/blogs/${id}/translations`)
+      .then((r) => r.data),
 };
