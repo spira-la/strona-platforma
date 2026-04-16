@@ -90,7 +90,7 @@ function splitHtmlIntoChunks(html: string): HtmlChunk[] {
 export class OllamaService {
   private readonly logger = new Logger(OllamaService.name);
   private readonly ollamaUrl: string;
-  private readonly model = 'qwen2.5:3b';
+  private readonly model = 'gemma4:e2b';
 
   /** 2 minutes per chunk — small blocks translate fast */
   private readonly chunkTimeoutMs = 2 * 60 * 1000;
