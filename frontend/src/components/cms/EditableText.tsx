@@ -372,7 +372,7 @@ export function EditableText({
   const [draftValue, setDraftValue] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const wrapperRef = useRef<HTMLSpanElement>(null);
+  const wrapperRef = useRef<HTMLElement>(null);
   const [computedColor, setComputedColor] = useState('');
 
   // Keep the portal-rendered format button pinned to the text element
@@ -702,7 +702,7 @@ export function EditableText({
     const WrapperTag = needsFullWidth ? 'div' : 'span';
     return (
       <WrapperTag
-        ref={wrapperRef}
+        ref={wrapperRef as React.RefObject<never>}
         className={`relative ${needsFullWidth ? 'block w-full' : 'inline-block align-baseline'}`}
       >
         {React.createElement(

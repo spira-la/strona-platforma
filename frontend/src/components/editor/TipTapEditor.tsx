@@ -178,7 +178,7 @@ export function TipTapEditor({
   // Sync content prop into editor when it arrives after mount (e.g. async fetch)
   useEffect(() => {
     if (editor && content && editor.getHTML() !== content) {
-      editor.commands.setContent(content, false);
+      editor.commands.setContent(content, { emitUpdate: false });
     }
   }, [editor, content]);
 
