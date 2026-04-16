@@ -58,7 +58,8 @@ const envSchema = z.object({
   SITE_URL: z.string().optional(),
 
   // Ollama — AI translation service (optional, defaults to local Docker port)
-  OLLAMA_URL: z.string().optional().default('http://localhost:45020'),
+  // eslint-disable-next-line sonarjs/no-clear-text-protocols -- internal Docker network, no TLS
+  OLLAMA_URL: z.string().optional().default('http://spirala-ollama:11434'),
 });
 
 export type EnvConfig = z.infer<typeof envSchema>;

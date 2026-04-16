@@ -8,7 +8,8 @@ services:
       - spirala-ollama-data:/root/.ollama
     restart: unless-stopped
     networks:
-      - spirala-ollama-network
+      - spirala-dev-network
+      - spirala-prod-network
     deploy:
       resources:
         limits:
@@ -25,5 +26,7 @@ volumes:
   spirala-ollama-data:
 
 networks:
-  spirala-ollama-network:
-    name: spirala-ollama-network
+  spirala-dev-network:
+    external: true
+  spirala-prod-network:
+    external: true
