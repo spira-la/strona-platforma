@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BlogPostEntity } from '../../db/entities/blog.entity.js';
+import { BlogPostStatus } from '../../db/entities/enums.js';
 
 interface SitemapUrl {
   loc: string;
@@ -66,7 +67,7 @@ export class SitemapService {
     try {
       blogPosts = await this.blogRepo.find({
         select: ['slug', 'updatedAt'],
-        where: { isPublished: true },
+        where: { status: BlogPostStatus.PUBLISHED },
         order: { publishedAt: 'DESC' },
       });
     } catch (error) {

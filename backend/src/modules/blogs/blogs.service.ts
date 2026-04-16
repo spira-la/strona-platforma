@@ -5,8 +5,11 @@ import {
   Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { BlogPostEntity } from '../../db/entities/blog.entity.js';
+import { CategoryEntity } from '../../db/entities/product.entity.js';
+import { BlogPostStatus } from '../../db/entities/enums.js';
+import { BlogTranslationsService } from './blog-translations.service.js';
 
 // ---------------------------------------------------------------------------
 // DTOs
@@ -17,8 +20,8 @@ export interface CreateBlogPostData {
   content?: string | null;
   excerpt?: string | null;
   coverImageUrl?: string | null;
-  tags?: string[] | null;
-  isPublished?: boolean;
+  categoryIds?: string[];
+  status?: BlogPostStatus;
 }
 
 export interface UpdateBlogPostData {
@@ -26,8 +29,8 @@ export interface UpdateBlogPostData {
   content?: string | null;
   excerpt?: string | null;
   coverImageUrl?: string | null;
-  tags?: string[] | null;
-  isPublished?: boolean;
+  categoryIds?: string[];
+  status?: BlogPostStatus;
 }
 
 // ---------------------------------------------------------------------------
@@ -67,6 +70,9 @@ export class BlogsService {
   constructor(
     @InjectRepository(BlogPostEntity)
     private readonly blogRepo: Repository<BlogPostEntity>,
+    @InjectRepository(CategoryEntity)
+    private readonly categoryRepo: Repository<CategoryEntity>,
+    private readonly translations: BlogTranslationsService,
   ) {}
 
   // ---------------------------------------------------------------------------
@@ -79,7 +85,7 @@ export class BlogsService {
    */
   async findAllPublished(): Promise<BlogPostEntity[]> {
     return this.blogRepo.find({
-      where: { isPublished: true },
+      where: { status: BlogPostStatus.PUBLISHED },
       order: { publishedAt: 'DESC' },
     });
   }
@@ -90,7 +96,7 @@ export class BlogsService {
    */
   async findBySlug(slug: string): Promise<BlogPostEntity> {
     const post = await this.blogRepo.findOne({
-      where: { slug, isPublished: true },
+      where: { slug, status: BlogPostStatus.PUBLISHED },
     });
 
     if (!post) {
@@ -154,6 +160,15 @@ export class BlogsService {
   ): Promise<BlogPostEntity> {
     const slug = generateSlug(data.title);
 
+    const status = data.status ?? BlogPostStatus.DRAFT;
+
+    const categories =
+      data.categoryIds && data.categoryIds.length > 0
+        ? await this.categoryRepo.find({
+            where: { id: In(data.categoryIds) },
+          })
+        : [];
+
     const entity = this.blogRepo.create({
       authorId: coachId,
       title: data.title,
@@ -161,17 +176,22 @@ export class BlogsService {
       content: data.content ?? null,
       excerpt: data.excerpt ?? null,
       coverImageUrl: data.coverImageUrl ?? null,
-      tags: data.tags ?? null,
-      isPublished: data.isPublished ?? false,
-      publishedAt: data.isPublished ? new Date() : null,
+      categories,
+      status,
+      publishedAt: status === BlogPostStatus.PUBLISHED ? new Date() : null,
     });
 
-    return this.blogRepo.save(entity);
+    const saved = await this.blogRepo.save(entity);
+
+    // Auto-translate to other languages in background
+    this.translations.translateToOtherLanguages(saved.id, 'pl');
+
+    return saved;
   }
 
   /**
    * Partially updates a blog post owned by the authenticated coach.
-   * If isPublished transitions to true, sets publishedAt to now().
+   * If status transitions to PUBLISHED, sets publishedAt to now().
    * Throws ForbiddenException if the post belongs to another coach.
    */
   async update(
@@ -181,26 +201,43 @@ export class BlogsService {
   ): Promise<BlogPostEntity> {
     const post = await this.findOneByCoach(id, coachId);
 
-    const patch: Partial<BlogPostEntity> = {};
-
-    if (data.title !== undefined) patch.title = data.title;
-    if (data.content !== undefined) patch.content = data.content;
-    if (data.excerpt !== undefined) patch.excerpt = data.excerpt;
+    if (data.title !== undefined) post.title = data.title;
+    if (data.content !== undefined) post.content = data.content;
+    if (data.excerpt !== undefined) post.excerpt = data.excerpt;
     if (data.coverImageUrl !== undefined)
-      patch.coverImageUrl = data.coverImageUrl;
-    if (data.tags !== undefined) patch.tags = data.tags;
+      post.coverImageUrl = data.coverImageUrl;
 
-    if (data.isPublished !== undefined) {
-      patch.isPublished = data.isPublished;
-      // Only set publishedAt when the post is being published for the first time
-      if (data.isPublished && !post.isPublished) {
-        patch.publishedAt = new Date();
-      }
+    if (data.categoryIds !== undefined) {
+      post.categories =
+        data.categoryIds.length > 0
+          ? await this.categoryRepo.find({
+              where: { id: In(data.categoryIds) },
+            })
+          : [];
     }
 
-    await this.blogRepo.update({ id }, patch);
+    if (data.status !== undefined) {
+      if (
+        data.status === BlogPostStatus.PUBLISHED &&
+        post.status !== BlogPostStatus.PUBLISHED
+      ) {
+        post.publishedAt = new Date();
+      }
+      post.status = data.status;
+    }
 
-    return this.blogRepo.findOneOrFail({ where: { id } });
+    const saved = await this.blogRepo.save(post);
+
+    // Auto-translate if translatable content changed
+    const contentChanged =
+      data.title !== undefined ||
+      data.content !== undefined ||
+      data.excerpt !== undefined;
+    if (contentChanged) {
+      this.translations.translateToOtherLanguages(saved.id, 'pl');
+    }
+
+    return saved;
   }
 
   /**
@@ -226,7 +263,7 @@ export class BlogsService {
     increment: boolean,
   ): Promise<number> {
     const post = await this.blogRepo.findOne({
-      where: { id: postId, isPublished: true },
+      where: { id: postId, status: BlogPostStatus.PUBLISHED },
     });
 
     if (!post) {

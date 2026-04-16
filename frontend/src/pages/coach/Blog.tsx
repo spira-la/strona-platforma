@@ -6,6 +6,7 @@ import {
   FileText,
   CheckCircle2,
   FileX2,
+  Archive,
   Plus,
   Pencil,
   Trash2,
@@ -37,7 +38,7 @@ function formatDate(dateStr: string): string {
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type StatusFilter = 'published' | 'drafts';
+type StatusFilter = 'published' | 'drafts' | 'archived';
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
@@ -61,12 +62,18 @@ export default function CoachBlog() {
     queryFn: () => blogsClient.getMyPosts(),
   });
 
-  const published = posts.filter((p) => p.isPublished);
-  const drafts = posts.filter((p) => !p.isPublished);
+  const safePosts = Array.isArray(posts) ? posts : [];
+  const published = safePosts.filter((p) => p.status === 'published');
+  const drafts = safePosts.filter((p) => p.status === 'draft');
+  const archived = safePosts.filter((p) => p.status === 'archived');
 
-  const filtered = posts.filter((p) => {
-    const matchesStatus =
-      statusFilter === 'published' ? p.isPublished : !p.isPublished;
+  const filtered = safePosts.filter((p) => {
+    const statusMap: Record<StatusFilter, string> = {
+      published: 'published',
+      drafts: 'draft',
+      archived: 'archived',
+    };
+    const matchesStatus = p.status === statusMap[statusFilter];
     const matchesSearch =
       search.trim() === '' ||
       p.title.toLowerCase().includes(search.trim().toLowerCase());
@@ -135,20 +142,30 @@ export default function CoachBlog() {
     {
       key: 'status',
       header: t('coach.blog.table.status'),
-      render: (post) => (
-        <span
-          className={[
-            'inline-flex items-center px-2 py-0.5 rounded-full text-[12px] font-medium font-["Inter"]',
-            post.isPublished
-              ? 'text-[#0D9488] bg-[#F0FDFA] border border-[#0D9488]/20'
-              : 'text-[#6B6B6B] bg-[#F5F5F5] border border-[#E8E4DF]',
-          ].join(' ')}
-        >
-          {post.isPublished
-            ? t('coach.blog.status.published')
-            : t('coach.blog.status.draft')}
-        </span>
-      ),
+      render: (post) => {
+        const badgeClass =
+          post.status === 'published'
+            ? 'text-[#0D9488] bg-[#F0FDFA] border border-[#0D9488]/20'
+            : post.status === 'archived'
+              ? 'text-[#6B6B6B] bg-[#F5F5F5] border border-[#E8E4DF]'
+              : 'text-[#B8963E] bg-[#FDF8F0] border border-[#B8963E]/20';
+        const labelKey =
+          post.status === 'published'
+            ? 'coach.blog.status.published'
+            : post.status === 'archived'
+              ? 'coach.blog.status.archived'
+              : 'coach.blog.status.draft';
+        return (
+          <span
+            className={[
+              'inline-flex items-center px-2 py-0.5 rounded-full text-[12px] font-medium font-["Inter"]',
+              badgeClass,
+            ].join(' ')}
+          >
+            {t(labelKey)}
+          </span>
+        );
+      },
     },
     {
       key: 'date',
@@ -156,7 +173,7 @@ export default function CoachBlog() {
       render: (post) => (
         <span className="font-['Inter'] text-[13px] text-[#6B6B6B] whitespace-nowrap">
           {formatDate(
-            post.isPublished && post.publishedAt
+            post.status === 'published' && post.publishedAt
               ? post.publishedAt
               : post.createdAt,
           )}
@@ -201,7 +218,7 @@ export default function CoachBlog() {
       />
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
         <AdminStatCard
           icon={FileText}
           label={t('coach.blog.stats.total')}
@@ -216,6 +233,11 @@ export default function CoachBlog() {
           icon={FileX2}
           label={t('coach.blog.stats.drafts')}
           value={isLoading ? '—' : drafts.length}
+        />
+        <AdminStatCard
+          icon={Archive}
+          label={t('coach.blog.stats.archived')}
+          value={isLoading ? '—' : archived.length}
         />
       </div>
 
@@ -232,6 +254,11 @@ export default function CoachBlog() {
               value: 'drafts',
               label: t('coach.blog.filter.drafts'),
               count: drafts.length,
+            },
+            {
+              value: 'archived',
+              label: t('coach.blog.filter.archived'),
+              count: archived.length,
             },
           ]}
           active={statusFilter}

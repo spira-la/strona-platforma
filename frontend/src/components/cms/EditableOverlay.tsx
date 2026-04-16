@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Droplet, Check } from 'lucide-react';
+import { Droplet, Check, RotateCw } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useCMS } from '@/contexts/CMSContext';
 import type { CMSSectionKey } from '@/types/cms.types';
@@ -51,14 +51,23 @@ export function EditableOverlay({
 
   const topField = `${fieldPath}OverlayTop`;
   const bottomField = `${fieldPath}OverlayBottom`;
+  const angleField = `${fieldPath}OverlayAngle`;
 
   const topRaw = getFieldValue(section, topField);
   const bottomRaw = getFieldValue(section, bottomField);
+  const angleRaw = getFieldValue(section, angleField);
   const top = parseOpacity(topRaw === topField ? '' : topRaw, defaultTop);
   const bottom = parseOpacity(
     bottomRaw === bottomField ? '' : bottomRaw,
     defaultBottom,
   );
+  // Angle: -1 means use the `direction` prop (keyword like "to top"). ≥0 = explicit degrees.
+  const angle = (() => {
+    if (!angleRaw || angleRaw === angleField || angleRaw.trim() === '')
+      return -1;
+    const n = Number.parseInt(angleRaw, 10);
+    return Number.isFinite(n) ? n : -1;
+  })();
 
   const [showControls, setShowControls] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -80,7 +89,8 @@ export function EditableOverlay({
     [section, updateField, flashSaved],
   );
 
-  const gradient = `linear-gradient(${direction}, rgba(${color},${bottom / 100}) 0%, rgba(${color},${top / 100}) 100%)`;
+  const gradientDir = angle >= 0 ? `${angle}deg` : direction;
+  const gradient = `linear-gradient(${gradientDir}, rgba(${color},${bottom / 100}) 0%, rgba(${color},${top / 100}) 100%)`;
 
   return (
     <>
@@ -158,6 +168,72 @@ export function EditableOverlay({
                 </div>
               </div>
 
+              {/* Angle control */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter'] flex items-center gap-1">
+                    <RotateCw size={9} />
+                    {t('cms.overlayAngle', { defaultValue: 'Angle' })}
+                  </p>
+                  <span className="text-[10px] text-[#8A8A8A] font-['Inter'] font-medium">
+                    {angle >= 0 ? `${angle}°` : 'auto'}
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min={0}
+                  max={360}
+                  step={15}
+                  value={Math.max(angle, 0)}
+                  onChange={(e) =>
+                    void persist(angleField, Number(e.target.value))
+                  }
+                  className="w-full h-1.5 rounded-full appearance-none bg-gray-200 cursor-pointer"
+                  style={{ accentColor: '#B8963E' }}
+                />
+                {/* Preset buttons */}
+                <div className="flex items-center gap-1 mt-1.5">
+                  {[
+                    { label: '↑', value: 0, title: 'Arriba' },
+                    { label: '↗', value: 45, title: '45°' },
+                    { label: '→', value: 90, title: 'Derecha' },
+                    { label: '↘', value: 135, title: '135°' },
+                    { label: '↓', value: 180, title: 'Abajo' },
+                    { label: '↙', value: 225, title: '225°' },
+                    { label: '←', value: 270, title: 'Izquierda' },
+                    { label: '↖', value: 315, title: '315°' },
+                  ].map(({ label, value, title }) => (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => void persist(angleField, value)}
+                      title={title}
+                      className={`w-6 h-6 flex items-center justify-center rounded text-[11px] transition-colors ${
+                        angle === value
+                          ? 'bg-[#B8963E] text-white'
+                          : 'bg-gray-100 text-[#6B6B6B] hover:bg-gray-200'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      void updateField(section, angleField, '').then(flashSaved)
+                    }
+                    title="Auto"
+                    className={`px-1.5 h-6 flex items-center justify-center rounded text-[9px] font-semibold tracking-wider transition-colors ${
+                      angle < 0
+                        ? 'bg-[#B8963E] text-white'
+                        : 'bg-gray-100 text-[#6B6B6B] hover:bg-gray-200'
+                    }`}
+                  >
+                    AUTO
+                  </button>
+                </div>
+              </div>
+
               <div className="flex items-center justify-between pt-2 border-t border-[#F0EDE8]">
                 <span
                   className={`flex items-center gap-1 text-[10px] font-medium font-['Inter'] transition-opacity duration-300 ${saved ? 'opacity-100 text-green-600' : 'opacity-0'}`}
@@ -170,6 +246,7 @@ export function EditableOverlay({
                   onClick={() => {
                     void persist(topField, defaultTop);
                     void persist(bottomField, defaultBottom);
+                    void updateField(section, angleField, '').then(flashSaved);
                   }}
                   className="px-2 py-1 rounded-md text-[10px] font-medium text-[#6B6B6B] hover:text-[#B8963E] transition-colors font-['Inter']"
                 >

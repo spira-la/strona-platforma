@@ -1,115 +1,40 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { SEO } from '@/components/shared/SEO';
 import { ArrowRight, Calendar, Mail } from 'lucide-react';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableBackground } from '@/components/cms/EditableBackground';
 import { EditableOverlay } from '@/components/cms/EditableOverlay';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
+import { blogsClient, type BlogPost } from '@/clients/blogs.client';
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
+const DEFAULT_COVER =
+  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=800&auto=format&fit=crop';
 
-interface BlogCardData {
-  id: number;
-  category: string;
-  title: string;
-  excerpt: string;
-  date: string;
-  imageUrl: string;
-  slug: string;
+function formatDate(iso: string | null): string {
+  if (!iso) return '';
+  try {
+    return new Date(iso).toLocaleDateString('pl-PL', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+  } catch {
+    return '';
+  }
 }
 
-// ---------------------------------------------------------------------------
-// Static data — will be replaced by CMS/API data in future iterations
-// ---------------------------------------------------------------------------
-
-const BLOG_POSTS: BlogCardData[] = [
-  {
-    id: 1,
-    category: 'Relacje',
-    title: 'Jak budowac zdrowe granice w relacjach',
-    excerpt:
-      'Granice to nie mury — to wyraz szacunku do siebie i do drugiego czlowieka. Dowiedz sie, jak je wyznaczac z miloscia.',
-    date: '12 marca 2026',
-    imageUrl:
-      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=800&auto=format&fit=crop',
-    slug: '/blog/zdrowe-granice',
-  },
-  {
-    id: 2,
-    category: 'Rozwoj osobisty',
-    title: 'Praktyki uwaznosci na trudne dni',
-    excerpt:
-      'Kiedy rzeczywistosc przytlacza, drobne rytualy uwaznosciowe moga stac sie kotwica. Kilka sprawdzonych praktyk.',
-    date: '5 marca 2026',
-    imageUrl:
-      'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?q=80&w=800&auto=format&fit=crop',
-    slug: '/blog/praktyki-uwaznosci',
-  },
-  {
-    id: 3,
-    category: 'Emocje',
-    title: 'Zlosc jako informacja, nie wrog',
-    excerpt:
-      'Zlosc bywa potepiana, ale kryje w sobie wazny przekaz. Naucz sie jej suchac zamiast ja tlumic.',
-    date: '25 lutego 2026',
-    imageUrl:
-      'https://images.unsplash.com/photo-1474540412665-1cdae210ae6b?q=80&w=800&auto=format&fit=crop',
-    slug: '/blog/zlosc-jako-informacja',
-  },
-  {
-    id: 4,
-    category: 'Trauma',
-    title: 'Cialo pamięta — somatyczne podejscie do uzdrawiania',
-    excerpt:
-      'Trauma zapisuje sie nie tylko w umysle, ale i w ciele. Jak praca z sensacjami cielesnymi moze wspierac zdrowienie.',
-    date: '18 lutego 2026',
-    imageUrl:
-      'https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=800&auto=format&fit=crop',
-    slug: '/blog/cialo-pamieta',
-  },
-  {
-    id: 5,
-    category: 'Coaching',
-    title: 'Cel czy wartosci — co naprawde prowadzi do zmiany',
-    excerpt:
-      'Wiele osob stawia sobie cele, ale za mala uwage poswięca wartosciom. To one sa kompasem trwalej transformacji.',
-    date: '10 lutego 2026',
-    imageUrl:
-      'https://images.unsplash.com/photo-1443890923422-7819ed4101c0?q=80&w=800&auto=format&fit=crop',
-    slug: '/blog/cel-czy-wartosci',
-  },
-  {
-    id: 6,
-    category: 'Samopoznanie',
-    title: 'Dziennik wdzieznosci — dlaczego dziala',
-    excerpt:
-      'Neurobiologia potwierdzila to, co intuicja czuje od dawna: regularna praktyka wdzieznosci zmienia mozg.',
-    date: '3 lutego 2026',
-    imageUrl:
-      'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?q=80&w=800&auto=format&fit=crop',
-    slug: '/blog/dziennik-wdziecznosci',
-  },
-];
-
-const FEATURED_POST = {
-  title: 'Jak uwolnic sie od blokad przekazywanych przez pokolenia',
-  excerpt:
-    'Wzorce z dziecinstwa, przekonania przejęte od rodzicow, nieświadome reakcje — to wszystko moze nas ograniczac. Ale mozna sie od nich uwolnic. Dowiedz sie jak.',
-  date: '20 marca 2026',
-  imageUrl:
-    'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=900&auto=format&fit=crop',
-  slug: '/blog/blokady-miedzypokoleniowe',
-};
+function getCategory(post: BlogPost): string {
+  return post.categories?.[0]?.name ?? 'Artykuł';
+}
 
 // ---------------------------------------------------------------------------
 // Sub-components
 // ---------------------------------------------------------------------------
 
 interface BlogCardProps {
-  post: BlogCardData;
+  post: BlogPost;
 }
 
 function BlogCard({ post }: BlogCardProps) {
@@ -117,7 +42,7 @@ function BlogCard({ post }: BlogCardProps) {
     <article className="flex flex-col bg-white rounded-lg overflow-hidden shadow-sm border border-[#F0EDE8] hover:shadow-md transition-shadow duration-300">
       <div className="relative overflow-hidden h-48">
         <img
-          src={post.imageUrl}
+          src={post.coverImageUrl ?? DEFAULT_COVER}
           alt={post.title}
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           loading="lazy"
@@ -125,21 +50,23 @@ function BlogCard({ post }: BlogCardProps) {
       </div>
       <div className="flex flex-col flex-1 p-5 gap-3">
         <span className="inline-block self-start font-['Lato'] text-[11px] font-semibold tracking-[0.08em] uppercase text-[#B8944A] bg-[#B8944A]/[0.1] rounded-full px-3 py-1">
-          {post.category}
+          {getCategory(post)}
         </span>
         <h3 className="font-['Cormorant_Garamond'] text-[17px] font-bold text-[#2D2D2D] leading-snug">
           {post.title}
         </h3>
-        <p className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-relaxed flex-1">
-          {post.excerpt}
-        </p>
-        <div className="flex items-center justify-between pt-2 border-t border-[#F0EDE8]">
+        {post.excerpt && (
+          <p className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-relaxed flex-1">
+            {post.excerpt}
+          </p>
+        )}
+        <div className="flex items-center justify-between pt-2 border-t border-[#F0EDE8] mt-auto">
           <span className="flex items-center gap-1.5 font-['Lato'] text-[13px] text-[#8A8A8A]">
             <Calendar size={13} aria-hidden="true" />
-            {post.date}
+            {formatDate(post.publishedAt ?? post.createdAt)}
           </span>
           <Link
-            to={post.slug}
+            to={`/blog/${post.slug}`}
             className="flex items-center gap-1 font-['Lato'] text-[13px] font-semibold text-[#B8944A] hover:text-[#D4B97A] transition-colors"
             aria-label={`Czytaj wiecej: ${post.title}`}
           >
@@ -204,68 +131,59 @@ function HeroSection() {
   );
 }
 
-function FeaturedPostSection() {
+interface FeaturedPostSectionProps {
+  post: BlogPost;
+}
+
+function FeaturedPostSection({ post }: FeaturedPostSectionProps) {
+  const category = post.categories?.[0]?.name;
   return (
     <section
-      className="bg-white py-14 md:py-20"
+      className="bg-[#FAF8F5] pt-10 md:pt-16 pb-10 md:pb-16"
       aria-label="Wyrozniony artykul"
     >
-      <div className="max-w-[1100px] mx-auto px-6">
+      <div className="max-w-[1200px] mx-auto px-6 md:px-8">
         <ScrollReveal animation="fade-up">
-          <div className="flex flex-col md:flex-row gap-0 rounded-lg overflow-hidden border border-[#E8E4DF] shadow-sm">
-            {/* Image */}
-            <div className="md:w-[45%] relative overflow-hidden min-h-[280px]">
+          <div className="flex flex-col md:flex-row gap-0 rounded-lg overflow-hidden bg-[#F5F3EF] md:h-[420px]">
+            <div className="md:w-1/2 relative overflow-hidden h-[280px] md:h-full">
               <img
-                src={FEATURED_POST.imageUrl}
-                alt={FEATURED_POST.title}
+                src={post.coverImageUrl ?? DEFAULT_COVER}
+                alt={post.title}
                 className="w-full h-full object-cover absolute inset-0"
               />
             </div>
-            {/* Content */}
-            <div className="md:w-[55%] flex flex-col justify-center gap-5 p-8 md:p-12 bg-[#FAF8F5]">
-              <span className="inline-block self-start font-['Lato'] text-[11px] font-bold tracking-[0.1em] uppercase text-white bg-[#B8944A] rounded-full px-4 py-1.5">
-                <EditableText
-                  section="blog"
-                  fieldPath="featured.badge"
-                  as="span"
-                  placeholder="Najnowszy wpis"
-                />
-              </span>
-              <EditableText
-                section="blog"
-                fieldPath="featured.title"
-                as="h2"
-                className="font-['Cormorant_Garamond'] text-[24px] md:text-[28px] font-bold text-[#2D2D2D] leading-snug"
-                placeholder={FEATURED_POST.title}
-              />
-              <EditableText
-                section="blog"
-                fieldPath="featured.excerpt"
-                as="p"
-                className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7]"
-                placeholder={FEATURED_POST.excerpt}
-              />
-              <div className="flex items-center gap-2">
-                <span className="font-['Lato'] text-[13px] text-[#8A8A8A] flex items-center gap-1.5">
-                  <Calendar size={13} aria-hidden="true" />
-                  {FEATURED_POST.date}
-                </span>
-              </div>
+            <div className="md:w-1/2 flex flex-col justify-center gap-5 px-10 py-12 md:px-14 md:py-12">
+              {(category || post.publishedAt || post.createdAt) && (
+                <div className="flex flex-wrap items-center gap-4">
+                  {category && (
+                    <span className="inline-block font-['Lato'] text-[11px] font-bold tracking-[0.2em] uppercase text-white bg-[#B8944A] rounded-md px-3 py-1.5">
+                      {category}
+                    </span>
+                  )}
+                  <span className="font-['Lato'] text-[13px] text-[#8A8A8A]">
+                    {formatDate(post.publishedAt ?? post.createdAt)}
+                  </span>
+                </div>
+              )}
+              <h2 className="font-['Playfair_Display'] text-[32px] md:text-[42px] font-normal text-[#2D2D2D] leading-[1.15] tracking-[-0.015em]">
+                {post.title}
+              </h2>
+              {post.excerpt && (
+                <p className="font-['Lato'] text-[15px] md:text-[16px] text-[#6B6B6B] leading-[1.8]">
+                  {post.excerpt}
+                </p>
+              )}
               <Link
-                to={FEATURED_POST.slug}
-                className="inline-flex items-center gap-2 self-start font-['Lato'] text-[14px] font-semibold text-[#B8944A] hover:text-[#D4B97A] transition-colors group"
+                to={`/blog/${post.slug}`}
+                className="inline-flex items-center gap-2 self-start font-['Lato'] text-[14px] font-semibold text-[#B8944A] hover:text-white hover:bg-[#B8944A] border border-[#B8944A] rounded px-6 py-3 transition-colors mt-2"
               >
                 <EditableText
                   section="blog"
                   fieldPath="featured.cta"
                   as="span"
-                  placeholder="Czytaj wiecej"
+                  placeholder="Czytaj artykuł"
                 />
-                <ArrowRight
-                  size={15}
-                  className="transition-transform group-hover:translate-x-1"
-                  aria-hidden="true"
-                />
+                <ArrowRight size={15} aria-hidden="true" />
               </Link>
             </div>
           </div>
@@ -275,36 +193,63 @@ function FeaturedPostSection() {
   );
 }
 
-function ArticleGridSection() {
+interface ArticleGridSectionProps {
+  posts: BlogPost[];
+  isLoading: boolean;
+}
+
+function ArticleGridSection({ posts, isLoading }: ArticleGridSectionProps) {
   return (
     <section
       className="bg-[#FAF8F5] py-14 md:py-20"
       aria-label="Artykuly i refleksje"
     >
-      <div className="max-w-[1100px] mx-auto px-6">
+      <div className="max-w-[1200px] mx-auto px-6 md:px-8">
         <ScrollReveal animation="fade-up">
           <div className="flex flex-col items-center text-center gap-3 mb-12">
-            <span className="inline-block font-['Lato'] text-[11px] font-semibold tracking-[0.1em] uppercase text-[#B8944A] bg-[#B8944A]/[0.1] rounded-full px-4 py-1.5">
-              Artykuly
-            </span>
+            <EditableText
+              section="blog"
+              fieldPath="grid.eyebrow"
+              as="span"
+              className="font-['Lato'] text-[11px] font-semibold tracking-[0.25em] uppercase text-[#B8944A]"
+              placeholder="WSZYSTKIE WPISY"
+            />
             <EditableText
               section="blog"
               fieldPath="grid.title"
               as="h2"
-              className="font-['Cormorant_Garamond'] text-[28px] md:text-[36px] font-bold text-[#2D2D2D]"
-              placeholder="Artykuly i refleksje"
+              className="font-['Playfair_Display'] text-[32px] md:text-[40px] font-normal text-[#2D2D2D] leading-[1.1]"
+              placeholder="Artykuły i refleksje"
             />
-            <div className="w-10 h-0.5 bg-[#B8944A] mt-1" aria-hidden="true" />
           </div>
         </ScrollReveal>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {BLOG_POSTS.map((post, i) => (
-            <ScrollReveal key={post.id} animation="fade-up" delay={stagger(i)}>
-              <BlogCard post={post} />
-            </ScrollReveal>
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div
+                key={i}
+                className="h-[380px] rounded-lg bg-white border border-[#F0EDE8] animate-pulse"
+              />
+            ))}
+          </div>
+        ) : posts.length === 0 ? (
+          <p className="text-center font-['Lato'] text-[15px] text-[#8A8A8A] py-12">
+            Brak artykułów. Wkrótce pojawią się tu nowe wpisy.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {posts.map((post, i) => (
+              <ScrollReveal
+                key={post.id}
+                animation="fade-up"
+                delay={stagger(i)}
+              >
+                <BlogCard post={post} />
+              </ScrollReveal>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
@@ -399,6 +344,15 @@ function NewsletterSection() {
 // ---------------------------------------------------------------------------
 
 export default function Blog() {
+  const { data, isLoading } = useQuery({
+    queryKey: ['blogs', 'published'],
+    queryFn: () => blogsClient.getPublished(),
+    staleTime: 60_000,
+  });
+
+  const posts = data ?? [];
+  const [featured, ...rest] = posts;
+
   return (
     <main>
       <SEO
@@ -407,8 +361,8 @@ export default function Blog() {
         canonical="/blog"
       />
       <HeroSection />
-      <FeaturedPostSection />
-      <ArticleGridSection />
+      {featured && <FeaturedPostSection post={featured} />}
+      <ArticleGridSection posts={rest} isLoading={isLoading} />
       <NewsletterSection />
     </main>
   );

@@ -32,6 +32,12 @@ export class CategoryEntity {
   @Column({ name: 'sort_order', type: 'int', default: 0, nullable: true })
   sortOrder: number | null;
 
+  @Column({ name: 'name_en', type: 'text', nullable: true })
+  nameEn: string | null;
+
+  @Column({ name: 'name_es', type: 'text', nullable: true })
+  nameEs: string | null;
+
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz', nullable: true })
   createdAt: Date | null;
 }

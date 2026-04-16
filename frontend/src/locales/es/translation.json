@@ -255,11 +255,13 @@
       "stats": {
         "total": "Todos los artículos",
         "published": "Publicados",
-        "drafts": "Borradores"
+        "drafts": "Borradores",
+        "archived": "Archivados"
       },
       "filter": {
         "published": "Publicados",
-        "drafts": "Borradores"
+        "drafts": "Borradores",
+        "archived": "Archivados"
       },
       "searchPlaceholder": "Buscar por título...",
       "newArticle": "Nuevo artículo",
@@ -271,7 +273,8 @@
       },
       "status": {
         "published": "Publicado",
-        "draft": "Borrador"
+        "draft": "Borrador",
+        "archived": "Archivado"
       },
       "empty": {
         "noResults": "No hay artículos que coincidan con la búsqueda.",
@@ -304,6 +307,10 @@
       "slugPlaceholder": "slug-de-url-del-articulo",
       "publish": "Publicado",
       "draft": "Borrador",
+      "statusLabel": "Estado del artículo",
+      "statusDraft": "Borrador",
+      "statusPublished": "Publicado",
+      "statusArchived": "Archivado",
       "save": "Guardar",
       "saving": "Guardando...",
       "back": "Volver al blog",

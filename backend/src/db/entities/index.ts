@@ -8,6 +8,7 @@ export * from './order.entity';
 export * from './booking.entity';
 export * from './invoice.entity';
 export * from './blog.entity';
+export * from './blog-translation.entity';
 export * from './newsletter.entity';
 export * from './contact.entity';
 export * from './cms-content.entity';
@@ -32,6 +33,7 @@ import { OrderEntity } from './order.entity';
 import { BookingEntity } from './booking.entity';
 import { InvoiceEntity } from './invoice.entity';
 import { BlogPostEntity, BlogCommentEntity } from './blog.entity';
+import { BlogPostTranslationEntity } from './blog-translation.entity';
 import { NewsletterSubscriberEntity } from './newsletter.entity';
 import { ContactMessageEntity } from './contact.entity';
 import { CmsContentEntity } from './cms-content.entity';
@@ -60,6 +62,7 @@ export const ALL_ENTITIES = [
   InvoiceEntity,
   BlogPostEntity,
   BlogCommentEntity,
+  BlogPostTranslationEntity,
   NewsletterSubscriberEntity,
   ContactMessageEntity,
   CmsContentEntity,

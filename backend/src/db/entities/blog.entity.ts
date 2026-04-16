@@ -5,11 +5,15 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Index,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
+import { BlogPostStatus } from './enums.js';
+import { CategoryEntity } from './product.entity.js';
 
 @Entity({ name: 'blog_posts' })
 @Index('blog_posts_slug_idx', ['slug'])
-@Index('blog_posts_is_published_idx', ['isPublished'])
+@Index('blog_posts_status_idx', ['status'])
 @Index('blog_posts_published_at_idx', ['publishedAt'])
 export class BlogPostEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -34,18 +38,22 @@ export class BlogPostEntity {
   coverImageUrl: string | null;
 
   @Column({
-    name: 'is_published',
-    type: 'boolean',
-    default: false,
-    nullable: true,
+    name: 'status',
+    type: 'text',
+    default: BlogPostStatus.DRAFT,
   })
-  isPublished: boolean | null;
+  status: BlogPostStatus;
 
   @Column({ name: 'published_at', type: 'timestamptz', nullable: true })
   publishedAt: Date | null;
 
-  @Column({ type: 'text', array: true, nullable: true })
-  tags: string[] | null;
+  @ManyToMany(() => CategoryEntity, { eager: true })
+  @JoinTable({
+    name: 'blog_post_categories',
+    joinColumn: { name: 'post_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'category_id', referencedColumnName: 'id' },
+  })
+  categories: CategoryEntity[];
 
   @Column({ name: 'view_count', type: 'int', default: 0, nullable: true })
   viewCount: number | null;

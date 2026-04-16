@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { useRoles } from '@/hooks/useRoles';
 import { AdminLayout } from './AdminLayout';
 
 function AdminLoadingSpinner() {
@@ -19,18 +19,14 @@ function AdminLoadingSpinner() {
   );
 }
 
-function isAdmin(user: ReturnType<typeof useAuth>['user']): boolean {
-  return user?.app_metadata?.role === 'admin';
-}
-
 export default function AdminProtectedRoute() {
-  const { user, isLoading, isAuthenticated } = useAuth();
+  const { isAdmin, isLoading } = useRoles();
 
   if (isLoading) {
     return <AdminLoadingSpinner />;
   }
 
-  if (!isAuthenticated || !isAdmin(user)) {
+  if (!isAdmin) {
     return <Navigate to="/" replace />;
   }
 

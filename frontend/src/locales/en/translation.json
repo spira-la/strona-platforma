@@ -462,11 +462,70 @@
     },
     "blog": {
       "title": "Blog",
-      "description": "Manage articles"
+      "description": "Manage your articles",
+      "stats": {
+        "total": "All articles",
+        "published": "Published",
+        "drafts": "Drafts",
+        "archived": "Archived"
+      },
+      "filter": {
+        "published": "Published",
+        "drafts": "Drafts",
+        "archived": "Archived"
+      },
+      "searchPlaceholder": "Search by title...",
+      "newArticle": "New article",
+      "table": {
+        "title": "Title",
+        "status": "Status",
+        "date": "Date",
+        "actions": "Actions"
+      },
+      "status": {
+        "published": "Published",
+        "draft": "Draft",
+        "archived": "Archived"
+      },
+      "empty": {
+        "noResults": "No articles match your search criteria.",
+        "noPosts": "You have no articles yet. Click \"New article\" to get started."
+      },
+      "errors": {
+        "loadFailed": "Failed to load articles. Please refresh the page."
+      },
+      "delete": {
+        "title": "Delete article",
+        "confirm": "Are you sure you want to delete",
+        "irreversible": "This action cannot be undone."
+      }
     },
     "blogEditor": {
       "title": "Article editor",
-      "description": "Create and edit articles"
+      "description": "Create and edit articles",
+      "newTitle": "New article",
+      "editTitle": "Edit article",
+      "titlePlaceholder": "Enter article title...",
+      "contentPlaceholder": "Start writing your article...",
+      "coverImage": "Cover image",
+      "uploadCover": "Click to upload an image",
+      "removeCover": "Remove image",
+      "excerpt": "Excerpt",
+      "excerptPlaceholder": "Short article description (max 300 characters)...",
+      "tags": "Tags",
+      "tagsPlaceholder": "Type a tag and press Enter or comma",
+      "slug": "Slug (URL)",
+      "slugPlaceholder": "article-url-slug",
+      "publish": "Published",
+      "draft": "Draft",
+      "statusLabel": "Article status",
+      "statusDraft": "Draft",
+      "statusPublished": "Published",
+      "statusArchived": "Archived",
+      "save": "Save",
+      "saving": "Saving...",
+      "back": "Back to blog",
+      "characters": "characters"
     },
     "newsletter": {
       "title": "Newsletter",

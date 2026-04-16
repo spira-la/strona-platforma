@@ -3,6 +3,7 @@ import { Calendar } from 'lucide-react';
 import { SEO } from '@/components/shared/SEO';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableBackground } from '@/components/cms/EditableBackground';
+import { EditableOverlay } from '@/components/cms/EditableOverlay';
 import { BookingCalendar } from '@/components/booking/BookingCalendar';
 import { TimeSlotPicker } from '@/components/booking/TimeSlotPicker';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
@@ -337,11 +338,11 @@ export default function Services() {
           className="absolute inset-0"
           aria-hidden={true}
         />
-        {/* Dark overlay */}
-        <div
-          className="absolute inset-0"
-          style={{ backgroundColor: 'rgba(25, 20, 15, 0.68)' }}
-          aria-hidden="true"
+        <EditableOverlay
+          section="services"
+          fieldPath="heroBg"
+          defaultTop={68}
+          defaultBottom={68}
         />
 
         <ScrollReveal
@@ -458,10 +459,11 @@ export default function Services() {
           className="absolute inset-0"
           aria-hidden={true}
         />
-        <div
-          className="absolute inset-0"
-          style={{ backgroundColor: 'rgba(25, 20, 15, 0.72)' }}
-          aria-hidden="true"
+        <EditableOverlay
+          section="services"
+          fieldPath="ctaBg"
+          defaultTop={72}
+          defaultBottom={72}
         />
 
         <ScrollReveal

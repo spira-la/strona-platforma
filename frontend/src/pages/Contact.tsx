@@ -1,20 +1,13 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { SEO } from '@/components/shared/SEO';
+import { EditableBackground } from '@/components/cms/EditableBackground';
+import { EditableOverlay } from '@/components/cms/EditableOverlay';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import {
-  Phone,
-  Mail,
-  Globe,
-  Code,
-  Clock,
-  CheckCircle,
-  AlertCircle,
-} from 'lucide-react';
+import { Phone, Mail, Clock, CheckCircle, AlertCircle } from 'lucide-react';
 import { EditableText } from '@/components/cms/EditableText';
-import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
+import { ScrollReveal } from '@/components/shared/ScrollReveal';
 
 // ---------------------------------------------------------------------------
 // Zod schema
@@ -54,195 +47,6 @@ function SectionBadge({ label }: { label: string }) {
   );
 }
 
-interface StepCardProps {
-  icon: React.ReactNode;
-  number: string;
-  titleField: string;
-  titlePlaceholder: string;
-  descField: string;
-  descPlaceholder: string;
-}
-
-function StepCard({
-  icon,
-  number,
-  titleField,
-  titlePlaceholder,
-  descField,
-  descPlaceholder,
-}: StepCardProps) {
-  return (
-    <div className="flex flex-col items-center text-center px-6 py-8 rounded-xl bg-white border border-[#E8E4DF] shadow-sm relative">
-      <span className="absolute -top-3 left-6 font-['Lato'] text-[11px] font-bold text-[#B8944A] bg-white border border-[#E8E4DF] rounded-full px-2.5 py-0.5">
-        {number}
-      </span>
-      <div className="flex items-center justify-center w-14 h-14 rounded-full bg-[#B8944A]/[0.1] text-[#B8944A] mb-5">
-        {icon}
-      </div>
-      <EditableText
-        section="contact"
-        fieldPath={titleField}
-        as="h3"
-        className="font-['Cormorant_Garamond'] text-[17px] font-bold text-[#2D2D2D] mb-3"
-        placeholder={titlePlaceholder}
-      />
-      <EditableText
-        section="contact"
-        fieldPath={descField}
-        as="p"
-        className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-relaxed"
-        placeholder={descPlaceholder}
-      />
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Sections
-// ---------------------------------------------------------------------------
-
-function PricingBannerSection() {
-  return (
-    <section
-      className="relative overflow-hidden py-14 md:py-20"
-      aria-label="Oferta strony internetowej"
-      style={{
-        background:
-          'linear-gradient(135deg, #B8944A 0%, #D4B97A 60%, #B8944A 100%)',
-      }}
-    >
-      <div className="max-w-[1100px] mx-auto px-6 flex flex-col md:flex-row items-center gap-10 md:gap-16">
-        {/* Text */}
-        <ScrollReveal
-          animation="fade"
-          delay={200}
-          className="flex-1 flex flex-col gap-5 text-center md:text-left"
-        >
-          <span className="inline-block self-center md:self-start font-['Lato'] text-[11px] font-bold tracking-[0.1em] uppercase text-[#B8944A] bg-white rounded-full px-4 py-1.5">
-            Oferta specjalna
-          </span>
-          <EditableText
-            section="contact"
-            fieldPath="pricing.title"
-            as="h2"
-            className="font-['Cormorant_Garamond'] text-[28px] md:text-[36px] font-bold text-white leading-snug"
-            placeholder="Chcesz taka strone dla siebie?"
-          />
-          <EditableText
-            section="contact"
-            fieldPath="pricing.description"
-            as="p"
-            className="font-['Lato'] text-[15px] text-white/85 leading-[1.7] max-w-[520px]"
-            placeholder="Tworze profesjonalne strony internetowe dla coachow, terapeutow i specjalistow. Elegancki design, CMS do edycji tresci i szybkie wdrozenie."
-          />
-          <div className="flex items-baseline gap-3">
-            <EditableText
-              section="contact"
-              fieldPath="pricing.price"
-              as="span"
-              className="font-['Cormorant_Garamond'] text-[48px] font-bold text-white"
-              placeholder="2 000 zl"
-            />
-            <EditableText
-              section="contact"
-              fieldPath="pricing.priceNote"
-              as="span"
-              className="font-['Lato'] text-[15px] text-white/70"
-              placeholder="jednorazowo"
-            />
-          </div>
-          <Link
-            to="/tworzenie-stron"
-            className="inline-block self-center md:self-start font-['Lato'] text-[14px] font-semibold text-[#B8944A] bg-white hover:bg-[#FAF8F5] rounded-lg px-6 py-3 transition-colors"
-          >
-            <EditableText
-              section="contact"
-              fieldPath="pricing.cta"
-              as="span"
-              placeholder="Zobacz ofertę"
-            />
-          </Link>
-        </ScrollReveal>
-
-        {/* Mockup placeholder */}
-        <div className="md:w-[380px] flex-shrink-0">
-          <div className="w-full aspect-[4/3] rounded-lg bg-white/20 border border-white/30 flex items-center justify-center">
-            <div className="flex flex-col items-center gap-3 text-white/60">
-              <Globe size={40} aria-hidden="true" />
-              <span className="font-['Lato'] text-[13px]">
-                <EditableText
-                  section="contact"
-                  fieldPath="previewLabel"
-                  as="span"
-                  placeholder="Podgląd strony"
-                />
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function ProcessSection() {
-  return (
-    <section
-      className="bg-[#FAF8F5] py-14 md:py-20"
-      aria-label="Proces tworzenia strony"
-    >
-      <div className="max-w-[1100px] mx-auto px-6">
-        <ScrollReveal animation="fade-up">
-          <div className="flex flex-col items-center text-center gap-3 mb-12">
-            <SectionBadge label="Proces" />
-            <EditableText
-              section="contact"
-              fieldPath="process.title"
-              as="h2"
-              className="font-['Cormorant_Garamond'] text-[26px] md:text-[34px] font-bold text-[#2D2D2D]"
-              placeholder="Jak wyglada tworzenie Twojej strony?"
-            />
-            <div className="w-10 h-0.5 bg-[#B8944A] mt-1" aria-hidden="true" />
-          </div>
-        </ScrollReveal>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-          <ScrollReveal animation="fade-up" delay={stagger(0)}>
-            <StepCard
-              icon={<Phone size={24} aria-hidden="true" />}
-              number="01"
-              titleField="process.step1.title"
-              titlePlaceholder="Pierwsza rozmowa"
-              descField="process.step1.desc"
-              descPlaceholder="Bezplatna konsultacja — poznajesz moje podejscie, opowiadasz o swoich potrzebach i razem ustalamy zakres projektu."
-            />
-          </ScrollReveal>
-          <ScrollReveal animation="fade-up" delay={stagger(1)}>
-            <StepCard
-              icon={<Code size={24} aria-hidden="true" />}
-              number="02"
-              titleField="process.step2.title"
-              titlePlaceholder="Projekt i wdrozenie"
-              descField="process.step2.desc"
-              descPlaceholder="Tworze projekt graficzny i wdrazzam strone. Przez caly czas bedziemy w kontakcie, a Ty zatwierdzasz kazdy etap."
-            />
-          </ScrollReveal>
-          <ScrollReveal animation="fade-up" delay={stagger(2)}>
-            <StepCard
-              icon={<Globe size={24} aria-hidden="true" />}
-              number="03"
-              titleField="process.step3.title"
-              titlePlaceholder="Twoja gotowa strona"
-              descField="process.step3.desc"
-              descPlaceholder="Przekazuje strone z panelem CMS, szkoleniem i pelnym wsparciem technicznym. Jestes gotowa/y dzialac."
-            />
-          </ScrollReveal>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function ContactInfoColumn() {
   return (
     <div className="flex flex-col gap-8">
@@ -265,7 +69,7 @@ function ContactInfoColumn() {
 
       <div className="flex flex-col gap-4">
         <a
-          href="mailto:kontakt@spirala.pl"
+          href="mailto:contact@spira-la.com"
           className="flex items-center gap-3 group"
           aria-label="Napisz e-mail"
         >
@@ -286,7 +90,7 @@ function ContactInfoColumn() {
               fieldPath="info.email"
               as="span"
               className="font-['Lato'] text-[15px] text-[#2D2D2D] group-hover:text-[#B8944A] transition-colors"
-              placeholder="kontakt@spirala.pl"
+              placeholder="contact@spira-la.com"
             />
           </div>
         </a>
@@ -353,7 +157,7 @@ function ContactInfoColumn() {
         </p>
         <div className="flex items-center gap-3">
           <a
-            href="https://instagram.com"
+            href="https://www.instagram.com/anetamroczkospirala/"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
@@ -376,7 +180,7 @@ function ContactInfoColumn() {
             </svg>
           </a>
           <a
-            href="https://facebook.com"
+            href="https://www.facebook.com/AnetaMroczko.Spirala"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Facebook"
@@ -675,6 +479,51 @@ function ContactFormColumn() {
   );
 }
 
+function HeroSection() {
+  return (
+    <section
+      className="relative flex flex-col items-center justify-center text-center px-6 py-28 md:py-36 overflow-hidden min-h-[420px]"
+      aria-label="Kontakt — nagłówek"
+    >
+      <EditableBackground
+        section="contact"
+        fieldPath="heroBg"
+        fallbackSrc="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2070&auto=format&fit=crop"
+        className="absolute inset-0"
+        aria-hidden={true}
+      />
+      <EditableOverlay
+        section="contact"
+        fieldPath="heroBg"
+        defaultTop={40}
+        defaultBottom={70}
+      />
+
+      <ScrollReveal
+        animation="fade"
+        delay={150}
+        className="relative z-10 flex flex-col items-center gap-5 max-w-[720px]"
+      >
+        <SectionBadge label="Kontakt" />
+        <EditableText
+          section="contact"
+          fieldPath="heroTitle"
+          as="h1"
+          className="font-['Cormorant_Garamond'] text-[2.25rem] md:text-[3rem] font-bold text-white leading-[1.15] tracking-[-0.5px]"
+          placeholder="Porozmawiajmy"
+        />
+        <EditableText
+          section="contact"
+          fieldPath="heroSubtitle"
+          as="p"
+          className="font-['Lato'] text-[15px] md:text-[17px] text-white/85 leading-[1.7] max-w-[560px]"
+          placeholder="Napisz, zadzwoń lub wyślij wiadomość przez formularz — odpowiem w ciągu 24 godzin."
+        />
+      </ScrollReveal>
+    </section>
+  );
+}
+
 function ContactSection() {
   return (
     <section
@@ -721,8 +570,7 @@ export default function Contact() {
         description="Skontaktuj się — formularz kontaktowy, e-mail i dane do rezerwacji sesji."
         canonical="/kontakt"
       />
-      <PricingBannerSection />
-      <ProcessSection />
+      <HeroSection />
       <ContactSection />
     </main>
   );

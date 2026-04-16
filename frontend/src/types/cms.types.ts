@@ -50,6 +50,8 @@ export interface EditableTextProps {
   placeholder?: string;
   children?: React.ReactNode;
   richText?: boolean;
+  /** Preserve newlines — renders with white-space: pre-wrap */
+  multiline?: boolean;
   render?: (content: string) => React.ReactNode;
 }
 

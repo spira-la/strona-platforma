@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
+import { WebDesignRibbon } from './WebDesignRibbon';
 import { CMSEditToolbar } from '@/components/cms/CMSEditToolbar';
 import { AuthModal } from '@/components/auth/AuthModal';
 import { useSmoothScroll } from '@/hooks/useSmoothScroll';
@@ -33,6 +34,7 @@ export function Layout({ children }: LayoutProps) {
       <main className={hasHero ? 'flex-1' : 'flex-1 pt-[72px]'}>
         {children}
       </main>
+      {pathname !== '/tworzenie-stron' && <WebDesignRibbon />}
       <Footer />
       <CMSEditToolbar />
       <AuthModal />

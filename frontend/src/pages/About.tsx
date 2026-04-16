@@ -533,10 +533,11 @@ export default function About() {
           className="absolute inset-0"
           aria-hidden={true}
         />
-        <div
-          className="absolute inset-0"
-          style={{ backgroundColor: 'rgba(30,25,20,0.72)' }}
-          aria-hidden="true"
+        <EditableOverlay
+          section="about"
+          fieldPath="ctaBg"
+          defaultTop={72}
+          defaultBottom={72}
         />
 
         <ScrollReveal
