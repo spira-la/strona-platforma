@@ -1,0 +1,29 @@
+services:
+  spirala-ollama:
+    image: ollama/ollama:latest
+    container_name: spirala-ollama
+    ports:
+      - "45020:11434"
+    volumes:
+      - spirala-ollama-data:/root/.ollama
+    restart: unless-stopped
+    networks:
+      - spirala-ollama-network
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 6G
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:11434/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  spirala-ollama-data:
+
+networks:
+  spirala-ollama-network:
+    name: spirala-ollama-network

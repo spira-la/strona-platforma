@@ -1,0 +1,36 @@
+name: Deploy Infra (Ollama)
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+    paths:
+      - 'infra/**'
+  workflow_dispatch:
+
+jobs:
+  deploy-ollama:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: ${{ secrets.SERVER_PORT }}
+          script: |
+            cd ${{ secrets.SPIRALA_APP_DIR }}
+            git fetch --all --prune --force
+            git checkout origin/dev -- infra/
+
+            # Run Ollama setup (idempotent — skips model pull if already present)
+            bash infra/setup-ollama.sh
+
+            # Health check
+            if curl -sf http://localhost:45020/ > /dev/null 2>&1; then
+              echo "Ollama healthy"
+            else
+              echo "WARNING: Ollama health check failed"
+              exit 1
+            fi

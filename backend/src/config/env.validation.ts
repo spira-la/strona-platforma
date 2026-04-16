@@ -56,6 +56,9 @@ const envSchema = z.object({
   CLOUDFLARE_ZONE_ID: z.string().optional(),
   CLOUDFLARE_API_TOKEN: z.string().optional(),
   SITE_URL: z.string().optional(),
+
+  // Ollama — AI translation service (optional, defaults to local Docker port)
+  OLLAMA_URL: z.string().optional().default('http://localhost:45020'),
 });
 
 export type EnvConfig = z.infer<typeof envSchema>;
