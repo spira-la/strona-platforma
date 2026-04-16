@@ -99,6 +99,9 @@ ${text}`;
           model: this.model,
           prompt,
           stream: false,
+          options: {
+            num_ctx: 16_384,
+          },
         }),
         signal: controller.signal,
       });
