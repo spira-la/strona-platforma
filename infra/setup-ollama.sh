@@ -5,7 +5,7 @@ set -euo pipefail
 # Run once on the server, or triggered by infra pipeline.
 
 COMPOSE_FILE="$(dirname "$0")/docker-compose.ollama.yml"
-MODEL="qwen2.5:3b"
+MODEL="gemma4:e2b"
 CONTAINER="spirala-ollama"
 
 echo "==> Starting Ollama container..."
