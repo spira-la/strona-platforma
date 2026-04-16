@@ -255,11 +255,13 @@
       "stats": {
         "total": "Wszystkie artykuły",
         "published": "Opublikowane",
-        "drafts": "Szkice"
+        "drafts": "Szkice",
+        "archived": "Archiwum"
       },
       "filter": {
         "published": "Opublikowane",
-        "drafts": "Szkice"
+        "drafts": "Szkice",
+        "archived": "Archiwum"
       },
       "searchPlaceholder": "Szukaj po tytule...",
       "newArticle": "Nowy artykuł",
@@ -271,7 +273,8 @@
       },
       "status": {
         "published": "Opublikowany",
-        "draft": "Szkic"
+        "draft": "Szkic",
+        "archived": "Archiwum"
       },
       "empty": {
         "noResults": "Brak artykułów spełniających kryteria wyszukiwania.",
@@ -304,6 +307,10 @@
       "slugPlaceholder": "adres-url-artykulu",
       "publish": "Opublikowany",
       "draft": "Szkic",
+      "statusLabel": "Status artykułu",
+      "statusDraft": "Szkic",
+      "statusPublished": "Opublikowany",
+      "statusArchived": "Archiwum",
       "save": "Zapisz",
       "saving": "Zapisuję...",
       "back": "Wróć do bloga",

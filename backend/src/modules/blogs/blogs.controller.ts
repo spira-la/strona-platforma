@@ -23,10 +23,20 @@ import { Roles } from '../../common/decorators/roles.decorator.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import { StorageService } from '../../core/storage.service.js';
 import { BlogsService } from './blogs.service.js';
+import { BlogTranslationsService } from './blog-translations.service.js';
 import type {
   CreateBlogPostData,
   UpdateBlogPostData,
 } from './blogs.service.js';
+
+// ---------------------------------------------------------------------------
+// DTOs
+// ---------------------------------------------------------------------------
+
+interface TranslatePostBody {
+  targetLang: string;
+  sourceLang?: string;
+}
 
 // ---------------------------------------------------------------------------
 // Controller
@@ -43,6 +53,7 @@ export class BlogsController {
   constructor(
     private readonly blogs: BlogsService,
     private readonly storage: StorageService,
+    private readonly translations: BlogTranslationsService,
   ) {}
 
   // ---------------------------------------------------------------------------
@@ -174,6 +185,57 @@ export class BlogsController {
   async remove(@CurrentUser() user: User, @Param('id') id: string) {
     await this.blogs.remove(id, user.id);
     return { success: true, data: null };
+  }
+
+  // ---------------------------------------------------------------------------
+  // Translation endpoints (declared before /:slug to avoid route conflicts)
+  // ---------------------------------------------------------------------------
+
+  /**
+   * POST /api/blogs/:id/translate
+   * Coach — fires background translation for a blog post.
+   * Returns 202 immediately; translation runs asynchronously via Ollama.
+   * Body: { targetLang: string, sourceLang?: string }
+   */
+  @Post(':id/translate')
+  @UseGuards(SupabaseAuthGuard, RolesGuard)
+  @Roles('coach')
+  @HttpCode(HttpStatus.ACCEPTED)
+  triggerTranslation(@Param('id') id: string, @Body() body: TranslatePostBody) {
+    if (!body.targetLang) {
+      throw new BadRequestException('targetLang is required');
+    }
+
+    // Fire-and-forget — do not await
+    void this.translations.translatePost(
+      id,
+      body.targetLang,
+      body.sourceLang ?? 'pl',
+    );
+
+    return { success: true, message: 'Translation started' };
+  }
+
+  /**
+   * GET /api/blogs/:id/translations
+   * Coach — returns all stored translations for a post.
+   */
+  @Get(':id/translations')
+  @UseGuards(SupabaseAuthGuard, RolesGuard)
+  @Roles('coach')
+  async getTranslations(@Param('id') id: string) {
+    const data = await this.translations.getTranslations(id);
+    return { success: true, data };
+  }
+
+  /**
+   * GET /api/blogs/:id/translations/:lang
+   * Public — returns a specific language translation for reading.
+   */
+  @Get(':id/translations/:lang')
+  async getTranslation(@Param('id') id: string, @Param('lang') lang: string) {
+    const data = await this.translations.getTranslation(id, lang);
+    return { success: true, data };
   }
 
   // ---------------------------------------------------------------------------

@@ -52,3 +52,9 @@ export enum PurchaseStatus {
   EXPIRED = 'expired',
   REFUNDED = 'refunded',
 }
+
+export enum BlogPostStatus {
+  DRAFT = 'draft',
+  PUBLISHED = 'published',
+  ARCHIVED = 'archived',
+}

@@ -2,14 +2,24 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, Loader2, ImagePlus, X, Save } from 'lucide-react';
+import {
+  ArrowLeft,
+  Loader2,
+  ImagePlus,
+  X,
+  Save,
+  Check,
+  Languages,
+} from 'lucide-react';
 import { TipTapEditor } from '@/components/editor/TipTapEditor';
 import { toast } from '@/stores/toast.store';
 import {
   blogsClient,
+  type BlogPostStatus,
   type CreateBlogData,
   type UpdateBlogData,
 } from '@/clients/blogs.client';
+import { categoriesClient, type Category } from '@/clients/categories.client';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -26,29 +36,6 @@ function slugify(text: string): string {
     .trim()
     .replaceAll(/[\s_]+/g, '-')
     .replaceAll(/-+/g, '-');
-}
-
-// ─── Tag chip ─────────────────────────────────────────────────────────────────
-
-interface TagChipProps {
-  tag: string;
-  onRemove: () => void;
-}
-
-function TagChip({ tag, onRemove }: TagChipProps) {
-  return (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#F0FDFA] border border-[#0D9488]/20 font-['Inter'] text-[12px] text-[#0D9488]">
-      {tag}
-      <button
-        type="button"
-        onClick={onRemove}
-        aria-label={`Usuń tag ${tag}`}
-        className="hover:text-[#0F766E] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#0D9488] rounded-full"
-      >
-        <X size={11} />
-      </button>
-    </span>
-  );
 }
 
 // ─── Shared input class ───────────────────────────────────────────────────────
@@ -80,16 +67,22 @@ export default function CoachBlogEditor() {
   const [excerpt, setExcerpt] = useState('');
   const [slug, setSlug] = useState('');
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
-  const [tagInput, setTagInput] = useState('');
-  const [tags, setTags] = useState<string[]>([]);
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
   const [coverImageUrl, setCoverImageUrl] = useState('');
-  const [isPublished, setIsPublished] = useState(false);
+  const [status, setStatus] = useState<BlogPostStatus>('draft');
 
   // Cover image upload state
   const [isUploadingCover, setIsUploadingCover] = useState(false);
   const coverFileInputRef = useRef<HTMLInputElement>(null);
 
   // ─── Fetch existing post for edit ─────────────────────────────────────────
+
+  const { data: allCategories = [] } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => categoriesClient.getAll(),
+    staleTime: 300_000,
+  });
+  const activeCategories = allCategories.filter((c: Category) => c.isActive);
 
   const { data: existingPost, isLoading: isLoadingPost } = useQuery({
     queryKey: ['coach', 'blogs', id],
@@ -109,9 +102,9 @@ export default function CoachBlogEditor() {
     setExcerpt(existingPost.excerpt ?? '');
     setSlug(existingPost.slug);
     setSlugManuallyEdited(true); // don't auto-regenerate slug in edit mode
-    setTags(existingPost.tags ?? []);
+    setSelectedCategoryIds(existingPost.categories?.map((c) => c.id) ?? []);
     setCoverImageUrl(existingPost.coverImageUrl ?? '');
-    setIsPublished(existingPost.isPublished);
+    setStatus(existingPost.status);
   }, [existingPost]);
 
   // ─── Auto-generate slug from title ───────────────────────────────────────
@@ -151,6 +144,47 @@ export default function CoachBlogEditor() {
 
   const isSaving = createMutation.isPending || updateMutation.isPending;
 
+  // ─── Translation ─────────────────────────────────────────────────────────
+
+  const { data: translationStatus = [], refetch: refetchTranslations } =
+    useQuery({
+      queryKey: ['coach', 'blogs', id, 'translations'],
+      queryFn: () => blogsClient.getTranslationStatus(id!),
+      enabled: isEditMode,
+      refetchInterval: 15_000, // poll every 15s to catch background completion
+    });
+
+  const [translatingLang, setTranslatingLang] = useState<string | null>(null);
+
+  const translateMutation = useMutation({
+    mutationFn: ({
+      targetLang,
+      sourceLang,
+    }: {
+      targetLang: string;
+      sourceLang?: string;
+    }) => blogsClient.translatePost(id!, targetLang, sourceLang),
+    onSuccess: (_data, variables) => {
+      setTranslatingLang(variables.targetLang);
+      toast.success(
+        t('coach.blogEditor.translationStarted', {
+          defaultValue: 'Tłumaczenie uruchomione w tle...',
+        }),
+      );
+      // Start polling more aggressively for 2 minutes
+      setTimeout(() => void refetchTranslations(), 30_000);
+      setTimeout(() => void refetchTranslations(), 60_000);
+      setTimeout(() => {
+        void refetchTranslations();
+        setTranslatingLang(null);
+      }, 120_000);
+    },
+    onError: (err) => {
+      setTranslatingLang(null);
+      toast.error(err instanceof Error ? err.message : t('admin.common.error'));
+    },
+  });
+
   // ─── Handlers ─────────────────────────────────────────────────────────────
 
   const handleSave = () => {
@@ -163,8 +197,9 @@ export default function CoachBlogEditor() {
       content,
       excerpt: excerpt.trim() || undefined,
       coverImageUrl: coverImageUrl || undefined,
-      tags: tags.length > 0 ? tags : undefined,
-      isPublished,
+      categoryIds:
+        selectedCategoryIds.length > 0 ? selectedCategoryIds : undefined,
+      status,
       slug: slug.trim() || slugify(title),
     };
     if (isEditMode) {
@@ -196,23 +231,10 @@ export default function CoachBlogEditor() {
     }
   };
 
-  const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' || e.key === ',') {
-      e.preventDefault();
-      addTag();
-    }
-  };
-
-  const addTag = () => {
-    const newTag = tagInput.trim().replace(/,$/, '');
-    if (newTag && !tags.includes(newTag)) {
-      setTags((prev) => [...prev, newTag]);
-    }
-    setTagInput('');
-  };
-
-  const removeTag = (tag: string) => {
-    setTags((prev) => prev.filter((t) => t !== tag));
+  const toggleCategory = (id: string) => {
+    setSelectedCategoryIds((prev) =>
+      prev.includes(id) ? prev.filter((cid) => cid !== id) : [...prev, id],
+    );
   };
 
   // ─── Loading state for edit mode ─────────────────────────────────────────
@@ -251,34 +273,48 @@ export default function CoachBlogEditor() {
           </h1>
         </div>
 
-        {/* Publish toggle + Save */}
+        {/* Status selector + Save */}
         <div className="flex items-center gap-3 shrink-0">
-          {/* Publish toggle */}
-          <label className="flex items-center gap-2 cursor-pointer select-none">
-            <span className="font-['Inter'] text-[14px] text-[#6B6B6B]">
-              {isPublished
-                ? t('coach.blogEditor.publish')
-                : t('coach.blogEditor.draft')}
-            </span>
-            <button
-              type="button"
-              role="switch"
-              aria-checked={isPublished}
-              onClick={() => setIsPublished((v) => !v)}
-              className={[
-                'relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488] focus-visible:ring-offset-1',
-                isPublished ? 'bg-[#0D9488]' : 'bg-[#D1D5DB]',
-              ].join(' ')}
-            >
-              <span
+          {/* Status segmented control */}
+          <div
+            role="group"
+            aria-label={t('coach.blogEditor.statusLabel')}
+            className="inline-flex rounded-lg border border-[#E8E4DF] bg-[#FAF8F5] p-0.5 gap-0.5"
+          >
+            {(
+              [
+                { value: 'draft', labelKey: 'coach.blogEditor.statusDraft' },
+                {
+                  value: 'published',
+                  labelKey: 'coach.blogEditor.statusPublished',
+                },
+                {
+                  value: 'archived',
+                  labelKey: 'coach.blogEditor.statusArchived',
+                },
+              ] as { value: BlogPostStatus; labelKey: string }[]
+            ).map(({ value, labelKey }) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setStatus(value)}
+                aria-pressed={status === value}
                 className={[
-                  'inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform duration-200',
-                  isPublished ? 'translate-x-6' : 'translate-x-1',
+                  "px-3 py-1 rounded-md font-['Inter'] text-[13px] font-medium transition-colors duration-150",
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E] focus-visible:ring-offset-1',
+                  status === value && value === 'published'
+                    ? 'bg-[#B8963E] text-white shadow-sm'
+                    : status === value && value === 'draft'
+                      ? 'bg-white text-[#B8963E] shadow-sm border border-[#E8E4DF]'
+                      : status === value && value === 'archived'
+                        ? 'bg-[#6B6B6B] text-white shadow-sm'
+                        : 'text-[#6B6B6B] hover:text-[#2D2D2D]',
                 ].join(' ')}
-              />
-            </button>
-          </label>
+              >
+                {t(labelKey)}
+              </button>
+            ))}
+          </div>
 
           {/* Save button */}
           <button
@@ -422,33 +458,149 @@ export default function CoachBlogEditor() {
             </div>
           </div>
 
-          {/* Tags */}
+          {/* Categories */}
           <div className="bg-white border border-[#E8E4DF] rounded-xl p-4">
-            <label htmlFor="blog-tags" className={LABEL_CLASS}>
-              {t('coach.blogEditor.tags')}
-            </label>
-            <input
-              id="blog-tags"
-              type="text"
-              value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
-              onKeyDown={handleTagKeyDown}
-              onBlur={addTag}
-              placeholder={t('coach.blogEditor.tagsPlaceholder')}
-              className={INPUT_CLASS}
-            />
-            {tags.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 mt-2">
-                {tags.map((tag) => (
-                  <TagChip
-                    key={tag}
-                    tag={tag}
-                    onRemove={() => removeTag(tag)}
-                  />
-                ))}
+            <h2 className={LABEL_CLASS}>
+              {t('coach.blogEditor.categories', { defaultValue: 'Kategorie' })}
+            </h2>
+            {activeCategories.length === 0 ? (
+              <p className="font-['Inter'] text-[12px] text-[#AAAAAA] italic">
+                {t('coach.blogEditor.noCategories', {
+                  defaultValue: 'Brak kategorii. Dodaj je w panelu admin.',
+                })}
+              </p>
+            ) : (
+              <div className="flex flex-col gap-1.5 max-h-[200px] overflow-y-auto">
+                {activeCategories.map((cat: Category) => {
+                  const isSelected = selectedCategoryIds.includes(cat.id);
+                  return (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      onClick={() => toggleCategory(cat.id)}
+                      className={[
+                        'flex items-center gap-2 w-full px-2.5 py-1.5 rounded-lg text-left',
+                        "font-['Inter'] text-[13px] transition-colors",
+                        isSelected
+                          ? 'bg-[#F0FDFA] text-[#0D9488] border border-[#0D9488]/20'
+                          : 'text-[#6B6B6B] hover:bg-[#FAF8F5] border border-transparent',
+                      ].join(' ')}
+                    >
+                      <span
+                        className={[
+                          'w-4 h-4 rounded flex items-center justify-center shrink-0 border transition-colors',
+                          isSelected
+                            ? 'bg-[#0D9488] border-[#0D9488] text-white'
+                            : 'border-[#D1D5DB] bg-white',
+                        ].join(' ')}
+                      >
+                        {isSelected && <Check size={10} />}
+                      </span>
+                      {cat.name}
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
+
+          {/* Translations */}
+          {isEditMode && (
+            <div className="bg-white border border-[#E8E4DF] rounded-xl p-4">
+              <h2 className="font-['Inter'] text-[13px] font-semibold text-[#444444] mb-3 flex items-center gap-2">
+                <Languages size={14} />
+                {t('coach.blogEditor.translations', {
+                  defaultValue: 'Tłumaczenia',
+                })}
+              </h2>
+              <div className="flex flex-col gap-2">
+                {[
+                  { code: 'en', label: 'English', flag: '🇬🇧' },
+                  { code: 'es', label: 'Español', flag: '🇪🇸' },
+                ].map(({ code, label, flag }) => {
+                  const existing = translationStatus.find(
+                    (t) => t.lang === code,
+                  );
+                  const isTranslating = translatingLang === code;
+                  return (
+                    <div
+                      key={code}
+                      className="flex items-center justify-between gap-2 px-3 py-2 rounded-lg border border-[#E8E4DF] bg-[#FAF8F5]"
+                    >
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="text-[16px]">{flag}</span>
+                        <div className="flex flex-col min-w-0">
+                          <span className="font-['Inter'] text-[13px] font-medium text-[#2D2D2D]">
+                            {label}
+                          </span>
+                          {existing && (
+                            <span className="font-['Inter'] text-[10px] text-[#8A8A8A] truncate">
+                              {new Date(
+                                existing.translatedAt,
+                              ).toLocaleDateString('pl-PL', {
+                                day: 'numeric',
+                                month: 'short',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        {existing && (
+                          <span className="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
+                            <Check size={10} />
+                          </span>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() =>
+                            translateMutation.mutate({
+                              targetLang: code,
+                              sourceLang: 'pl',
+                            })
+                          }
+                          disabled={
+                            isTranslating || translateMutation.isPending
+                          }
+                          className={[
+                            "px-2.5 py-1 rounded-md font-['Inter'] text-[11px] font-medium transition-colors",
+                            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]',
+                            'disabled:opacity-50 disabled:cursor-not-allowed',
+                            existing
+                              ? 'text-[#6B6B6B] bg-gray-100 hover:bg-gray-200'
+                              : 'text-white bg-[#0D9488] hover:bg-[#0F766E]',
+                          ].join(' ')}
+                        >
+                          {isTranslating ? (
+                            <Loader2
+                              size={12}
+                              className="animate-spin inline"
+                            />
+                          ) : existing ? (
+                            t('coach.blogEditor.retranslate', {
+                              defaultValue: 'Ponów',
+                            })
+                          ) : (
+                            t('coach.blogEditor.translate', {
+                              defaultValue: 'Tłumacz',
+                            })
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <p className="mt-2 font-['Inter'] text-[10px] text-[#AAAAAA] leading-relaxed">
+                {t('coach.blogEditor.translationHint', {
+                  defaultValue:
+                    'Tłumaczenie działa w tle i może potrwać kilka minut. Status odświeża się automatycznie.',
+                })}
+              </p>
+            </div>
+          )}
 
           {/* Slug */}
           <div className="bg-white border border-[#E8E4DF] rounded-xl p-4">
