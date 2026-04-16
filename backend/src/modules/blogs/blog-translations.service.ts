@@ -5,24 +5,26 @@ import { BlogPostEntity } from '../../db/entities/blog.entity.js';
 import { BlogPostTranslationEntity } from '../../db/entities/blog-translation.entity.js';
 import { OllamaService } from '../../core/ollama.service.js';
 
+// All supported languages
+const ALL_LANGS = ['pl', 'en', 'es'] as const;
+
+interface TranslationJob {
+  postId: string;
+  sourceLang: string;
+  targetLang: string;
+}
+
 // ---------------------------------------------------------------------------
 // Service
 // ---------------------------------------------------------------------------
 
-/**
- * Manages AI-powered translations for blog posts.
- *
- * Translations run via Ollama (local LLM) and are stored in the
- * blog_post_translations table. Each (post_id, language_code) pair is unique —
- * re-translating a post upserts the existing row.
- *
- * All translation methods are designed to be called fire-and-forget from the
- * controller (background job pattern). Errors are logged but never thrown so
- * a failed translation does not crash the request cycle.
- */
 @Injectable()
 export class BlogTranslationsService {
   private readonly logger = new Logger(BlogTranslationsService.name);
+
+  // FIFO queue + mutex — only 1 translation runs at a time on CPU
+  private readonly queue: TranslationJob[] = [];
+  private isProcessing = false;
 
   constructor(
     @InjectRepository(BlogPostEntity)
@@ -33,26 +35,78 @@ export class BlogTranslationsService {
   ) {}
 
   // ---------------------------------------------------------------------------
-  // Write
+  // Public API
   // ---------------------------------------------------------------------------
 
   /**
-   * Translates a blog post into the target language and upserts the result.
-   * Runs field translations sequentially to avoid overloading the CPU-bound
-   * Ollama process. Caller should NOT await this — fire and forget.
-   *
-   * @param postId     - UUID of the blog post to translate
-   * @param targetLang - BCP-47 target language code ('en' | 'es')
-   * @param sourceLang - BCP-47 source language code (default: 'pl')
+   * Enqueue translation of a single post to a single target language.
+   * Deduplicates: if the same (postId, targetLang) is already queued, skips.
+   * Non-blocking — returns immediately.
    */
-  async translatePost(
+  translatePost(
     postId: string,
     targetLang: string,
     sourceLang: string = 'pl',
-  ): Promise<void> {
-    this.logger.log(
-      `Starting translation: post=${postId} ${sourceLang}→${targetLang}`,
+  ): void {
+    this.enqueue({ postId, sourceLang, targetLang });
+  }
+
+  /**
+   * Auto-translate: enqueue translations to ALL other languages.
+   * Called automatically after a blog post is saved/updated.
+   * E.g. sourceLang='pl' → enqueues 'en' and 'es'.
+   */
+  translateToOtherLanguages(postId: string, sourceLang: string = 'pl'): void {
+    const targets = ALL_LANGS.filter((l) => l !== sourceLang);
+    for (const targetLang of targets) {
+      this.enqueue({ postId, sourceLang, targetLang });
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Queue
+  // ---------------------------------------------------------------------------
+
+  private enqueue(job: TranslationJob): void {
+    // Deduplicate — don't add if same post+target is already queued
+    const isDuplicate = this.queue.some(
+      (j) => j.postId === job.postId && j.targetLang === job.targetLang,
     );
+    if (isDuplicate) {
+      this.logger.debug(
+        `Skipping duplicate: post=${job.postId} →${job.targetLang}`,
+      );
+      return;
+    }
+
+    this.queue.push(job);
+    this.logger.log(
+      `Enqueued: post=${job.postId} ${job.sourceLang}→${job.targetLang} (queue: ${this.queue.length})`,
+    );
+
+    // Start processing if not already running
+    void this.processQueue();
+  }
+
+  private async processQueue(): Promise<void> {
+    if (this.isProcessing) return;
+    this.isProcessing = true;
+
+    while (this.queue.length > 0) {
+      const job = this.queue.shift()!;
+      await this.executeTranslation(job);
+    }
+
+    this.isProcessing = false;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Translation execution
+  // ---------------------------------------------------------------------------
+
+  private async executeTranslation(job: TranslationJob): Promise<void> {
+    const { postId, sourceLang, targetLang } = job;
+    this.logger.log(`Translating: post=${postId} ${sourceLang}→${targetLang}`);
 
     let post: BlogPostEntity;
     try {
@@ -62,14 +116,12 @@ export class BlogTranslationsService {
       }
       post = found;
     } catch (error) {
-      this.logger.error(
-        `translatePost: could not load post ${postId}: ${String(error)}`,
-      );
+      this.logger.error(`Could not load post ${postId}: ${String(error)}`);
       return;
     }
 
     try {
-      // Translate fields sequentially — CPU inference cannot parallelise well
+      // Sequential — CPU inference cannot parallelise
       const translatedTitle = post.title
         ? await this.ollama.translate(post.title, sourceLang, targetLang)
         : null;
@@ -83,7 +135,7 @@ export class BlogTranslationsService {
         ? await this.ollama.translate(post.excerpt, sourceLang, targetLang)
         : null;
 
-      // Upsert — ON CONFLICT (post_id, language_code) DO UPDATE
+      // Upsert
       await this.translationRepo
         .createQueryBuilder()
         .insert()
@@ -110,12 +162,10 @@ export class BlogTranslationsService {
         )
         .execute();
 
-      this.logger.log(
-        `Translation complete: post=${postId} ${sourceLang}→${targetLang}`,
-      );
+      this.logger.log(`Done: post=${postId} ${sourceLang}→${targetLang}`);
     } catch (error) {
       this.logger.error(
-        `translatePost failed for post=${postId} ${sourceLang}→${targetLang}: ${String(error)}`,
+        `Failed: post=${postId} ${sourceLang}→${targetLang}: ${String(error)}`,
       );
     }
   }
@@ -124,9 +174,6 @@ export class BlogTranslationsService {
   // Read
   // ---------------------------------------------------------------------------
 
-  /**
-   * Returns all translations for a given post.
-   */
   async getTranslations(postId: string): Promise<BlogPostTranslationEntity[]> {
     return this.translationRepo.find({
       where: { postId },
@@ -134,10 +181,6 @@ export class BlogTranslationsService {
     });
   }
 
-  /**
-   * Returns a specific translation by post ID and language code.
-   * Returns null if no translation exists yet.
-   */
   async getTranslation(
     postId: string,
     lang: string,
@@ -147,10 +190,6 @@ export class BlogTranslationsService {
     });
   }
 
-  /**
-   * Returns a lightweight status list showing which languages have been
-   * translated and when — useful for the admin UI translation dashboard.
-   */
   async getTranslationStatus(
     postId: string,
   ): Promise<{ lang: string; translatedAt: string }[]> {
@@ -164,5 +203,12 @@ export class BlogTranslationsService {
       lang: t.languageCode,
       translatedAt: t.translatedAt?.toISOString() ?? '',
     }));
+  }
+
+  /**
+   * Returns current queue size — useful for debugging.
+   */
+  getQueueSize(): number {
+    return this.queue.length;
   }
 }

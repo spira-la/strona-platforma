@@ -9,6 +9,7 @@ import { In, Repository } from 'typeorm';
 import { BlogPostEntity } from '../../db/entities/blog.entity.js';
 import { CategoryEntity } from '../../db/entities/product.entity.js';
 import { BlogPostStatus } from '../../db/entities/enums.js';
+import { BlogTranslationsService } from './blog-translations.service.js';
 
 // ---------------------------------------------------------------------------
 // DTOs
@@ -71,6 +72,7 @@ export class BlogsService {
     private readonly blogRepo: Repository<BlogPostEntity>,
     @InjectRepository(CategoryEntity)
     private readonly categoryRepo: Repository<CategoryEntity>,
+    private readonly translations: BlogTranslationsService,
   ) {}
 
   // ---------------------------------------------------------------------------
@@ -179,7 +181,12 @@ export class BlogsService {
       publishedAt: status === BlogPostStatus.PUBLISHED ? new Date() : null,
     });
 
-    return this.blogRepo.save(entity);
+    const saved = await this.blogRepo.save(entity);
+
+    // Auto-translate to other languages in background
+    this.translations.translateToOtherLanguages(saved.id, 'pl');
+
+    return saved;
   }
 
   /**
@@ -219,7 +226,18 @@ export class BlogsService {
       post.status = data.status;
     }
 
-    return this.blogRepo.save(post);
+    const saved = await this.blogRepo.save(post);
+
+    // Auto-translate if translatable content changed
+    const contentChanged =
+      data.title !== undefined ||
+      data.content !== undefined ||
+      data.excerpt !== undefined;
+    if (contentChanged) {
+      this.translations.translateToOtherLanguages(saved.id, 'pl');
+    }
+
+    return saved;
   }
 
   /**
