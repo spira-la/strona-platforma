@@ -3,5 +3,9 @@
   "compilerOptions": {
     "module": "commonjs",
     "moduleResolution": "node"
+  },
+  "ts-node": {
+    "experimentalResolver": true,
+    "transpileOnly": true
   }
 }

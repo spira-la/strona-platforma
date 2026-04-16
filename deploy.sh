@@ -116,7 +116,7 @@ if [ "$TARGET" = "prod" ]; then
 fi
 
 docker compose -f "$FRONTEND_COMPOSE" build --no-cache
-docker compose -f "$FRONTEND_COMPOSE" up -d --force-recreate --remove-orphans
+docker compose -f "$FRONTEND_COMPOSE" up -d --force-recreate
 
 sleep 3
 if curl -sf "$FRONTEND_HEALTH" > /dev/null 2>&1; then

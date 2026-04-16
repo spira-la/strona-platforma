@@ -27,7 +27,7 @@ npm run build:dev
 echo "--- Building and starting Docker container ---"
 cd "$SCRIPT_DIR"
 docker compose -f docker-compose.dev.yml build --no-cache
-docker compose -f docker-compose.dev.yml up -d --force-recreate --remove-orphans
+docker compose -f docker-compose.dev.yml up -d --force-recreate
 
 # Wait for container to be ready
 sleep 3
