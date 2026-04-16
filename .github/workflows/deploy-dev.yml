@@ -69,8 +69,10 @@ jobs:
             export NODE_TLS_REJECT_UNAUTHORIZED=0
             npm ci
             npm run db:migrate 2>&1 || echo "WARNING: migration failed or no pending migrations"
-            # Build and deploy
-            docker compose -f docker-compose.dev.yml build --no-cache
+            # Build and deploy — BuildKit cache mounts persist node_modules between builds
+            export DOCKER_BUILDKIT=1
+            export COMPOSE_DOCKER_CLI_BUILD=1
+            docker compose -f docker-compose.dev.yml build
             docker compose -f docker-compose.dev.yml up -d --force-recreate
             # Health check with retries
             for i in $(seq 1 15); do
@@ -101,7 +103,9 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             cd ${{ secrets.SPIRALA_APP_DIR }}
-            docker compose -f docker-compose.dev.yml build --no-cache
+            export DOCKER_BUILDKIT=1
+            export COMPOSE_DOCKER_CLI_BUILD=1
+            docker compose -f docker-compose.dev.yml build
             docker compose -f docker-compose.dev.yml up -d --force-recreate
             sleep 3
             curl -sf http://localhost:45000/health || echo "WARNING: frontend health check failed"
@@ -123,6 +127,8 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            # Prune only dangling (untagged) images — safe for running containers
+            # Aggressive cleanup — prune dangling + unused images older than 48h
             docker image prune -f
-            docker builder prune -af --filter "until=24h"
+            docker image prune -af --filter "until=48h"
+            docker builder prune -af --filter "until=48h"
+            docker volume prune -f
