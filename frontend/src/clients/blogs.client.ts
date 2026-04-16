@@ -41,6 +41,17 @@ export interface CreateBlogData {
 
 export type UpdateBlogData = Partial<CreateBlogData>;
 
+export interface BlogTranslation {
+  id: string;
+  postId: string;
+  languageCode: string;
+  title: string | null;
+  content: string | null;
+  excerpt: string | null;
+  isAutoTranslated: boolean;
+  translatedAt: string | null;
+}
+
 // ─── Auth header helper (for file upload fetches) ─────────────────────────────
 
 async function getAuthHeader(): Promise<Record<string, string>> {
@@ -131,13 +142,11 @@ export const blogsClient = {
   ): Promise<{ success: boolean; message: string }> =>
     api.post(`/blogs/${id}/translate`, { targetLang, sourceLang }),
 
-  getTranslationStatus: (
-    id: string,
-  ): Promise<{ lang: string; translatedAt: string }[]> =>
+  getTranslations: (id: string): Promise<BlogTranslation[]> =>
     api
       .get<{
         success: boolean;
-        data: { lang: string; translatedAt: string }[];
+        data: BlogTranslation[];
       }>(`/blogs/${id}/translations`)
       .then((r) => r.data),
 };

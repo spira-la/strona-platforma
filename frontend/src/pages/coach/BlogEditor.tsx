@@ -16,10 +16,12 @@ import { toast } from '@/stores/toast.store';
 import {
   blogsClient,
   type BlogPostStatus,
+  type BlogTranslation,
   type CreateBlogData,
   type UpdateBlogData,
 } from '@/clients/blogs.client';
 import { categoriesClient, type Category } from '@/clients/categories.client';
+import DOMPurify from 'dompurify';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -146,13 +148,23 @@ export default function CoachBlogEditor() {
 
   // ─── Translation ─────────────────────────────────────────────────────────
 
-  const { data: translationStatus = [], refetch: refetchTranslations } =
-    useQuery({
-      queryKey: ['coach', 'blogs', id, 'translations'],
-      queryFn: () => blogsClient.getTranslationStatus(id!),
-      enabled: isEditMode,
-      refetchInterval: 15_000, // poll every 15s to catch background completion
-    });
+  const [activeLangTab, setActiveLangTab] = useState<'pl' | 'en' | 'es'>('pl');
+
+  const { data: translations = [], refetch: refetchTranslations } = useQuery({
+    queryKey: ['coach', 'blogs', id, 'translations'],
+    queryFn: () => blogsClient.getTranslations(id!),
+    enabled: isEditMode,
+    refetchInterval: 15_000,
+  });
+
+  const translationStatus = translations.map((t: BlogTranslation) => ({
+    lang: t.languageCode,
+    translatedAt: t.translatedAt ?? '',
+  }));
+
+  const activeTranslation = translations.find(
+    (t: BlogTranslation) => t.languageCode === activeLangTab,
+  );
 
   const [translatingLang, setTranslatingLang] = useState<string | null>(null);
 
@@ -355,27 +367,172 @@ export default function CoachBlogEditor() {
       <div className="flex flex-col lg:flex-row gap-6 flex-1">
         {/* Editor area */}
         <div className="flex-1 min-w-0">
-          {/* Title input */}
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder={t('coach.blogEditor.titlePlaceholder')}
-            className={[
-              'w-full mb-4 px-0 py-2 bg-transparent border-0 border-b-2 border-[#E8E4DF]',
-              "font-['Cormorant_Garamond',serif] text-[28px] font-bold text-[#2D2D2D] placeholder:text-[#CCCCCC]",
-              'focus:outline-none focus:border-[#0D9488]',
-              'transition-colors duration-150',
-            ].join(' ')}
-          />
+          {/* Language tabs */}
+          {isEditMode && (
+            <div className="flex items-center gap-1 mb-4 border-b border-[#E8E4DF]">
+              {(
+                [
+                  { code: 'pl', label: '🇵🇱 Polski', isOriginal: true },
+                  { code: 'en', label: '🇬🇧 English', isOriginal: false },
+                  { code: 'es', label: '🇪🇸 Español', isOriginal: false },
+                ] as const
+              ).map(({ code, label, isOriginal }) => {
+                const hasTranslation = translations.some(
+                  (tr: BlogTranslation) => tr.languageCode === code,
+                );
+                return (
+                  <button
+                    key={code}
+                    type="button"
+                    onClick={() => setActiveLangTab(code)}
+                    className={[
+                      "px-4 py-2 font-['Inter'] text-[13px] font-medium transition-colors -mb-px border-b-2",
+                      activeLangTab === code
+                        ? 'border-[#0D9488] text-[#0D9488]'
+                        : 'border-transparent text-[#8A8A8A] hover:text-[#2D2D2D]',
+                    ].join(' ')}
+                  >
+                    {label}
+                    {isOriginal && (
+                      <span className="ml-1.5 text-[10px] font-semibold text-[#B8963E]">
+                        ORG
+                      </span>
+                    )}
+                    {!isOriginal && hasTranslation && (
+                      <span className="ml-1.5 inline-block w-1.5 h-1.5 rounded-full bg-green-500" />
+                    )}
+                    {!isOriginal && !hasTranslation && (
+                      <span className="ml-1.5 inline-block w-1.5 h-1.5 rounded-full bg-[#E8E4DF]" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
-          {/* TipTap editor */}
-          <TipTapEditor
-            content={content}
-            onChange={setContent}
-            onImageUpload={handleImageUpload}
-            placeholder={t('coach.blogEditor.contentPlaceholder')}
-          />
+          {/* PL tab — editable */}
+          {activeLangTab === 'pl' && (
+            <>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder={t('coach.blogEditor.titlePlaceholder')}
+                className={[
+                  'w-full mb-4 px-0 py-2 bg-transparent border-0 border-b-2 border-[#E8E4DF]',
+                  "font-['Cormorant_Garamond',serif] text-[28px] font-bold text-[#2D2D2D] placeholder:text-[#CCCCCC]",
+                  'focus:outline-none focus:border-[#0D9488]',
+                  'transition-colors duration-150',
+                ].join(' ')}
+              />
+              <TipTapEditor
+                content={content}
+                onChange={setContent}
+                onImageUpload={handleImageUpload}
+                placeholder={t('coach.blogEditor.contentPlaceholder')}
+              />
+            </>
+          )}
+
+          {/* EN/ES tabs — read-only translation preview */}
+          {activeLangTab !== 'pl' && (
+            <div className="min-h-[400px]">
+              {activeTranslation ? (
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center justify-between">
+                    <span className="font-['Inter'] text-[11px] text-[#8A8A8A]">
+                      {activeTranslation.isAutoTranslated
+                        ? t('coach.blogEditor.autoTranslated', {
+                            defaultValue: 'Tłumaczenie automatyczne',
+                          })
+                        : t('coach.blogEditor.manualTranslation', {
+                            defaultValue: 'Tłumaczenie ręczne',
+                          })}
+                      {activeTranslation.translatedAt && (
+                        <>
+                          {' '}
+                          ·{' '}
+                          {new Date(
+                            activeTranslation.translatedAt,
+                          ).toLocaleString('pl-PL', {
+                            day: 'numeric',
+                            month: 'short',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </>
+                      )}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        translateMutation.mutate({
+                          targetLang: activeLangTab,
+                          sourceLang: 'pl',
+                        })
+                      }
+                      disabled={translateMutation.isPending}
+                      className="px-3 py-1 rounded-md font-['Inter'] text-[11px] font-medium text-[#6B6B6B] bg-gray-100 hover:bg-gray-200 transition-colors disabled:opacity-50"
+                    >
+                      {translateMutation.isPending ? (
+                        <Loader2 size={12} className="animate-spin inline" />
+                      ) : (
+                        t('coach.blogEditor.retranslate', {
+                          defaultValue: 'Przetłumacz ponownie',
+                        })
+                      )}
+                    </button>
+                  </div>
+                  <h2 className="font-['Cormorant_Garamond',serif] text-[28px] font-bold text-[#2D2D2D] border-b-2 border-[#E8E4DF] pb-2">
+                    {activeTranslation.title ?? '—'}
+                  </h2>
+                  {activeTranslation.excerpt && (
+                    <p className="font-['Inter'] text-[14px] text-[#6B6B6B] italic border-l-2 border-[#B8963E] pl-4">
+                      {activeTranslation.excerpt}
+                    </p>
+                  )}
+                  <div
+                    className="prose prose-base max-w-none font-['Lato'] text-[#3F3F3F] leading-relaxed"
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(
+                        activeTranslation.content ?? '',
+                      ),
+                    }}
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
+                  <Languages size={32} className="text-[#E8E4DF]" />
+                  <p className="font-['Inter'] text-[14px] text-[#8A8A8A]">
+                    {t('coach.blogEditor.noTranslation', {
+                      defaultValue:
+                        'Brak tłumaczenia. Zostanie utworzone automatycznie po zapisaniu posta w języku polskim.',
+                    })}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      translateMutation.mutate({
+                        targetLang: activeLangTab,
+                        sourceLang: 'pl',
+                      })
+                    }
+                    disabled={translateMutation.isPending}
+                    className="px-4 py-2 rounded-lg font-['Inter'] text-[13px] font-medium text-white bg-[#0D9488] hover:bg-[#0F766E] transition-colors disabled:opacity-50"
+                  >
+                    {translateMutation.isPending ? (
+                      <Loader2 size={14} className="animate-spin inline mr-2" />
+                    ) : (
+                      <Languages size={14} className="inline mr-2" />
+                    )}
+                    {t('coach.blogEditor.translateNow', {
+                      defaultValue: 'Przetłumacz teraz',
+                    })}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Sidebar */}

@@ -132,10 +132,9 @@ export class CmsService {
     // Invalidate cache
     this.cache.delete(CACHE_KEY);
 
-    // Auto-translate: PL edits propagate to EN + ES in background
+    // Auto-propagate PL edits to EN + ES in background
     if (language === 'pl' && value.trim().length > 0) {
-      this.enqueueTranslation(section, fieldPath, value, 'en');
-      this.enqueueTranslation(section, fieldPath, value, 'es');
+      this.propagateToOtherLanguages(section, fieldPath, value);
     }
 
     return { version: newVersion, updatedAt: now };
@@ -240,28 +239,95 @@ export class CmsService {
   // CMS auto-translation (PL → EN, ES) — background FIFO queue
   // ---------------------------------------------------------------------------
 
+  // Style suffixes that should be COPIED (not translated) to other languages
+  private static readonly STYLE_SUFFIXES = [
+    'Bold',
+    'Italic',
+    'Align',
+    'Size',
+    'Color',
+    'MaxWidth',
+    'MaxHeight',
+    'Multiline',
+    'OverlayTop',
+    'OverlayBottom',
+    'OverlayAngle',
+  ];
+
+  private isStyleField(fieldPath: string): boolean {
+    return CmsService.STYLE_SUFFIXES.some((s) => fieldPath.endsWith(s));
+  }
+
+  /**
+   * Propagates a PL edit to EN + ES:
+   * - Style fields → copied directly (same value)
+   * - Text fields → enqueued for translation via Ollama
+   */
+  private propagateToOtherLanguages(
+    section: string,
+    fieldPath: string,
+    value: string,
+  ): void {
+    const targets = ['en', 'es'];
+
+    if (this.isStyleField(fieldPath)) {
+      // Style fields: copy directly to both languages (no translation needed)
+      for (const lang of targets) {
+        void this.copyFieldToLanguage(section, fieldPath, value, lang);
+      }
+    } else {
+      // Text fields: enqueue for translation
+      for (const lang of targets) {
+        this.enqueueTranslation(section, fieldPath, value, lang);
+      }
+    }
+  }
+
+  /** Copies a field value directly to another language (no translation). */
+  private async copyFieldToLanguage(
+    section: string,
+    fieldPath: string,
+    value: string,
+    targetLang: string,
+  ): Promise<void> {
+    try {
+      const doc = await this.getContent();
+      const content = { ...doc.content };
+
+      if (!content[section]) content[section] = {};
+      if (!content[section][targetLang]) content[section][targetLang] = {};
+
+      const parts = fieldPath.split('.');
+      let cursor: Record<string, unknown> = content[section][targetLang];
+      for (let i = 0; i < parts.length - 1; i++) {
+        const key = parts[i];
+        if (typeof cursor[key] !== 'object' || cursor[key] === null) {
+          cursor[key] = {};
+        }
+        cursor = cursor[key] as Record<string, unknown>;
+      }
+      cursor[parts.at(-1)!] = value;
+
+      await this.repo.update(
+        { id: DOC_ID },
+        { content, version: (doc.version || 0) + 1, updatedAt: new Date() },
+      );
+      this.cache.delete(CACHE_KEY);
+
+      this.logger.debug(`CMS copied: ${section}.${fieldPath} → ${targetLang}`);
+    } catch (error) {
+      this.logger.error(
+        `CMS copy failed: ${section}.${fieldPath} → ${targetLang}: ${String(error)}`,
+      );
+    }
+  }
+
   private enqueueTranslation(
     section: string,
     fieldPath: string,
     value: string,
     targetLang: string,
   ): void {
-    // Skip style/formatting fields — only translate actual text content
-    const styleSuffixes = [
-      'Bold',
-      'Italic',
-      'Align',
-      'Size',
-      'Color',
-      'MaxWidth',
-      'MaxHeight',
-      'Multiline',
-      'OverlayTop',
-      'OverlayBottom',
-      'OverlayAngle',
-    ];
-    if (styleSuffixes.some((s) => fieldPath.endsWith(s))) return;
-
     // Deduplicate
     const isDuplicate = this.translateQueue.some(
       (j) =>
