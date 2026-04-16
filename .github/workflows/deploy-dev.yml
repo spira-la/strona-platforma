@@ -128,7 +128,7 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             # Aggressive cleanup — prune dangling + unused images older than 48h
+            # WARNING: never prune volumes automatically — they hold DB data
             docker image prune -f
             docker image prune -af --filter "until=48h"
             docker builder prune -af --filter "until=48h"
-            docker volume prune -f
