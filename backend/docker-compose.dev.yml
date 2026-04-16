@@ -16,9 +16,6 @@ services:
     restart: unless-stopped
     networks:
       - spirala-dev-network
-    depends_on:
-      spirala-redis-dev:
-        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -31,27 +28,8 @@ services:
       retries: 5
       start_period: 20s
 
-  spirala-redis-dev:
-    image: redis:7-alpine
-    container_name: spirala-redis-dev
-    ports:
-      - "45010:6379"
-    command: redis-server --appendonly yes --maxmemory 128mb --maxmemory-policy allkeys-lru
-    restart: unless-stopped
-    networks:
-      - spirala-dev-network
-    volumes:
-      - spirala-redis-dev-data:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 5s
-
-volumes:
-  spirala-redis-dev-data:
-
 networks:
+  # Redis, Ollama live on this external network — managed separately
+  # from the app lifecycle via infra/ compose files.
   spirala-dev-network:
-    name: spirala-dev-network
+    external: true
