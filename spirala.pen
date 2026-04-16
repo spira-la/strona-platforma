@@ -1,5 +1,5 @@
 {
-  "version": "2.10",
+  "version": "2.11",
   "children": [
     {
       "type": "frame",
@@ -21121,6 +21121,853 @@
               "fontFamily": "Lato",
               "fontSize": 12,
               "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "ssRhe",
+      "x": 13531,
+      "y": 0,
+      "name": "Blog Post - Subpage",
+      "width": 1440,
+      "cornerRadius": 8,
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "nNgBI",
+          "name": "Top Section",
+          "width": "fill_container",
+          "cornerRadius": 8,
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "CtKNO",
+              "name": "navBar",
+              "width": "fill_container",
+              "fill": "$bg-white",
+              "cornerRadius": 8,
+              "stroke": {
+                "align": "inside",
+                "thickness": {
+                  "bottom": 1
+                },
+                "fill": "$border-warm"
+              },
+              "padding": [
+                20,
+                48
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "JxgwX",
+                  "name": "logoSection",
+                  "width": "fill_container",
+                  "cornerRadius": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "v16Wa",
+                      "name": "logo",
+                      "fill": "$brand-gold",
+                      "content": "Spirala",
+                      "fontFamily": "Playfair Display",
+                      "fontSize": 24,
+                      "fontWeight": "normal",
+                      "letterSpacing": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "vR414",
+                  "name": "navLinks",
+                  "cornerRadius": 8,
+                  "gap": 36,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "QNu4M",
+                      "name": "link1",
+                      "fill": "$text-secondary",
+                      "content": "O Mnie",
+                      "fontFamily": "Lato",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "xk7Bh",
+                      "name": "link2",
+                      "fill": "$text-secondary",
+                      "content": "Jak Pracuję",
+                      "fontFamily": "Lato",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "0XBYK",
+                      "name": "link3",
+                      "fill": "$text-secondary",
+                      "content": "Usługi",
+                      "fontFamily": "Lato",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "9r5aq",
+                      "name": "link4",
+                      "fill": "$brand-gold",
+                      "content": "Blog",
+                      "fontFamily": "Lato",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "MRePx",
+                  "name": "ctaSection",
+                  "width": "fill_container",
+                  "cornerRadius": 8,
+                  "justifyContent": "end",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "6WcSa",
+                      "name": "ctaBtn",
+                      "fill": "$brand-gold",
+                      "cornerRadius": 8,
+                      "padding": [
+                        12,
+                        24
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "2q1EA",
+                          "name": "ctaBtnText",
+                          "fill": "$text-on-dark",
+                          "content": "Umów sesję",
+                          "fontFamily": "Lato",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "X88XY",
+              "name": "Article Header",
+              "width": "fill_container",
+              "fill": "$bg-cream",
+              "layout": "vertical",
+              "gap": 24,
+              "padding": [
+                96,
+                120,
+                48,
+                120
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "mPZgQ",
+                  "name": "breadcrumb",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "FkHuk",
+                      "name": "bcHome",
+                      "fill": "$brand-gold",
+                      "content": "BLOG",
+                      "fontFamily": "Lato",
+                      "fontSize": 11,
+                      "fontWeight": "600",
+                      "letterSpacing": 3
+                    },
+                    {
+                      "type": "text",
+                      "id": "EJjaV",
+                      "name": "bcSep",
+                      "fill": "$text-muted",
+                      "content": "·",
+                      "fontFamily": "Lato",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "r0grX",
+                      "name": "bcCat",
+                      "fill": "$text-muted",
+                      "content": "RELACJE",
+                      "fontFamily": "Lato",
+                      "fontSize": 11,
+                      "fontWeight": "600",
+                      "letterSpacing": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "D9O5I",
+                  "name": "titleWrap",
+                  "width": 820,
+                  "layout": "vertical",
+                  "gap": 20,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "63g2R",
+                      "name": "articleTitle",
+                      "fill": "$text-primary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Jak budować zdrowe granice w relacjach bez poczucia winy",
+                      "lineHeight": 1.2,
+                      "textAlign": "center",
+                      "fontFamily": "Playfair Display",
+                      "fontSize": 46,
+                      "letterSpacing": -0.8
+                    },
+                    {
+                      "type": "text",
+                      "id": "z5UCp",
+                      "name": "articleExcerpt",
+                      "fill": "$text-secondary",
+                      "textGrowth": "fixed-width",
+                      "width": 700,
+                      "content": "Granice to nie mury — to wyraz szacunku do siebie i do drugiego człowieka. Poznaj cztery zasady, które ułatwią Ci stawianie ich z miłością, a nie z lęku.",
+                      "lineHeight": 1.7,
+                      "textAlign": "center",
+                      "fontFamily": "Lato",
+                      "fontSize": 18,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "rLg3A",
+                  "name": "metaRow",
+                  "gap": 24,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "13Meg",
+                      "name": "metaDate",
+                      "fill": "$text-muted",
+                      "content": "12 marca 2026",
+                      "fontFamily": "Lato",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "TK0Pc",
+                      "name": "metaDot1",
+                      "fill": "$text-muted",
+                      "content": "·",
+                      "fontFamily": "Lato",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "eBb4u",
+                      "name": "metaRead",
+                      "fill": "$text-muted",
+                      "content": "6 min czytania",
+                      "fontFamily": "Lato",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "OvVLG",
+                      "name": "metaDot2",
+                      "fill": "$text-muted",
+                      "content": "·",
+                      "fontFamily": "Lato",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "nNhQR",
+                      "name": "metaAuthor",
+                      "fill": "$text-muted",
+                      "content": "Aneta Spirala",
+                      "fontFamily": "Lato",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "zW6NV",
+          "name": "Newsletter Section",
+          "width": "fill_container",
+          "fill": "$bg-warm",
+          "cornerRadius": 8,
+          "layout": "vertical",
+          "padding": [
+            80,
+            120
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "9CDpH",
+              "name": "inner",
+              "width": "fill_container",
+              "cornerRadius": 8,
+              "layout": "vertical",
+              "gap": 40,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Ko2IT",
+                  "name": "topPart",
+                  "width": "fill_container",
+                  "cornerRadius": 8,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "h1mdY",
+                      "name": "badge",
+                      "fill": "$brand-gold",
+                      "content": "NEWSLETTER",
+                      "fontFamily": "Lato",
+                      "fontSize": 10,
+                      "fontWeight": "normal",
+                      "letterSpacing": 2
+                    },
+                    {
+                      "type": "text",
+                      "id": "L0AsL",
+                      "name": "headline",
+                      "fill": "$text-primary",
+                      "textGrowth": "fixed-width",
+                      "width": 600,
+                      "content": "Refleksje prosto do Twojej skrzynki",
+                      "lineHeight": 1.25,
+                      "textAlign": "center",
+                      "fontFamily": "Playfair Display",
+                      "fontSize": 38,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "uHLn8",
+                      "name": "sub",
+                      "fill": "$text-secondary",
+                      "textGrowth": "fixed-width",
+                      "width": 480,
+                      "content": "Co dwa tygodnie – artykuł, ćwiczenie lub pytanie do refleksji. Bez spamu, tylko wartość.",
+                      "lineHeight": 1.6,
+                      "textAlign": "center",
+                      "fontFamily": "Lato",
+                      "fontSize": 16,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "dAkiX",
+                  "name": "formRow",
+                  "width": 560,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 8,
+                  "stroke": {
+                    "thickness": 1,
+                    "fill": "$border-warm"
+                  },
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "IDZYT",
+                      "name": "emailInput",
+                      "width": "fill_container",
+                      "height": 56,
+                      "cornerRadius": 8,
+                      "layout": "vertical",
+                      "padding": [
+                        0,
+                        24
+                      ],
+                      "justifyContent": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Ih9oN",
+                          "name": "placeholder",
+                          "fill": "$text-secondary",
+                          "content": "Twój adres e-mail",
+                          "fontFamily": "Lato",
+                          "fontSize": 15,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "o9ClX",
+                      "name": "submitBtn",
+                      "width": 160,
+                      "height": 56,
+                      "fill": "$brand-gold",
+                      "cornerRadius": 8,
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "W7SpA",
+                          "name": "submitTxt",
+                          "fill": "#FFFFFF",
+                          "content": "Zapisz się",
+                          "fontFamily": "Lato",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "4ZmNW",
+                  "name": "disclaimer",
+                  "fill": "$text-secondary",
+                  "content": "Zapisując się, akceptujesz politykę prywatności. Wypisujesz się jednym kliknięciem.",
+                  "textAlign": "center",
+                  "fontFamily": "Lato",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Tef0c",
+          "name": "footer",
+          "width": "fill_container",
+          "fill": "$bg-cream",
+          "cornerRadius": 8,
+          "layout": "vertical",
+          "gap": 40,
+          "padding": [
+            48,
+            120
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "ln1PE",
+              "name": "footerTop",
+              "width": "fill_container",
+              "cornerRadius": 8,
+              "justifyContent": "space_between",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Lw2M9",
+                  "name": "ftLeft",
+                  "width": 320,
+                  "cornerRadius": 8,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "fLIH4",
+                      "name": "ftLeftLogo",
+                      "cornerRadius": 8,
+                      "gap": 10,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "ellipse",
+                          "id": "b5wDn",
+                          "name": "logoIcon",
+                          "fill": "$brand-gold",
+                          "width": 36,
+                          "height": 36
+                        },
+                        {
+                          "type": "text",
+                          "id": "Pj0CE",
+                          "name": "ftLogoText",
+                          "fill": "$text-primary",
+                          "content": "spirala",
+                          "fontFamily": "Playfair Display",
+                          "fontSize": 22,
+                          "fontWeight": "normal",
+                          "letterSpacing": -0.5
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "xoAlD",
+                      "name": "ftDesc",
+                      "fill": "$text-secondary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Holistyczny coaching i psychobiologia. Towarzyszę kobietom w drodze do głębokiej, trwałej zmiany.",
+                      "lineHeight": 1.6,
+                      "fontFamily": "Lato",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "8rAJU",
+                      "name": "socialRow",
+                      "cornerRadius": 8,
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "KRvzj",
+                          "name": "soc1",
+                          "width": 36,
+                          "height": 36,
+                          "fill": "#D4B97A30",
+                          "cornerRadius": 8,
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "tvtCR",
+                              "name": "socIc1",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "facebook",
+                              "iconFontFamily": "lucide",
+                              "fill": "$brand-gold"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "85JM9",
+                          "name": "soc2",
+                          "width": 36,
+                          "height": 36,
+                          "fill": "#D4B97A30",
+                          "cornerRadius": 8,
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "y9BlY",
+                              "name": "socIc2",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "instagram",
+                              "iconFontFamily": "lucide",
+                              "fill": "$brand-gold"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "WtGUt",
+                          "name": "soc3",
+                          "width": 36,
+                          "height": 36,
+                          "fill": "#D4B97A30",
+                          "cornerRadius": 8,
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "CPZTm",
+                              "name": "socIc3",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "linkedin",
+                              "iconFontFamily": "lucide",
+                              "fill": "$brand-gold"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "tddPT",
+                  "name": "ftRight",
+                  "cornerRadius": 8,
+                  "gap": 80,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "kilRJ",
+                      "name": "ftCol1",
+                      "cornerRadius": 8,
+                      "layout": "vertical",
+                      "gap": 16,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "zmW1U",
+                          "name": "ftCol1Title",
+                          "fill": "$text-primary",
+                          "content": "Nawigacja",
+                          "fontFamily": "Lato",
+                          "fontSize": 13,
+                          "fontWeight": "normal",
+                          "letterSpacing": 0.5
+                        },
+                        {
+                          "type": "text",
+                          "id": "VBXLw",
+                          "name": "ftLink1",
+                          "fill": "$text-secondary",
+                          "content": "O mnie",
+                          "fontFamily": "Lato",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "dklka",
+                          "name": "ftLink2",
+                          "fill": "$text-secondary",
+                          "content": "Usługi",
+                          "fontFamily": "Lato",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "beJYI",
+                          "name": "ftLink3",
+                          "fill": "$text-secondary",
+                          "content": "Opinie",
+                          "fontFamily": "Lato",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "AfNHv",
+                          "name": "ftLink4",
+                          "fill": "$text-secondary",
+                          "content": "Kontakt",
+                          "fontFamily": "Lato",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d9Wto",
+                      "name": "ftCol2",
+                      "cornerRadius": 8,
+                      "layout": "vertical",
+                      "gap": 16,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "XH8HZ",
+                          "name": "ftCol2Title",
+                          "fill": "$text-primary",
+                          "content": "Usługi",
+                          "fontFamily": "Lato",
+                          "fontSize": 13,
+                          "fontWeight": "normal",
+                          "letterSpacing": 0.5
+                        },
+                        {
+                          "type": "text",
+                          "id": "EPdmp",
+                          "name": "ftEmail",
+                          "fill": "$text-secondary",
+                          "content": "Coaching Mindset",
+                          "fontFamily": "Lato",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "ZhvAA",
+                          "name": "ftPhone",
+                          "fill": "$text-secondary",
+                          "content": "Praca z podświadomością",
+                          "fontFamily": "Lato",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Xzxq4",
+                          "fill": "$text-secondary",
+                          "content": "Psychobiologia",
+                          "fontFamily": "Lato",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Wp9SC",
+                      "name": "col3",
+                      "cornerRadius": 8,
+                      "layout": "vertical",
+                      "gap": 16,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ikWsy",
+                          "fill": "$text-primary",
+                          "content": "Kontakt",
+                          "fontFamily": "Lato",
+                          "fontSize": 13,
+                          "fontWeight": "normal",
+                          "letterSpacing": 0.5
+                        },
+                        {
+                          "type": "text",
+                          "id": "rHz31",
+                          "fill": "$text-secondary",
+                          "content": "kontakt@spirala.pl",
+                          "fontFamily": "Lato",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "0lhe9",
+                          "fill": "$text-secondary",
+                          "content": "+48 123 456 789",
+                          "fontFamily": "Lato",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "CuyRj",
+                          "fill": "$text-secondary",
+                          "content": "Warszawa, Polska",
+                          "fontFamily": "Lato",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "rectangle",
+              "cornerRadius": 8,
+              "id": "Vqyv5",
+              "name": "divider",
+              "fill": "#D4B97A50",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "frame",
+              "id": "dSQrq",
+              "name": "Footer Bottom",
+              "width": "fill_container",
+              "cornerRadius": 8,
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "kN5yl",
+                  "name": "ftCopy",
+                  "fill": "$text-muted",
+                  "content": "© 2026 Spirala. Wszelkie prawa zastrzeżone.",
+                  "fontFamily": "Lato",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "Qw7xy",
+                  "name": "legalLinks",
+                  "cornerRadius": 8,
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "PaDtA",
+                      "name": "ftPrivacy",
+                      "fill": "$text-muted",
+                      "content": "Polityka prywatności",
+                      "fontFamily": "Lato",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "DPpYt",
+                      "name": "ftTerms",
+                      "fill": "$text-muted",
+                      "content": "Regulamin",
+                      "fontFamily": "Lato",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }
