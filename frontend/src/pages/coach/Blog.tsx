@@ -62,11 +62,12 @@ export default function CoachBlog() {
     queryFn: () => blogsClient.getMyPosts(),
   });
 
-  const published = posts.filter((p) => p.status === 'published');
-  const drafts = posts.filter((p) => p.status === 'draft');
-  const archived = posts.filter((p) => p.status === 'archived');
+  const safePosts = Array.isArray(posts) ? posts : [];
+  const published = safePosts.filter((p) => p.status === 'published');
+  const drafts = safePosts.filter((p) => p.status === 'draft');
+  const archived = safePosts.filter((p) => p.status === 'archived');
 
-  const filtered = posts.filter((p) => {
+  const filtered = safePosts.filter((p) => {
     const statusMap: Record<StatusFilter, string> = {
       published: 'published',
       drafts: 'draft',
