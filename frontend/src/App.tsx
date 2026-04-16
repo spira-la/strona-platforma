@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { CMSProvider } from '@/contexts/CMSContext';
+import { CMSFocusProvider } from '@/components/cms/EditableText';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { useTranslation } from 'react-i18next';
 import { Layout } from '@/components/layout';
@@ -439,7 +440,9 @@ export default function App() {
         <BrowserRouter>
           <AuthProvider>
             <CMSProvider>
-              <AppRoutes />
+              <CMSFocusProvider>
+                <AppRoutes />
+              </CMSFocusProvider>
             </CMSProvider>
           </AuthProvider>
         </BrowserRouter>

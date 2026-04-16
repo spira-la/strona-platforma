@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { EditableText } from '@/components/cms/EditableText';
 import { useAuth } from '@/contexts/AuthContext';
+import { useRoles } from '@/hooks/useRoles';
 import { useAuthStore } from '@/stores/auth.store';
 import spiralaIcon from '@/assets/spirala-icon.png';
 
@@ -65,6 +66,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
   const { t, i18n } = useTranslation();
   const location = useLocation();
   const { user, isAuthenticated, signOut } = useAuth();
+  const { isAdmin, isCoach } = useRoles();
   const { openLogin } = useAuthStore();
 
   const [scrolled, setScrolled] = useState(false);
@@ -287,8 +289,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                         {user?.email}
                       </p>
                     </div>
-                    {(user?.app_metadata?.role === 'coach' ||
-                      user?.app_metadata?.role === 'admin') && (
+                    {isCoach && (
                       <Link
                         to="/coach"
                         className="w-full flex items-center gap-2 px-3 py-2 font-['Lato'] text-[13px] text-[#B8944A] hover:bg-[#FAF8F5] hover:text-[#8A6F2E] transition-colors"
@@ -301,7 +302,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                         </EditableText>
                       </Link>
                     )}
-                    {user?.app_metadata?.role === 'admin' && (
+                    {isAdmin && (
                       <Link
                         to="/admin"
                         className="w-full flex items-center gap-2 px-3 py-2 font-['Lato'] text-[13px] text-[#B8944A] hover:bg-[#FAF8F5] hover:text-[#8A6F2E] transition-colors"
@@ -452,8 +453,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                     </EditableText>
                   </button>
                 </div>
-                {(user?.app_metadata?.role === 'coach' ||
-                  user?.app_metadata?.role === 'admin') && (
+                {isCoach && (
                   <Link
                     to="/coach"
                     className="flex items-center gap-2 font-['Lato'] text-[13px] font-semibold text-[#B8944A] hover:text-[#8A6F2E] transition-colors px-1 py-1"
@@ -464,7 +464,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                     </EditableText>
                   </Link>
                 )}
-                {user?.app_metadata?.role === 'admin' && (
+                {isAdmin && (
                   <Link
                     to="/admin"
                     className="flex items-center gap-2 font-['Lato'] text-[13px] font-semibold text-[#B8944A] hover:text-[#8A6F2E] transition-colors px-1 py-1"

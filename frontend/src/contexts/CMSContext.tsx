@@ -9,7 +9,7 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cmsClient } from '@/clients/cms.client';
-import { useAuth } from '@/contexts/AuthContext';
+import { useRoles } from '@/hooks/useRoles';
 import type {
   CMSContextValue,
   CMSLanguage,
@@ -111,12 +111,7 @@ interface CMSProviderProps {
 
 export function CMSProvider({ children }: CMSProviderProps) {
   const { i18n } = useTranslation();
-  const { user } = useAuth();
-
-  // Check admin status from Supabase user metadata
-  const isAdmin =
-    user?.app_metadata?.role === 'admin' ||
-    user?.user_metadata?.role === 'admin';
+  const { isAdmin } = useRoles();
 
   const [content, setContent] = useState<
     Record<string, Record<CMSLanguage, Record<string, unknown>>>

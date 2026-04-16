@@ -817,6 +817,7 @@ export default function AdminCoaches() {
     mutationFn: (d: CreateCoachData) => coachesClient.create(d),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['coaches'] });
+      void queryClient.invalidateQueries({ queryKey: ['auth', 'me'] });
       setDialogMode(null);
       toast.success(t('admin.common.created'));
     },

@@ -1,6 +1,6 @@
 import { PencilIcon, XIcon } from 'lucide-react';
 import { useCMS } from '@/contexts/CMSContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useRoles } from '@/hooks/useRoles';
 
 /**
  * CMSEditToolbar — floating admin toolbar (bottom-right corner).
@@ -9,12 +9,8 @@ import { useAuth } from '@/contexts/AuthContext';
  * between view mode and CMS inline-edit mode.
  */
 export function CMSEditToolbar() {
-  const { user } = useAuth();
+  const { isAdmin } = useRoles();
   const { isEditMode, setEditMode } = useCMS();
-
-  const isAdmin =
-    user?.app_metadata?.role === 'admin' ||
-    user?.user_metadata?.role === 'admin';
 
   if (!isAdmin) return null;
 

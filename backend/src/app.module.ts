@@ -15,6 +15,7 @@ import { CoachPanelModule } from './modules/coach-panel/coach-panel.module.js';
 import { CoachesModule } from './modules/coaches/coaches.module.js';
 import { BlogsModule } from './modules/blogs/blogs.module.js';
 import { SitemapModule } from './modules/sitemap/sitemap.module.js';
+import { AuthModule } from './modules/auth/auth.module.js';
 import { AppController } from './app.controller.js';
 
 @Module({
@@ -66,6 +67,7 @@ import { AppController } from './app.controller.js';
     CoachesModule,
     BlogsModule,
     SitemapModule,
+    AuthModule,
   ],
   controllers: [AppController],
 })

@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { useRoles } from '@/hooks/useRoles';
 import { CoachLayout } from './CoachLayout';
 
 function CoachLoadingSpinner() {
@@ -19,19 +19,14 @@ function CoachLoadingSpinner() {
   );
 }
 
-function isCoachOrAdmin(user: ReturnType<typeof useAuth>['user']): boolean {
-  const role = user?.app_metadata?.role;
-  return role === 'coach' || role === 'admin';
-}
-
 export default function CoachProtectedRoute() {
-  const { user, isLoading, isAuthenticated } = useAuth();
+  const { isCoach, isLoading } = useRoles();
 
   if (isLoading) {
     return <CoachLoadingSpinner />;
   }
 
-  if (!isAuthenticated || !isCoachOrAdmin(user)) {
+  if (!isCoach) {
     return <Navigate to="/" replace />;
   }
 
