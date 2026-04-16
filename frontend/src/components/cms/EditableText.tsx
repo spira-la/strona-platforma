@@ -1,4 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 import {
   Bold,
@@ -6,6 +13,7 @@ import {
   AlignLeft,
   AlignCenter,
   AlignRight,
+  AlignJustify,
   Type,
   RotateCcw,
 } from 'lucide-react';
@@ -13,14 +21,49 @@ import { useCMS } from '@/contexts/CMSContext';
 import type { EditableTextProps } from '@/types/cms.types';
 
 // ---------------------------------------------------------------------------
+// CMS Focus Lock — only one EditableText active at a time
+// ---------------------------------------------------------------------------
+
+interface CMSFocusContextValue {
+  activeId: string | null;
+  claim: (id: string) => void;
+  release: (id: string) => void;
+}
+
+const CMSFocusContext = createContext<CMSFocusContextValue>({
+  activeId: null,
+  claim: () => {},
+  release: () => {},
+});
+
+export function CMSFocusProvider({ children }: { children: React.ReactNode }) {
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const claim = useCallback((id: string) => setActiveId(id), []);
+  const release = useCallback(
+    (id: string) => setActiveId((prev) => (prev === id ? null : prev)),
+    [],
+  );
+  return (
+    <CMSFocusContext.Provider value={{ activeId, claim, release }}>
+      {children}
+    </CMSFocusContext.Provider>
+  );
+}
+
+function useCMSFocus() {
+  return useContext(CMSFocusContext);
+}
+
+// ---------------------------------------------------------------------------
 // Style helpers — sibling CMS fields of the form `{fieldPath}{Suffix}`
 // ---------------------------------------------------------------------------
 
-type Align = 'left' | 'center' | 'right';
+type Align = 'left' | 'center' | 'right' | 'justify';
 
 interface TextStyleState {
   bold: boolean;
   italic: boolean;
+  multiline: boolean;
   align: Align | '';
   size: number; // multiplier relative to the base CSS font-size (1 = inherit)
   color: string; // hex or empty string
@@ -47,8 +90,9 @@ function parseStyle(
   return {
     bold: raw('Bold') === '1',
     italic: raw('Italic') === '1',
+    multiline: raw('Multiline') === '1',
     align: (raw('Align') as Align) || '',
-    size: Number.isFinite(parsed) && parsed > 0 ? clamp(parsed, 0.5, 2.5) : 1,
+    size: Number.isFinite(parsed) && parsed > 0 ? clamp(parsed, 0.5, 5) : 1,
     color: raw('Color'),
     maxWidth: Number.isFinite(mwRaw) && mwRaw > 0 ? mwRaw : 0,
     maxHeight: Number.isFinite(mhRaw) && mhRaw > 0 ? mhRaw : 0,
@@ -59,6 +103,7 @@ function toCssStyle(s: TextStyleState): React.CSSProperties {
   const style: React.CSSProperties = {};
   if (s.bold) style.fontWeight = 700;
   if (s.italic) style.fontStyle = 'italic';
+  if (s.multiline) style.whiteSpace = 'pre-wrap';
   if (s.align) style.textAlign = s.align;
   if (s.size !== 1) style.fontSize = `${s.size}em`;
   if (s.color) style.color = s.color;
@@ -76,6 +121,7 @@ function toCssStyle(s: TextStyleState): React.CSSProperties {
 
 interface FormatPopoverProps {
   style: TextStyleState;
+  computedColor: string;
   onPatch: (patch: Partial<TextStyleState>) => void;
   onReset: () => void;
   onClose: () => void;
@@ -83,6 +129,7 @@ interface FormatPopoverProps {
 
 function FormatPopover({
   style,
+  computedColor,
   onPatch,
   onReset,
   onClose,
@@ -91,11 +138,12 @@ function FormatPopover({
     { value: 'left', Icon: AlignLeft },
     { value: 'center', Icon: AlignCenter },
     { value: 'right', Icon: AlignRight },
+    { value: 'justify', Icon: AlignJustify },
   ];
 
   return (
     <div
-      className="w-[240px] bg-white rounded-xl shadow-2xl border border-[#E8E4DF] p-3 flex flex-col gap-2.5"
+      className="w-[240px] max-h-[calc(100vh-16px)] overflow-y-auto bg-white rounded-xl shadow-2xl border border-[#E8E4DF] p-3 flex flex-col gap-2.5"
       onClick={(e) => e.stopPropagation()}
       onMouseDown={(e) => e.stopPropagation()}
     >
@@ -161,7 +209,7 @@ function FormatPopover({
         <input
           type="range"
           min={50}
-          max={250}
+          max={500}
           step={5}
           value={Math.round(style.size * 100)}
           onChange={(e) => onPatch({ size: Number(e.target.value) / 100 })}
@@ -222,7 +270,7 @@ function FormatPopover({
         <div className="flex items-center gap-1">
           <input
             type="color"
-            value={style.color || '#2D2D2D'}
+            value={style.color || computedColor || '#2D2D2D'}
             onChange={(e) => onPatch({ color: e.target.value })}
             className="w-7 h-7 rounded border border-[#E8E4DF] cursor-pointer bg-white p-0"
             title="Pick color"
@@ -238,6 +286,28 @@ function FormatPopover({
             </button>
           )}
         </div>
+      </div>
+
+      {/* Multiline toggle */}
+      <div className="flex items-center justify-between">
+        <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter']">
+          Multiline
+        </p>
+        <button
+          type="button"
+          onClick={() => onPatch({ multiline: !style.multiline })}
+          className={`relative w-9 h-5 rounded-full transition-colors ${
+            style.multiline ? 'bg-[#B8963E]' : 'bg-[#E8E4DF]'
+          }`}
+          title={style.multiline ? 'Enters aktywne' : 'Enters wyłączone'}
+          aria-pressed={style.multiline}
+        >
+          <span
+            className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${
+              style.multiline ? 'translate-x-4' : ''
+            }`}
+          />
+        </button>
       </div>
 
       {/* Footer */}
@@ -275,6 +345,7 @@ export function EditableText({
   placeholder,
   children,
   richText: _richText = false,
+  multiline: _multilineProp,
   render,
 }: EditableTextProps) {
   const { isLoading, isEditMode, getFieldValue, updateField, content } =
@@ -291,6 +362,10 @@ export function EditableText({
           .map((c) => (typeof c === 'string' ? c : ''))
           .join('');
 
+  const focusId = `${section}.${fieldPath}`;
+  const { activeId, claim, release } = useCMSFocus();
+  const isOtherActive = activeId !== null && activeId !== focusId;
+
   const [isEditing, setIsEditing] = useState(false);
   const [showFormat, setShowFormat] = useState(false);
   const [rect, setRect] = useState<DOMRect | null>(null);
@@ -298,14 +373,25 @@ export function EditableText({
   const [isSaving, setIsSaving] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const wrapperRef = useRef<HTMLSpanElement>(null);
+  const [computedColor, setComputedColor] = useState('');
 
   // Keep the portal-rendered format button pinned to the text element
   // on scroll / resize / layout shifts. Always-on while in edit mode.
   useEffect(() => {
     if (!isEditMode) return;
     const update = () => {
-      if (wrapperRef.current)
+      if (wrapperRef.current) {
         setRect(wrapperRef.current.getBoundingClientRect());
+        // Detect actual rendered color from the inner Tag element (not the wrapper)
+        const inner =
+          wrapperRef.current.firstElementChild ?? wrapperRef.current;
+        const raw = getComputedStyle(inner).color;
+        const m = raw.match(/\d+/g);
+        if (m && m.length >= 3) {
+          const hex = `#${Number(m[0]).toString(16).padStart(2, '0')}${Number(m[1]).toString(16).padStart(2, '0')}${Number(m[2]).toString(16).padStart(2, '0')}`;
+          setComputedColor(hex);
+        }
+      }
     };
     update();
     // Occasional re-check catches late layout changes (fonts loading,
@@ -364,6 +450,8 @@ export function EditableText({
           `${fieldPath}MaxHeight`,
           patch.maxHeight > 0 ? String(patch.maxHeight) : '',
         ]);
+      if ('multiline' in patch)
+        writes.push([`${fieldPath}Multiline`, patch.multiline ? '1' : '']);
 
       void Promise.all(writes.map(([f, v]) => updateField(section, f, v)));
     },
@@ -379,11 +467,21 @@ export function EditableText({
       updateField(section, `${fieldPath}Color`, ''),
       updateField(section, `${fieldPath}MaxWidth`, ''),
       updateField(section, `${fieldPath}MaxHeight`, ''),
+      updateField(section, `${fieldPath}Multiline`, ''),
     ]);
   }, [section, fieldPath, updateField]);
 
+  // Claim/release focus lock
+  useEffect(() => {
+    if (isEditing || showFormat) {
+      claim(focusId);
+    } else {
+      release(focusId);
+    }
+  }, [isEditing, showFormat, focusId, claim, release]);
+
   const startEditing = useCallback(() => {
-    if (!isEditMode) return;
+    if (!isEditMode || isOtherActive) return;
     const hasNoValue =
       resolvedValue === fieldPath || resolvedValue.trim() === '';
     const prefill = hasNoValue
@@ -391,7 +489,14 @@ export function EditableText({
       : resolvedValue;
     setDraftValue(prefill);
     setIsEditing(true);
-  }, [isEditMode, resolvedValue, fieldPath, placeholder, childrenText]);
+  }, [
+    isEditMode,
+    isOtherActive,
+    resolvedValue,
+    fieldPath,
+    placeholder,
+    childrenText,
+  ]);
 
   const cancelEditing = useCallback(() => {
     setIsEditing(false);
@@ -471,7 +576,7 @@ export function EditableText({
   if (isEditMode && isEditing) {
     return (
       <span
-        className={`relative inline-block w-full ${className ?? ''}`}
+        className={`relative inline-block w-full ring-2 ring-[#B8963E]/30 rounded-md ${className ?? ''}`}
         onClick={(e) => e.preventDefault()}
       >
         <textarea
@@ -539,8 +644,12 @@ export function EditableText({
     // bounding rect.
     const portalTarget = typeof document === 'undefined' ? null : document.body;
 
+    // Clamp floating UI within viewport bounds
+    const vw = globalThis.window === undefined ? 1440 : window.innerWidth;
+    const vh = globalThis.window === undefined ? 900 : window.innerHeight;
+
     const floatingUi =
-      portalTarget && rect
+      portalTarget && rect && !isOtherActive
         ? createPortal(
             <>
               <button
@@ -556,8 +665,8 @@ export function EditableText({
                     : 'bg-black/70 text-white hover:bg-[#B8963E]'
                 }`}
                 style={{
-                  top: rect.top - 28,
-                  left: rect.right - 24,
+                  top: rect.top - 28 < 4 ? rect.bottom + 4 : rect.top - 28,
+                  left: Math.min(rect.right - 24, vw - 32),
                 }}
                 title="Format text"
                 aria-label="Format text"
@@ -569,15 +678,16 @@ export function EditableText({
                 <div
                   className="fixed z-[9999]"
                   style={{
-                    top: rect.bottom + 4,
-                    left: Math.max(
-                      8,
-                      Math.min(rect.left, window.innerWidth - 252),
-                    ),
+                    top:
+                      rect.bottom + 4 + 360 > vh
+                        ? Math.max(4, rect.bottom - 360)
+                        : rect.bottom + 4,
+                    left: Math.max(8, Math.min(rect.left, vw - 252)),
                   }}
                 >
                   <FormatPopover
                     style={textStyle}
+                    computedColor={computedColor}
                     onPatch={patchStyle}
                     onReset={resetStyle}
                     onClose={() => setShowFormat(false)}
@@ -589,14 +699,22 @@ export function EditableText({
           )
         : null;
 
+    const WrapperTag = needsFullWidth ? 'div' : 'span';
     return (
-      <span ref={wrapperRef} className="relative inline-block align-baseline">
+      <WrapperTag
+        ref={wrapperRef}
+        className={`relative ${needsFullWidth ? 'block w-full' : 'inline-block align-baseline'}`}
+      >
         {React.createElement(
           Tag,
           {
             id,
             style: inlineStyle,
-            className: `relative cursor-pointer rounded transition-[outline,box-shadow] outline outline-1 outline-transparent hover:outline-[#B8963E]/70 hover:shadow-[0_0_0_3px_rgba(184,150,62,0.12)] ${resolvedClassName ?? ''}`,
+            className: `relative rounded transition-[outline,box-shadow,opacity] outline outline-1 ${
+              isOtherActive
+                ? 'outline-transparent opacity-40 pointer-events-none'
+                : 'outline-transparent cursor-pointer hover:outline-[#B8963E]/70 hover:shadow-[0_0_0_3px_rgba(184,150,62,0.12)]'
+            } ${resolvedClassName ?? ''}`,
             onClick: (e: React.MouseEvent) => {
               e.preventDefault();
               e.stopPropagation();
@@ -616,7 +734,7 @@ export function EditableText({
           render ? render(displayContent) : displayContent,
         )}
         {floatingUi}
-      </span>
+      </WrapperTag>
     );
   }
 
