@@ -121,19 +121,24 @@ export class BlogTranslationsService {
     }
 
     try {
-      // Sequential — CPU inference cannot parallelise
+      // Title + excerpt: plain text, single call each
       const translatedTitle = post.title
         ? await this.ollama.translate(post.title, sourceLang, targetLang)
         : null;
 
-      const translatedContent =
-        post.content && post.content.length > 0
-          ? await this.ollama.translate(post.content, sourceLang, targetLang)
-          : null;
-
       const translatedExcerpt = post.excerpt
         ? await this.ollama.translate(post.excerpt, sourceLang, targetLang)
         : null;
+
+      // Content: HTML from TipTap, chunked by block tags
+      const translatedContent =
+        post.content && post.content.length > 0
+          ? await this.ollama.translateHtml(
+              post.content,
+              sourceLang,
+              targetLang,
+            )
+          : null;
 
       // Upsert
       await this.translationRepo
