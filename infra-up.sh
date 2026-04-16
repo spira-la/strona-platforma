@@ -3,10 +3,11 @@ set -euo pipefail
 
 # Brings up the manually-managed infrastructure services that are NOT
 # touched by the CI/CD pipeline:
+#   - spirala-db       (PostgreSQL — dev + prod databases)
+#   - spirala-redis    (cache — dev + prod)
+#   - spirala-ollama   (LLM for translations)
 #   - spirala-nginx    (reverse proxy)
 #   - tunnel-spirala   (Cloudflare tunnel)
-#   - spirala-redis    (cache, prod + dev)
-#   - spirala-ollama   (LLM for translations)
 #
 # Run this once on the server after reboot, or whenever you need to
 # restore these services without disturbing the backend/frontend.
@@ -26,6 +27,9 @@ docker volume inspect spirala-redis-dev-data >/dev/null 2>&1 \
 docker volume inspect spirala-redis-data >/dev/null 2>&1 \
   || docker volume create spirala-redis-data
 
+echo "==> Starting PostgreSQL..."
+docker compose -f docker-compose.db.yml up -d
+
 echo "==> Starting Redis (dev + prod)..."
 docker compose -f infra/docker-compose.redis.yml up -d
 
@@ -40,4 +44,4 @@ docker compose -f docker-compose.tunnel.yml up -d
 
 echo "==> Done. Status:"
 docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" \
-  | grep -E "spirala-redis|spirala-ollama|spirala-nginx|tunnel-spirala" || true
+  | grep -E "spirala-db|spirala-redis|spirala-ollama|spirala-nginx|tunnel-spirala" || true
