@@ -241,6 +241,7 @@ export class CmsService {
 
   // Style suffixes that should be COPIED (not translated) to other languages
   private static readonly STYLE_SUFFIXES = [
+    // Text styling
     'Bold',
     'Italic',
     'Align',
@@ -249,13 +250,34 @@ export class CmsService {
     'MaxWidth',
     'MaxHeight',
     'Multiline',
+    // Overlays
     'OverlayTop',
     'OverlayBottom',
     'OverlayAngle',
+    // Backgrounds
+    'Pos',
+    'Fit',
+  ];
+
+  // Media fields (images, logos, avatars) stored at root fieldPath
+  private static readonly MEDIA_FIELD_PATTERNS: RegExp[] = [
+    /bg$/i,
+    /bg\./i,
+    /image$/i,
+    /image\./i,
+    /logo$/i,
+    /photo$/i,
+    /icon$/i,
+    /avatar$/i,
+    /cover$/i,
+    /Src$/,
   ];
 
   private isStyleField(fieldPath: string): boolean {
-    return CmsService.STYLE_SUFFIXES.some((s) => fieldPath.endsWith(s));
+    if (CmsService.STYLE_SUFFIXES.some((s) => fieldPath.endsWith(s))) {
+      return true;
+    }
+    return CmsService.MEDIA_FIELD_PATTERNS.some((re) => re.test(fieldPath));
   }
 
   /**

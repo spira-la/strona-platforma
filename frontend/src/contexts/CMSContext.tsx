@@ -200,14 +200,58 @@ export function CMSProvider({ children }: CMSProviderProps) {
     [isAdmin],
   );
 
+  // Style + media suffixes are stored ONLY in PL and apply to all languages
+  // (design, images, overlays are global; only text content differs per language)
+  const STYLE_SUFFIXES = [
+    // Text styling
+    'Bold',
+    'Italic',
+    'Align',
+    'Size',
+    'Color',
+    'MaxWidth',
+    'MaxHeight',
+    'Multiline',
+    // Overlays
+    'OverlayTop',
+    'OverlayBottom',
+    'OverlayAngle',
+    // Backgrounds
+    'Pos',
+    'Fit',
+  ];
+
+  // Fields that are images/media (stored at root fieldPath without suffix).
+  // We identify them by convention: fieldPath contains 'bg', 'image', 'logo',
+  // 'photo', 'icon', 'avatar', 'cover', or ends in 'Src'.
+  const MEDIA_FIELD_PATTERNS = [
+    /bg$/i,
+    /bg\./i,
+    /image$/i,
+    /image\./i,
+    /logo$/i,
+    /photo$/i,
+    /icon$/i,
+    /avatar$/i,
+    /cover$/i,
+    /Src$/,
+  ];
+
+  const isStyleField = (fieldPath: string): boolean => {
+    if (STYLE_SUFFIXES.some((s) => fieldPath.endsWith(s))) return true;
+    return MEDIA_FIELD_PATTERNS.some((re) => re.test(fieldPath));
+  };
+
   const getFieldValue = useCallback(
     (section: CMSSectionKey, fieldPath: string): string => {
       const sectionData = content[section];
       if (!sectionData) return fieldPath;
 
-      const lang = i18n.language as CMSLanguage;
+      // Style fields always read from PL (design is global)
+      const lang: CMSLanguage = isStyleField(fieldPath)
+        ? 'pl'
+        : (i18n.language as CMSLanguage);
 
-      // Try current language first, then 'pl' as primary fallback
       const langData = sectionData[lang] ?? sectionData['pl'];
       if (!langData) return fieldPath;
 
@@ -222,7 +266,10 @@ export function CMSProvider({ children }: CMSProviderProps) {
       fieldPath: string,
       value: string,
     ): Promise<void> => {
-      const lang = i18n.language as CMSLanguage;
+      // Style fields always write to PL (design is global)
+      const lang: CMSLanguage = isStyleField(fieldPath)
+        ? 'pl'
+        : (i18n.language as CMSLanguage);
 
       // Optimistic update
       setContent((prev) => {

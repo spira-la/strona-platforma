@@ -23,6 +23,8 @@ const Contact = lazy(() => import('@/pages/Contact'));
 const WebDesignOffer = lazy(() => import('@/pages/WebDesignOffer'));
 const Confirmation = lazy(() => import('@/pages/Confirmation'));
 const AuthCallback = lazy(() => import('@/pages/AuthCallback'));
+const PrivacyPolicy = lazy(() => import('@/pages/PrivacyPolicy'));
+const Terms = lazy(() => import('@/pages/Terms'));
 
 // Feature-flagged pages — lazy only when flags are active
 const Webinars = lazy(() => import('@/pages/Webinars'));
@@ -390,6 +392,22 @@ function AppRoutes() {
           element={
             <Suspense fallback={<LoadingFallback />}>
               <Confirmation />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/polityka-prywatnosci"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <PrivacyPolicy />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/regulamin"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <Terms />
             </Suspense>
           }
         />

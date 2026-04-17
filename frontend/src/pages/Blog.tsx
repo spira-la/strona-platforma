@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { SEO } from '@/components/shared/SEO';
 import { ArrowRight, Calendar, Mail } from 'lucide-react';
 import { EditableText } from '@/components/cms/EditableText';
@@ -344,9 +345,12 @@ function NewsletterSection() {
 // ---------------------------------------------------------------------------
 
 export default function Blog() {
+  const { i18n } = useTranslation();
+  const currentLang = i18n.language;
+
   const { data, isLoading } = useQuery({
-    queryKey: ['blogs', 'published'],
-    queryFn: () => blogsClient.getPublished(),
+    queryKey: ['blogs', 'published', currentLang],
+    queryFn: () => blogsClient.getPublished(currentLang),
     staleTime: 60_000,
   });
 

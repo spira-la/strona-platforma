@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 import DOMPurify from 'dompurify';
 import {
@@ -247,32 +248,37 @@ function PostNotFound() {
 
 export default function BlogPost() {
   const { slug } = useParams<{ slug: string }>();
+  const { i18n } = useTranslation();
+  const currentLang = i18n.language;
 
   const {
     data: post,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['blog', slug],
-    queryFn: () => blogsClient.getBySlug(slug!),
+    queryKey: ['blog', slug, currentLang],
+    queryFn: () => blogsClient.getBySlug(slug!, currentLang),
     enabled: Boolean(slug),
     retry: false,
   });
 
+  // Backend already merges translation when lang param is passed
+  const displayedPost = post ?? null;
+
   const { data: allPosts } = useQuery({
-    queryKey: ['blogs', 'published'],
-    queryFn: () => blogsClient.getPublished(),
+    queryKey: ['blogs', 'published', currentLang],
+    queryFn: () => blogsClient.getPublished(currentLang),
     staleTime: 60_000,
   });
 
   const related = useMemo(() => {
-    if (!post || !allPosts) return [];
-    return allPosts.filter((p) => p.id !== post.id);
-  }, [post, allPosts]);
+    if (!displayedPost || !allPosts) return [];
+    return allPosts.filter((p) => p.id !== displayedPost.id);
+  }, [displayedPost, allPosts]);
 
   const readTime = useMemo(
-    () => estimateReadTime(post?.content ?? null),
-    [post],
+    () => estimateReadTime(displayedPost?.content ?? null),
+    [displayedPost],
   );
 
   if (isLoading) {
@@ -283,7 +289,7 @@ export default function BlogPost() {
     );
   }
 
-  if (isError || !post) {
+  if (isError || !post || !displayedPost) {
     return (
       <main className="min-h-screen bg-[#FAF8F5]">
         <PostNotFound />
@@ -291,45 +297,46 @@ export default function BlogPost() {
     );
   }
 
-  const canonicalPath = `/blog/${post.slug}`;
+  // From here on, use `displayedPost` for translated fields (falls back to PL)
+  const canonicalPath = `/blog/${displayedPost.slug}`;
   const fullUrl = `${SITE_URL}${canonicalPath}`;
-  const ogImageUrl = post.coverImageUrl
-    ? post.coverImageUrl.startsWith('http')
-      ? post.coverImageUrl
-      : `${SITE_URL}${post.coverImageUrl}`
+  const ogImageUrl = displayedPost.coverImageUrl
+    ? displayedPost.coverImageUrl.startsWith('http')
+      ? displayedPost.coverImageUrl
+      : `${SITE_URL}${displayedPost.coverImageUrl}`
     : `${SITE_URL}/og-image.jpg`;
-  const category = post.categories?.[0]?.name;
+  const category = displayedPost.categories?.[0]?.name;
 
   const articleJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: post.title,
-    description: post.excerpt ?? post.title,
+    headline: displayedPost.title,
+    description: displayedPost.excerpt ?? displayedPost.title,
     image: ogImageUrl,
     url: fullUrl,
-    datePublished: post.publishedAt ?? post.createdAt,
-    dateModified: post.updatedAt,
+    datePublished: displayedPost.publishedAt ?? displayedPost.createdAt,
+    dateModified: displayedPost.updatedAt,
     author: { '@type': 'Person', name: DEFAULT_AUTHOR.name },
     publisher: {
       '@type': 'Organization',
       name: 'Spirala',
       logo: { '@type': 'ImageObject', url: `${SITE_URL}/spirala-logo.png` },
     },
-    keywords: post.categories?.map((c) => c.name).join(', ') ?? '',
+    keywords: displayedPost.categories?.map((c) => c.name).join(', ') ?? '',
   };
 
   return (
     <main className="min-h-screen bg-[#FAF8F5]">
       <SEO
-        title={post.title}
-        description={post.excerpt ?? post.title}
+        title={displayedPost.title}
+        description={displayedPost.excerpt ?? displayedPost.title}
         canonical={canonicalPath}
-        ogImage={post.coverImageUrl ?? undefined}
+        ogImage={displayedPost.coverImageUrl ?? undefined}
         ogType="article"
         article={{
-          publishedTime: post.publishedAt ?? undefined,
-          modifiedTime: post.updatedAt,
-          tags: post.categories?.map((c) => c.name) ?? undefined,
+          publishedTime: displayedPost.publishedAt ?? undefined,
+          modifiedTime: displayedPost.updatedAt,
+          tags: displayedPost.categories?.map((c) => c.name) ?? undefined,
         }}
       />
       <Helmet>
@@ -339,15 +346,15 @@ export default function BlogPost() {
       </Helmet>
 
       {/* Cover image — clean, no overlay */}
-      {post.coverImageUrl && (
+      {displayedPost.coverImageUrl && (
         <section className="w-full">
           <div
             className="w-full overflow-hidden"
             style={{ height: 'clamp(320px, 50vh, 560px)' }}
           >
             <img
-              src={post.coverImageUrl}
-              alt={post.title}
+              src={displayedPost.coverImageUrl}
+              alt={displayedPost.title}
               className="w-full h-full object-cover"
             />
           </div>
@@ -356,7 +363,7 @@ export default function BlogPost() {
 
       {/* Article header — between image and body */}
       <section
-        className={`bg-[#FAF8F5] ${post.coverImageUrl ? 'pt-10 md:pt-12' : 'pt-14 md:pt-20'} pb-6 md:pb-8`}
+        className={`bg-[#FAF8F5] ${displayedPost.coverImageUrl ? 'pt-10 md:pt-12' : 'pt-14 md:pt-20'} pb-6 md:pb-8`}
       >
         <div className="max-w-[1060px] mx-auto px-5 sm:px-6 md:px-8 flex flex-col items-center text-center gap-6">
           {/* Category */}
@@ -368,7 +375,7 @@ export default function BlogPost() {
 
           {/* Title */}
           <h1 className="font-['Playfair_Display'] text-[34px] sm:text-[42px] md:text-[52px] font-normal text-[#2D2D2D] leading-[1.1] tracking-[-0.02em]">
-            {post.title}
+            {displayedPost.title}
           </h1>
 
           {/* Divider */}
@@ -392,7 +399,7 @@ export default function BlogPost() {
             />
             <span className="inline-flex items-center gap-1.5 font-['Lato'] text-[13px] text-[#8A8A8A]">
               <Calendar size={12} aria-hidden="true" />
-              {formatDate(post.publishedAt ?? post.createdAt)}
+              {formatDate(displayedPost.publishedAt ?? displayedPost.createdAt)}
             </span>
             <span className="inline-flex items-center gap-1.5 font-['Lato'] text-[13px] text-[#8A8A8A]">
               <Clock size={12} aria-hidden="true" />
@@ -424,14 +431,14 @@ export default function BlogPost() {
               prose-hr:border-[#E8E4DF] prose-hr:my-10 md:prose-hr:my-12
             "
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(post.content ?? ''),
+              __html: DOMPurify.sanitize(displayedPost.content ?? ''),
             }}
           />
 
           {/* Categories */}
-          {post.categories && post.categories.length > 0 && (
+          {displayedPost.categories && displayedPost.categories.length > 0 && (
             <div className="mt-12 flex flex-wrap items-center gap-2">
-              {post.categories.map((cat) => (
+              {displayedPost.categories.map((cat) => (
                 <span
                   key={cat.id}
                   className="inline-block font-['Lato'] text-[12px] font-semibold tracking-[0.1em] uppercase text-[#B8944A] border border-[#B8944A]/40 rounded-full px-4 py-1.5"
@@ -444,7 +451,7 @@ export default function BlogPost() {
 
           {/* Share */}
           <div className="mt-10">
-            <ShareBar url={fullUrl} title={post.title} />
+            <ShareBar url={fullUrl} title={displayedPost.title} />
           </div>
 
           {/* Author bio card */}

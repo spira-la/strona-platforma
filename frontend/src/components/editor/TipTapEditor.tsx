@@ -1,7 +1,8 @@
 import { useRef, useCallback, useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
+import { BubbleMenu } from '@tiptap/react/menus';
 import StarterKit from '@tiptap/starter-kit';
-import ImageExt from '@tiptap/extension-image';
+import { ResizableImage } from './ResizableImage';
 import LinkExt from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
 import TextAlign from '@tiptap/extension-text-align';
@@ -10,6 +11,16 @@ import Color from '@tiptap/extension-color';
 import { TextStyle } from '@tiptap/extension-text-style';
 import Highlight from '@tiptap/extension-highlight';
 import CharacterCount from '@tiptap/extension-character-count';
+import Typography from '@tiptap/extension-typography';
+import Youtube from '@tiptap/extension-youtube';
+import TaskList from '@tiptap/extension-task-list';
+import TaskItem from '@tiptap/extension-task-item';
+import { Table } from '@tiptap/extension-table';
+import { TableRow } from '@tiptap/extension-table-row';
+import { TableCell } from '@tiptap/extension-table-cell';
+import { TableHeader } from '@tiptap/extension-table-header';
+import { Subscript } from '@tiptap/extension-subscript';
+import { Superscript } from '@tiptap/extension-superscript';
 import {
   Bold,
   Italic,
@@ -23,12 +34,27 @@ import {
   AlignRight,
   List,
   ListOrdered,
+  ListChecks,
   Quote,
   Link2,
   ImagePlus,
   Highlighter,
   Undo2,
   Redo2,
+  Film as YoutubeIcon,
+  Table as TableIcon,
+  Minus,
+  Superscript as SuperscriptIcon,
+  Subscript as SubscriptIcon,
+  ArrowUp as RowInsertTop,
+  ArrowDown as RowInsertBottom,
+  Rows3 as RowDelete,
+  ArrowLeft as ColumnInsertLeft,
+  ArrowRight as ColumnInsertRight,
+  Columns3 as ColumnDelete,
+  Merge,
+  Heading,
+  Trash2,
 } from 'lucide-react';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -104,7 +130,7 @@ export function TipTapEditor({
         // bulletList, orderedList, blockquote, code, codeBlock, hardBreak, horizontalRule
       }),
       Underline,
-      ImageExt.configure({
+      ResizableImage.configure({
         inline: false,
         allowBase64: false,
       }),
@@ -125,6 +151,24 @@ export function TipTapEditor({
       Color,
       Highlight.configure({ multicolor: true }),
       CharacterCount,
+      Typography,
+      Subscript,
+      Superscript,
+      TaskList,
+      TaskItem.configure({ nested: true }),
+      Table.configure({
+        resizable: true,
+        HTMLAttributes: { class: 'tiptap-table' },
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
+      Youtube.configure({
+        width: 640,
+        height: 360,
+        nocookie: true,
+        HTMLAttributes: { class: 'tiptap-youtube' },
+      }),
     ],
     content,
     immediatelyRender: false,
@@ -239,8 +283,15 @@ export function TipTapEditor({
         .tiptap-editor-content h2 { font-size: 1.5em; font-weight: 700; margin: 0.5em 0; font-family: 'Cormorant Garamond', serif; }
         .tiptap-editor-content h3 { font-size: 1.25em; font-weight: 600; margin: 0.5em 0; font-family: 'Cormorant Garamond', serif; }
         .tiptap-editor-content p { margin: 0.5em 0; }
-        .tiptap-editor-content ul, .tiptap-editor-content ol { padding-left: 1.5em; }
+        .tiptap-editor-content ul { list-style: disc; padding-left: 1.5em; }
+        .tiptap-editor-content ol { list-style: decimal; padding-left: 1.5em; }
+        .tiptap-editor-content ul ul { list-style: circle; }
+        .tiptap-editor-content ul ul ul { list-style: square; }
         .tiptap-editor-content li { margin: 0.2em 0; }
+        .tiptap-editor-content li::marker { color: #B8944A; }
+        /* Task list overrides disc marker */
+        .tiptap-editor-content ul[data-type='taskList'] { list-style: none; padding-left: 0; }
+        .tiptap-editor-content ul[data-type='taskList'] li::marker { content: ''; }
         .tiptap-editor-content blockquote {
           border-left: 3px solid #0D9488;
           padding-left: 1em;
@@ -291,12 +342,42 @@ export function TipTapEditor({
           float: left;
           height: 0;
         }
+        /* Tables — gold borders matching Spirala design */
+        .tiptap-editor-content .tableWrapper {
+          overflow-x: auto;
+          margin: 1rem 0;
+        }
+        .tiptap-editor-content table {
+          width: 100%;
+          border-collapse: collapse;
+          border: 2px solid #b8944a;
+        }
+        .tiptap-editor-content table th,
+        .tiptap-editor-content table td {
+          border: 1px solid #b8944a;
+          padding: 0.5rem 0.75rem;
+          vertical-align: top;
+          text-align: left;
+          min-width: 80px;
+        }
+        .tiptap-editor-content table th {
+          background: rgba(184, 148, 74, 0.12);
+          font-weight: 600;
+          color: #2D2D2D;
+        }
+        .tiptap-editor-content table .selectedCell {
+          background: rgba(184, 148, 74, 0.15);
+        }
+        .tiptap-editor-content table td p,
+        .tiptap-editor-content table th p {
+          margin: 0;
+        }
       `}</style>
 
-      <div className="border border-[#E8E4DF] rounded-xl overflow-hidden bg-white">
-        {/* Toolbar */}
+      <div className="border border-[#E8E4DF] rounded-xl bg-white">
+        {/* Toolbar — sticky so it stays visible while scrolling through long posts */}
         <div
-          className="flex flex-wrap items-center gap-0.5 px-3 py-2 border-b border-[#E8E4DF] bg-white"
+          className="sticky top-0 z-20 flex flex-wrap items-center gap-0.5 px-3 py-2 border-b border-[#E8E4DF] bg-white/95 backdrop-blur-sm shadow-sm rounded-t-xl"
           role="toolbar"
           aria-label="Pasek narzędzi edytora"
         >
@@ -455,15 +536,254 @@ export function TipTapEditor({
 
           <ToolbarSeparator />
 
+          {/* Task list */}
+          <ToolbarButton
+            title="Lista zadań"
+            active={editor.isActive('taskList')}
+            onClick={() => editor.chain().focus().toggleTaskList().run()}
+          >
+            <ListChecks size={15} />
+          </ToolbarButton>
+
+          {/* Horizontal rule */}
+          <ToolbarButton
+            title="Linia pozioma"
+            onClick={() => editor.chain().focus().setHorizontalRule().run()}
+          >
+            <Minus size={15} />
+          </ToolbarButton>
+
+          {/* Sub/Superscript */}
+          <ToolbarButton
+            title="Indeks górny (x²)"
+            active={editor.isActive('superscript')}
+            onClick={() => editor.chain().focus().toggleSuperscript().run()}
+          >
+            <SuperscriptIcon size={15} />
+          </ToolbarButton>
+          <ToolbarButton
+            title="Indeks dolny (H₂O)"
+            active={editor.isActive('subscript')}
+            onClick={() => editor.chain().focus().toggleSubscript().run()}
+          >
+            <SubscriptIcon size={15} />
+          </ToolbarButton>
+
+          <ToolbarSeparator />
+
+          {/* Table */}
+          <ToolbarButton
+            title="Wstaw tabelę (3×3)"
+            active={editor.isActive('table')}
+            onClick={() =>
+              editor
+                .chain()
+                .focus()
+                .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+                .run()
+            }
+          >
+            <TableIcon size={15} />
+          </ToolbarButton>
+
+          {/* Youtube embed */}
+          <ToolbarButton
+            title="Wstaw wideo YouTube"
+            onClick={() => {
+              const url = globalThis.prompt('Wklej URL YouTube:');
+              if (url) {
+                editor.chain().focus().setYoutubeVideo({ src: url }).run();
+              }
+            }}
+          >
+            <YoutubeIcon size={15} />
+          </ToolbarButton>
+
+          <ToolbarSeparator />
+
           {/* Image upload */}
           <ToolbarButton title="Wstaw obraz" onClick={handleImageButtonClick}>
             <ImagePlus size={15} />
           </ToolbarButton>
+
+          {/* Image-specific controls (visible only when an image is selected) */}
+          {editor?.isActive('image') && (
+            <>
+              <ToolbarSeparator />
+              <ToolbarButton
+                title="Wyrównaj obraz do lewej"
+                active={editor.getAttributes('image').align === 'left'}
+                onClick={() =>
+                  editor.chain().focus().setImageAlign('left').run()
+                }
+              >
+                <AlignLeft size={15} />
+              </ToolbarButton>
+              <ToolbarButton
+                title="Wyśrodkuj obraz"
+                active={editor.getAttributes('image').align === 'center'}
+                onClick={() =>
+                  editor.chain().focus().setImageAlign('center').run()
+                }
+              >
+                <AlignCenter size={15} />
+              </ToolbarButton>
+              <ToolbarButton
+                title="Wyrównaj obraz do prawej"
+                active={editor.getAttributes('image').align === 'right'}
+                onClick={() =>
+                  editor.chain().focus().setImageAlign('right').run()
+                }
+              >
+                <AlignRight size={15} />
+              </ToolbarButton>
+              <ToolbarSeparator />
+              {/* Width presets */}
+              {['25%', '50%', '75%', '100%'].map((w) => (
+                <button
+                  key={w}
+                  type="button"
+                  title={`Szerokość ${w}`}
+                  onClick={() => editor.chain().focus().setImageWidth(w).run()}
+                  className={[
+                    "px-2 h-8 flex items-center justify-center rounded font-['Inter'] text-[11px] font-semibold transition-colors",
+                    editor.getAttributes('image').width === w
+                      ? 'bg-[#0D9488]/10 text-[#0D9488]'
+                      : 'text-[#6B6B6B] hover:bg-[#F0FDFA] hover:text-[#0D9488]',
+                  ].join(' ')}
+                >
+                  {w}
+                </button>
+              ))}
+            </>
+          )}
+
+          {/* Table-specific controls (visible only when cursor is inside a table) */}
+          {editor?.isActive('table') && (
+            <>
+              <ToolbarSeparator />
+              <ToolbarButton
+                title="Dodaj wiersz nad"
+                onClick={() => editor.chain().focus().addRowBefore().run()}
+              >
+                <RowInsertTop size={15} />
+              </ToolbarButton>
+              <ToolbarButton
+                title="Dodaj wiersz pod"
+                onClick={() => editor.chain().focus().addRowAfter().run()}
+              >
+                <RowInsertBottom size={15} />
+              </ToolbarButton>
+              <ToolbarButton
+                title="Usuń wiersz"
+                onClick={() => editor.chain().focus().deleteRow().run()}
+              >
+                <RowDelete size={15} />
+              </ToolbarButton>
+              <ToolbarSeparator />
+              <ToolbarButton
+                title="Dodaj kolumnę lewo"
+                onClick={() => editor.chain().focus().addColumnBefore().run()}
+              >
+                <ColumnInsertLeft size={15} />
+              </ToolbarButton>
+              <ToolbarButton
+                title="Dodaj kolumnę prawo"
+                onClick={() => editor.chain().focus().addColumnAfter().run()}
+              >
+                <ColumnInsertRight size={15} />
+              </ToolbarButton>
+              <ToolbarButton
+                title="Usuń kolumnę"
+                onClick={() => editor.chain().focus().deleteColumn().run()}
+              >
+                <ColumnDelete size={15} />
+              </ToolbarButton>
+              <ToolbarSeparator />
+              <ToolbarButton
+                title="Połącz/podziel komórki"
+                onClick={() => editor.chain().focus().mergeOrSplit().run()}
+              >
+                <Merge size={15} />
+              </ToolbarButton>
+              <ToolbarButton
+                title="Przełącz nagłówek wiersza"
+                onClick={() => editor.chain().focus().toggleHeaderRow().run()}
+              >
+                <Heading size={15} />
+              </ToolbarButton>
+              <ToolbarButton
+                title="Usuń tabelę"
+                onClick={() => editor.chain().focus().deleteTable().run()}
+              >
+                <Trash2 size={15} />
+              </ToolbarButton>
+            </>
+          )}
         </div>
 
         {/* Editor area */}
         <div className="p-4">
           <EditorContent editor={editor} />
+
+          {/* Floating bubble menu — shows when text is selected */}
+          {editor && (
+            <BubbleMenu
+              editor={editor}
+              options={{ placement: 'top' }}
+              shouldShow={({
+                editor: ed,
+                from,
+                to,
+              }: {
+                editor: typeof editor;
+                from: number;
+                to: number;
+              }) => {
+                if (from === to) return false;
+                if (ed.isActive('image')) return false;
+                return true;
+              }}
+            >
+              <div className="flex items-center gap-0.5 bg-white rounded-lg shadow-lg border border-[#E8E4DF] p-1">
+                <ToolbarButton
+                  title="Pogrubienie"
+                  active={editor.isActive('bold')}
+                  onClick={() => editor.chain().focus().toggleBold().run()}
+                >
+                  <Bold size={14} />
+                </ToolbarButton>
+                <ToolbarButton
+                  title="Kursywa"
+                  active={editor.isActive('italic')}
+                  onClick={() => editor.chain().focus().toggleItalic().run()}
+                >
+                  <Italic size={14} />
+                </ToolbarButton>
+                <ToolbarButton
+                  title="Podkreślenie"
+                  active={editor.isActive('underline')}
+                  onClick={() => editor.chain().focus().toggleUnderline().run()}
+                >
+                  <UnderlineIcon size={14} />
+                </ToolbarButton>
+                <ToolbarButton
+                  title="Link"
+                  active={editor.isActive('link')}
+                  onClick={handleSetLink}
+                >
+                  <Link2 size={14} />
+                </ToolbarButton>
+                <ToolbarButton
+                  title="Podświetl"
+                  active={editor.isActive('highlight')}
+                  onClick={() => editor.chain().focus().toggleHighlight().run()}
+                >
+                  <Highlighter size={14} />
+                </ToolbarButton>
+              </div>
+            </BubbleMenu>
+          )}
         </div>
 
         {/* Character count footer */}

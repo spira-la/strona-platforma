@@ -506,10 +506,9 @@ export function EditableText({
   const saveEditing = useCallback(async () => {
     if (!isEditing) return;
     const trimmed = draftValue.trim();
-    const isUnchanged =
-      trimmed === resolvedValue ||
-      (trimmed === '' && resolvedValue === fieldPath);
-    if (isUnchanged) {
+    // Skip only if saving empty on a never-set field (nothing to persist)
+    const isNoOp = trimmed === '' && resolvedValue === fieldPath;
+    if (isNoOp) {
       setIsEditing(false);
       return;
     }

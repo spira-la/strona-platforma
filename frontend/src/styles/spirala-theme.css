@@ -155,3 +155,174 @@ html.lenis body {
     filter: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Blog content images — respect width + data-align from TipTap ResizableImage
+   Overrides prose-img:mx-auto so explicit alignment is honored.
+
+   align 'left' / 'right' = float with text wrap (magazine style)
+   align 'center'         = block, centered, no wrap
+--------------------------------------------------------------------------- */
+.prose img[data-align='left'] {
+  float: left !important;
+  margin: 0.5rem 1.25rem 0.75rem 0 !important;
+  max-width: 50% !important;
+}
+.prose img[data-align='right'] {
+  float: right !important;
+  margin: 0.5rem 0 0.75rem 1.25rem !important;
+  max-width: 50% !important;
+}
+.prose img[data-align='center'] {
+  float: none !important;
+  display: block;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  clear: both;
+}
+.prose img[width] {
+  height: auto;
+}
+/* Clear floats after a section so following blocks don't overlap */
+.prose h2,
+.prose h3,
+.prose blockquote {
+  clear: both;
+}
+
+/* On narrow screens, images can't realistically wrap text — stack them */
+@media (max-width: 640px) {
+  .prose img[data-align='left'],
+  .prose img[data-align='right'] {
+    float: none !important;
+    display: block;
+    margin: 1rem auto !important;
+    max-width: 100% !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Tables (TipTap) — horizontal scroll on mobile, clean look on desktop
+--------------------------------------------------------------------------- */
+.tiptap-editor-content .tableWrapper,
+.prose .tableWrapper {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  -webkit-overflow-scrolling: touch;
+}
+.tiptap-table,
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 2px solid #b8944a;
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  min-width: 400px;
+}
+.tiptap-table th,
+.prose table th,
+.tiptap-table td,
+.prose table td {
+  border: 1px solid #b8944a;
+  padding: 0.5rem 0.75rem;
+  vertical-align: top;
+  text-align: left;
+}
+.tiptap-table th,
+.prose table th {
+  background: rgba(184, 148, 74, 0.12);
+  font-weight: 600;
+  color: #2d2d2d;
+}
+/* Selected cell highlight */
+.tiptap-table .selectedCell {
+  background: rgba(184, 148, 74, 0.15);
+}
+
+/* ---------------------------------------------------------------------------
+   YouTube — responsive 16:9 wrapper
+--------------------------------------------------------------------------- */
+.tiptap-editor-content .tiptap-youtube,
+.tiptap-editor-content iframe,
+.prose .tiptap-youtube,
+.prose iframe {
+  display: block;
+  width: 100%;
+  max-width: 640px;
+  aspect-ratio: 16 / 9;
+  margin: 1.5rem auto;
+  border: 0;
+  border-radius: 8px;
+}
+
+/* ---------------------------------------------------------------------------
+   Task list — checkboxes aligned nicely
+--------------------------------------------------------------------------- */
+.tiptap-editor-content ul[data-type='taskList'],
+/* Regular lists — disc/decimal with gold markers */
+.prose ul:not([data-type='taskList']) {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+.prose ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+}
+.prose ul ul {
+  list-style: circle;
+}
+.prose ul ul ul {
+  list-style: square;
+}
+.prose li::marker {
+  color: #b8944a;
+}
+
+.prose ul[data-type='taskList'] {
+  list-style: none;
+  padding-left: 0;
+}
+.prose ul[data-type='taskList'] li::marker {
+  content: '';
+}
+.tiptap-editor-content ul[data-type='taskList'] li,
+.prose ul[data-type='taskList'] li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin: 0.25rem 0;
+}
+.tiptap-editor-content ul[data-type='taskList'] li > label,
+.prose ul[data-type='taskList'] li > label {
+  user-select: none;
+  margin-top: 0.25rem;
+  flex-shrink: 0;
+}
+.tiptap-editor-content ul[data-type='taskList'] li > div,
+.prose ul[data-type='taskList'] li > div {
+  flex: 1;
+}
+.tiptap-editor-content ul[data-type='taskList'] input[type='checkbox'],
+.prose ul[data-type='taskList'] input[type='checkbox'] {
+  accent-color: #b8944a;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+.tiptap-editor-content ul[data-type='taskList'] li[data-checked='true'] > div,
+.prose ul[data-type='taskList'] li[data-checked='true'] > div {
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+
+/* ---------------------------------------------------------------------------
+   Subscript / Superscript (inline safety on mobile)
+--------------------------------------------------------------------------- */
+.prose sub,
+.prose sup,
+.tiptap-editor-content sub,
+.tiptap-editor-content sup {
+  font-size: 0.75em;
+  line-height: 0;
+}
+

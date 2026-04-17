@@ -95,15 +95,19 @@ async function uploadFile(
 
 export const blogsClient = {
   // Public endpoints — no auth required
-  getPublished: (): Promise<BlogPost[]> =>
-    api
-      .get<{ success: boolean; data: BlogPost[] }>('/blogs')
-      .then((r) => r.data),
+  getPublished: (lang?: string): Promise<BlogPost[]> => {
+    const qs = lang && lang !== 'pl' ? `?lang=${encodeURIComponent(lang)}` : '';
+    return api
+      .get<{ success: boolean; data: BlogPost[] }>(`/blogs${qs}`)
+      .then((r) => r.data);
+  },
 
-  getBySlug: (slug: string): Promise<BlogPost> =>
-    api
-      .get<{ success: boolean; data: BlogPost }>(`/blogs/${slug}`)
-      .then((r) => r.data),
+  getBySlug: (slug: string, lang?: string): Promise<BlogPost> => {
+    const qs = lang && lang !== 'pl' ? `?lang=${encodeURIComponent(lang)}` : '';
+    return api
+      .get<{ success: boolean; data: BlogPost }>(`/blogs/${slug}${qs}`)
+      .then((r) => r.data);
+  },
 
   // Protected endpoints
   getMyPosts: (): Promise<BlogPost[]> =>
@@ -148,5 +152,17 @@ export const blogsClient = {
         success: boolean;
         data: BlogTranslation[];
       }>(`/blogs/${id}/translations`)
+      .then((r) => r.data),
+
+  /** Public — returns translation for a given language, or null if not translated yet. */
+  getPublicTranslation: (
+    id: string,
+    lang: string,
+  ): Promise<BlogTranslation | null> =>
+    api
+      .get<{
+        success: boolean;
+        data: BlogTranslation | null;
+      }>(`/blogs/${id}/translations/${lang}`)
       .then((r) => r.data),
 };

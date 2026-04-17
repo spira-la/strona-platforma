@@ -22,6 +22,13 @@ const DARK_HERO_PAGES = new Set([
   '/tworzenie-stron',
 ]);
 
+/** Pages where the WebDesign pre-footer ribbon is hidden (legal / promotional). */
+const RIBBON_HIDDEN_PAGES = new Set([
+  '/tworzenie-stron',
+  '/polityka-prywatnosci',
+  '/regulamin',
+]);
+
 export function Layout({ children }: LayoutProps) {
   useSmoothScroll();
   const { pathname } = useLocation();
@@ -34,7 +41,7 @@ export function Layout({ children }: LayoutProps) {
       <main className={hasHero ? 'flex-1' : 'flex-1 pt-[72px]'}>
         {children}
       </main>
-      {pathname !== '/tworzenie-stron' && <WebDesignRibbon />}
+      {!RIBBON_HIDDEN_PAGES.has(pathname) && <WebDesignRibbon />}
       <Footer />
       <CMSEditToolbar />
       <AuthModal />

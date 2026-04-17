@@ -5,6 +5,7 @@ import {
   Put,
   Delete,
   Param,
+  Query,
   Body,
   HttpCode,
   HttpStatus,
@@ -247,18 +248,19 @@ export class BlogsController {
    * Public — returns all published posts ordered by publishedAt DESC.
    */
   @Get()
-  async findAll() {
-    const data = await this.blogs.findAllPublished();
+  async findAll(@Query('lang') lang?: string) {
+    const data = await this.blogs.findAllPublished(lang);
     return { success: true, data };
   }
 
   /**
    * GET /api/blogs/:slug
    * Public — returns a single published post and increments viewCount.
+   * Optional ?lang=en|es to get translated content (falls back to PL).
    */
   @Get(':slug')
-  async findBySlug(@Param('slug') slug: string) {
-    const data = await this.blogs.findBySlug(slug);
+  async findBySlug(@Param('slug') slug: string, @Query('lang') lang?: string) {
+    const data = await this.blogs.findBySlug(slug, lang);
     return { success: true, data };
   }
 }

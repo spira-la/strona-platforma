@@ -36,7 +36,7 @@ export function SplitText({
   cmsSection,
   cmsField,
 }: SplitTextProps) {
-  const { isEditMode } = useCMS();
+  const { isEditMode, getFieldValue } = useCMS();
   const { ref, isVisible } = useScrollReveal<HTMLDivElement>({
     threshold: 0.2,
   });
@@ -55,11 +55,21 @@ export function SplitText({
     );
   }
 
-  const pieces = splitBy === 'word' ? text.split(' ') : [...text];
+  // Read-only mode: use CMS value if available (respects current language),
+  // otherwise fall back to the hardcoded `text` prop.
+  let displayText = text;
+  if (cmsSection && cmsField) {
+    const cmsValue = getFieldValue(cmsSection, cmsField);
+    if (cmsValue && cmsValue !== cmsField && cmsValue.trim() !== '') {
+      displayText = cmsValue;
+    }
+  }
+
+  const pieces = splitBy === 'word' ? displayText.split(' ') : [...displayText];
   const easing = 'cubic-bezier(0.19, 1, 0.22, 1)';
 
   return (
-    <div ref={ref} className={className} aria-label={text}>
+    <div ref={ref} className={className} aria-label={displayText}>
       {pieces.map((piece, i) => (
         <span
           key={i}
