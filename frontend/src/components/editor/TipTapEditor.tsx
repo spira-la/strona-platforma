@@ -328,10 +328,10 @@ export function TipTapEditor({
         }
       `}</style>
 
-      <div className="border border-[#E8E4DF] rounded-xl overflow-hidden bg-white">
-        {/* Toolbar */}
+      <div className="border border-[#E8E4DF] rounded-xl bg-white">
+        {/* Toolbar — sticky so it stays visible while scrolling through long posts */}
         <div
-          className="flex flex-wrap items-center gap-0.5 px-3 py-2 border-b border-[#E8E4DF] bg-white"
+          className="sticky top-0 z-20 flex flex-wrap items-center gap-0.5 px-3 py-2 border-b border-[#E8E4DF] bg-white/95 backdrop-blur-sm shadow-sm rounded-t-xl"
           role="toolbar"
           aria-label="Pasek narzędzi edytora"
         >
