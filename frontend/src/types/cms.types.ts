@@ -19,7 +19,9 @@ export type CMSSectionKey =
   | 'testimonials'
   | 'auth'
   | 'notFound'
-  | 'webDesign';
+  | 'webDesign'
+  | 'privacy'
+  | 'terms';
 
 export interface CMSContentResponse {
   success: boolean;
