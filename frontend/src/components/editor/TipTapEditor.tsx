@@ -342,6 +342,36 @@ export function TipTapEditor({
           float: left;
           height: 0;
         }
+        /* Tables — gold borders matching Spirala design */
+        .tiptap-editor-content .tableWrapper {
+          overflow-x: auto;
+          margin: 1rem 0;
+        }
+        .tiptap-editor-content table {
+          width: 100%;
+          border-collapse: collapse;
+          border: 2px solid #b8944a;
+        }
+        .tiptap-editor-content table th,
+        .tiptap-editor-content table td {
+          border: 1px solid #b8944a;
+          padding: 0.5rem 0.75rem;
+          vertical-align: top;
+          text-align: left;
+          min-width: 80px;
+        }
+        .tiptap-editor-content table th {
+          background: rgba(184, 148, 74, 0.12);
+          font-weight: 600;
+          color: #2D2D2D;
+        }
+        .tiptap-editor-content table .selectedCell {
+          background: rgba(184, 148, 74, 0.15);
+        }
+        .tiptap-editor-content table td p,
+        .tiptap-editor-content table th p {
+          margin: 0;
+        }
       `}</style>
 
       <div className="border border-[#E8E4DF] rounded-xl bg-white">
