@@ -159,20 +159,34 @@ html.lenis body {
 /* ---------------------------------------------------------------------------
    Blog content images — respect width + data-align from TipTap ResizableImage
    Overrides prose-img:mx-auto so explicit alignment is honored.
+
+   align 'left' / 'right' = float with text wrap (magazine style)
+   align 'center'         = block, centered, no wrap
 --------------------------------------------------------------------------- */
 .prose img[data-align='left'] {
-  margin-left: 0 !important;
-  margin-right: auto !important;
+  float: left !important;
+  margin: 0.5rem 1.25rem 0.75rem 0 !important;
+  max-width: 50% !important;
 }
 .prose img[data-align='right'] {
-  margin-left: auto !important;
-  margin-right: 0 !important;
+  float: right !important;
+  margin: 0.5rem 0 0.75rem 1.25rem !important;
+  max-width: 50% !important;
 }
 .prose img[data-align='center'] {
+  float: none !important;
+  display: block;
   margin-left: auto !important;
   margin-right: auto !important;
+  clear: both;
 }
 .prose img[width] {
   height: auto;
+}
+/* Clear floats after a section so following blocks don't overlap */
+.prose h2,
+.prose h3,
+.prose blockquote {
+  clear: both;
 }
 

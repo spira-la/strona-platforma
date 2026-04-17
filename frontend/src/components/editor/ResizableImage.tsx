@@ -95,17 +95,29 @@ function ResizableImageView({
     return () => document.removeEventListener('keydown', onKey);
   }, [selected, width, updateAttributes]);
 
-  const justify =
-    align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center';
+  // align 'left' / 'right' = float with text wrap (magazine style).
+  // align 'center' = block-level, centered, no wrap.
+  const isFloated = align === 'left' || align === 'right';
+  const wrapperStyle: React.CSSProperties = isFloated
+    ? {
+        float: align as 'left' | 'right',
+        margin:
+          align === 'left'
+            ? '0.5rem 1.25rem 0.75rem 0'
+            : '0.5rem 0 0.75rem 1.25rem',
+        maxWidth: '50%',
+      }
+    : {
+        display: 'flex',
+        justifyContent: 'center',
+        margin: '1rem 0',
+      };
 
   return (
     <NodeViewWrapper
       data-align={align ?? 'center'}
-      style={{
-        display: 'flex',
-        justifyContent: justify,
-        margin: '1rem 0',
-      }}
+      data-float={isFloated ? align : undefined}
+      style={wrapperStyle}
     >
       <div
         ref={containerRef}
