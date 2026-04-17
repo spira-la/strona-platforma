@@ -1,5 +1,6 @@
 import { useRef, useCallback, useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
+import { BubbleMenu } from '@tiptap/react/menus';
 import StarterKit from '@tiptap/starter-kit';
 import { ResizableImage } from './ResizableImage';
 import LinkExt from '@tiptap/extension-link';
@@ -10,6 +11,16 @@ import Color from '@tiptap/extension-color';
 import { TextStyle } from '@tiptap/extension-text-style';
 import Highlight from '@tiptap/extension-highlight';
 import CharacterCount from '@tiptap/extension-character-count';
+import Typography from '@tiptap/extension-typography';
+import Youtube from '@tiptap/extension-youtube';
+import TaskList from '@tiptap/extension-task-list';
+import TaskItem from '@tiptap/extension-task-item';
+import { Table } from '@tiptap/extension-table';
+import { TableRow } from '@tiptap/extension-table-row';
+import { TableCell } from '@tiptap/extension-table-cell';
+import { TableHeader } from '@tiptap/extension-table-header';
+import { Subscript } from '@tiptap/extension-subscript';
+import { Superscript } from '@tiptap/extension-superscript';
 import {
   Bold,
   Italic,
@@ -23,12 +34,18 @@ import {
   AlignRight,
   List,
   ListOrdered,
+  ListChecks,
   Quote,
   Link2,
   ImagePlus,
   Highlighter,
   Undo2,
   Redo2,
+  Film as YoutubeIcon,
+  Table as TableIcon,
+  Minus,
+  Superscript as SuperscriptIcon,
+  Subscript as SubscriptIcon,
 } from 'lucide-react';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -125,6 +142,24 @@ export function TipTapEditor({
       Color,
       Highlight.configure({ multicolor: true }),
       CharacterCount,
+      Typography,
+      Subscript,
+      Superscript,
+      TaskList,
+      TaskItem.configure({ nested: true }),
+      Table.configure({
+        resizable: true,
+        HTMLAttributes: { class: 'tiptap-table' },
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
+      Youtube.configure({
+        width: 640,
+        height: 360,
+        nocookie: true,
+        HTMLAttributes: { class: 'tiptap-youtube' },
+      }),
     ],
     content,
     immediatelyRender: false,
@@ -455,6 +490,71 @@ export function TipTapEditor({
 
           <ToolbarSeparator />
 
+          {/* Task list */}
+          <ToolbarButton
+            title="Lista zadań"
+            active={editor.isActive('taskList')}
+            onClick={() => editor.chain().focus().toggleTaskList().run()}
+          >
+            <ListChecks size={15} />
+          </ToolbarButton>
+
+          {/* Horizontal rule */}
+          <ToolbarButton
+            title="Linia pozioma"
+            onClick={() => editor.chain().focus().setHorizontalRule().run()}
+          >
+            <Minus size={15} />
+          </ToolbarButton>
+
+          {/* Sub/Superscript */}
+          <ToolbarButton
+            title="Indeks górny (x²)"
+            active={editor.isActive('superscript')}
+            onClick={() => editor.chain().focus().toggleSuperscript().run()}
+          >
+            <SuperscriptIcon size={15} />
+          </ToolbarButton>
+          <ToolbarButton
+            title="Indeks dolny (H₂O)"
+            active={editor.isActive('subscript')}
+            onClick={() => editor.chain().focus().toggleSubscript().run()}
+          >
+            <SubscriptIcon size={15} />
+          </ToolbarButton>
+
+          <ToolbarSeparator />
+
+          {/* Table */}
+          <ToolbarButton
+            title="Wstaw tabelę (3×3)"
+            active={editor.isActive('table')}
+            onClick={() =>
+              editor
+                .chain()
+                .focus()
+                .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+                .run()
+            }
+          >
+            <TableIcon size={15} />
+          </ToolbarButton>
+
+          {/* Youtube embed */}
+          <ToolbarButton
+            title="Wstaw wideo YouTube"
+            onClick={() => {
+              const url = globalThis.prompt('Wklej URL YouTube:');
+              if (url) {
+                editor.chain().focus().setYoutubeVideo({ src: url }).run();
+              }
+            }}
+          >
+            <YoutubeIcon size={15} />
+          </ToolbarButton>
+
+          <ToolbarSeparator />
+
           {/* Image upload */}
           <ToolbarButton title="Wstaw obraz" onClick={handleImageButtonClick}>
             <ImagePlus size={15} />
@@ -516,6 +616,65 @@ export function TipTapEditor({
         {/* Editor area */}
         <div className="p-4">
           <EditorContent editor={editor} />
+
+          {/* Floating bubble menu — shows when text is selected */}
+          {editor && (
+            <BubbleMenu
+              editor={editor}
+              options={{ placement: 'top' }}
+              shouldShow={({
+                editor: ed,
+                from,
+                to,
+              }: {
+                editor: typeof editor;
+                from: number;
+                to: number;
+              }) => {
+                if (from === to) return false;
+                if (ed.isActive('image')) return false;
+                return true;
+              }}
+            >
+              <div className="flex items-center gap-0.5 bg-white rounded-lg shadow-lg border border-[#E8E4DF] p-1">
+                <ToolbarButton
+                  title="Pogrubienie"
+                  active={editor.isActive('bold')}
+                  onClick={() => editor.chain().focus().toggleBold().run()}
+                >
+                  <Bold size={14} />
+                </ToolbarButton>
+                <ToolbarButton
+                  title="Kursywa"
+                  active={editor.isActive('italic')}
+                  onClick={() => editor.chain().focus().toggleItalic().run()}
+                >
+                  <Italic size={14} />
+                </ToolbarButton>
+                <ToolbarButton
+                  title="Podkreślenie"
+                  active={editor.isActive('underline')}
+                  onClick={() => editor.chain().focus().toggleUnderline().run()}
+                >
+                  <UnderlineIcon size={14} />
+                </ToolbarButton>
+                <ToolbarButton
+                  title="Link"
+                  active={editor.isActive('link')}
+                  onClick={handleSetLink}
+                >
+                  <Link2 size={14} />
+                </ToolbarButton>
+                <ToolbarButton
+                  title="Podświetl"
+                  active={editor.isActive('highlight')}
+                  onClick={() => editor.chain().focus().toggleHighlight().run()}
+                >
+                  <Highlighter size={14} />
+                </ToolbarButton>
+              </div>
+            </BubbleMenu>
+          )}
         </div>
 
         {/* Character count footer */}
