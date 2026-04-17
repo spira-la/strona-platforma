@@ -200,9 +200,10 @@ export function CMSProvider({ children }: CMSProviderProps) {
     [isAdmin],
   );
 
-  // Style suffixes are stored ONLY in PL and apply to all languages
-  // (design is global; only text content differs per language)
+  // Style + media suffixes are stored ONLY in PL and apply to all languages
+  // (design, images, overlays are global; only text content differs per language)
   const STYLE_SUFFIXES = [
+    // Text styling
     'Bold',
     'Italic',
     'Align',
@@ -211,13 +212,35 @@ export function CMSProvider({ children }: CMSProviderProps) {
     'MaxWidth',
     'MaxHeight',
     'Multiline',
+    // Overlays
     'OverlayTop',
     'OverlayBottom',
     'OverlayAngle',
+    // Backgrounds
+    'Pos',
+    'Fit',
   ];
 
-  const isStyleField = (fieldPath: string): boolean =>
-    STYLE_SUFFIXES.some((s) => fieldPath.endsWith(s));
+  // Fields that are images/media (stored at root fieldPath without suffix).
+  // We identify them by convention: fieldPath contains 'bg', 'image', 'logo',
+  // 'photo', 'icon', 'avatar', 'cover', or ends in 'Src'.
+  const MEDIA_FIELD_PATTERNS = [
+    /bg$/i,
+    /bg\./i,
+    /image$/i,
+    /image\./i,
+    /logo$/i,
+    /photo$/i,
+    /icon$/i,
+    /avatar$/i,
+    /cover$/i,
+    /Src$/,
+  ];
+
+  const isStyleField = (fieldPath: string): boolean => {
+    if (STYLE_SUFFIXES.some((s) => fieldPath.endsWith(s))) return true;
+    return MEDIA_FIELD_PATTERNS.some((re) => re.test(fieldPath));
+  };
 
   const getFieldValue = useCallback(
     (section: CMSSectionKey, fieldPath: string): string => {
