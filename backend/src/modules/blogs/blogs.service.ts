@@ -10,6 +10,7 @@ import { BlogPostEntity } from '../../db/entities/blog.entity.js';
 import { CategoryEntity } from '../../db/entities/product.entity.js';
 import { BlogPostStatus } from '../../db/entities/enums.js';
 import { BlogTranslationsService } from './blog-translations.service.js';
+import { BlogPostTranslationEntity } from '../../db/entities/blog-translation.entity.js';
 
 // ---------------------------------------------------------------------------
 // DTOs
@@ -72,6 +73,8 @@ export class BlogsService {
     private readonly blogRepo: Repository<BlogPostEntity>,
     @InjectRepository(CategoryEntity)
     private readonly categoryRepo: Repository<CategoryEntity>,
+    @InjectRepository(BlogPostTranslationEntity)
+    private readonly translationRepo: Repository<BlogPostTranslationEntity>,
     private readonly translations: BlogTranslationsService,
   ) {}
 
@@ -81,20 +84,47 @@ export class BlogsService {
 
   /**
    * Returns all published posts ordered by publishedAt DESC.
-   * Used by the public blog listing page.
+   * If `lang` is not 'pl' and a translation exists, merges translated
+   * title/content/excerpt into each post (falling back to PL for any
+   * missing fields).
    */
-  async findAllPublished(): Promise<BlogPostEntity[]> {
-    return this.blogRepo.find({
+  async findAllPublished(lang?: string): Promise<BlogPostEntity[]> {
+    const posts = await this.blogRepo.find({
       where: { status: BlogPostStatus.PUBLISHED },
       order: { publishedAt: 'DESC' },
+    });
+
+    if (!lang || lang === 'pl' || posts.length === 0) {
+      return posts;
+    }
+
+    // Batch-load translations for all posts in target language
+    const translations = await this.translationRepo.find({
+      where: {
+        postId: In(posts.map((p) => p.id)),
+        languageCode: lang,
+      },
+    });
+    const byPostId = new Map(translations.map((t) => [t.postId, t]));
+
+    return posts.map((post) => {
+      const t = byPostId.get(post.id);
+      if (!t) return post;
+      return {
+        ...post,
+        title: t.title ?? post.title,
+        content: t.content ?? post.content,
+        excerpt: t.excerpt ?? post.excerpt,
+      };
     });
   }
 
   /**
    * Returns a single published post by slug and increments viewCount.
-   * Throws NotFoundException if the post does not exist or is not published.
+   * If `lang` is provided and a translation exists, merges translated
+   * fields into the response (fallback to PL for missing fields).
    */
-  async findBySlug(slug: string): Promise<BlogPostEntity> {
+  async findBySlug(slug: string, lang?: string): Promise<BlogPostEntity> {
     const post = await this.blogRepo.findOne({
       where: { slug, status: BlogPostStatus.PUBLISHED },
     });
@@ -111,6 +141,20 @@ export class BlogsService {
           `Failed to increment viewCount for post ${post.id}: ${String(error)}`,
         );
       });
+
+    if (lang && lang !== 'pl') {
+      const t = await this.translationRepo.findOne({
+        where: { postId: post.id, languageCode: lang },
+      });
+      if (t) {
+        return {
+          ...post,
+          title: t.title ?? post.title,
+          content: t.content ?? post.content,
+          excerpt: t.excerpt ?? post.excerpt,
+        };
+      }
+    }
 
     return post;
   }
