@@ -200,14 +200,35 @@ export function CMSProvider({ children }: CMSProviderProps) {
     [isAdmin],
   );
 
+  // Style suffixes are stored ONLY in PL and apply to all languages
+  // (design is global; only text content differs per language)
+  const STYLE_SUFFIXES = [
+    'Bold',
+    'Italic',
+    'Align',
+    'Size',
+    'Color',
+    'MaxWidth',
+    'MaxHeight',
+    'Multiline',
+    'OverlayTop',
+    'OverlayBottom',
+    'OverlayAngle',
+  ];
+
+  const isStyleField = (fieldPath: string): boolean =>
+    STYLE_SUFFIXES.some((s) => fieldPath.endsWith(s));
+
   const getFieldValue = useCallback(
     (section: CMSSectionKey, fieldPath: string): string => {
       const sectionData = content[section];
       if (!sectionData) return fieldPath;
 
-      const lang = i18n.language as CMSLanguage;
+      // Style fields always read from PL (design is global)
+      const lang: CMSLanguage = isStyleField(fieldPath)
+        ? 'pl'
+        : (i18n.language as CMSLanguage);
 
-      // Try current language first, then 'pl' as primary fallback
       const langData = sectionData[lang] ?? sectionData['pl'];
       if (!langData) return fieldPath;
 
@@ -222,7 +243,10 @@ export function CMSProvider({ children }: CMSProviderProps) {
       fieldPath: string,
       value: string,
     ): Promise<void> => {
-      const lang = i18n.language as CMSLanguage;
+      // Style fields always write to PL (design is global)
+      const lang: CMSLanguage = isStyleField(fieldPath)
+        ? 'pl'
+        : (i18n.language as CMSLanguage);
 
       // Optimistic update
       setContent((prev) => {
