@@ -46,6 +46,15 @@ import {
   Minus,
   Superscript as SuperscriptIcon,
   Subscript as SubscriptIcon,
+  ArrowUp as RowInsertTop,
+  ArrowDown as RowInsertBottom,
+  Rows3 as RowDelete,
+  ArrowLeft as ColumnInsertLeft,
+  ArrowRight as ColumnInsertRight,
+  Columns3 as ColumnDelete,
+  Merge,
+  Heading,
+  Trash2,
 } from 'lucide-react';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -274,8 +283,15 @@ export function TipTapEditor({
         .tiptap-editor-content h2 { font-size: 1.5em; font-weight: 700; margin: 0.5em 0; font-family: 'Cormorant Garamond', serif; }
         .tiptap-editor-content h3 { font-size: 1.25em; font-weight: 600; margin: 0.5em 0; font-family: 'Cormorant Garamond', serif; }
         .tiptap-editor-content p { margin: 0.5em 0; }
-        .tiptap-editor-content ul, .tiptap-editor-content ol { padding-left: 1.5em; }
+        .tiptap-editor-content ul { list-style: disc; padding-left: 1.5em; }
+        .tiptap-editor-content ol { list-style: decimal; padding-left: 1.5em; }
+        .tiptap-editor-content ul ul { list-style: circle; }
+        .tiptap-editor-content ul ul ul { list-style: square; }
         .tiptap-editor-content li { margin: 0.2em 0; }
+        .tiptap-editor-content li::marker { color: #B8944A; }
+        /* Task list overrides disc marker */
+        .tiptap-editor-content ul[data-type='taskList'] { list-style: none; padding-left: 0; }
+        .tiptap-editor-content ul[data-type='taskList'] li::marker { content: ''; }
         .tiptap-editor-content blockquote {
           border-left: 3px solid #0D9488;
           padding-left: 1em;
@@ -609,6 +625,69 @@ export function TipTapEditor({
                   {w}
                 </button>
               ))}
+            </>
+          )}
+
+          {/* Table-specific controls (visible only when cursor is inside a table) */}
+          {editor?.isActive('table') && (
+            <>
+              <ToolbarSeparator />
+              <ToolbarButton
+                title="Dodaj wiersz nad"
+                onClick={() => editor.chain().focus().addRowBefore().run()}
+              >
+                <RowInsertTop size={15} />
+              </ToolbarButton>
+              <ToolbarButton
+                title="Dodaj wiersz pod"
+                onClick={() => editor.chain().focus().addRowAfter().run()}
+              >
+                <RowInsertBottom size={15} />
+              </ToolbarButton>
+              <ToolbarButton
+                title="Usuń wiersz"
+                onClick={() => editor.chain().focus().deleteRow().run()}
+              >
+                <RowDelete size={15} />
+              </ToolbarButton>
+              <ToolbarSeparator />
+              <ToolbarButton
+                title="Dodaj kolumnę lewo"
+                onClick={() => editor.chain().focus().addColumnBefore().run()}
+              >
+                <ColumnInsertLeft size={15} />
+              </ToolbarButton>
+              <ToolbarButton
+                title="Dodaj kolumnę prawo"
+                onClick={() => editor.chain().focus().addColumnAfter().run()}
+              >
+                <ColumnInsertRight size={15} />
+              </ToolbarButton>
+              <ToolbarButton
+                title="Usuń kolumnę"
+                onClick={() => editor.chain().focus().deleteColumn().run()}
+              >
+                <ColumnDelete size={15} />
+              </ToolbarButton>
+              <ToolbarSeparator />
+              <ToolbarButton
+                title="Połącz/podziel komórki"
+                onClick={() => editor.chain().focus().mergeOrSplit().run()}
+              >
+                <Merge size={15} />
+              </ToolbarButton>
+              <ToolbarButton
+                title="Przełącz nagłówek wiersza"
+                onClick={() => editor.chain().focus().toggleHeaderRow().run()}
+              >
+                <Heading size={15} />
+              </ToolbarButton>
+              <ToolbarButton
+                title="Usuń tabelę"
+                onClick={() => editor.chain().focus().deleteTable().run()}
+              >
+                <Trash2 size={15} />
+              </ToolbarButton>
             </>
           )}
         </div>
