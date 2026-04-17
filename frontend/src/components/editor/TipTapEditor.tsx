@@ -1,7 +1,7 @@
 import { useRef, useCallback, useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import ImageExt from '@tiptap/extension-image';
+import { ResizableImage } from './ResizableImage';
 import LinkExt from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
 import TextAlign from '@tiptap/extension-text-align';
@@ -104,7 +104,7 @@ export function TipTapEditor({
         // bulletList, orderedList, blockquote, code, codeBlock, hardBreak, horizontalRule
       }),
       Underline,
-      ImageExt.configure({
+      ResizableImage.configure({
         inline: false,
         allowBase64: false,
       }),
@@ -459,6 +459,58 @@ export function TipTapEditor({
           <ToolbarButton title="Wstaw obraz" onClick={handleImageButtonClick}>
             <ImagePlus size={15} />
           </ToolbarButton>
+
+          {/* Image-specific controls (visible only when an image is selected) */}
+          {editor?.isActive('image') && (
+            <>
+              <ToolbarSeparator />
+              <ToolbarButton
+                title="Wyrównaj obraz do lewej"
+                active={editor.getAttributes('image').align === 'left'}
+                onClick={() =>
+                  editor.chain().focus().setImageAlign('left').run()
+                }
+              >
+                <AlignLeft size={15} />
+              </ToolbarButton>
+              <ToolbarButton
+                title="Wyśrodkuj obraz"
+                active={editor.getAttributes('image').align === 'center'}
+                onClick={() =>
+                  editor.chain().focus().setImageAlign('center').run()
+                }
+              >
+                <AlignCenter size={15} />
+              </ToolbarButton>
+              <ToolbarButton
+                title="Wyrównaj obraz do prawej"
+                active={editor.getAttributes('image').align === 'right'}
+                onClick={() =>
+                  editor.chain().focus().setImageAlign('right').run()
+                }
+              >
+                <AlignRight size={15} />
+              </ToolbarButton>
+              <ToolbarSeparator />
+              {/* Width presets */}
+              {['25%', '50%', '75%', '100%'].map((w) => (
+                <button
+                  key={w}
+                  type="button"
+                  title={`Szerokość ${w}`}
+                  onClick={() => editor.chain().focus().setImageWidth(w).run()}
+                  className={[
+                    "px-2 h-8 flex items-center justify-center rounded font-['Inter'] text-[11px] font-semibold transition-colors",
+                    editor.getAttributes('image').width === w
+                      ? 'bg-[#0D9488]/10 text-[#0D9488]'
+                      : 'text-[#6B6B6B] hover:bg-[#F0FDFA] hover:text-[#0D9488]',
+                  ].join(' ')}
+                >
+                  {w}
+                </button>
+              ))}
+            </>
+          )}
         </div>
 
         {/* Editor area */}
