@@ -63,9 +63,9 @@ export function SplitText({
     const full = toCssStyle(
       parseStyle((f) => getFieldValue(cmsSection, f), cmsField),
     );
-    const { fontSize, fontWeight, fontStyle, color, whiteSpace, textAlign } =
+    const { fontSize, fontWeight, fontStyle, color, whiteSpace, ...rest } =
       full;
-    containerStyle = textAlign ? { textAlign } : undefined;
+    containerStyle = Object.keys(rest).length > 0 ? rest : undefined;
     const textOverrides = {
       fontSize,
       fontWeight,
