@@ -569,13 +569,20 @@ export function EditableText({
 
   const inlineStyle = toCssStyle(textStyle);
 
+  // Auto-detect newlines: always render them even if the Multiline flag
+  // wasn't explicitly toggled in the format popover.
+  if (displayContent.includes('\n') && !inlineStyle.whiteSpace) {
+    inlineStyle.whiteSpace = 'pre-wrap';
+  }
+
   // -------------------------------------------------------------------------
   // Edit mode — active textarea
   // -------------------------------------------------------------------------
   if (isEditMode && isEditing) {
+    const EditWrap = needsFullWidth ? 'div' : 'span';
     return (
-      <span
-        className={`relative inline-block w-full ring-2 ring-[#B8963E]/30 rounded-md ${className ?? ''}`}
+      <EditWrap
+        className={`relative ${needsFullWidth ? 'block w-full' : 'inline-block'} ring-2 ring-[#B8963E]/30 rounded-md ${className ?? ''}`}
         onClick={(e) => e.preventDefault()}
       >
         <textarea
@@ -629,7 +636,7 @@ export function EditableText({
             </button>
           </span>
         </span>
-      </span>
+      </EditWrap>
     );
   }
 
@@ -698,15 +705,12 @@ export function EditableText({
           )
         : null;
 
-    const WrapperTag = needsFullWidth ? 'div' : 'span';
     return (
-      <WrapperTag
-        ref={wrapperRef as React.RefObject<never>}
-        className={`relative ${needsFullWidth ? 'block w-full' : 'inline-block align-baseline'}`}
-      >
+      <>
         {React.createElement(
           Tag,
           {
+            ref: wrapperRef as React.RefObject<never>,
             id,
             style: inlineStyle,
             className: `relative rounded transition-[outline,box-shadow,opacity] outline outline-1 ${
@@ -733,7 +737,7 @@ export function EditableText({
           render ? render(displayContent) : displayContent,
         )}
         {floatingUi}
-      </WrapperTag>
+      </>
     );
   }
 
