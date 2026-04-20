@@ -534,8 +534,13 @@ export function EditableText({
   }, [isEditMode, isOtherActive]);
 
   const cancelEditing = useCallback(() => {
+    // Restore the original text (React will reconcile on next render)
+    if (wrapperRef.current) {
+      wrapperRef.current.textContent = displayContent;
+      wrapperRef.current.blur();
+    }
     setIsEditing(false);
-  }, []);
+  }, [displayContent]);
 
   const saveEditing = useCallback(async () => {
     if (!isEditing) return;
@@ -754,11 +759,7 @@ export function EditableText({
                   },
                 }),
           },
-          isEditing
-            ? undefined
-            : render
-              ? render(displayContent)
-              : displayContent,
+          render && !isEditing ? render(displayContent) : displayContent,
         )}
         {floatingUi}
       </>
