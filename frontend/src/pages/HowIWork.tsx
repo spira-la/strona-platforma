@@ -198,7 +198,7 @@ export default function HowIWork() {
       {/* HERO — nature image with overlay title                              */}
       {/* ------------------------------------------------------------------ */}
       <section
-        className="relative flex flex-col items-center justify-center text-center px-6 overflow-hidden min-h-[500px] md:h-[620px]"
+        className="relative flex flex-col items-center justify-center text-center px-6 overflow-hidden h-[500px] md:h-[620px]"
         aria-label="Nagłówek strony Jak pracuję"
       >
         <EditableBackground
