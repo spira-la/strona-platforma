@@ -17,6 +17,7 @@ import {
   Type,
   RotateCcw,
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useCMS } from '@/contexts/CMSContext';
 import type { EditableTextProps } from '@/types/cms.types';
 
@@ -127,6 +128,43 @@ interface FormatPopoverProps {
   onClose: () => void;
 }
 
+const FORMAT_LABELS: Record<string, Record<string, string>> = {
+  size: { pl: 'Rozmiar', en: 'Size', es: 'Tamaño' },
+  maxWidth: { pl: 'Maks. szerokość', en: 'Max width', es: 'Ancho máximo' },
+  maxHeight: { pl: 'Maks. wysokość', en: 'Max height', es: 'Alto máximo' },
+  color: { pl: 'Kolor', en: 'Color', es: 'Color' },
+  multiline: { pl: 'Wieloliniowy', en: 'Multiline', es: 'Multilínea' },
+  multilineOn: {
+    pl: 'Entery aktywne',
+    en: 'Line breaks on',
+    es: 'Saltos activos',
+  },
+  multilineOff: {
+    pl: 'Entery wyłączone',
+    en: 'Line breaks off',
+    es: 'Saltos inactivos',
+  },
+  bold: { pl: 'Pogrubienie', en: 'Bold', es: 'Negrita' },
+  italic: { pl: 'Kursywa', en: 'Italic', es: 'Cursiva' },
+  alignLeft: { pl: 'Do lewej', en: 'Align left', es: 'Alinear izquierda' },
+  alignCenter: { pl: 'Wyśrodkuj', en: 'Align center', es: 'Centrar' },
+  alignRight: { pl: 'Do prawej', en: 'Align right', es: 'Alinear derecha' },
+  alignJustify: { pl: 'Wyjustuj', en: 'Justify', es: 'Justificar' },
+  pickColor: { pl: 'Wybierz kolor', en: 'Pick color', es: 'Elegir color' },
+  defaultColor: {
+    pl: 'Domyślny kolor',
+    en: 'Default color',
+    es: 'Color por defecto',
+  },
+  reset: { pl: 'Resetuj', en: 'Reset', es: 'Restablecer' },
+  done: { pl: 'Gotowe', en: 'Done', es: 'Listo' },
+  auto: { pl: 'auto', en: 'auto', es: 'auto' },
+};
+
+function l(key: string, lang: string): string {
+  return FORMAT_LABELS[key]?.[lang] ?? FORMAT_LABELS[key]?.['en'] ?? key;
+}
+
 function FormatPopover({
   style,
   computedColor,
@@ -134,11 +172,18 @@ function FormatPopover({
   onReset,
   onClose,
 }: FormatPopoverProps) {
-  const alignOptions: { value: Align; Icon: React.ElementType }[] = [
-    { value: 'left', Icon: AlignLeft },
-    { value: 'center', Icon: AlignCenter },
-    { value: 'right', Icon: AlignRight },
-    { value: 'justify', Icon: AlignJustify },
+  const { i18n } = useTranslation();
+  const lang = i18n.language?.slice(0, 2) ?? 'pl';
+
+  const alignOptions: {
+    value: Align;
+    Icon: React.ElementType;
+    labelKey: string;
+  }[] = [
+    { value: 'left', Icon: AlignLeft, labelKey: 'alignLeft' },
+    { value: 'center', Icon: AlignCenter, labelKey: 'alignCenter' },
+    { value: 'right', Icon: AlignRight, labelKey: 'alignRight' },
+    { value: 'justify', Icon: AlignJustify, labelKey: 'alignJustify' },
   ];
 
   return (
@@ -158,7 +203,7 @@ function FormatPopover({
               ? 'bg-[#B8963E] text-white'
               : 'bg-gray-100 text-[#6B6B6B] hover:bg-gray-200'
           }`}
-          title="Bold"
+          title={l('bold', lang)}
         >
           <Bold size={13} />
         </button>
@@ -171,12 +216,12 @@ function FormatPopover({
               ? 'bg-[#B8963E] text-white'
               : 'bg-gray-100 text-[#6B6B6B] hover:bg-gray-200'
           }`}
-          title="Italic"
+          title={l('italic', lang)}
         >
           <Italic size={13} />
         </button>
         <span className="mx-1 w-px h-5 bg-[#E8E4DF]" aria-hidden="true" />
-        {alignOptions.map(({ value, Icon }) => (
+        {alignOptions.map(({ value, Icon, labelKey }) => (
           <button
             key={value}
             type="button"
@@ -189,7 +234,7 @@ function FormatPopover({
                 ? 'bg-[#B8963E] text-white'
                 : 'bg-gray-100 text-[#6B6B6B] hover:bg-gray-200'
             }`}
-            title={`Align ${value}`}
+            title={l(labelKey, lang)}
           >
             <Icon size={13} />
           </button>
@@ -200,7 +245,7 @@ function FormatPopover({
       <div>
         <div className="flex items-center justify-between mb-1">
           <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter']">
-            Size
+            {l('size', lang)}
           </p>
           <span className="text-[10px] text-[#8A8A8A] font-['Inter'] font-medium">
             {Math.round(style.size * 100)}%
@@ -222,10 +267,10 @@ function FormatPopover({
       <div>
         <div className="flex items-center justify-between mb-1">
           <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter']">
-            Max width
+            {l('maxWidth', lang)}
           </p>
           <span className="text-[10px] text-[#8A8A8A] font-['Inter'] font-medium">
-            {style.maxWidth > 0 ? `${style.maxWidth}px` : 'auto'}
+            {style.maxWidth > 0 ? `${style.maxWidth}px` : l('auto', lang)}
           </span>
         </div>
         <input
@@ -244,10 +289,10 @@ function FormatPopover({
       <div>
         <div className="flex items-center justify-between mb-1">
           <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter']">
-            Max height
+            {l('maxHeight', lang)}
           </p>
           <span className="text-[10px] text-[#8A8A8A] font-['Inter'] font-medium">
-            {style.maxHeight > 0 ? `${style.maxHeight}px` : 'auto'}
+            {style.maxHeight > 0 ? `${style.maxHeight}px` : l('auto', lang)}
           </span>
         </div>
         <input
@@ -265,7 +310,7 @@ function FormatPopover({
       {/* Color picker */}
       <div className="flex items-center justify-between">
         <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter']">
-          Color
+          {l('color', lang)}
         </p>
         <div className="flex items-center gap-1">
           <input
@@ -273,14 +318,14 @@ function FormatPopover({
             value={style.color || computedColor || '#2D2D2D'}
             onChange={(e) => onPatch({ color: e.target.value })}
             className="w-7 h-7 rounded border border-[#E8E4DF] cursor-pointer bg-white p-0"
-            title="Pick color"
+            title={l('pickColor', lang)}
           />
           {style.color && (
             <button
               type="button"
               onClick={() => onPatch({ color: '' })}
               className="px-1.5 py-0.5 text-[10px] text-[#6B6B6B] hover:text-[#B8963E]"
-              title="Use default color"
+              title={l('defaultColor', lang)}
             >
               ✕
             </button>
@@ -291,7 +336,7 @@ function FormatPopover({
       {/* Multiline toggle */}
       <div className="flex items-center justify-between">
         <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter']">
-          Multiline
+          {l('multiline', lang)}
         </p>
         <button
           type="button"
@@ -299,7 +344,9 @@ function FormatPopover({
           className={`relative w-9 h-5 rounded-full transition-colors ${
             style.multiline ? 'bg-[#B8963E]' : 'bg-[#E8E4DF]'
           }`}
-          title={style.multiline ? 'Enters aktywne' : 'Enters wyłączone'}
+          title={
+            style.multiline ? l('multilineOn', lang) : l('multilineOff', lang)
+          }
           aria-pressed={style.multiline}
         >
           <span
@@ -318,14 +365,14 @@ function FormatPopover({
           className="flex items-center gap-1 text-[10px] font-medium text-[#6B6B6B] hover:text-[#B8963E] transition-colors"
         >
           <RotateCcw size={10} />
-          Reset
+          {l('reset', lang)}
         </button>
         <button
           type="button"
           onClick={onClose}
           className="px-3 py-1 rounded-md text-[11px] font-medium text-white bg-[#B8963E] hover:bg-[#8A6F2E] transition-colors font-['Inter']"
         >
-          Done
+          {l('done', lang)}
         </button>
       </div>
     </div>
