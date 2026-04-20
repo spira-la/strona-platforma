@@ -46,22 +46,7 @@ export function SplitText({
     threshold: 0.2,
   });
 
-  // In CMS edit mode, render an EditableText instead of the animation
-  if (isEditMode && cmsSection && cmsField) {
-    return (
-      <div className={className}>
-        <EditableText
-          section={cmsSection}
-          fieldPath={cmsField}
-          as="span"
-          placeholder={text}
-        />
-      </div>
-    );
-  }
-
-  // Read-only mode: use CMS value if available (respects current language),
-  // otherwise fall back to the hardcoded `text` prop.
+  // CMS text value (used in both modes)
   let displayText = text;
   if (cmsSection && cmsField) {
     const cmsValue = getFieldValue(cmsSection, cmsField);
@@ -70,10 +55,8 @@ export function SplitText({
     }
   }
 
-  // Apply CMS style fields in read-only mode.
-  // Container styles (maxWidth, textAlign, etc.) go on the outer div.
-  // Text styles (fontSize, fontWeight, color, etc.) go on each word span
-  // so they layer correctly with the Tailwind base classes on the container.
+  // CMS style fields — split into container vs text styles so they layer
+  // correctly with the Tailwind base classes on the container div.
   let containerStyle: React.CSSProperties | undefined;
   let wordStyle: React.CSSProperties | undefined;
   if (cmsSection && cmsField) {
@@ -92,6 +75,20 @@ export function SplitText({
     };
     const hasTextOverrides = Object.values(textOverrides).some(Boolean);
     wordStyle = hasTextOverrides ? textOverrides : undefined;
+  }
+
+  // In CMS edit mode, render an EditableText instead of the animation
+  if (isEditMode && cmsSection && cmsField) {
+    return (
+      <div className={className} style={containerStyle}>
+        <EditableText
+          section={cmsSection}
+          fieldPath={cmsField}
+          as="span"
+          placeholder={text}
+        />
+      </div>
+    );
   }
 
   const pieces = splitBy === 'word' ? displayText.split(' ') : [...displayText];

@@ -116,7 +116,7 @@ function StepCard({
 function HeroSection() {
   return (
     <section
-      className="relative flex flex-col items-center justify-center text-center px-6 py-28 md:py-36 overflow-hidden min-h-[480px]"
+      className="relative flex flex-col items-center justify-center text-center px-6 overflow-hidden h-[500px] md:h-[620px]"
       aria-label="Tworzenie stron internetowych"
     >
       <EditableBackground

@@ -92,7 +92,7 @@ function BlogCard({ post }: BlogCardProps) {
 function HeroSection() {
   return (
     <section
-      className="relative flex items-center justify-center min-h-[380px] md:min-h-[440px] overflow-hidden"
+      className="relative flex items-center justify-center h-[500px] md:h-[620px] overflow-hidden"
       aria-label="Naglowek bloga"
     >
       <EditableBackground

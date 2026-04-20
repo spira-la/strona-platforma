@@ -241,7 +241,9 @@ ${numbered}`;
     const raw = await this.callOllama(prompt, fromLang, toLang, true);
 
     // Parse numbered lines back to array. Forgiving: accepts [1], 1., 1:, etc.
-    const result: string[] = Array.from({ length: texts.length }).fill('');
+    const result: string[] = Array.from<string>({ length: texts.length }).fill(
+      '',
+    );
     // eslint-disable-next-line sonarjs/slow-regex -- input is LLM output, bounded by BATCH_CHAR_LIMIT
     const lineRegex = /^\s*\[?(\d+)\]?[.:)\s]\s*(.*)$/;
 
