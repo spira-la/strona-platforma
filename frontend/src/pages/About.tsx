@@ -162,7 +162,7 @@ export default function About() {
       {/* HERO                                                                 */}
       {/* ------------------------------------------------------------------ */}
       <section
-        className="relative flex flex-col items-center justify-center text-center overflow-hidden h-[360px] md:h-[420px]"
+        className="relative flex flex-col items-center justify-center text-center overflow-hidden min-h-[500px] md:h-[620px]"
         aria-label="Nagłówek strony O mnie"
       >
         {/* Background image */}
