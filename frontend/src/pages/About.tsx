@@ -233,55 +233,77 @@ export default function About() {
       {/* ABOUT — PHOTO + BIO                                                 */}
       {/* ------------------------------------------------------------------ */}
       <section className="px-6 py-16 sm:py-24 bg-white" aria-label="Biografia">
-        <div className="max-w-[1024px] mx-auto flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
-          {/* Photo */}
-          <ScrollReveal
-            animation="scale"
-            className="flex-shrink-0 w-full lg:w-80 xl:w-96"
-          >
-            <div
-              className="relative rounded-[20px] overflow-hidden aspect-[4/5] w-full"
-              style={{ boxShadow: '0 20px 60px rgba(184,148,74,0.15)' }}
+        <div className="max-w-[1024px] mx-auto flex flex-col gap-12">
+          {/* Top row: photo + short intro */}
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
+            {/* Photo */}
+            <ScrollReveal
+              animation="scale"
+              className="flex-shrink-0 w-full lg:w-80 xl:w-96"
             >
-              <EditableImage
-                section="about"
-                fieldPath="profilePhoto"
-                fallbackSrc={ane2Photo}
-                alt="Aneta — psycholog kliniczny i coach"
-                className="w-full h-full object-cover"
-              />
               <div
-                className="absolute inset-0 rounded-[20px] pointer-events-none"
-                style={{ boxShadow: 'inset 0 0 0 2px rgba(184,148,74,0.3)' }}
-                aria-hidden="true"
+                className="relative rounded-[20px] overflow-hidden aspect-[4/5] w-full"
+                style={{ boxShadow: '0 20px 60px rgba(184,148,74,0.15)' }}
+              >
+                <EditableImage
+                  section="about"
+                  fieldPath="profilePhoto"
+                  fallbackSrc={ane2Photo}
+                  alt="Aneta — psycholog kliniczny i coach"
+                  className="w-full h-full object-cover"
+                />
+                <div
+                  className="absolute inset-0 rounded-[20px] pointer-events-none"
+                  style={{ boxShadow: 'inset 0 0 0 2px rgba(184,148,74,0.3)' }}
+                  aria-hidden="true"
+                />
+              </div>
+            </ScrollReveal>
+
+            {/* Short intro next to photo */}
+            <ScrollReveal
+              animation="fade-left"
+              delay={150}
+              className="flex flex-col gap-6 flex-1"
+            >
+              <SectionBadge label="O mnie" />
+
+              <EditableText
+                section="about"
+                fieldPath="bioHeading"
+                as="h2"
+                placeholder="CZEŚĆ, JESTEM ANETA"
+                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
               />
-            </div>
-          </ScrollReveal>
 
-          {/* Bio */}
+              <EditableText
+                section="about"
+                fieldPath="bioParagraph1"
+                as="p"
+                placeholder="Jestem psychologiem klinicznym z wieloletnim doświadczeniem w pracy z osobami poszukującymi głębszej zmiany. Ukończyłam psychologię kliniczną oraz liczne szkolenia z zakresu terapii somatycznej i psychobiologii stresu."
+                className="text-sm sm:text-base leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+              />
+
+              <blockquote className="pl-5 border-l-2 border-[#B8944A] mt-2">
+                <EditableText
+                  section="about"
+                  fieldPath="bioQuote"
+                  as="p"
+                  placeholder={
+                    '„Zmiana nie zaczyna się w głowie — zaczyna się w ciele i w odważnej decyzji, by siebie wysłuchać."'
+                  }
+                  className="text-base sm:text-lg italic leading-relaxed text-[#B8944A] [font-family:'Cormorant_Garamond',serif]"
+                />
+              </blockquote>
+            </ScrollReveal>
+          </div>
+
+          {/* Full-width extended bio below */}
           <ScrollReveal
-            animation="fade-left"
-            delay={150}
-            className="flex flex-col gap-6 flex-1"
+            animation="fade-up"
+            delay={200}
+            className="flex flex-col gap-6"
           >
-            <SectionBadge label="O mnie" />
-
-            <EditableText
-              section="about"
-              fieldPath="bioHeading"
-              as="h2"
-              placeholder="CZEŚĆ, JESTEM ANETA"
-              className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
-            />
-
-            <EditableText
-              section="about"
-              fieldPath="bioParagraph1"
-              as="p"
-              placeholder="Jestem psychologiem klinicznym z wieloletnim doświadczeniem w pracy z osobami poszukującymi głębszej zmiany. Ukończyłam psychologię kliniczną oraz liczne szkolenia z zakresu terapii somatycznej i psychobiologii stresu."
-              className="text-sm sm:text-base leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
-            />
-
             <EditableText
               section="about"
               fieldPath="bioParagraph2"
@@ -297,18 +319,6 @@ export default function About() {
               placeholder="Pracuję z dorosłymi — indywidualnie — online i stacjonarnie. Moją misją jest towarzyszenie Ci w odkrywaniu własnych zasobów i potencjału."
               className="text-sm sm:text-base leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
             />
-
-            <blockquote className="pl-5 border-l-2 border-[#B8944A] mt-2">
-              <EditableText
-                section="about"
-                fieldPath="bioQuote"
-                as="p"
-                placeholder={
-                  '„Zmiana nie zaczyna się w głowie — zaczyna się w ciele i w odważnej decyzji, by siebie wysłuchać."'
-                }
-                className="text-base sm:text-lg italic leading-relaxed text-[#B8944A] [font-family:'Cormorant_Garamond',serif]"
-              />
-            </blockquote>
           </ScrollReveal>
         </div>
       </section>
