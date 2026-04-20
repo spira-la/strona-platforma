@@ -416,9 +416,7 @@ export function EditableText({
   const [isEditing, setIsEditing] = useState(false);
   const [showFormat, setShowFormat] = useState(false);
   const [rect, setRect] = useState<DOMRect | null>(null);
-  const [draftValue, setDraftValue] = useState('');
   const [isSaving, setIsSaving] = useState(false);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const wrapperRef = useRef<HTMLElement>(null);
   const [computedColor, setComputedColor] = useState('');
 
@@ -454,14 +452,17 @@ export function EditableText({
     };
   }, [isEditMode]);
 
-  // Auto-size textarea height and focus when entering edit mode
+  // Focus and place cursor at end when entering inline edit mode
   useEffect(() => {
-    if (isEditing && textareaRef.current) {
-      const el = textareaRef.current;
-      el.style.height = 'auto';
-      el.style.height = `${el.scrollHeight}px`;
+    if (isEditing && wrapperRef.current) {
+      const el = wrapperRef.current;
       el.focus();
-      el.select();
+      const range = document.createRange();
+      const sel = globalThis.getSelection();
+      range.selectNodeContents(el);
+      range.collapse(false);
+      sel?.removeAllRanges();
+      sel?.addRange(range);
     }
   }, [isEditing]);
 
@@ -529,31 +530,18 @@ export function EditableText({
 
   const startEditing = useCallback(() => {
     if (!isEditMode || isOtherActive) return;
-    const hasNoValue =
-      resolvedValue === fieldPath || resolvedValue.trim() === '';
-    const prefill = hasNoValue
-      ? (placeholder ?? childrenText ?? '')
-      : resolvedValue;
-    setDraftValue(prefill);
     setIsEditing(true);
-  }, [
-    isEditMode,
-    isOtherActive,
-    resolvedValue,
-    fieldPath,
-    placeholder,
-    childrenText,
-  ]);
+  }, [isEditMode, isOtherActive]);
 
   const cancelEditing = useCallback(() => {
     setIsEditing(false);
-    setDraftValue('');
   }, []);
 
   const saveEditing = useCallback(async () => {
     if (!isEditing) return;
-    const trimmed = draftValue.trim();
-    // Skip only if saving empty on a never-set field (nothing to persist)
+    const el = wrapperRef.current;
+    // eslint-disable-next-line unicorn/prefer-dom-node-text-content -- innerText preserves <br> as \n from contentEditable
+    const trimmed = (el?.innerText ?? '').trim();
     const isNoOp = trimmed === '' && resolvedValue === fieldPath;
     if (isNoOp) {
       setIsEditing(false);
@@ -566,10 +554,10 @@ export function EditableText({
       setIsSaving(false);
       setIsEditing(false);
     }
-  }, [isEditing, draftValue, resolvedValue, fieldPath, section, updateField]);
+  }, [isEditing, resolvedValue, fieldPath, section, updateField]);
 
   const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    (e: React.KeyboardEvent<HTMLElement>) => {
       if (e.key === 'Escape') {
         e.preventDefault();
         cancelEditing();
@@ -623,81 +611,10 @@ export function EditableText({
   }
 
   // -------------------------------------------------------------------------
-  // Edit mode — active textarea
-  // -------------------------------------------------------------------------
-  if (isEditMode && isEditing) {
-    const EditWrap = needsFullWidth ? 'div' : 'span';
-    return (
-      <EditWrap
-        className={`relative ${needsFullWidth ? 'block w-full' : 'inline-block'} ring-2 ring-[#B8963E]/30 rounded-md ${className ?? ''}`}
-        onClick={(e) => e.preventDefault()}
-      >
-        <textarea
-          ref={textareaRef}
-          value={draftValue}
-          onChange={(e) => {
-            setDraftValue(e.target.value);
-            e.target.style.height = 'auto';
-            e.target.style.height = `${e.target.scrollHeight}px`;
-          }}
-          onKeyDown={handleKeyDown}
-          className="w-full resize-none overflow-hidden rounded border border-[#B8963E] bg-white px-2 py-1 font-sans text-sm text-[#2D2D2D] leading-normal shadow-sm outline-none focus:ring-2 focus:ring-[#B8963E]/50"
-          rows={1}
-          aria-label={`Edit ${section}.${fieldPath}`}
-        />
-        <span className="flex items-center justify-between mt-1">
-          <button
-            type="button"
-            onMouseDown={(e) => {
-              e.preventDefault();
-              setDraftValue('');
-            }}
-            className="rounded px-2 py-0.5 text-[11px] font-medium text-red-500 hover:text-red-700 hover:bg-red-50 transition-colors"
-            title="Clear to show default text"
-          >
-            Reset
-          </button>
-          <span className="flex items-center gap-2">
-            {isSaving && (
-              <span className="text-[10px] text-[#B8963E]">saving...</span>
-            )}
-            <button
-              type="button"
-              onMouseDown={(e) => {
-                e.preventDefault();
-                cancelEditing();
-              }}
-              className="rounded px-2 py-0.5 text-[11px] font-medium text-[#6B6B6B] bg-gray-100 hover:bg-gray-200 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              onMouseDown={(e) => {
-                e.preventDefault();
-                void saveEditing();
-              }}
-              className="rounded px-2 py-0.5 text-[11px] font-medium text-white bg-[#B8963E] hover:bg-[#8A6F2E] transition-colors"
-            >
-              Save
-            </button>
-          </span>
-        </span>
-      </EditWrap>
-    );
-  }
-
-  // -------------------------------------------------------------------------
-  // Edit mode — hoverable with format button
+  // Edit mode — unified WYSIWYG (contentEditable when active, clickable otherwise)
   // -------------------------------------------------------------------------
   if (isEditMode) {
-    // Floating UI rendered into document.body so it escapes any
-    // `overflow: hidden` ancestor (chips, rounded pills, sections with
-    // clipping). Positioned with `fixed` coordinates from the wrapper's
-    // bounding rect.
     const portalTarget = typeof document === 'undefined' ? null : document.body;
-
-    // Clamp floating UI within viewport bounds
     const vw = globalThis.window === undefined ? 1440 : window.innerWidth;
     const vh = globalThis.window === undefined ? 900 : window.innerHeight;
 
@@ -705,6 +622,7 @@ export function EditableText({
       portalTarget && rect && !isOtherActive
         ? createPortal(
             <>
+              {/* Format button */}
               <button
                 type="button"
                 onClick={(e) => {
@@ -747,6 +665,49 @@ export function EditableText({
                   />
                 </div>
               )}
+
+              {/* Save/Cancel toolbar — shown only while actively editing */}
+              {isEditing && (
+                <div
+                  className="fixed z-[9999] flex items-center gap-1.5 bg-white/95 backdrop-blur-sm rounded-lg shadow-xl border border-[#E8E4DF] px-2 py-1.5"
+                  style={{
+                    top: rect.bottom + 6,
+                    left: Math.max(8, Math.min(rect.left, vw - 260)),
+                  }}
+                  onMouseDown={(e) => e.preventDefault()}
+                >
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (wrapperRef.current)
+                        wrapperRef.current.textContent = '';
+                    }}
+                    className="rounded px-2 py-0.5 text-[11px] font-medium text-red-500 hover:text-red-700 hover:bg-red-50 transition-colors font-['Inter']"
+                  >
+                    Reset
+                  </button>
+                  <span className="w-px h-4 bg-[#E8E4DF]" />
+                  {isSaving && (
+                    <span className="text-[10px] text-[#B8963E] font-['Inter']">
+                      ...
+                    </span>
+                  )}
+                  <button
+                    type="button"
+                    onClick={cancelEditing}
+                    className="rounded px-2 py-0.5 text-[11px] font-medium text-[#6B6B6B] bg-gray-100 hover:bg-gray-200 transition-colors font-['Inter']"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => void saveEditing()}
+                    className="rounded px-2.5 py-0.5 text-[11px] font-medium text-white bg-[#B8963E] hover:bg-[#8A6F2E] transition-colors font-['Inter']"
+                  >
+                    Save
+                  </button>
+                </div>
+              )}
             </>,
             portalTarget,
           )
@@ -761,27 +722,43 @@ export function EditableText({
             id,
             style: inlineStyle,
             className: `relative rounded transition-[outline,box-shadow,opacity] outline outline-1 ${
-              isOtherActive
-                ? 'outline-transparent opacity-40 pointer-events-none'
-                : 'outline-transparent cursor-pointer hover:outline-[#B8963E]/70 hover:shadow-[0_0_0_3px_rgba(184,150,62,0.12)]'
+              isEditing
+                ? 'outline-[#B8963E]/70 shadow-[0_0_0_3px_rgba(184,150,62,0.18)]'
+                : isOtherActive
+                  ? 'outline-transparent opacity-40 pointer-events-none'
+                  : 'outline-transparent cursor-pointer hover:outline-[#B8963E]/70 hover:shadow-[0_0_0_3px_rgba(184,150,62,0.12)]'
             } ${resolvedClassName ?? ''}`,
-            onClick: (e: React.MouseEvent) => {
-              e.preventDefault();
-              e.stopPropagation();
-              startEditing();
-            },
-            title: `Edit: ${section} → ${fieldPath}`,
-            role: 'button',
-            tabIndex: 0,
-            onKeyDown: (e: React.KeyboardEvent) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                e.stopPropagation();
-                startEditing();
-              }
-            },
+            ...(isEditing
+              ? {
+                  contentEditable: true,
+                  suppressContentEditableWarning: true,
+                  onKeyDown: handleKeyDown,
+                  role: 'textbox',
+                  'aria-label': `Edit ${section}.${fieldPath}`,
+                }
+              : {
+                  onClick: (e: React.MouseEvent) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    startEditing();
+                  },
+                  title: `Edit: ${section} → ${fieldPath}`,
+                  role: 'button',
+                  tabIndex: 0,
+                  onKeyDown: (e: React.KeyboardEvent) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      startEditing();
+                    }
+                  },
+                }),
           },
-          render ? render(displayContent) : displayContent,
+          isEditing
+            ? undefined
+            : render
+              ? render(displayContent)
+              : displayContent,
         )}
         {floatingUi}
       </>
