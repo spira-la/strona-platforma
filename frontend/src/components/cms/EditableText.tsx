@@ -75,7 +75,7 @@ function clamp(n: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, n));
 }
 
-function parseStyle(
+export function parseStyle(
   read: (field: string) => string,
   fieldPath: string,
 ): TextStyleState {
@@ -99,7 +99,7 @@ function parseStyle(
   };
 }
 
-function toCssStyle(s: TextStyleState): React.CSSProperties {
+export function toCssStyle(s: TextStyleState): React.CSSProperties {
   const style: React.CSSProperties = {};
   if (s.bold) style.fontWeight = 700;
   if (s.italic) style.fontStyle = 'italic';
