@@ -1,6 +1,10 @@
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 import { useCMS } from '@/contexts/CMSContext';
-import { EditableText } from '@/components/cms/EditableText';
+import {
+  EditableText,
+  parseStyle,
+  toCssStyle,
+} from '@/components/cms/EditableText';
 import type { CMSSectionKey } from '@/types/cms.types';
 
 interface SplitTextProps {
@@ -65,11 +69,22 @@ export function SplitText({
     }
   }
 
+  // Apply CMS style fields (maxWidth, bold, italic, etc.) in read-only mode
+  const cmsInlineStyle =
+    cmsSection && cmsField
+      ? toCssStyle(parseStyle((f) => getFieldValue(cmsSection, f), cmsField))
+      : undefined;
+
   const pieces = splitBy === 'word' ? displayText.split(' ') : [...displayText];
   const easing = 'cubic-bezier(0.19, 1, 0.22, 1)';
 
   return (
-    <div ref={ref} className={className} aria-label={displayText}>
+    <div
+      ref={ref}
+      className={className}
+      style={cmsInlineStyle}
+      aria-label={displayText}
+    >
       {pieces.map((piece, i) => (
         <span
           key={i}
