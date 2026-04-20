@@ -1,3 +1,4 @@
+import type React from 'react';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 import { useCMS } from '@/contexts/CMSContext';
 import {
@@ -69,11 +70,29 @@ export function SplitText({
     }
   }
 
-  // Apply CMS style fields (maxWidth, bold, italic, etc.) in read-only mode
-  const cmsInlineStyle =
-    cmsSection && cmsField
-      ? toCssStyle(parseStyle((f) => getFieldValue(cmsSection, f), cmsField))
-      : undefined;
+  // Apply CMS style fields in read-only mode.
+  // Container styles (maxWidth, textAlign, etc.) go on the outer div.
+  // Text styles (fontSize, fontWeight, color, etc.) go on each word span
+  // so they layer correctly with the Tailwind base classes on the container.
+  let containerStyle: React.CSSProperties | undefined;
+  let wordStyle: React.CSSProperties | undefined;
+  if (cmsSection && cmsField) {
+    const full = toCssStyle(
+      parseStyle((f) => getFieldValue(cmsSection, f), cmsField),
+    );
+    const { fontSize, fontWeight, fontStyle, color, whiteSpace, ...rest } =
+      full;
+    containerStyle = Object.keys(rest).length > 0 ? rest : undefined;
+    const textOverrides = {
+      fontSize,
+      fontWeight,
+      fontStyle,
+      color,
+      whiteSpace,
+    };
+    const hasTextOverrides = Object.values(textOverrides).some(Boolean);
+    wordStyle = hasTextOverrides ? textOverrides : undefined;
+  }
 
   const pieces = splitBy === 'word' ? displayText.split(' ') : [...displayText];
   const easing = 'cubic-bezier(0.19, 1, 0.22, 1)';
@@ -82,7 +101,7 @@ export function SplitText({
     <div
       ref={ref}
       className={className}
-      style={cmsInlineStyle}
+      style={containerStyle}
       aria-label={displayText}
     >
       {pieces.map((piece, i) => (
@@ -94,6 +113,7 @@ export function SplitText({
           <span
             className="inline-block"
             style={{
+              ...wordStyle,
               transform: isVisible ? 'translateY(0)' : 'translateY(110%)',
               opacity: isVisible ? 1 : 0,
               transition: `transform ${duration}ms ${easing} ${delay + i * staggerInterval}ms, opacity ${duration * 0.5}ms ${easing} ${delay + i * staggerInterval}ms`,
