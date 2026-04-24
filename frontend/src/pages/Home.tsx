@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { SEO } from '@/components/shared/SEO';
 import { ArrowRight, ShieldCheck, Lock, Heart } from 'lucide-react';
 import { EditableText } from '@/components/cms/EditableText';
@@ -8,7 +10,24 @@ import { EditableOverlay } from '@/components/cms/EditableOverlay';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
 import { SplitText } from '@/components/shared/SplitText';
 import { GoldLine } from '@/components/shared/GoldLine';
+import { blogsClient, type BlogPost } from '@/clients/blogs.client';
 import ane1Photo from '@/assets/Ane1.jpg';
+
+const BLOG_DEFAULT_COVER =
+  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=800&auto=format&fit=crop';
+
+function formatBlogDate(iso: string | null, locale: string): string {
+  if (!iso) return '';
+  try {
+    return new Date(iso).toLocaleDateString(locale, {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+  } catch {
+    return '';
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Shared primitives
@@ -668,143 +687,155 @@ function TestimonialsSection() {
 // 6. Blog Preview Section
 // ---------------------------------------------------------------------------
 
-interface BlogCardProps {
-  fieldBase: string;
-  imageUrl: string;
-  imageAlt: string;
-  imageField: string;
-  defaultCategory: string;
-  defaultTitle: string;
-  defaultExcerpt: string;
-  defaultDate: string;
-  featured?: boolean;
+interface FeaturedBlogCardProps {
+  post: BlogPost;
+  locale: string;
 }
 
-function BlogCard({
-  fieldBase,
-  imageUrl,
-  imageAlt,
-  imageField,
-  defaultCategory,
-  defaultTitle,
-  defaultExcerpt,
-  defaultDate,
-  featured = false,
-}: BlogCardProps) {
-  if (featured) {
-    return (
-      <article className="flex flex-col md:flex-row border border-[#E8E4DF] rounded-[12px] overflow-hidden">
-        <EditableImage
-          section="home"
-          fieldPath={imageField}
-          fallbackSrc={imageUrl}
-          alt={imageAlt}
-          className="w-full md:w-[500px] h-[260px] md:h-[320px] object-cover flex-shrink-0"
-        />
-        <div className="flex flex-col gap-3 p-8 justify-center flex-1">
-          <EditableText
-            section="blog"
-            fieldPath={`${fieldBase}Category`}
-            as="span"
-            className="font-['Lato'] text-[11px] font-bold uppercase tracking-[0.1em] text-[#B8944A]"
-            placeholder={defaultCategory}
-          />
-          <EditableText
-            section="blog"
-            fieldPath={`${fieldBase}Title`}
-            as="h3"
-            className="font-['Cormorant_Garamond'] text-[22px] md:text-[26px] font-bold text-[#2D2D2D] leading-[1.25]"
-            placeholder={defaultTitle}
-          />
-          <EditableText
-            section="blog"
-            fieldPath={`${fieldBase}Excerpt`}
-            as="p"
-            className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-[1.7]"
-            placeholder={defaultExcerpt}
-          />
-          <div className="flex items-center justify-between mt-2">
+function FeaturedBlogCard({ post, locale }: FeaturedBlogCardProps) {
+  const category = post.categories?.[0]?.name;
+  return (
+    <Link
+      to={`/blog/${post.slug}`}
+      className="group flex flex-col md:flex-row border border-[#E8E4DF] rounded-[12px] overflow-hidden hover:shadow-md transition-shadow duration-300"
+    >
+      <img
+        src={post.coverImageUrl ?? BLOG_DEFAULT_COVER}
+        alt={post.title}
+        className="w-full md:w-[500px] h-[260px] md:h-[320px] object-cover flex-shrink-0 transition-transform duration-500 group-hover:scale-[1.02]"
+        loading="lazy"
+      />
+      <div className="flex flex-col gap-3 p-8 justify-center flex-1">
+        {category && (
+          <span className="font-['Lato'] text-[11px] font-bold uppercase tracking-[0.1em] text-[#B8944A]">
+            {category}
+          </span>
+        )}
+        <h3 className="font-['Cormorant_Garamond'] text-[22px] md:text-[26px] font-bold text-[#2D2D2D] leading-[1.25]">
+          {post.title}
+        </h3>
+        {post.excerpt && (
+          <p className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-[1.7]">
+            {post.excerpt}
+          </p>
+        )}
+        <div className="flex items-center justify-between mt-2">
+          <time className="font-['Lato'] text-[12px] text-[#8A8A8A]">
+            {formatBlogDate(post.publishedAt ?? post.createdAt, locale)}
+          </time>
+          <span className="inline-flex items-center gap-1.5 font-['Lato'] text-[13px] font-semibold text-[#B8944A] group-hover:text-[#8A6F2E] transition-colors duration-200">
             <EditableText
               section="blog"
-              fieldPath={`${fieldBase}Date`}
-              as="time"
-              className="font-['Lato'] text-[12px] text-[#8A8A8A]"
-              placeholder={defaultDate}
+              fieldPath="readMoreFeatured"
+              placeholder="Czytaj więcej"
             />
-            <Link
-              to="/blog"
-              className="inline-flex items-center gap-1.5 font-['Lato'] text-[13px] font-semibold text-[#B8944A] hover:text-[#8A6F2E] transition-colors duration-200 focus-visible:outline-none focus-visible:underline"
-            >
-              <EditableText
-                section="blog"
-                fieldPath="readMoreFeatured"
-                placeholder="Czytaj więcej"
-              />
-              <ArrowRight size={13} aria-hidden="true" />
-            </Link>
-          </div>
+            <ArrowRight size={13} aria-hidden="true" />
+          </span>
         </div>
-      </article>
-    );
-  }
+      </div>
+    </Link>
+  );
+}
 
+interface SmallBlogCardProps {
+  post: BlogPost;
+  locale: string;
+}
+
+function SmallBlogCard({ post, locale }: SmallBlogCardProps) {
+  const category = post.categories?.[0]?.name;
   return (
-    <article className="flex flex-col border border-[#E8E4DF] rounded-[12px] overflow-hidden">
-      <EditableImage
-        section="home"
-        fieldPath={imageField}
-        fallbackSrc={imageUrl}
-        alt={imageAlt}
-        className="w-full h-[180px] object-cover"
-      />
+    <Link
+      to={`/blog/${post.slug}`}
+      className="group flex flex-col border border-[#E8E4DF] rounded-[12px] overflow-hidden hover:shadow-md transition-shadow duration-300 h-full"
+    >
+      <div className="w-full h-[180px] overflow-hidden">
+        <img
+          src={post.coverImageUrl ?? BLOG_DEFAULT_COVER}
+          alt={post.title}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          loading="lazy"
+        />
+      </div>
       <div className="flex flex-col gap-2.5 p-5 flex-1">
-        <EditableText
-          section="blog"
-          fieldPath={`${fieldBase}Category`}
-          as="span"
-          className="font-['Lato'] text-[11px] font-bold uppercase tracking-[0.1em] text-[#B8944A]"
-          placeholder={defaultCategory}
-        />
-        <EditableText
-          section="blog"
-          fieldPath={`${fieldBase}Title`}
-          as="h3"
-          className="font-['Cormorant_Garamond'] text-[17px] font-bold text-[#2D2D2D] leading-[1.3]"
-          placeholder={defaultTitle}
-        />
-        <EditableText
-          section="blog"
-          fieldPath={`${fieldBase}Excerpt`}
-          as="p"
-          className="font-['Lato'] text-[13px] text-[#6B6B6B] leading-[1.6] flex-1"
-          placeholder={defaultExcerpt}
-        />
+        {category && (
+          <span className="font-['Lato'] text-[11px] font-bold uppercase tracking-[0.1em] text-[#B8944A]">
+            {category}
+          </span>
+        )}
+        <h3 className="font-['Cormorant_Garamond'] text-[17px] font-bold text-[#2D2D2D] leading-[1.3]">
+          {post.title}
+        </h3>
+        {post.excerpt && (
+          <p className="font-['Lato'] text-[13px] text-[#6B6B6B] leading-[1.6] flex-1 line-clamp-3">
+            {post.excerpt}
+          </p>
+        )}
         <div className="flex items-center justify-between mt-1">
-          <EditableText
-            section="blog"
-            fieldPath={`${fieldBase}Date`}
-            as="time"
-            className="font-['Lato'] text-[11px] text-[#8A8A8A]"
-            placeholder={defaultDate}
-          />
-          <Link
-            to="/blog"
-            className="inline-flex items-center gap-1 font-['Lato'] text-[12px] font-semibold text-[#B8944A] hover:text-[#8A6F2E] transition-colors duration-200 focus-visible:outline-none focus-visible:underline"
-          >
+          <time className="font-['Lato'] text-[11px] text-[#8A8A8A]">
+            {formatBlogDate(post.publishedAt ?? post.createdAt, locale)}
+          </time>
+          <span className="inline-flex items-center gap-1 font-['Lato'] text-[12px] font-semibold text-[#B8944A] group-hover:text-[#8A6F2E] transition-colors duration-200">
             <EditableText
               section="blog"
               fieldPath="readMore"
               placeholder="Czytaj"
             />
             <ArrowRight size={12} aria-hidden="true" />
-          </Link>
+          </span>
         </div>
       </div>
-    </article>
+    </Link>
+  );
+}
+
+function BlogCardSkeleton({ featured = false }: { featured?: boolean }) {
+  if (featured) {
+    return (
+      <div className="flex flex-col md:flex-row border border-[#E8E4DF] rounded-[12px] overflow-hidden animate-pulse">
+        <div className="w-full md:w-[500px] h-[260px] md:h-[320px] bg-[#F0EDE8]" />
+        <div className="flex flex-col gap-3 p-8 justify-center flex-1">
+          <div className="h-3 w-20 bg-[#F0EDE8] rounded" />
+          <div className="h-6 w-3/4 bg-[#F0EDE8] rounded" />
+          <div className="h-3 w-full bg-[#F0EDE8] rounded" />
+          <div className="h-3 w-5/6 bg-[#F0EDE8] rounded" />
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className="flex flex-col border border-[#E8E4DF] rounded-[12px] overflow-hidden h-full animate-pulse">
+      <div className="w-full h-[180px] bg-[#F0EDE8]" />
+      <div className="flex flex-col gap-2.5 p-5 flex-1">
+        <div className="h-3 w-16 bg-[#F0EDE8] rounded" />
+        <div className="h-4 w-full bg-[#F0EDE8] rounded" />
+        <div className="h-3 w-5/6 bg-[#F0EDE8] rounded" />
+      </div>
+    </div>
   );
 }
 
 function BlogSection() {
+  const { i18n } = useTranslation();
+  const currentLang = i18n.language;
+  const locale =
+    currentLang === 'pl' ? 'pl-PL' : currentLang === 'es' ? 'es-ES' : 'en-US';
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['blogs', 'home-preview', currentLang],
+    queryFn: () => blogsClient.getPublished(currentLang),
+    staleTime: 60_000,
+  });
+
+  const posts = data ?? [];
+  const [featured, ...rest] = posts;
+  const smaller = rest.slice(0, 3);
+
+  // Hide the entire section when we know there are no posts at all.
+  if (!isLoading && posts.length === 0) {
+    return null;
+  }
+
   return (
     <section
       className="bg-white py-16 md:py-20 px-6 md:px-[120px]"
@@ -839,59 +870,34 @@ function BlogSection() {
         </ScrollReveal>
 
         {/* Featured post */}
-        <ScrollReveal animation="clip-left" className="w-full">
-          <BlogCard
-            fieldBase="featured"
-            imageUrl="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1200&auto=format&fit=crop"
-            imageAlt="Jesienny las — artykuł o akceptacji"
-            imageField="blogFeaturedImg"
-            defaultCategory="Terapia"
-            defaultTitle="Jak zaakceptować to, czego zmienić nie możemy"
-            defaultExcerpt="Akceptacja nie oznacza zgody na wszystko. To raczej głęboka mądrość o tym, co jest w naszym zasięgu — i piękna ulga, która z tego wynika."
-            defaultDate="15 marca 2026"
-            featured
-          />
-        </ScrollReveal>
+        {isLoading ? (
+          <BlogCardSkeleton featured />
+        ) : featured ? (
+          <ScrollReveal animation="clip-left" className="w-full">
+            <FeaturedBlogCard post={featured} locale={locale} />
+          </ScrollReveal>
+        ) : null}
 
-        {/* 3 smaller cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <ScrollReveal animation="fade-up" delay={stagger(0)}>
-            <BlogCard
-              fieldBase="post1"
-              imageUrl="https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?q=80&w=800&auto=format&fit=crop"
-              imageAlt="Słońce przez liście — artykuł o granicach"
-              imageField="blogPost1Img"
-              defaultCategory="Coaching"
-              defaultTitle="Granice jako wyraz miłości do siebie"
-              defaultExcerpt="Mówienie 'nie' innym to często największy akt troski o siebie. Dowiedz się, jak stawiać granice bez poczucia winy."
-              defaultDate="2 marca 2026"
-            />
-          </ScrollReveal>
-          <ScrollReveal animation="fade-up" delay={stagger(1)}>
-            <BlogCard
-              fieldBase="post2"
-              imageUrl="https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?q=80&w=800&auto=format&fit=crop"
-              imageAlt="Spokojne jezioro — artykuł o uważności"
-              imageField="blogPost2Img"
-              defaultCategory="Uważność"
-              defaultTitle="Pięć chwil uważności, które zmienią Twój dzień"
-              defaultExcerpt="Uważność nie wymaga godzinnej medytacji. Wystarczy kilka świadomych oddechów, by wrócić do siebie."
-              defaultDate="18 lutego 2026"
-            />
-          </ScrollReveal>
-          <ScrollReveal animation="fade-up" delay={stagger(2)}>
-            <BlogCard
-              fieldBase="post3"
-              imageUrl="https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=800&auto=format&fit=crop"
-              imageAlt="Mglisty poranek — artykuł o lęku"
-              imageField="blogPost3Img"
-              defaultCategory="Emocje"
-              defaultTitle="Lęk jako nauczyciel: co chce nam powiedzieć?"
-              defaultExcerpt="Zamiast walczyć z lękiem, warto go posłuchać. Często kryje w sobie ważną informację o naszych potrzebach."
-              defaultDate="5 lutego 2026"
-            />
-          </ScrollReveal>
-        </div>
+        {/* Smaller cards */}
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <BlogCardSkeleton key={i} />
+            ))}
+          </div>
+        ) : smaller.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {smaller.map((post, i) => (
+              <ScrollReveal
+                key={post.id}
+                animation="fade-up"
+                delay={stagger(i)}
+              >
+                <SmallBlogCard post={post} locale={locale} />
+              </ScrollReveal>
+            ))}
+          </div>
+        ) : null}
 
         {/* View all link */}
         <div className="flex justify-center">

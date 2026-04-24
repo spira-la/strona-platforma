@@ -1,5 +1,8 @@
 import { supabase } from '@/config/supabase';
 
+const API_BASE_URL =
+  (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? '';
+
 async function getAuthHeader(): Promise<Record<string, string>> {
   if (!supabase) return {};
   const { data } = await supabase.auth.getSession();
@@ -19,7 +22,7 @@ async function request<T>(
     ...authHeader,
   };
 
-  const response = await fetch(`/api${path}`, {
+  const response = await fetch(`${API_BASE_URL}/api${path}`, {
     method,
     headers,
     body: body === undefined ? undefined : JSON.stringify(body),

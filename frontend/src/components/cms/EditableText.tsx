@@ -409,6 +409,11 @@ export function EditableText({
           .map((c) => (typeof c === 'string' ? c : ''))
           .join('');
 
+  const fallback = placeholder ?? (childrenText || undefined) ?? resolvedValue;
+  const hasNoContent =
+    resolvedValue === fieldPath || resolvedValue.trim() === '';
+  const displayContent = hasNoContent ? fallback : resolvedValue;
+
   const focusId = `${section}.${fieldPath}`;
   const { activeId, claim, release } = useCMSFocus();
   const isOtherActive = activeId !== null && activeId !== focusId;
@@ -601,11 +606,6 @@ export function EditableText({
     needsFullWidth && !hasExplicitWidth
       ? `w-full ${className ?? ''}`
       : className;
-
-  const fallback = placeholder ?? (childrenText || undefined) ?? resolvedValue;
-  const hasNoContent =
-    resolvedValue === fieldPath || resolvedValue.trim() === '';
-  const displayContent = hasNoContent ? fallback : resolvedValue;
 
   const inlineStyle = toCssStyle(textStyle);
 

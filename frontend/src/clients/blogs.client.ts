@@ -63,6 +63,9 @@ async function getAuthHeader(): Promise<Record<string, string>> {
 
 // ─── Upload helper ────────────────────────────────────────────────────────────
 
+const API_BASE_URL =
+  (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? '';
+
 async function uploadFile(
   endpoint: string,
   file: File,
@@ -71,7 +74,7 @@ async function uploadFile(
   const formData = new FormData();
   formData.append('file', file);
 
-  const res = await fetch(`/api${endpoint}`, {
+  const res = await fetch(`${API_BASE_URL}/api${endpoint}`, {
     method: 'POST',
     headers: authHeader,
     body: formData,
