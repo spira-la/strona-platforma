@@ -1,0 +1,49 @@
+# LiveKit Egress Configuration - DEVELOPMENT
+# Documentation: https://docs.livekit.io/home/self-hosting/egress/
+#
+# Replica of BeWonderMe dev egress — container names swapped to
+# spirala-* but every port and limit kept identical.
+
+# API credentials are read from environment variables:
+# - LIVEKIT_API_KEY
+# - LIVEKIT_API_SECRET
+# Do NOT set them here - egress reads them automatically from env vars
+
+# LiveKit server WebSocket URL (internal Docker network)
+ws_url: ws://spirala-livekit-dev:7880
+
+# Redis configuration (for job queue)
+redis:
+  address: spirala-redis-dev:6379
+
+# Health check port
+health_port: 9090
+
+# Logging (verbose for dev)
+log_level: debug
+
+# CPU cost configuration (8-core server, egress has 4 CPU limit)
+cpu_cost:
+  room_composite_cpu_cost: 2.0
+  web_cpu_cost: 2.0
+  audio_cpu_cost: 1.0
+  track_composite_cpu_cost: 2.0
+  track_cpu_cost: 1.0
+
+# File output configuration
+file_output:
+  # Local storage (mounted volumes)
+  local:
+    - /recordings
+    - /hls
+
+# Session limits
+session_limits:
+  # Maximum duration for a single recording (1 hour max for dev)
+  file_output_max_duration: 1h
+
+# Insecure mode (for development only)
+insecure: true
+
+# NOTE: Do NOT set template_base - it makes egress load base_url/?layout=custom_url
+# Instead, the custom layout URL is loaded directly when using RoomComposite with layout

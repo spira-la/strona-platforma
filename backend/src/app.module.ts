@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { validate } from './config/env.validation.js';
 import { ALL_ENTITIES } from './db/entities/index.js';
 import { CoreModule } from './core/core.module.js';
@@ -16,6 +17,12 @@ import { CoachesModule } from './modules/coaches/coaches.module.js';
 import { BlogsModule } from './modules/blogs/blogs.module.js';
 import { SitemapModule } from './modules/sitemap/sitemap.module.js';
 import { AuthModule } from './modules/auth/auth.module.js';
+import { StripeModule } from './modules/stripe/stripe.module.js';
+import { SlotHoldsModule } from './modules/slot-holds/slot-holds.module.js';
+import { OrdersModule } from './modules/orders/orders.module.js';
+import { BookingsModule } from './modules/bookings/bookings.module.js';
+import { LivekitModule } from './modules/livekit/livekit.module.js';
+import { AvailabilityModule } from './modules/availability/availability.module.js';
 import { AppController } from './app.controller.js';
 
 @Module({
@@ -55,6 +62,7 @@ import { AppController } from './app.controller.js';
         };
       },
     }),
+    EventEmitterModule.forRoot(),
     CoreModule,
     EmailModule,
     CmsModule,
@@ -68,6 +76,12 @@ import { AppController } from './app.controller.js';
     BlogsModule,
     SitemapModule,
     AuthModule,
+    StripeModule,
+    SlotHoldsModule,
+    OrdersModule,
+    BookingsModule,
+    LivekitModule,
+    AvailabilityModule,
   ],
   controllers: [AppController],
 })

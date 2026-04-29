@@ -39,6 +39,49 @@
   /* Typography */
   --font-heading: 'Cormorant Garamond', serif;
   --font-body: 'Lato', sans-serif;
+
+  /* ─────────────────────────────────────────────────────────────
+     BWM token aliases — used by ported meeting/ + webinar/ kit.
+     Each maps to a Spirala equivalent so migrated components
+     render with our palette without rewriting className strings.
+     ───────────────────────────────────────────────────────────── */
+  --color-bwm-primary: #2d2d2d;
+  --color-bwm-secondary: #6b6b6b;
+  --color-bwm-muted: #8a8a8a;
+  --color-bwm-section: #faf8f5;
+  --color-bwm-card: #ffffff;
+  --color-bwm-card-alt: #f5f3ef;
+  --color-bwm-border: #e8e4df;
+  --color-bwm-accent: #b8944a;
+  --color-bwm-accent-light: #d4b97a;
+  --color-bwm-accent-dark: #8a6f2e;
+  --color-bwm-success: #4caf50;
+  --color-bwm-danger: #c62828;
+  --color-bwm-warning: #f59e0b;
+  --color-bwm-info: #173a5e;
+
+  /* shadcn-style semantic tokens (used by ported ui/ primitives) */
+  --color-background: #ffffff;
+  --color-foreground: #2d2d2d;
+  --color-card: #ffffff;
+  --color-card-foreground: #2d2d2d;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #2d2d2d;
+  --color-primary: #b8944a;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f5f3ef;
+  --color-secondary-foreground: #2d2d2d;
+  --color-muted: #f5f3ef;
+  --color-muted-foreground: #8a8a8a;
+  --color-accent: #f5f3ef;
+  --color-accent-foreground: #2d2d2d;
+  --color-destructive: #c62828;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #e8e4df;
+  --color-input: #e8e4df;
+  --color-ring: #b8944a;
+
+  --radius: 0.5rem;
 }
 
 /* Base styles */

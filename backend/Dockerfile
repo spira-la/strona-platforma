@@ -45,8 +45,11 @@ RUN --mount=type=cache,target=/root/.npm,sharing=locked \
 # ---------------------------------------------------------------------
 FROM node:22-alpine AS runner
 
-# Install dumb-init for proper signal handling
-RUN apk add --no-cache dumb-init
+# dumb-init for proper signal handling.
+# ffmpeg is required by LivekitEgressService.concatenateHlsSegments()
+# to remux .ts segments into MP4 with `ffmpeg -c copy`. Without it the
+# coach's "stop recording" call fails when generating the final MP4.
+RUN apk add --no-cache dumb-init ffmpeg
 
 # Create non-root user
 RUN addgroup -g 1001 -S nestjs && \

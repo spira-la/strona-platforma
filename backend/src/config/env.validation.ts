@@ -51,6 +51,28 @@ const envSchema = z.object({
   // Stripe
   STRIPE_SECRET_KEY: z.string().optional(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
+  STRIPE_PUBLISHABLE_KEY: z.string().optional(),
+  STRIPE_MOCK_MODE: z.string().optional(),
+
+  // LiveKit (self-hosted webinar / session video)
+  LIVEKIT_API_KEY: z.string().optional(),
+  LIVEKIT_API_SECRET: z.string().optional(),
+  LIVEKIT_HTTP_URL: z.string().optional(),
+  // eslint-disable-next-line sonarjs/deprecation
+  LIVEKIT_PUBLIC_WS_URL: z.string().url().optional().or(z.literal('')),
+
+  // LiveKit Egress / HLS recording (only used when webinars feature flag is ON)
+  // eslint-disable-next-line sonarjs/deprecation
+  RECORDING_TEMPLATE_URL: z.string().url().optional().or(z.literal('')),
+  RECORDING_API_KEY: z.string().optional(),
+  RECORDING_INTERNAL_API_URL: z.string().optional(),
+  HLS_OUTPUT_PATH: z.string().optional().default('/hls'),
+  // eslint-disable-next-line sonarjs/deprecation
+  HLS_BASE_URL: z.string().url().optional().or(z.literal('')),
+
+  // Frontend URL for building links in transactional emails
+  // eslint-disable-next-line sonarjs/deprecation
+  FRONTEND_URL: z.string().url().optional().or(z.literal('')),
 
   // Cloudflare Cache (optional — cache purge disabled if not set)
   CLOUDFLARE_ZONE_ID: z.string().optional(),

@@ -1,10 +1,28 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { json, raw } from 'express';
 import { AppModule } from './app.module.js';
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { rawBody: false });
+
+  // Stripe webhook requires the raw request body to verify the signature.
+  // Register BEFORE the global JSON parser so the body isn't consumed twice.
+  app.use(
+    '/api/stripe/webhook',
+    raw({ type: 'application/json' }),
+    (
+      req: import('express').Request & { rawBody?: Buffer },
+      _res: import('express').Response,
+      next: import('express').NextFunction,
+    ) => {
+      req.rawBody = req.body as Buffer;
+      next();
+    },
+  );
+
+  app.use(json({ limit: '5mb' }));
 
   // Global API prefix — sitemap.xml is excluded so it resolves at root, not /api/sitemap.xml
   app.setGlobalPrefix('api', { exclude: ['sitemap.xml'] });

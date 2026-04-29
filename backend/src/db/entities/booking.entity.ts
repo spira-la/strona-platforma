@@ -43,11 +43,29 @@ export class BookingEntity {
   @Column({ name: 'meeting_link', type: 'text', nullable: true })
   meetingLink: string | null;
 
+  @Column({ name: 'livekit_room_name', type: 'text', nullable: true })
+  livekitRoomName: string | null;
+
   @Column({ type: 'text', nullable: true })
   notes: string | null;
 
   @Column({ name: 'cancellation_reason', type: 'text', nullable: true })
   cancellationReason: string | null;
+
+  @Column({ name: 'rescheduled_at', type: 'timestamptz', nullable: true })
+  rescheduledAt: Date | null;
+
+  @Column({ name: 'rescheduled_from', type: 'timestamptz', nullable: true })
+  rescheduledFrom: Date | null;
+
+  @Column({ name: 'reschedule_reason', type: 'text', nullable: true })
+  rescheduleReason: string | null;
+
+  @Column({ name: 'reschedule_count', type: 'int', default: 0, nullable: true })
+  rescheduleCount: number | null;
+
+  @Column({ name: 'service_id', type: 'uuid', nullable: true })
+  serviceId: string | null;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz', nullable: true })
   createdAt: Date | null;

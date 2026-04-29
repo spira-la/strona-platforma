@@ -53,6 +53,37 @@ export class OrderEntity {
   @Column({ name: 'coupon_id', type: 'uuid', nullable: true })
   couponId: string | null;
 
+  @Column({ name: 'discount_cents', type: 'int', default: 0, nullable: true })
+  discountCents: number | null;
+
+  @Column({ name: 'coach_id', type: 'uuid', nullable: true })
+  coachId: string | null;
+
+  @Column({ name: 'customer_email', type: 'text', nullable: true })
+  customerEmail: string | null;
+
+  @Column({ name: 'customer_name', type: 'text', nullable: true })
+  customerName: string | null;
+
+  @Column({ name: 'customer_phone', type: 'text', nullable: true })
+  customerPhone: string | null;
+
+  @Column({ name: 'invoice_data', type: 'jsonb', nullable: true })
+  invoiceData: {
+    companyName?: string;
+    taxId?: string;
+    address?: string;
+    city?: string;
+    postalCode?: string;
+    country?: string;
+  } | null;
+
+  @Column({ name: 'booking_slots', type: 'jsonb', nullable: true })
+  bookingSlots: Array<{ startTime: string; endTime: string }> | null;
+
+  @Column({ type: 'text', nullable: true })
+  notes: string | null;
+
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz', nullable: true })
   createdAt: Date | null;
 

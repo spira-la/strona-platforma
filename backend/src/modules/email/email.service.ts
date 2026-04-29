@@ -34,6 +34,13 @@ export class EmailService {
     subject: string;
     html: string;
     text?: string;
+    replyTo?: string;
+    bcc?: string | string[];
+    attachments?: Array<{
+      filename: string;
+      content: string | Buffer;
+      contentType?: string;
+    }>;
   }): Promise<void> {
     if (!this.transporter) {
       this.logger.warn(`Email not sent (SMTP disabled): ${options.subject}`);
@@ -48,6 +55,9 @@ export class EmailService {
       subject: options.subject,
       html: options.html,
       text: options.text,
+      replyTo: options.replyTo,
+      bcc: options.bcc,
+      attachments: options.attachments,
     });
 
     this.logger.log(`Email sent to ${options.to}: ${options.subject}`);

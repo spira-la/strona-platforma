@@ -7,6 +7,7 @@ export const featureFlags = {
   seoManagement: true,
 
   // Hidden — preserved for future
+  purchaseFlow: false,
   multiCoach: false,
   webinars: false,
   audioCourses: false,

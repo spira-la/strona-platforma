@@ -19,6 +19,19 @@ interface ListResponse {
   data: ContactMessage[];
 }
 
+export interface ContactSubmitPayload {
+  fullName: string;
+  email: string;
+  phone?: string;
+  subject: 'coaching' | 'terapia' | 'strona' | 'wspolpraca' | 'inne';
+  message: string;
+}
+
+export interface ContactSubmitResponse {
+  success: true;
+  data: { id: string };
+}
+
 // ---------------------------------------------------------------------------
 // Client
 // ---------------------------------------------------------------------------
@@ -26,6 +39,10 @@ interface ListResponse {
 export const contactClient = {
   getAll(): Promise<ContactMessage[]> {
     return api.get<ListResponse>('/contact').then((r) => r.data);
+  },
+
+  submit(payload: ContactSubmitPayload): Promise<ContactSubmitResponse> {
+    return api.post<ContactSubmitResponse>('/contact-messages', payload);
   },
 
   markAsRead(id: string): Promise<void> {
