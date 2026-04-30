@@ -153,7 +153,9 @@ export class OrdersService {
     const saved = await this.orders.save(order);
 
     // Attach existing holds to this order so webhook/cleanup can find them.
-    const heldIds = input.slots.map((s) => s.holdId).filter(Boolean);
+    const heldIds = input.slots
+      .map((s) => s.holdId)
+      .filter((id): id is string => typeof id === 'string' && id.length > 0);
     if (heldIds.length > 0) {
       await this.slotHolds.attachToOrder(heldIds, saved.id);
     }
