@@ -14,6 +14,7 @@ jobs:
     outputs:
       frontend: ${{ steps.filter.outputs.frontend }}
       backend: ${{ steps.filter.outputs.backend }}
+      nginx: ${{ steps.filter.outputs.nginx }}
     steps:
       - uses: actions/checkout@v4
 
@@ -24,10 +25,12 @@ jobs:
             frontend:
               - 'frontend/**'
               - 'Dockerfile'
-              - 'nginx/**'
               - 'docker-compose.dev.yml'
             backend:
               - 'backend/**'
+            nginx:
+              - 'nginx/**'
+              - 'docker-compose.nginx.yml'
 
   # ------------------------------------------------------------------
   # Sync the server to the latest commit on dev
@@ -69,10 +72,13 @@ jobs:
             export NODE_TLS_REJECT_UNAUTHORIZED=0
             npm ci
             npm run db:migrate 2>&1 || echo "WARNING: migration failed or no pending migrations"
-            # Build and deploy — BuildKit cache mounts persist node_modules between builds
+            # Build and deploy. We pass CACHEBUST so the COPY src/ layer
+            # cannot be reused from a stale buildkit cache — guarantees
+            # the running image always reflects the latest commit.
             export DOCKER_BUILDKIT=1
             export COMPOSE_DOCKER_CLI_BUILD=1
-            docker compose -f docker-compose.dev.yml build
+            export CACHEBUST=$(git rev-parse HEAD)
+            docker compose -f docker-compose.dev.yml build --build-arg CACHEBUST=$CACHEBUST
             docker compose -f docker-compose.dev.yml up -d --force-recreate
             # Health check with retries
             for i in $(seq 1 15); do
@@ -111,12 +117,39 @@ jobs:
             curl -sf http://localhost:45000/health || echo "WARNING: frontend health check failed"
 
   # ------------------------------------------------------------------
+  # Reload Spirala reverse proxy if its config (nginx/) changed.
+  # The nginx container uses network_mode: host, so it can mount the
+  # bind-mounted config file and reload without re-pulling images.
+  # ------------------------------------------------------------------
+  deploy-nginx:
+    needs:
+      - detect-changes
+      - git-sync
+    if: needs.detect-changes.outputs.nginx == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: ${{ secrets.SERVER_PORT }}
+          script: |
+            cd ${{ secrets.SPIRALA_APP_DIR }}
+            docker compose -f docker-compose.nginx.yml up -d --force-recreate spirala-nginx-dev
+            sleep 2
+            docker exec spirala-nginx-dev nginx -t \
+              && docker exec spirala-nginx-dev nginx -s reload \
+              || echo "WARNING: nginx config test failed"
+
+  # ------------------------------------------------------------------
   # Clean up dangling images to reclaim disk space
   # ------------------------------------------------------------------
   cleanup:
     needs:
       - deploy-backend
       - deploy-frontend
+      - deploy-nginx
     if: always()
     runs-on: ubuntu-latest
     steps:

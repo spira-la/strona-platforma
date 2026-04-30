@@ -26,6 +26,12 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . ./
 
+# CACHEBUST is set by the deploy workflow to the current git SHA so the
+# COPY layer above (and everything below it) is guaranteed to re-run when
+# source files change — even if BuildKit thinks the cache is fresh.
+ARG CACHEBUST=unset
+RUN echo "build sha: $CACHEBUST"
+
 RUN npm run build
 
 # ---------------------------------------------------------------------

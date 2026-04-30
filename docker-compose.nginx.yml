@@ -1,9 +1,10 @@
 # =====================================================================
 # Spirala — Tunnel router nginx containers
 #
-# MANUAL use only — NOT part of the CI/CD pipeline.
+# Managed by .github/workflows/deploy-{dev,prod}.yml — the deploy-nginx
+# job recreates these containers when files under nginx/ or this compose
+# file change. You can also run it manually:
 #
-# Usage:
 #   docker compose -f docker-compose.nginx.yml up -d
 # =====================================================================
 
