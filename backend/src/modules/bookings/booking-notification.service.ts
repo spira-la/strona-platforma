@@ -6,6 +6,11 @@ import { BookingEntity } from '../../db/entities/booking.entity.js';
 import { CoachingServiceEntity } from '../../db/entities/coaching-service.entity.js';
 import { EmailService } from '../email/email.service.js';
 import { IcsService } from '../../core/ics.service.js';
+import {
+  escapeHtml,
+  kvRow,
+  wrapWithSpiralaLayout,
+} from '../../core/email-templates.util.js';
 
 export interface NotificationContext {
   booking: BookingEntity;
@@ -55,55 +60,64 @@ export class BookingNotificationService {
     const { booking, service, customerName, coachName } = ctx;
     const when = this.formatDateTime(booking.startTime);
     const serviceName = service?.name ?? 'Session';
-    return `
-      <div style="font-family: Inter, Arial, sans-serif; max-width: 560px; margin: 0 auto; color: #1f2937;">
-        <div style="padding: 24px; background: linear-gradient(135deg, #B8963E 0%, #D4B96A 100%); color: white;">
-          <h1 style="margin: 0; font-family: 'Playfair Display', Georgia, serif; font-size: 24px;">Spirala</h1>
-          <p style="margin: 8px 0 0; opacity: 0.95;">Your session is confirmed</p>
-        </div>
-        <div style="padding: 24px; background: #F9F6F0;">
-          <p>Cześć ${this.escapeHtml(customerName)},</p>
-          <p>Potwierdzamy Twoją rezerwację:</p>
-          <table style="width: 100%; border-collapse: collapse; margin: 16px 0;">
-            <tr><td style="padding: 8px 0; color: #6b7280;">Usługa</td><td style="padding: 8px 0;"><strong>${this.escapeHtml(serviceName)}</strong></td></tr>
-            ${coachName ? `<tr><td style="padding: 8px 0; color: #6b7280;">Coach</td><td style="padding: 8px 0;">${this.escapeHtml(coachName)}</td></tr>` : ''}
-            <tr><td style="padding: 8px 0; color: #6b7280;">Termin</td><td style="padding: 8px 0;">${this.escapeHtml(when)}</td></tr>
-          </table>
-          <p style="margin: 24px 0;">
-            <a href="${sessionLink}" style="display: inline-block; background: #B8963E; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600;">
-              Dołącz do sesji
-            </a>
-          </p>
-          <p style="color: #6b7280; font-size: 13px;">Link do spotkania wideo działa od 5 minut przed rozpoczęciem sesji.</p>
-          <p style="color: #6b7280; font-size: 13px;">Załącznik .ics dodaje wydarzenie do Twojego kalendarza (Google / Apple / Outlook).</p>
-        </div>
-      </div>
-    `;
+    const safeName = escapeHtml(customerName);
+    const firstName = customerName.split(/\s+/)[0] ?? customerName;
+
+    return wrapWithSpiralaLayout({
+      preheader: `Potwierdzenie rezerwacji — ${serviceName}, ${when}`,
+      title: 'Twoja sesja jest potwierdzona',
+      subtitle: 'Potwierdzenie rezerwacji',
+      body: `
+        <p style="margin: 0 0 16px; font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #2D2D2D; line-height: 1.7;">
+          Cześć <strong>${escapeHtml(firstName)}</strong>,
+        </p>
+        <p style="margin: 0 0 24px; font-family: 'Lato', Arial, sans-serif; font-size: 15px; color: #2D2D2D; line-height: 1.7;">
+          Potwierdzamy Twoją rezerwację. Szczegóły poniżej, a w załączniku znajdziesz plik <strong>.ics</strong> do dodania wydarzenia do kalendarza.
+        </p>
+        <table style="width: 100%; border-collapse: collapse; margin: 0 0 24px;">
+          ${kvRow('Usługa', `<strong>${escapeHtml(serviceName)}</strong>`)}
+          ${coachName ? kvRow('Coach', escapeHtml(coachName)) : ''}
+          ${kvRow('Termin', escapeHtml(when))}
+        </table>
+        <p style="margin: 0 0 24px;">
+          <a href="${sessionLink}" style="display: inline-block; background: #B8963E; color: #FFFFFF; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-family: 'Lato', Arial, sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 0.02em;">
+            Dołącz do sesji
+          </a>
+        </p>
+        <p style="margin: 0 0 8px; font-family: 'Lato', Arial, sans-serif; font-size: 13px; color: #6B6B6B; line-height: 1.6;">
+          Link do spotkania wideo działa od <strong>5 minut</strong> przed rozpoczęciem sesji.
+        </p>
+        <p style="margin: 0 0 24px; font-family: 'Lato', Arial, sans-serif; font-size: 13px; color: #6B6B6B; line-height: 1.6;">
+          Załącznik <strong>.ics</strong> dodaje wydarzenie do Twojego kalendarza (Google&nbsp;/&nbsp;Apple&nbsp;/&nbsp;Outlook).
+        </p>
+        <p style="margin: 32px 0 0; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; color: #2D2D2D; font-style: italic;">
+          Z pozdrowieniem,<br>
+          <strong style="font-style: normal;">Aneta Mroczko</strong>
+        </p>
+        <!-- Avoid unused-var lint when coachName is empty -->
+        <span style="display:none;">${safeName}</span>
+      `,
+    });
   }
 
   private buildAdminHtml(ctx: NotificationContext): string {
     const { booking, service, customerName, customerEmail } = ctx;
     const when = this.formatDateTime(booking.startTime);
-    return `
-      <div style="font-family: Inter, Arial, sans-serif;">
-        <h2>Nowa rezerwacja</h2>
-        <ul>
-          <li><strong>Klient:</strong> ${this.escapeHtml(customerName)} (${this.escapeHtml(customerEmail)})</li>
-          <li><strong>Usługa:</strong> ${this.escapeHtml(service?.name ?? '—')}</li>
-          <li><strong>Termin:</strong> ${this.escapeHtml(when)}</li>
-          <li><strong>Booking ID:</strong> ${booking.id}</li>
-          <li><strong>Order ID:</strong> ${booking.orderId ?? '—'}</li>
-        </ul>
-      </div>
-    `;
-  }
 
-  private escapeHtml(s: string): string {
-    return s
-      .replaceAll('&', '&amp;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;')
-      .replaceAll('"', '&quot;');
+    return wrapWithSpiralaLayout({
+      preheader: `Nowa rezerwacja — ${customerName}, ${when}`,
+      title: 'Nowa rezerwacja',
+      subtitle: 'Klient zarezerwował sesję',
+      body: `
+        <table style="width: 100%; border-collapse: collapse; margin: 0;">
+          ${kvRow('Klient', `${escapeHtml(customerName)} <span style="color:#6B6B6B;">&lt;<a href="mailto:${escapeHtml(customerEmail)}" style="color:#B8963E;text-decoration:none;">${escapeHtml(customerEmail)}</a>&gt;</span>`)}
+          ${kvRow('Usługa', escapeHtml(service?.name ?? '—'))}
+          ${kvRow('Termin', escapeHtml(when))}
+          ${kvRow('Booking ID', `<code style="font-family: monospace; font-size: 12px; color: #6B6B6B;">${escapeHtml(booking.id)}</code>`)}
+          ${kvRow('Order ID', `<code style="font-family: monospace; font-size: 12px; color: #6B6B6B;">${escapeHtml(booking.orderId ?? '—')}</code>`)}
+        </table>
+      `,
+    });
   }
 
   async sendConfirmation(ctx: NotificationContext): Promise<void> {
@@ -195,14 +209,42 @@ export class BookingNotificationService {
         `spirala-session-${ctx.booking.id}.ics`,
       );
 
+      const newWhen = this.formatDateTime(ctx.booking.startTime);
+      const oldWhen = this.formatDateTime(previousStart);
+      const firstName = ctx.customerName.split(/\s+/)[0] ?? ctx.customerName;
+
       await this.email.sendMail({
         to: ctx.customerEmail,
-        subject: `Sesja przeniesiona — ${this.formatDateTime(ctx.booking.startTime)}`,
-        html: `
-          <p>Cześć ${this.escapeHtml(ctx.customerName)},</p>
-          <p>Twoja sesja została przeniesiona z <strong>${this.escapeHtml(this.formatDateTime(previousStart))}</strong> na <strong>${this.escapeHtml(this.formatDateTime(ctx.booking.startTime))}</strong>.</p>
-          <p><a href="${sessionLink}">Dołącz do sesji</a></p>
-        `,
+        subject: `Sesja przeniesiona — ${newWhen}`,
+        html: wrapWithSpiralaLayout({
+          preheader: `Twoja sesja została przeniesiona na ${newWhen}`,
+          title: 'Sesja przeniesiona',
+          subtitle: 'Zmiana terminu',
+          body: `
+            <p style="margin: 0 0 16px; font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #2D2D2D; line-height: 1.7;">
+              Cześć <strong>${escapeHtml(firstName)}</strong>,
+            </p>
+            <p style="margin: 0 0 24px; font-family: 'Lato', Arial, sans-serif; font-size: 15px; color: #2D2D2D; line-height: 1.7;">
+              Twoja sesja została przeniesiona. Szczegóły:
+            </p>
+            <table style="width: 100%; border-collapse: collapse; margin: 0 0 24px;">
+              ${kvRow('Poprzedni termin', `<span style="color:#8A8A8A;text-decoration:line-through;">${escapeHtml(oldWhen)}</span>`)}
+              ${kvRow('Nowy termin', `<strong style="color:#B8963E;">${escapeHtml(newWhen)}</strong>`)}
+            </table>
+            <p style="margin: 0 0 24px;">
+              <a href="${sessionLink}" style="display: inline-block; background: #B8963E; color: #FFFFFF; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-family: 'Lato', Arial, sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 0.02em;">
+                Dołącz do sesji
+              </a>
+            </p>
+            <p style="margin: 0 0 24px; font-family: 'Lato', Arial, sans-serif; font-size: 13px; color: #6B6B6B; line-height: 1.6;">
+              Załącznik <strong>.ics</strong> zaktualizuje wydarzenie w Twoim kalendarzu.
+            </p>
+            <p style="margin: 32px 0 0; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; color: #2D2D2D; font-style: italic;">
+              Z pozdrowieniem,<br>
+              <strong style="font-style: normal;">Aneta Mroczko</strong>
+            </p>
+          `,
+        }),
         attachments: [icsAttachment],
       });
     } catch (error) {

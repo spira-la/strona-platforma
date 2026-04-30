@@ -3,6 +3,11 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CacheService } from '../../core/cache.service.js';
+import {
+  escapeHtml,
+  kvRow,
+  wrapWithSpiralaLayout,
+} from '../../core/email-templates.util.js';
 import { ContactMessageEntity } from '../../db/entities/contact.entity.js';
 import { EmailService } from '../email/email.service.js';
 import { CreateContactMessageDto } from './dto/create-contact-message.dto.js';
@@ -12,10 +17,6 @@ const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
 export type ContactMessage = ContactMessageEntity;
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
 const SUBJECT_LABELS: Record<string, string> = {
   coaching: 'Coaching',
   terapia: 'Terapia',
@@ -24,16 +25,6 @@ const SUBJECT_LABELS: Record<string, string> = {
   inne: 'Inne',
 };
 
-/** Escapes characters that have special meaning in HTML to prevent XSS. */
-function escapeHtml(raw: string): string {
-  return raw
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#039;');
-}
-
 interface EmailFields {
   fullName: string;
   email: string;
@@ -41,10 +32,6 @@ interface EmailFields {
   subjectLabel: string;
   message: string;
 }
-
-// ---------------------------------------------------------------------------
-// Service
-// ---------------------------------------------------------------------------
 
 @Injectable()
 export class ContactService {
@@ -73,7 +60,6 @@ export class ContactService {
     // Invalidate admin list cache so the new message is visible immediately.
     this.cache.delete(CACHE_KEY_ALL);
 
-    // Build email field set once, reused by both templates.
     const fields: EmailFields = {
       fullName: dto.fullName,
       email: dto.email,
@@ -82,8 +68,8 @@ export class ContactService {
       message: dto.message,
     };
 
-    // Notification emails. Failures are warnings — the row is already saved
-    // so the admin sees it in the panel even if SMTP has issues.
+    // Notification emails. Failures only log a warning — the row is already
+    // saved, so the admin sees the message in the panel even if SMTP breaks.
     const notificationTarget =
       this.config.get<string>('CONTACT_NOTIFICATION_EMAIL') ??
       'contact@spira-la.com';
@@ -120,11 +106,7 @@ export class ContactService {
   }
 
   // -------------------------------------------------------------------------
-  // Email templates — Spirala visual identity
-  //
-  // Inline styles only (most clients strip <style>). Tables wrap the content
-  // for Outlook compatibility. Web fonts fall back to Georgia / Arial since
-  // many clients block @font-face.
+  // Email templates
   // -------------------------------------------------------------------------
 
   private buildAdminHtml(f: EmailFields): string {
@@ -134,16 +116,16 @@ export class ContactService {
     const safeSubject = escapeHtml(f.subjectLabel);
     const safeMessage = escapeHtml(f.message).replaceAll('\n', '<br>');
 
-    return this.wrapWithLayout({
+    return wrapWithSpiralaLayout({
       preheader: `Nowa wiadomość kontaktowa od ${safeName}`,
       title: 'Nowa wiadomość kontaktowa',
       subtitle: 'Ktoś napisał przez formularz na stronie',
       body: `
         <table style="width: 100%; border-collapse: collapse; margin: 0;">
-          ${this.row('Imię i nazwisko', safeName)}
-          ${this.row('E-mail', `<a href="mailto:${safeEmail}" style="color: #B8963E; text-decoration: none;">${safeEmail}</a>`)}
-          ${this.row('Telefon', safePhone)}
-          ${this.row('Temat', safeSubject)}
+          ${kvRow('Imię i nazwisko', safeName)}
+          ${kvRow('E-mail', `<a href="mailto:${safeEmail}" style="color: #B8963E; text-decoration: none;">${safeEmail}</a>`)}
+          ${kvRow('Telefon', safePhone)}
+          ${kvRow('Temat', safeSubject)}
         </table>
         <div style="margin-top: 24px; padding: 20px; background: #FFFFFF; border-left: 3px solid #B8963E; border-radius: 4px;">
           <p style="margin: 0 0 8px; font-family: 'Lato', Arial, sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: #8A8A8A; font-weight: 600;">Wiadomość</p>
@@ -179,7 +161,7 @@ export class ContactService {
     const firstName = f.fullName.split(/\s+/)[0] ?? f.fullName;
     const safeFirstName = escapeHtml(firstName);
 
-    return this.wrapWithLayout({
+    return wrapWithSpiralaLayout({
       preheader: 'Dziękujemy za wiadomość — odpowiemy w ciągu 24 godzin',
       title: 'Dziękujemy za wiadomość',
       subtitle: 'Otrzymaliśmy Twoje zapytanie',
@@ -199,7 +181,7 @@ export class ContactService {
           <p style="margin: 0; font-family: 'Lato', Arial, sans-serif; font-size: 14px; color: #2D2D2D; line-height: 1.7; font-style: italic;">${safeMessage}</p>
         </div>
         <p style="margin: 32px 0 0; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; color: #2D2D2D; font-style: italic;">
-          Z ciepłem,<br>
+          Z pozdrowieniem,<br>
           <strong style="font-style: normal;">Aneta Mroczko</strong>
         </p>
       `,
@@ -224,94 +206,10 @@ export class ContactService {
       f.message,
       ''.padEnd(40, '-'),
       '',
-      'Z ciepłem,',
+      'Z pozdrowieniem,',
       'Aneta Mroczko — Spirala',
       'https://spira-la.com',
     ].join('\n');
-  }
-
-  /**
-   * Shared Spirala-branded layout: gold gradient header, cream body,
-   * subtle footer. All inline styles for maximum email-client support.
-   */
-  private wrapWithLayout(opts: {
-    preheader: string;
-    title: string;
-    subtitle: string;
-    body: string;
-  }): string {
-    return `<!DOCTYPE html>
-<html lang="pl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>${escapeHtml(opts.title)}</title>
-</head>
-<body style="margin: 0; padding: 0; background-color: #F9F6F0; font-family: 'Lato', Arial, sans-serif;">
-  <span style="display: none; font-size: 0; line-height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; visibility: hidden;">
-    ${escapeHtml(opts.preheader)}
-  </span>
-  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color: #F9F6F0;">
-    <tr>
-      <td align="center" style="padding: 32px 16px;">
-        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="max-width: 600px; width: 100%; background: #FFFFFF; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.04);">
-          <!-- Header -->
-          <tr>
-            <td style="background: linear-gradient(135deg, #B8963E 0%, #D4B96A 100%); padding: 32px 32px 28px;">
-              <p style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; font-weight: 700; color: #FFFFFF; letter-spacing: 0.04em;">
-                Spirala
-              </p>
-              <p style="margin: 4px 0 0; font-family: 'Lato', Arial, sans-serif; font-size: 13px; color: rgba(255,255,255,0.92); letter-spacing: 0.04em; text-transform: uppercase;">
-                ${escapeHtml(opts.subtitle)}
-              </p>
-            </td>
-          </tr>
-          <!-- Title -->
-          <tr>
-            <td style="padding: 32px 32px 0;">
-              <h1 style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 26px; font-weight: 700; color: #2D2D2D; line-height: 1.2;">
-                ${escapeHtml(opts.title)}
-              </h1>
-              <div style="width: 40px; height: 2px; background: #B8963E; margin: 16px 0 24px;"></div>
-            </td>
-          </tr>
-          <!-- Body -->
-          <tr>
-            <td style="padding: 0 32px 32px; background: #F9F6F0;">
-              ${opts.body}
-            </td>
-          </tr>
-          <!-- Footer -->
-          <tr>
-            <td style="padding: 24px 32px; background: #EDE8DC; border-top: 1px solid #E8E4DF;">
-              <p style="margin: 0 0 4px; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 16px; font-weight: 700; color: #2D2D2D;">
-                Spirala
-              </p>
-              <p style="margin: 0 0 8px; font-family: 'Lato', Arial, sans-serif; font-size: 12px; color: #6B6B6B; line-height: 1.6;">
-                Coaching i terapia online — Aneta Mroczko
-              </p>
-              <p style="margin: 0; font-family: 'Lato', Arial, sans-serif; font-size: 12px; color: #8A8A8A;">
-                <a href="https://spira-la.com" style="color: #B8963E; text-decoration: none;">spira-la.com</a>
-                &nbsp;·&nbsp;
-                <a href="mailto:contact@spira-la.com" style="color: #B8963E; text-decoration: none;">contact@spira-la.com</a>
-              </p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>`;
-  }
-
-  private row(label: string, value: string): string {
-    return `
-      <tr>
-        <td style="padding: 12px 0; border-bottom: 1px solid #E8E4DF; font-family: 'Lato', Arial, sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: #8A8A8A; font-weight: 600; width: 140px; vertical-align: top;">${label}</td>
-        <td style="padding: 12px 0; border-bottom: 1px solid #E8E4DF; font-family: 'Lato', Arial, sans-serif; font-size: 15px; color: #2D2D2D;">${value}</td>
-      </tr>
-    `;
   }
 
   async findAll(): Promise<ContactMessage[]> {
