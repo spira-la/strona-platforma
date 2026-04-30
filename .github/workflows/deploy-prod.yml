@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      force_all:
+        description: 'Force deploy all services (skip change detection)'
+        type: boolean
+        default: true
 
 jobs:
   # ------------------------------------------------------------------
@@ -17,10 +23,13 @@ jobs:
       nginx: ${{ steps.filter.outputs.nginx }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: dorny/paths-filter@v3
         id: filter
         with:
+          base: ${{ github.event.before }}
           filters: |
             frontend:
               - 'frontend/**'
@@ -56,7 +65,7 @@ jobs:
     needs:
       - detect-changes
       - git-sync
-    if: needs.detect-changes.outputs.backend == 'true'
+    if: needs.detect-changes.outputs.backend == 'true' || github.event.inputs.force_all == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: appleboy/ssh-action@v1.0.3
@@ -98,7 +107,7 @@ jobs:
     needs:
       - detect-changes
       - git-sync
-    if: needs.detect-changes.outputs.frontend == 'true'
+    if: needs.detect-changes.outputs.frontend == 'true' || github.event.inputs.force_all == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: appleboy/ssh-action@v1.0.3
@@ -126,7 +135,7 @@ jobs:
     needs:
       - detect-changes
       - git-sync
-    if: needs.detect-changes.outputs.nginx == 'true'
+    if: needs.detect-changes.outputs.nginx == 'true' || github.event.inputs.force_all == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: appleboy/ssh-action@v1.0.3
