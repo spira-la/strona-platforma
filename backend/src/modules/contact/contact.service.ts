@@ -52,9 +52,10 @@ export class ContactService {
 
   async create(dto: CreateContactMessageDto): Promise<ContactMessage> {
     const entity = this.repo.create({
-      name: dto.fullName,
+      fullName: dto.fullName,
       email: dto.email,
       phone: dto.phone ?? null,
+      subject: dto.subject,
       message: dto.message,
       isRead: false,
     });
