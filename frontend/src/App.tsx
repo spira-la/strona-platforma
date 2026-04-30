@@ -31,6 +31,16 @@ const Webinars = lazy(() => import('@/pages/Webinars'));
 const AudioCourses = lazy(() => import('@/pages/AudioCourses'));
 const Ebooks = lazy(() => import('@/pages/Ebooks'));
 
+// Booking flow — lazy-loaded
+const BookingFlow = lazy(() => import('@/pages/BookingFlow'));
+const Checkout = lazy(() => import('@/pages/Checkout'));
+const OrderConfirmation = lazy(() => import('@/pages/OrderConfirmation'));
+const MySessions = lazy(() => import('@/pages/MySessions'));
+const Session = lazy(() => import('@/pages/Session'));
+const SessionRecordingTemplate = lazy(
+  () => import('@/pages/SessionRecordingTemplate'),
+);
+
 // Coach pages — lazy-loaded, protected by CoachProtectedRoute
 const CoachProtectedRoute = lazy(
   () => import('@/components/coach/CoachProtectedRoute'),
@@ -95,6 +105,7 @@ function AppRoutes() {
   const showWebinars = useFeatureFlag('webinars');
   const showAudioCourses = useFeatureFlag('audioCourses');
   const showEbooks = useFeatureFlag('ebooks');
+  const showPurchaseFlow = useFeatureFlag('purchaseFlow');
 
   return (
     <Routes>
@@ -320,6 +331,33 @@ function AppRoutes() {
         />
       </Route>
 
+      {/* Fullscreen session (no navbar/footer) — LiveKit video */}
+      {showPurchaseFlow && (
+        <Route
+          path="/session/:bookingId"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <Session />
+            </Suspense>
+          }
+        />
+      )}
+
+      {/* Recording template — loaded by the egress Chrome only.
+          Matches the BWM URL pattern referenced by RECORDING_TEMPLATE_URL.
+          NOT meant for human users. Page validates `recordingKey` via the
+          public /api/livekit/recording-token endpoint. */}
+      {showPurchaseFlow && (
+        <Route
+          path="/recording-template/:bookingId"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <SessionRecordingTemplate />
+            </Suspense>
+          }
+        />
+      )}
+
       {/* Public routes — wrapped in the public Layout (Navbar, Footer, CMS toolbar) */}
       <Route element={<PublicLayout />}>
         <Route path="/" element={<Home />} />
@@ -395,6 +433,43 @@ function AppRoutes() {
             </Suspense>
           }
         />
+        {/* Purchase flow routes — hidden until purchaseFlow flag is enabled */}
+        {showPurchaseFlow && (
+          <>
+            <Route
+              path="/rezerwacja"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <BookingFlow />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/checkout"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <Checkout />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/zamowienie/:orderId"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <OrderConfirmation />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/moje-sesje"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <MySessions />
+                </Suspense>
+              }
+            />
+          </>
+        )}
         <Route
           path="/polityka-prywatnosci"
           element={

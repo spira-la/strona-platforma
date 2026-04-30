@@ -1,0 +1,65 @@
+# LiveKit Server Configuration - DEVELOPMENT
+# Documentation: https://docs.livekit.io/home/self-hosting/
+#
+# Replica of BeWonderMe dev config — only the dominio changes; all
+# ports stay the same so the firewall rules and nginx upstreams that
+# already work continue to work.
+
+# Server port (WebSocket/HTTP API)
+port: 7880
+
+# RTC configuration
+rtc:
+  # Port range for WebRTC connections (needs at least 2 ports for LiveKit)
+  port_range_start: 43021
+  port_range_end: 43030
+  # Use external IP for NAT traversal
+  use_external_ip: true
+  # TCP fallback port (TURN TCP - exposed as 43022 externally)
+  tcp_port: 43022
+  # Explicitly set the node IP for ICE candidates
+  # Required when running inside Docker - use_external_ip detects Docker network IP
+  node_ip: 46.224.100.39
+
+# TURN server configuration (for NAT traversal)
+# Disabled - requires TLS certificates mounted in container
+# For production, mount certs and enable
+turn:
+  enabled: false
+
+# Redis configuration (for distributed deployments)
+redis:
+  address: spirala-redis-dev:6379
+
+# API keys (format: key: secret)
+# Keys are set via environment variable LIVEKIT_KEYS
+# keys:
+#   APIKey: secret
+
+# Room configuration
+room:
+  # Maximum participants per room (reduced for dev)
+  max_participants: 50
+  # Auto-close empty rooms after this many seconds
+  empty_timeout: 120
+  # Departure timeout before removing participant
+  departure_timeout: 10
+
+# Webhook configuration (optional - for backend notifications)
+# webhook:
+#   urls:
+#     - http://spirala-be-dev:3000/api/webhooks/livekit
+#   api_key: your_webhook_key
+
+# Logging configuration (verbose for development)
+logging:
+  level: debug
+  json: false
+  sample: false
+
+# Limits (node-level caps — no Docker resource limits on dev LiveKit)
+limit:
+  # Max number of tracks the node can handle simultaneously. 0 = unlimited.
+  num_tracks: 0
+  # Max aggregate bandwidth for the node (bps). 0 = unlimited.
+  bytes_per_sec: 0

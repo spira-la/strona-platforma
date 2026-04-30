@@ -1,0 +1,66 @@
+# LiveKit Server Configuration - PRODUCTION
+# Documentation: https://docs.livekit.io/home/self-hosting/
+#
+# Replica of BeWonderMe prod config — only the dominio changes; all
+# ports stay the same as the working BWM setup.
+
+# Server port (WebSocket/HTTP API)
+port: 7880
+
+# RTC configuration
+rtc:
+  # Port range for WebRTC connections (40 ports for more concurrent streams)
+  port_range_start: 7881
+  port_range_end: 7920
+  # Use external IP for NAT traversal
+  use_external_ip: true
+  # TCP fallback port
+  tcp_port: 7882
+  # Explicitly set the node IP for ICE candidates
+  # Required when running inside Docker - use_external_ip detects Docker network IP
+  node_ip: 46.224.100.39
+
+# TURN server configuration (for NAT traversal)
+# Enabled to fix audio issues for users behind restrictive NATs/firewalls.
+# Without TURN, some users can see video but audio fails because UDP is blocked.
+turn:
+  enabled: true
+  udp_port: 7882
+
+# Redis configuration (for distributed deployments)
+redis:
+  address: spirala-redis:6379
+
+# API keys (format: key: secret)
+# Keys are set via environment variable LIVEKIT_KEYS
+# keys:
+#   APIKey: secret
+
+# Room configuration
+room:
+  # Maximum participants per room
+  max_participants: 100
+  # Auto-close empty rooms after this many seconds
+  empty_timeout: 300
+  # Departure timeout before removing participant
+  departure_timeout: 20
+
+# Webhook configuration (optional - for backend notifications)
+# webhook:
+#   urls:
+#     - http://spirala-be:3000/api/webhooks/livekit
+#   api_key: your_webhook_key
+
+# Logging configuration
+logging:
+  level: info
+  # Available levels: debug, info, warn, error
+  json: false
+  sample: true
+
+# Limits (node-level caps — Docker resource limits handle actual capacity)
+limit:
+  # 0 = unlimited (let Docker limits govern).
+  num_tracks: 0
+  # Max aggregate bandwidth for the node (bps). 0 = unlimited.
+  bytes_per_sec: 0

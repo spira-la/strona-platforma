@@ -54,6 +54,22 @@ export class CoachEntity {
   @Column({ name: 'is_active', type: 'boolean', default: true, nullable: true })
   isActive: boolean | null;
 
+  @Column({
+    name: 'min_cancellation_notice_minutes',
+    type: 'int',
+    default: 1440,
+    nullable: true,
+  })
+  minCancellationNoticeMinutes: number | null;
+
+  @Column({
+    name: 'rest_time_between_sessions_minutes',
+    type: 'int',
+    default: 15,
+    nullable: true,
+  })
+  restTimeBetweenSessionsMinutes: number | null;
+
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz', nullable: true })
   createdAt: Date | null;
 

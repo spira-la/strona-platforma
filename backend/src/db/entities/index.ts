@@ -6,6 +6,7 @@ export * from './availability.entity';
 export * from './coupon.entity';
 export * from './order.entity';
 export * from './booking.entity';
+export * from './slot-hold.entity';
 export * from './invoice.entity';
 export * from './blog.entity';
 export * from './blog-translation.entity';
@@ -31,6 +32,7 @@ import {
 import { CouponEntity } from './coupon.entity';
 import { OrderEntity } from './order.entity';
 import { BookingEntity } from './booking.entity';
+import { SlotHoldEntity } from './slot-hold.entity';
 import { InvoiceEntity } from './invoice.entity';
 import { BlogPostEntity, BlogCommentEntity } from './blog.entity';
 import { BlogPostTranslationEntity } from './blog-translation.entity';
@@ -59,6 +61,7 @@ export const ALL_ENTITIES = [
   CouponEntity,
   OrderEntity,
   BookingEntity,
+  SlotHoldEntity,
   InvoiceEntity,
   BlogPostEntity,
   BlogCommentEntity,

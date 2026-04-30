@@ -10,14 +10,17 @@ export class ContactMessageEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'text' })
-  name: string;
+  @Column({ name: 'full_name', type: 'text' })
+  fullName: string;
 
   @Column({ type: 'text' })
   email: string;
 
   @Column({ type: 'text', nullable: true })
   phone: string | null;
+
+  @Column({ type: 'text', nullable: true })
+  subject: string | null;
 
   @Column({ type: 'text' })
   message: string;

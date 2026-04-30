@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Calendar } from 'lucide-react';
 import { SEO } from '@/components/shared/SEO';
 import { EditableText } from '@/components/cms/EditableText';
@@ -308,11 +310,11 @@ function BookingSection() {
 // ---------------------------------------------------------------------------
 
 export default function Services() {
-  function scrollToBooking() {
-    const el = document.querySelector('#rezerwacja');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+  const navigate = useNavigate();
+  const showPurchaseFlow = useFeatureFlag('purchaseFlow');
+
+  function goToBookingFlow() {
+    navigate(showPurchaseFlow ? '/rezerwacja' : '/kontakt');
   }
 
   return (
@@ -412,7 +414,7 @@ export default function Services() {
                 priceField="card1Price"
                 pricePlaceholder="150 zl - sesja"
                 ctaLabel="Wybieram"
-                onCta={scrollToBooking}
+                onCta={goToBookingFlow}
               />
             </ScrollReveal>
 
@@ -429,7 +431,7 @@ export default function Services() {
                 priceField="card2Price"
                 pricePlaceholder="1 200 zl - pakiet"
                 ctaLabel="Wybieram"
-                onCta={scrollToBooking}
+                onCta={goToBookingFlow}
                 highlighted
               />
             </ScrollReveal>
@@ -438,11 +440,13 @@ export default function Services() {
       </section>
 
       {/* ------------------------------------------------------------------ */}
-      {/* BOOKING SECTION                                                      */}
+      {/* BOOKING SECTION — hidden until purchaseFlow flag is enabled         */}
       {/* ------------------------------------------------------------------ */}
-      <ScrollReveal animation="fade-up">
-        <BookingSection />
-      </ScrollReveal>
+      {showPurchaseFlow && (
+        <ScrollReveal animation="fade-up">
+          <BookingSection />
+        </ScrollReveal>
+      )}
 
       {/* ------------------------------------------------------------------ */}
       {/* CTA                                                                  */}
@@ -489,7 +493,7 @@ export default function Services() {
           <div className="flex flex-col sm:flex-row gap-3 mt-2">
             <button
               type="button"
-              onClick={scrollToBooking}
+              onClick={goToBookingFlow}
               className="inline-flex items-center justify-center px-8 py-3 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A]"
               style={{
                 background: 'linear-gradient(135deg, #B8944A 0%, #D4B97A 100%)',

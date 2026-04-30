@@ -1,0 +1,203 @@
+# =====================================================================
+# Spirala — LiveKit + Egress + HLS infra
+#
+# MANUAL use only — NOT part of the CI/CD pipeline.
+# Start once on the server and leave running. Restart only when LiveKit
+# config or image changes.
+#
+# Usage:
+#   1. Create .env.livekit with LIVEKIT_KEYS (see .env.livekit.example)
+#   2. docker compose -f docker-compose.livekit.yml up -d
+#
+# Networks (must already exist — created by app compose files):
+#   - spirala-dev-network
+#   - spirala-prod-network
+#   The spirala-redis-dev / spirala-redis containers must already be
+#   running on those networks before LiveKit starts (egress needs Redis).
+#
+# Public ports kept identical to BeWonderMe so existing host-nginx + firewall
+# rules keep working — only the dominio changes (be-wonder.me → spira-la.com).
+#
+#   DEV
+#     43020/tcp        LiveKit WS/API     (host nginx upstream: streamdev.spira-la.com)
+#     43021/udp        WebRTC media
+#     43022/tcp+udp    TURN
+#     43041/tcp        nginx-hls          (host nginx upstream: streamdev.spira-la.com /hls)
+#
+#   PROD
+#     7880/tcp         LiveKit WS/API     (host nginx upstream: stream.spira-la.com)
+#     7881-7920/udp    WebRTC media
+#     7882/tcp+udp     TURN
+#     43040/tcp        nginx-hls          (host nginx upstream: stream.spira-la.com /hls)
+# =====================================================================
+
+services:
+  # ==========================================
+  # LiveKit Server - DEV
+  # ==========================================
+  spirala-livekit-dev:
+    image: livekit/livekit-server:latest
+    container_name: spirala-livekit-dev
+    restart: unless-stopped
+    ports:
+      - "43020:7880"           # WS/API (host:container)
+      - "43021:43021/udp"      # RTC media
+      - "43022:43022/tcp"      # TURN TCP
+      - "43022:43022/udp"      # TURN UDP
+    environment:
+      - LIVEKIT_KEYS=${LIVEKIT_DEV_KEYS}
+    command: >
+      --config /etc/livekit/livekit.yaml
+      --bind 0.0.0.0
+    volumes:
+      - ./backend/livekit/livekit.dev.yaml:/etc/livekit/livekit.yaml:ro
+    networks:
+      - spirala-dev-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:7880"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ==========================================
+  # LiveKit Egress - DEV (recording / HLS streaming)
+  # ==========================================
+  spirala-livekit-egress-dev:
+    image: livekit/egress:latest
+    container_name: spirala-livekit-egress-dev
+    restart: unless-stopped
+    cap_add:
+      - SYS_ADMIN
+    environment:
+      - EGRESS_CONFIG_FILE=/etc/egress/egress.yaml
+      - LIVEKIT_API_KEY=${LIVEKIT_API_KEY_DEV}
+      - LIVEKIT_API_SECRET=${LIVEKIT_API_SECRET_DEV}
+    volumes:
+      - ./backend/livekit/egress.dev.yaml:/etc/egress/egress.yaml:ro
+      - spirala-recordings-dev:/recordings
+      - spirala-hls-dev:/hls
+    depends_on:
+      - spirala-livekit-dev
+    networks:
+      - spirala-dev-network
+    deploy:
+      resources:
+        limits:
+          cpus: "4.0"
+          memory: 4G
+
+  # ==========================================
+  # nginx-hls - DEV (serves HLS segments to host nginx)
+  # ==========================================
+  spirala-nginx-hls-dev:
+    image: nginx:1.27-alpine
+    container_name: spirala-nginx-hls-dev
+    restart: unless-stopped
+    ports:
+      - "43041:80"
+    volumes:
+      - ./backend/nginx/nginx-hls.conf:/etc/nginx/conf.d/default.conf:ro
+      - spirala-hls-dev:/usr/share/nginx/html/hls:ro
+    networks:
+      - spirala-dev-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ==========================================
+  # LiveKit Server - PROD
+  # ==========================================
+  spirala-livekit:
+    image: livekit/livekit-server:latest
+    container_name: spirala-livekit
+    restart: unless-stopped
+    ports:
+      - "7880:7880"            # WS/API
+      - "7881-7920:7881-7920/udp"  # RTC media (40 ports)
+      - "7882:7882/tcp"        # TURN TCP
+      - "7882:7882/udp"        # TURN UDP
+    environment:
+      - LIVEKIT_KEYS=${LIVEKIT_PROD_KEYS}
+    command: >
+      --config /etc/livekit/livekit.yaml
+      --bind 0.0.0.0
+    volumes:
+      - ./backend/livekit/livekit.yaml:/etc/livekit/livekit.yaml:ro
+    networks:
+      - spirala-prod-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:7880"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 4G
+
+  # ==========================================
+  # LiveKit Egress - PROD
+  # ==========================================
+  spirala-livekit-egress:
+    image: livekit/egress:latest
+    container_name: spirala-livekit-egress
+    restart: unless-stopped
+    cap_add:
+      - SYS_ADMIN
+    environment:
+      - EGRESS_CONFIG_FILE=/etc/egress/egress.yaml
+      - LIVEKIT_API_KEY=${LIVEKIT_API_KEY_PROD}
+      - LIVEKIT_API_SECRET=${LIVEKIT_API_SECRET_PROD}
+    volumes:
+      - ./backend/livekit/egress.yaml:/etc/egress/egress.yaml:ro
+      - spirala-recordings:/recordings
+      - spirala-hls:/hls
+    depends_on:
+      - spirala-livekit
+    networks:
+      - spirala-prod-network
+
+  # ==========================================
+  # nginx-hls - PROD
+  # ==========================================
+  spirala-nginx-hls:
+    image: nginx:1.27-alpine
+    container_name: spirala-nginx-hls
+    restart: unless-stopped
+    ports:
+      - "43040:80"
+    volumes:
+      - ./backend/nginx/nginx-hls.conf:/etc/nginx/conf.d/default.conf:ro
+      - spirala-hls:/usr/share/nginx/html/hls:ro
+    networks:
+      - spirala-prod-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+# ==========================================
+# Networks (shared with app containers — must exist before this compose runs)
+# ==========================================
+networks:
+  spirala-dev-network:
+    external: true
+  spirala-prod-network:
+    external: true
+
+# ==========================================
+# Volumes
+# ==========================================
+volumes:
+  spirala-hls-dev:
+    driver: local
+  spirala-hls:
+    driver: local
+  spirala-recordings-dev:
+    driver: local
+  spirala-recordings:
+    driver: local

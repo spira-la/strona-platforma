@@ -1,13 +1,16 @@
 import {
+  Body,
   Controller,
-  Get,
-  Patch,
   Delete,
-  Param,
+  Get,
   HttpCode,
   HttpStatus,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
 import { ContactService } from './contact.service.js';
+import { CreateContactMessageDto } from './dto/create-contact-message.dto.js';
 
 // ---------------------------------------------------------------------------
 // Controller
@@ -16,6 +19,18 @@ import { ContactService } from './contact.service.js';
 @Controller('contact-messages')
 export class ContactController {
   constructor(private readonly contact: ContactService) {}
+
+  /**
+   * POST /api/contact-messages
+   * Public — submit a contact form message.
+   * No auth required.
+   */
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  async create(@Body() dto: CreateContactMessageDto) {
+    const message = await this.contact.create(dto);
+    return { success: true, data: { id: message.id } };
+  }
 
   /**
    * GET /api/contact-messages
