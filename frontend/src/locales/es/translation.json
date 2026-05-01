@@ -58,12 +58,6 @@
     "emptyTitle": "No hay vídeos",
     "emptyBody": "No encontramos ningún vídeo. Visita nuestro canal de YouTube para ver el contenido más reciente."
   },
-  "youtubeCarousel": {
-    "prev": "Vídeo anterior",
-    "next": "Vídeo siguiente",
-    "trackLabel": "Carrusel de vídeos de YouTube",
-    "loadingMore": "Cargando vídeos..."
-  },
   "notFound": {
     "title": "Página no encontrada",
     "description": "Lo sentimos, la página que buscas no existe.",

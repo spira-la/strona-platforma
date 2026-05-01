@@ -58,12 +58,6 @@
     "emptyTitle": "No videos found",
     "emptyBody": "We couldn't find any videos. Visit our YouTube channel to see the latest content."
   },
-  "youtubeCarousel": {
-    "prev": "Previous video",
-    "next": "Next video",
-    "trackLabel": "YouTube video carousel",
-    "loadingMore": "Loading videos..."
-  },
   "notFound": {
     "title": "Page not found",
     "description": "Sorry, the page you are looking for does not exist.",
