@@ -62,7 +62,7 @@ function ServiceCard({
 }: ServiceCardProps) {
   return (
     <article
-      className={`flex flex-col rounded-2xl p-8 border transition-shadow hover:shadow-lg ${
+      className={`h-full flex flex-col rounded-2xl p-8 border transition-shadow hover:shadow-lg ${
         highlighted
           ? 'border-[#B8944A] bg-white shadow-[0_4px_24px_rgba(184,148,74,0.12)]'
           : 'border-[#E8E4DF] bg-white'

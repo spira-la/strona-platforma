@@ -223,7 +223,7 @@ function WorkStepCard({
   defaultDescription,
 }: WorkStepProps) {
   return (
-    <article className="border border-[#E8E4DF] rounded-[12px] p-8 flex flex-col gap-4">
+    <article className="h-full border border-[#E8E4DF] rounded-[12px] p-8 flex flex-col gap-4">
       <div
         className="w-10 h-10 rounded-full bg-[#B8944A] flex items-center justify-center text-white font-['Lato'] text-[15px] font-bold flex-shrink-0"
         aria-label={`Krok ${number}`}
@@ -387,7 +387,7 @@ function ServiceCard({
   href,
 }: ServiceCardProps) {
   return (
-    <article className="flex flex-col border border-[#E8E4DF] rounded-[12px] overflow-hidden">
+    <article className="h-full flex flex-col border border-[#E8E4DF] rounded-[12px] overflow-hidden">
       <EditableImage
         section="home"
         fieldPath={imageField}
@@ -556,7 +556,7 @@ function TestimonialCard({
   avatarInitial,
 }: TestimonialProps) {
   return (
-    <article className="flex flex-col gap-4 bg-[#FAF8F5] rounded-[8px] p-7">
+    <article className="h-full flex flex-col gap-4 bg-[#FAF8F5] rounded-[8px] p-7">
       {/* Decorative quote mark */}
       <span
         className="font-['Cormorant_Garamond'] text-[48px] text-[#B8944A] leading-none select-none"

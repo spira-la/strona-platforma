@@ -47,7 +47,7 @@ function PrincipleCard({
   descPlaceholder,
 }: PrincipleCardProps) {
   return (
-    <div className="flex flex-col gap-4 p-6 rounded-lg bg-[#FAF8F5] border border-[#F0EDE8]">
+    <div className="h-full flex flex-col gap-4 p-6 rounded-lg bg-[#FAF8F5] border border-[#F0EDE8]">
       <div
         className="flex items-center justify-center w-12 h-12 rounded-xl bg-[rgba(184,148,74,0.1)] text-[#B8944A]"
         aria-hidden="true"
