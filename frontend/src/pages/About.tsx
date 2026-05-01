@@ -40,7 +40,7 @@ function ValueCard({
   descPlaceholder,
 }: ValueCardProps) {
   return (
-    <div className="flex flex-col items-center text-center px-6 py-8 rounded-lg bg-[#FAF8F5] border border-[#F0EDE8]">
+    <div className="h-full flex flex-col items-center text-center px-6 py-8 rounded-lg bg-[#FAF8F5] border border-[#F0EDE8]">
       <div className="flex items-center justify-center w-14 h-14 rounded-full mb-5 bg-[rgba(184,148,74,0.1)] text-[#B8944A]">
         {icon}
       </div>
@@ -80,7 +80,7 @@ function QualificationCard({
   descPlaceholder,
 }: QualificationCardProps) {
   return (
-    <div className="flex gap-5 p-6 rounded-lg bg-white border border-[#E8E4DF]">
+    <div className="h-full flex gap-5 p-6 rounded-lg bg-white border border-[#E8E4DF]">
       <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold bg-[#B8944A] text-white [font-family:'Lato',sans-serif]">
         {number}
       </div>

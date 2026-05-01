@@ -67,6 +67,9 @@ WORKDIR /app
 COPY --from=builder --chown=nestjs:nestjs /app/dist ./dist
 COPY --from=prod-deps --chown=nestjs:nestjs /app/node_modules ./node_modules
 COPY --chown=nestjs:nestjs package*.json ./
+# Operational scripts (SMTP smoke test, future ad-hoc tools).
+# Run with: docker exec spirala-be-dev node scripts/<name>.mjs
+COPY --chown=nestjs:nestjs scripts ./scripts
 
 USER nestjs
 

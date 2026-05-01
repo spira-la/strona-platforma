@@ -21,7 +21,8 @@ export type CMSSectionKey =
   | 'notFound'
   | 'webDesign'
   | 'privacy'
-  | 'terms';
+  | 'terms'
+  | 'youtube';
 
 export interface CMSContentResponse {
   success: boolean;

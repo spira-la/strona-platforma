@@ -14,6 +14,7 @@ import { EditableText } from '@/components/cms/EditableText';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRoles } from '@/hooks/useRoles';
 import { useAuthStore } from '@/stores/auth.store';
+import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 import spiralaIcon from '@/assets/spirala-icon.png';
 
 interface NavLink {
@@ -23,7 +24,7 @@ interface NavLink {
   editable: string;
 }
 
-const NAV_LINKS: NavLink[] = [
+const BASE_NAV_LINKS: NavLink[] = [
   {
     href: '/o-mnie',
     labelKey: 'common.about',
@@ -50,6 +51,13 @@ const NAV_LINKS: NavLink[] = [
   },
 ];
 
+const YOUTUBE_NAV_LINK: NavLink = {
+  href: '/wideo',
+  labelKey: 'common.video',
+  fieldPath: 'link5',
+  editable: 'Wideo',
+};
+
 const LANGUAGES = [
   { code: 'pl', label: 'PL' },
   { code: 'en', label: 'EN' },
@@ -68,6 +76,11 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
   const { user, isAuthenticated, signOut } = useAuth();
   const { isAdmin, isCoach } = useRoles();
   const { openLogin } = useAuthStore();
+  const showYouTube = useFeatureFlag('youtubeContent');
+
+  const NAV_LINKS = showYouTube
+    ? [...BASE_NAV_LINKS, YOUTUBE_NAV_LINK]
+    : BASE_NAV_LINKS;
 
   const [scrolled, setScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);

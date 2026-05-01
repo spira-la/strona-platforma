@@ -19,7 +19,8 @@
     "send": "Enviar",
     "readMore": "Leer más",
     "saved": "Guardado",
-    "done": "Listo"
+    "done": "Listo",
+    "video": "Vídeo"
   },
   "cms": {
     "changeImage": "Cambiar",
@@ -44,6 +45,18 @@
     "copyright": "© 2026 Spirala. Todos los derechos reservados.",
     "privacy": "Política de privacidad",
     "terms": "Términos de servicio"
+  },
+  "youtube": {
+    "watchOnYouTube": "Ver en YouTube",
+    "play": "Reproducir",
+    "views": "vistas",
+    "latestVideos": "Vídeo",
+    "seeAll": "Ver todos los vídeos",
+    "loadingMore": "Cargando más vídeos...",
+    "errorTitle": "No se pudieron cargar los vídeos",
+    "errorBody": "Comprueba tu conexión a internet e inténtalo de nuevo.",
+    "emptyTitle": "No hay vídeos",
+    "emptyBody": "No encontramos ningún vídeo. Visita nuestro canal de YouTube para ver el contenido más reciente."
   },
   "notFound": {
     "title": "Página no encontrada",

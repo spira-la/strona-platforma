@@ -23,6 +23,7 @@ import { OrdersModule } from './modules/orders/orders.module.js';
 import { BookingsModule } from './modules/bookings/bookings.module.js';
 import { LivekitModule } from './modules/livekit/livekit.module.js';
 import { AvailabilityModule } from './modules/availability/availability.module.js';
+import { YouTubeModule } from './modules/youtube/youtube.module.js';
 import { AppController } from './app.controller.js';
 
 @Module({
@@ -82,6 +83,7 @@ import { AppController } from './app.controller.js';
     BookingsModule,
     LivekitModule,
     AvailabilityModule,
+    YouTubeModule,
   ],
   controllers: [AppController],
 })

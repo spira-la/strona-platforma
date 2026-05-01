@@ -1,16 +1,30 @@
-import { Entity, PrimaryColumn, Column, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+} from 'typeorm';
 
+/**
+ * Mirror of the `feature_flags` table created by InitialSchema.
+ * Each row gates a backend feature; `name` is the identifier that
+ * matches the keys in the frontend's `featureFlags` config and the
+ * argument of the `@FeatureFlag()` decorator.
+ */
 @Entity({ name: 'feature_flags' })
 export class FeatureFlagEntity {
-  @PrimaryColumn({ type: 'text' })
-  key: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @Column({ type: 'boolean', default: false, nullable: true })
-  enabled: boolean | null;
+  @Column({ type: 'text', unique: true })
+  name: string;
+
+  @Column({ type: 'boolean', default: true })
+  enabled: boolean;
 
   @Column({ type: 'text', nullable: true })
   description: string | null;
 
-  @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz', nullable: true })
-  updatedAt: Date | null;
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
+  createdAt: Date;
 }
