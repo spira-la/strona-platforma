@@ -56,7 +56,7 @@ export class FeatureFlagGuard implements CanActivate {
 
     const flag = await this.dataSource
       .getRepository(FeatureFlagEntity)
-      .findOne({ where: { key: flagKey }, select: { enabled: true } });
+      .findOne({ where: { name: flagKey }, select: { enabled: true } });
 
     // If the flag row doesn't exist in the DB, treat as disabled
     const enabled = flag?.enabled ?? false;
