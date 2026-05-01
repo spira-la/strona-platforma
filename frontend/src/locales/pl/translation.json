@@ -58,6 +58,12 @@
     "emptyTitle": "Brak filmów",
     "emptyBody": "Nie znaleźliśmy żadnych filmów. Odwiedź nasz kanał YouTube, aby zobaczyć najnowsze treści."
   },
+  "youtubeCarousel": {
+    "prev": "Poprzedni film",
+    "next": "Następny film",
+    "trackLabel": "Karuzela filmów YouTube",
+    "loadingMore": "Ładowanie filmów..."
+  },
   "notFound": {
     "title": "Strona nie istnieje",
     "description": "Przepraszamy, strona której szukasz nie została znaleziona.",

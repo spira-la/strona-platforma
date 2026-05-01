@@ -39,6 +39,24 @@ function FacebookIcon({ size = 18 }: { size?: number }) {
   );
 }
 
+function YouTubeIcon({ size = 18 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" />
+      <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" />
+    </svg>
+  );
+}
+
 interface FooterColumn {
   titleField: string;
   titleDefault: string;
@@ -111,6 +129,11 @@ const SOCIAL_LINKS = [
     href: 'https://www.facebook.com/AnetaMroczko.Spirala',
     label: 'Facebook',
     Icon: FacebookIcon,
+  },
+  {
+    href: 'https://www.youtube.com/@Ane-Spirala',
+    label: 'YouTube',
+    Icon: YouTubeIcon,
   },
 ];
 

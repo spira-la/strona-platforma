@@ -283,6 +283,18 @@ html.lenis body {
 }
 
 /* ---------------------------------------------------------------------------
+   YouTube carousel track — hide scrollbar entirely so nav buttons are the
+   only affordance. Applied via .yt-scroll-hide class on the track element.
+--------------------------------------------------------------------------- */
+.yt-scroll-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 11 */
+}
+.yt-scroll-hide::-webkit-scrollbar {
+  display: none; /* WebKit */
+}
+
+/* ---------------------------------------------------------------------------
    YouTube — responsive 16:9 wrapper
 --------------------------------------------------------------------------- */
 .tiptap-editor-content .tiptap-youtube,
