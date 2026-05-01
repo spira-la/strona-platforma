@@ -19,7 +19,8 @@
     "send": "Send",
     "readMore": "Read more",
     "saved": "Saved",
-    "done": "Done"
+    "done": "Done",
+    "video": "Video"
   },
   "cms": {
     "changeImage": "Change",
@@ -44,6 +45,18 @@
     "copyright": "© 2026 Spirala. All rights reserved.",
     "privacy": "Privacy policy",
     "terms": "Terms of service"
+  },
+  "youtube": {
+    "watchOnYouTube": "Watch on YouTube",
+    "play": "Play",
+    "views": "views",
+    "latestVideos": "Video",
+    "seeAll": "See all videos",
+    "loadingMore": "Loading more videos...",
+    "errorTitle": "Could not load videos",
+    "errorBody": "Check your internet connection and try again.",
+    "emptyTitle": "No videos found",
+    "emptyBody": "We couldn't find any videos. Visit our YouTube channel to see the latest content."
   },
   "notFound": {
     "title": "Page not found",

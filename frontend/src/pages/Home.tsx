@@ -11,6 +11,7 @@ import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
 import { SplitText } from '@/components/shared/SplitText';
 import { GoldLine } from '@/components/shared/GoldLine';
 import { blogsClient, type BlogPost } from '@/clients/blogs.client';
+import { YouTubeSection } from '@/components/youtube/YouTubeSection';
 import ane1Photo from '@/assets/Ane1.jpg';
 
 const BLOG_DEFAULT_COVER =
@@ -1072,6 +1073,7 @@ export default function Home() {
       <ServicesSection />
       <TestimonialsSection />
       <BlogSection />
+      <YouTubeSection />
       <CtaSection />
       <NewsletterBridge />
     </main>

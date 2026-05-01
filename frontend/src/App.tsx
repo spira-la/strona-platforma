@@ -30,6 +30,7 @@ const Terms = lazy(() => import('@/pages/Terms'));
 const Webinars = lazy(() => import('@/pages/Webinars'));
 const AudioCourses = lazy(() => import('@/pages/AudioCourses'));
 const Ebooks = lazy(() => import('@/pages/Ebooks'));
+const YouTubeLibrary = lazy(() => import('@/pages/YouTubeLibrary'));
 
 // Booking flow — lazy-loaded
 const BookingFlow = lazy(() => import('@/pages/BookingFlow'));
@@ -106,6 +107,7 @@ function AppRoutes() {
   const showAudioCourses = useFeatureFlag('audioCourses');
   const showEbooks = useFeatureFlag('ebooks');
   const showPurchaseFlow = useFeatureFlag('purchaseFlow');
+  const showYouTube = useFeatureFlag('youtubeContent');
 
   return (
     <Routes>
@@ -514,6 +516,16 @@ function AppRoutes() {
             element={
               <Suspense fallback={<LoadingFallback />}>
                 <Ebooks />
+              </Suspense>
+            }
+          />
+        )}
+        {showYouTube && (
+          <Route
+            path="/wideo"
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <YouTubeLibrary />
               </Suspense>
             }
           />
