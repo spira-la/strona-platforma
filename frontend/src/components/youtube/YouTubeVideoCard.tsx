@@ -198,38 +198,49 @@ export function YouTubeVideoCard({
           </div>
         </div>
 
-        {/* Content */}
+        {/* Content
+            The card is a flex column with a fixed-shape thumbnail above
+            and a text block below. To keep every card the same height
+            with the play button anchored, the title and description
+            reserve fixed minimum heights and the footer is pinned at
+            the bottom with `mt-auto`. The footer never wraps — the
+            meta cluster shrinks/truncates first so the button stays
+            anchored on the right at exactly the same Y across cards.
+        */}
         <div className="flex flex-col gap-2.5 p-5 flex-1">
           <h3
-            className={`font-['Cormorant_Garamond'] text-[17px] font-bold text-[#2D2D2D] leading-[1.3] ${descriptionClamp === 'line-clamp-4' ? '' : 'line-clamp-2'}`}
+            className="font-['Cormorant_Garamond'] text-[17px] font-bold text-[#2D2D2D] leading-[1.3] line-clamp-2"
+            style={{ minHeight: '2.6em' }}
           >
             {video.title}
           </h3>
 
-          {video.description && (
-            <p
-              className={`font-['Lato'] text-[13px] text-[#6B6B6B] leading-[1.6] flex-1 ${descriptionClamp}`}
-            >
-              {video.description}
-            </p>
-          )}
+          <p
+            className={`font-['Lato'] text-[13px] text-[#6B6B6B] leading-[1.6] flex-1 ${descriptionClamp}`}
+            style={{
+              minHeight:
+                descriptionClamp === 'line-clamp-4' ? '6.4em' : '3.2em',
+            }}
+          >
+            {video.description ?? ''}
+          </p>
 
-          {/* Footer */}
-          <div className="flex flex-wrap items-center justify-between gap-2 mt-auto pt-3 border-t border-[#F0EDE8]">
-            <div className="flex items-center gap-3">
-              <span className="flex items-center gap-1 font-['Lato'] text-[11px] text-[#8A8A8A]">
+          {/* Footer — fixed at the bottom; never wraps */}
+          <div className="flex flex-nowrap items-center justify-between gap-3 mt-auto pt-3 border-t border-[#F0EDE8]">
+            <div className="flex items-center gap-3 min-w-0 flex-1">
+              <span className="inline-flex items-center gap-1 font-['Lato'] text-[11px] text-[#8A8A8A] whitespace-nowrap">
                 <Calendar size={11} aria-hidden="true" />
                 {formatDate(video.publishedAt, locale)}
               </span>
               {video.viewCount !== undefined && (
-                <span className="flex items-center gap-1 font-['Lato'] text-[11px] text-[#8A8A8A]">
+                <span className="inline-flex items-center gap-1 font-['Lato'] text-[11px] text-[#8A8A8A] whitespace-nowrap overflow-hidden">
                   <Eye size={11} aria-hidden="true" />
                   {formatViews(video.viewCount)}
                 </span>
               )}
             </div>
 
-            <span className="inline-flex items-center gap-1 font-['Lato'] text-[12px] font-semibold text-white bg-[#B8963E] hover:bg-[#8A6F2E] transition-colors rounded-full px-4 py-1.5">
+            <span className="inline-flex items-center gap-1 font-['Lato'] text-[12px] font-semibold text-white bg-[#B8963E] group-hover:bg-[#8A6F2E] transition-colors rounded-full px-4 py-1.5 whitespace-nowrap flex-shrink-0">
               <Play size={11} fill="white" aria-hidden="true" />
               {t('youtube.play')}
             </span>
