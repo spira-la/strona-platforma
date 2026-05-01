@@ -82,6 +82,9 @@ const envSchema = z.object({
   // Ollama — AI translation service (optional, defaults to local Docker port)
   // eslint-disable-next-line sonarjs/no-clear-text-protocols -- internal Docker network, no TLS
   OLLAMA_URL: z.string().optional().default('http://spirala-ollama:11434'),
+
+  // YouTube — default channel handle for /api/youtube/videos (feature flag: youtubeContent)
+  YOUTUBE_CHANNEL_HANDLE: z.string().optional().default('@Ane-Spirala'),
 });
 
 export type EnvConfig = z.infer<typeof envSchema>;
