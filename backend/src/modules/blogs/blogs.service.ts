@@ -11,6 +11,7 @@ import { CategoryEntity } from '../../db/entities/product.entity.js';
 import { BlogPostStatus } from '../../db/entities/enums.js';
 import { BlogTranslationsService } from './blog-translations.service.js';
 import { BlogPostTranslationEntity } from '../../db/entities/blog-translation.entity.js';
+import { buildOgHtml, getSiteUrl } from '../../common/utils/og-html.util.js';
 
 // ---------------------------------------------------------------------------
 // DTOs
@@ -157,6 +158,50 @@ export class BlogsService {
     }
 
     return post;
+  }
+
+  /**
+   * Builds an HTML document with Open Graph + Twitter Card meta tags
+   * for the given post slug. Used by social-media crawlers
+   * (facebookexternalhit, Twitterbot, etc.) to render link previews.
+   *
+   * Does NOT increment viewCount — crawlers should not inflate views.
+   */
+  async getOpenGraphHtml(slug: string, lang?: string): Promise<string> {
+    const post = await this.blogRepo.findOne({
+      where: { slug, status: BlogPostStatus.PUBLISHED },
+    });
+
+    if (!post) {
+      throw new NotFoundException(`Blog post with slug "${slug}" not found`);
+    }
+
+    let title = post.title;
+    let excerpt = post.excerpt;
+    let content = post.content;
+
+    if (lang && lang !== 'pl') {
+      const t = await this.translationRepo.findOne({
+        where: { postId: post.id, languageCode: lang },
+      });
+      if (t) {
+        title = t.title ?? title;
+        excerpt = t.excerpt ?? excerpt;
+        content = t.content ?? content;
+      }
+    }
+
+    const description = excerpt || content || '';
+
+    return buildOgHtml({
+      title,
+      description,
+      url: `${getSiteUrl()}/blog/${slug}`,
+      image: post.coverImageUrl,
+      type: 'article',
+      publishedAt: post.publishedAt ? post.publishedAt.toISOString() : null,
+      lang: lang || 'pl',
+    });
   }
 
   // ---------------------------------------------------------------------------
