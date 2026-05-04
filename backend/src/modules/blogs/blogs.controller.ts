@@ -7,13 +7,16 @@ import {
   Param,
   Query,
   Body,
+  Header,
   HttpCode,
   HttpStatus,
+  Res,
   UseGuards,
   UseInterceptors,
   UploadedFile,
   BadRequestException,
 } from '@nestjs/common';
+import type { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import sharp from 'sharp';
 import { v4 as uuidv4 } from 'uuid';
@@ -251,6 +254,27 @@ export class BlogsController {
   async findAll(@Query('lang') lang?: string) {
     const data = await this.blogs.findAllPublished(lang);
     return { success: true, data };
+  }
+
+  /**
+   * GET /api/blogs/:slug/og
+   * Public — returns minimal HTML with Open Graph + Twitter meta tags
+   * for social-media crawlers (facebookexternalhit, Twitterbot, …).
+   * Nginx routes crawler requests for /blog/:slug here so previews
+   * show the cover image. Real users hit the SPA directly.
+   *
+   * Declared BEFORE :slug to win route priority over the JSON endpoint.
+   */
+  @Get(':slug/og')
+  @Header('Content-Type', 'text/html; charset=utf-8')
+  @Header('Cache-Control', 'public, max-age=3600, s-maxage=86400')
+  async getOpenGraph(
+    @Param('slug') slug: string,
+    @Query('lang') lang: string | undefined,
+    @Res() res: Response,
+  ) {
+    const html = await this.blogs.getOpenGraphHtml(slug, lang);
+    res.send(html);
   }
 
   /**
