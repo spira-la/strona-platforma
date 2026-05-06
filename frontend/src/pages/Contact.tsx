@@ -9,6 +9,29 @@ import { Phone, Mail, Clock, CheckCircle, AlertCircle } from 'lucide-react';
 import { EditableText } from '@/components/cms/EditableText';
 import { ScrollReveal } from '@/components/shared/ScrollReveal';
 import { contactClient } from '@/clients/contact.client';
+import { useCMS } from '@/contexts/CMSContext';
+
+const PHONE_FALLBACK = '+48 000 000 000';
+const EMAIL_FALLBACK = 'contact@spira-la.com';
+
+function readCmsValue(
+  raw: string,
+  fieldPath: string,
+  fallback: string,
+): string {
+  if (!raw || raw === fieldPath || raw.trim() === '') return fallback;
+  return raw.trim();
+}
+
+function telHref(phone: string): string {
+  const cleaned = phone.replaceAll(/[^\d+]/g, '');
+  return `tel:${cleaned}`;
+}
+
+function whatsappHref(phone: string): string {
+  const digits = phone.replaceAll(/\D/g, '');
+  return `https://wa.me/${digits}`;
+}
 
 // ---------------------------------------------------------------------------
 // Zod schema
@@ -49,6 +72,18 @@ function SectionBadge({ label }: { label: string }) {
 }
 
 function ContactInfoColumn() {
+  const { getFieldValue } = useCMS();
+  const email = readCmsValue(
+    getFieldValue('contact', 'info.email'),
+    'info.email',
+    EMAIL_FALLBACK,
+  );
+  const phone = readCmsValue(
+    getFieldValue('contact', 'info.phone'),
+    'info.phone',
+    PHONE_FALLBACK,
+  );
+
   return (
     <div className="flex flex-col gap-8">
       <div>
@@ -70,7 +105,7 @@ function ContactInfoColumn() {
 
       <div className="flex flex-col gap-4">
         <a
-          href="mailto:contact@spira-la.com"
+          href={`mailto:${email}`}
           className="flex items-center gap-3 group"
           aria-label="Napisz e-mail"
         >
@@ -97,7 +132,7 @@ function ContactInfoColumn() {
         </a>
 
         <a
-          href="tel:+48000000000"
+          href={telHref(phone)}
           className="flex items-center gap-3 group"
           aria-label="Zadzwon"
         >
@@ -180,9 +215,8 @@ function ContactInfoColumn() {
               <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
             </svg>
           </a>
-          {/* WhatsApp — update href to the real business number before launch */}
           <a
-            href="https://wa.me/48000000000"
+            href={whatsappHref(phone)}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="WhatsApp"
