@@ -114,7 +114,7 @@ export function wrapWithSpiralaLayout(opts: SpiralaLayoutOptions): string {
                 Spirala
               </p>
               <p style="margin: 0 0 8px; font-family: 'Lato', Arial, sans-serif; font-size: 12px; color: #6B6B6B; line-height: 1.6;">
-                Coaching i terapia online — Aneta Mroczko
+                Coaching mindsetu i dobrostanu — Aneta Mroczko
               </p>
               <p style="margin: 0; font-family: 'Lato', Arial, sans-serif; font-size: 12px; color: #8A8A8A;">
                 <a href="${SPIRALA_SITE_URL}" style="color: #B8963E; text-decoration: none;">spira-la.com</a>

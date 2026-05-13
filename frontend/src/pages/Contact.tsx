@@ -48,7 +48,7 @@ const contactSchema = z.object({
     .max(20, 'Numer telefonu jest za dlugi')
     .optional()
     .or(z.literal('')),
-  subject: z.enum(['coaching', 'terapia', 'strona', 'wspolpraca', 'inne'], {
+  subject: z.enum(['coaching', 'strona', 'wspolpraca', 'inne'], {
     message: 'Wybierz temat wiadomosci',
   }),
   message: z
@@ -473,7 +473,6 @@ function ContactFormColumn() {
               Wybierz temat...
             </option>
             <option value="coaching">Coaching</option>
-            <option value="terapia">Terapia</option>
             <option value="strona">Strona internetowa</option>
             <option value="wspolpraca">Wspolpraca</option>
             <option value="inne">Inne</option>

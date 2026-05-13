@@ -19,7 +19,6 @@ export type ContactMessage = ContactMessageEntity;
 
 const SUBJECT_LABELS: Record<string, string> = {
   coaching: 'Coaching',
-  terapia: 'Terapia',
   strona: 'Strona internetowa',
   wspolpraca: 'Współpraca',
   inne: 'Inne',

@@ -154,7 +154,7 @@ export default function About() {
     <main className="min-h-screen bg-white text-[#2D2D2D]">
       <SEO
         title="O mnie"
-        description="Poznaj Anetę — psycholog kliniczny, coach i terapeuta somatyczny. Wieloletnie doświadczenie w pracy z ciałem i transformacji."
+        description="Poznaj Anetę — psycholog kliniczny i coach somatyczny. Wieloletnie doświadczenie w pracy z ciałem i transformacji."
         canonical="/o-mnie"
       />
 

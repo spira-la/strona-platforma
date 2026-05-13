@@ -22,7 +22,7 @@ export class CreateContactMessageDto {
   @MaxLength(20)
   phone?: string;
 
-  @IsIn(['coaching', 'terapia', 'strona', 'wspolpraca', 'inne'])
+  @IsIn(['coaching', 'strona', 'wspolpraca', 'inne'])
   subject!: string;
 
   @IsString()
