@@ -23,7 +23,7 @@ export interface ContactSubmitPayload {
   fullName: string;
   email: string;
   phone?: string;
-  subject: 'coaching' | 'terapia' | 'strona' | 'wspolpraca' | 'inne';
+  subject: 'coaching' | 'strona' | 'wspolpraca' | 'inne';
   message: string;
 }
 

@@ -47,7 +47,7 @@ async function bootstrap(): Promise<void> {
   // Swagger / OpenAPI
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Spirala API')
-    .setDescription('Coaching & therapy platform backend API')
+    .setDescription('Mindset & Wellbeing Coaching platform backend API')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
