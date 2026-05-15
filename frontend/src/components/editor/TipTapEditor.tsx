@@ -9,6 +9,7 @@ import TextAlign from '@tiptap/extension-text-align';
 import Underline from '@tiptap/extension-underline';
 import Color from '@tiptap/extension-color';
 import { TextStyle } from '@tiptap/extension-text-style';
+import { FontSize } from './FontSize';
 import Highlight from '@tiptap/extension-highlight';
 import CharacterCount from '@tiptap/extension-character-count';
 import Typography from '@tiptap/extension-typography';
@@ -148,6 +149,7 @@ export function TipTapEditor({
         types: ['heading', 'paragraph'],
       }),
       TextStyle,
+      FontSize,
       Color,
       Highlight.configure({ multicolor: true }),
       CharacterCount,
@@ -427,6 +429,32 @@ export function TipTapEditor({
           >
             <Heading3 size={15} />
           </ToolbarButton>
+
+          <ToolbarSeparator />
+
+          {/* Font size */}
+          <select
+            title="Rozmiar tekstu"
+            aria-label="Rozmiar tekstu"
+            value={editor.getAttributes('textStyle').fontSize ?? ''}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value) {
+                editor.chain().focus().setFontSize(value).run();
+              } else {
+                editor.chain().focus().unsetFontSize().run();
+              }
+            }}
+            className="h-8 px-2 rounded text-[12px] font-['Inter'] text-[#3F3F3F] bg-white border border-[#E8E4DF] hover:border-[#0D9488] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488] transition-colors"
+          >
+            <option value="">Rozmiar</option>
+            <option value="12px">Bardzo mały (12)</option>
+            <option value="14px">Mały (14)</option>
+            <option value="16px">Normalny (16)</option>
+            <option value="18px">Duży (18)</option>
+            <option value="22px">Bardzo duży (22)</option>
+            <option value="28px">Ogromny (28)</option>
+          </select>
 
           <ToolbarSeparator />
 

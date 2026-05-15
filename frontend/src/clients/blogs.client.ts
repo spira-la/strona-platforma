@@ -13,6 +13,12 @@ export interface BlogCategory {
   slug: string;
 }
 
+export interface BlogAuthor {
+  name: string | null;
+  bio: string | null;
+  avatarUrl: string | null;
+}
+
 export interface BlogPost {
   id: string;
   authorId: string | null;
@@ -28,6 +34,7 @@ export interface BlogPost {
   likeCount: number;
   createdAt: string;
   updatedAt: string;
+  author?: BlogAuthor | null;
 }
 
 export interface CreateBlogData {
