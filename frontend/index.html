@@ -3,6 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JLMXP0ZTKH"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      // SPA: disable automatic page_view; RouteTracker fires it on every route change
+      gtag('config', 'G-JLMXP0ZTKH', { send_page_view: false });
+    </script>
+
     <title>Spirala — Mindset & Wellbeing Coaching</title>
     <meta name="description" content="Coaching mindsetu i dobrostanu z Anetą — sesje indywidualne, pakiety, rozwój osobisty. Zarezerwuj sesję online." />
     <meta name="theme-color" content="#B8963E" />
