@@ -8,6 +8,7 @@ import { CMSFocusProvider } from '@/components/cms/EditableText';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { useTranslation } from 'react-i18next';
 import { Layout } from '@/components/layout';
+import { RouteTracker } from '@/components/shared/RouteTracker';
 
 // Eagerly loaded pages
 import Home from '@/pages/Home';
@@ -543,6 +544,7 @@ export default function App() {
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
+          <RouteTracker />
           <AuthProvider>
             <CMSProvider>
               <CMSFocusProvider>
