@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Put,
+  Patch,
   Post,
   Delete,
   Body,
@@ -82,12 +83,12 @@ export class CoachPanelController {
   }
 
   /**
-   * PUT /api/coach/me/profile
+   * PATCH /api/coach/me/profile
    * Partially updates the coach's own profile.
    * Updatable fields: bio, expertise, languages, location, website,
    * timezone, acceptingClients, yearsExperience, certifications.
    */
-  @Put('profile')
+  @Patch('profile')
   async updateProfile(
     @CurrentUser() user: User,
     @Body() body: UpdateProfileBody,

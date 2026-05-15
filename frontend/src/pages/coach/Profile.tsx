@@ -221,180 +221,204 @@ export default function CoachProfile() {
         description={t('coach.profile.description')}
       />
 
-      <form onSubmit={handleSubmit} className="max-w-2xl space-y-6" noValidate>
-        {/* Full name */}
-        <AdminFormField
-          label={t('coach.profile.fullName')}
-          htmlFor="profile-fullname"
-        >
-          <input
-            id="profile-fullname"
-            type="text"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            placeholder={t('coach.profile.fullNamePlaceholder')}
-            className={ADMIN_INPUT_CLASS}
-          />
-        </AdminFormField>
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-4xl mx-auto space-y-6"
+        noValidate
+      >
+        {/* Personal info card */}
+        <div className="bg-white border border-[#E8E4DF] rounded-xl p-6 md:p-8 space-y-6">
+          <h2 className="font-['Cormorant_Garamond',serif] text-xl font-bold text-[#2D2D2D]">
+            {t('coach.profile.fullName')}
+          </h2>
 
-        {/* Email */}
-        <AdminFormField
-          label={t('coach.profile.email')}
-          htmlFor="profile-email"
-        >
-          <input
-            id="profile-email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder={t('coach.profile.emailPlaceholder')}
-            className={ADMIN_INPUT_CLASS}
-          />
-        </AdminFormField>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+            {/* Full name */}
+            <AdminFormField
+              label={t('coach.profile.fullName')}
+              htmlFor="profile-fullname"
+            >
+              <input
+                id="profile-fullname"
+                type="text"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                placeholder={t('coach.profile.fullNamePlaceholder')}
+                className={ADMIN_INPUT_CLASS}
+              />
+            </AdminFormField>
 
-        {/* Phone */}
-        <AdminFormField
-          label={t('coach.profile.phone')}
-          htmlFor="profile-phone"
-        >
-          <input
-            id="profile-phone"
-            type="tel"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder={t('coach.profile.phonePlaceholder')}
-            className={ADMIN_INPUT_CLASS}
-          />
-        </AdminFormField>
+            {/* Email */}
+            <AdminFormField
+              label={t('coach.profile.email')}
+              htmlFor="profile-email"
+            >
+              <input
+                id="profile-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder={t('coach.profile.emailPlaceholder')}
+                className={ADMIN_INPUT_CLASS}
+              />
+            </AdminFormField>
 
-        {/* Bio */}
-        <AdminFormField label={t('coach.profile.bio')} htmlFor="profile-bio">
-          <textarea
-            id="profile-bio"
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            placeholder={t('coach.profile.bioPlaceholder')}
-            rows={5}
-            className={[ADMIN_INPUT_CLASS, 'resize-y min-h-[120px]'].join(' ')}
-          />
-        </AdminFormField>
+            {/* Phone */}
+            <AdminFormField
+              label={t('coach.profile.phone')}
+              htmlFor="profile-phone"
+            >
+              <input
+                id="profile-phone"
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder={t('coach.profile.phonePlaceholder')}
+                className={ADMIN_INPUT_CLASS}
+              />
+            </AdminFormField>
 
-        {/* Location */}
-        <AdminFormField
-          label={t('coach.profile.location')}
-          htmlFor="profile-location"
-        >
-          <input
-            id="profile-location"
-            type="text"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            placeholder={t('coach.profile.locationPlaceholder')}
-            className={ADMIN_INPUT_CLASS}
-          />
-        </AdminFormField>
+            {/* Location */}
+            <AdminFormField
+              label={t('coach.profile.location')}
+              htmlFor="profile-location"
+            >
+              <input
+                id="profile-location"
+                type="text"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder={t('coach.profile.locationPlaceholder')}
+                className={ADMIN_INPUT_CLASS}
+              />
+            </AdminFormField>
+          </div>
 
-        {/* Website */}
-        <AdminFormField
-          label={t('coach.profile.website')}
-          htmlFor="profile-website"
-        >
-          <input
-            id="profile-website"
-            type="url"
-            value={website}
-            onChange={(e) => setWebsite(e.target.value)}
-            placeholder={t('coach.profile.websitePlaceholder')}
-            className={ADMIN_INPUT_CLASS}
-          />
-        </AdminFormField>
+          {/* Bio — full width */}
+          <AdminFormField label={t('coach.profile.bio')} htmlFor="profile-bio">
+            <textarea
+              id="profile-bio"
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              placeholder={t('coach.profile.bioPlaceholder')}
+              rows={6}
+              className={[ADMIN_INPUT_CLASS, 'resize-y min-h-[140px]'].join(
+                ' ',
+              )}
+            />
+          </AdminFormField>
+        </div>
 
-        {/* Timezone */}
-        <AdminFormField
-          label={t('coach.profile.timezone')}
-          htmlFor="profile-timezone"
-        >
-          <select
-            id="profile-timezone"
-            value={timezone}
-            onChange={(e) => setTimezone(e.target.value)}
-            className={ADMIN_INPUT_CLASS}
+        {/* Professional info card */}
+        <div className="bg-white border border-[#E8E4DF] rounded-xl p-6 md:p-8 space-y-6">
+          <h2 className="font-['Cormorant_Garamond',serif] text-xl font-bold text-[#2D2D2D]">
+            {t('coach.profile.expertise')}
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+            {/* Website */}
+            <AdminFormField
+              label={t('coach.profile.website')}
+              htmlFor="profile-website"
+            >
+              <input
+                id="profile-website"
+                type="url"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+                placeholder={t('coach.profile.websitePlaceholder')}
+                className={ADMIN_INPUT_CLASS}
+              />
+            </AdminFormField>
+
+            {/* Timezone */}
+            <AdminFormField
+              label={t('coach.profile.timezone')}
+              htmlFor="profile-timezone"
+            >
+              <select
+                id="profile-timezone"
+                value={timezone}
+                onChange={(e) => setTimezone(e.target.value)}
+                className={ADMIN_INPUT_CLASS}
+              >
+                {TIMEZONES.map((tz) => (
+                  <option key={tz} value={tz}>
+                    {tz}
+                  </option>
+                ))}
+              </select>
+            </AdminFormField>
+
+            {/* Years of experience */}
+            <AdminFormField
+              label={t('coach.profile.yearsExperience')}
+              htmlFor="profile-years"
+            >
+              <input
+                id="profile-years"
+                type="number"
+                min={0}
+                max={60}
+                value={yearsExperience}
+                onChange={(e) => setYearsExperience(e.target.value)}
+                placeholder="0"
+                className={ADMIN_INPUT_CLASS}
+              />
+            </AdminFormField>
+
+            {/* Languages */}
+            <AdminFormField
+              label={t('coach.profile.languages')}
+              htmlFor="profile-languages"
+            >
+              <input
+                id="profile-languages"
+                type="text"
+                value={languagesRaw}
+                onChange={(e) => setLanguagesRaw(e.target.value)}
+                placeholder={t('coach.profile.languagesPlaceholder')}
+                className={ADMIN_INPUT_CLASS}
+              />
+              <TagDisplay tags={languageTags} />
+            </AdminFormField>
+          </div>
+
+          {/* Expertise — full width */}
+          <AdminFormField
+            label={t('coach.profile.expertise')}
+            htmlFor="profile-expertise"
           >
-            {TIMEZONES.map((tz) => (
-              <option key={tz} value={tz}>
-                {tz}
-              </option>
-            ))}
-          </select>
-        </AdminFormField>
+            <input
+              id="profile-expertise"
+              type="text"
+              value={expertiseRaw}
+              onChange={(e) => setExpertiseRaw(e.target.value)}
+              placeholder={t('coach.profile.expertisePlaceholder')}
+              className={ADMIN_INPUT_CLASS}
+            />
+            <TagDisplay tags={expertiseTags} />
+          </AdminFormField>
 
-        {/* Years of experience */}
-        <AdminFormField
-          label={t('coach.profile.yearsExperience')}
-          htmlFor="profile-years"
-        >
-          <input
-            id="profile-years"
-            type="number"
-            min={0}
-            max={60}
-            value={yearsExperience}
-            onChange={(e) => setYearsExperience(e.target.value)}
-            placeholder="0"
-            className={ADMIN_INPUT_CLASS}
-          />
-        </AdminFormField>
-
-        {/* Languages */}
-        <AdminFormField
-          label={t('coach.profile.languages')}
-          htmlFor="profile-languages"
-        >
-          <input
-            id="profile-languages"
-            type="text"
-            value={languagesRaw}
-            onChange={(e) => setLanguagesRaw(e.target.value)}
-            placeholder={t('coach.profile.languagesPlaceholder')}
-            className={ADMIN_INPUT_CLASS}
-          />
-          <TagDisplay tags={languageTags} />
-        </AdminFormField>
-
-        {/* Expertise */}
-        <AdminFormField
-          label={t('coach.profile.expertise')}
-          htmlFor="profile-expertise"
-        >
-          <input
-            id="profile-expertise"
-            type="text"
-            value={expertiseRaw}
-            onChange={(e) => setExpertiseRaw(e.target.value)}
-            placeholder={t('coach.profile.expertisePlaceholder')}
-            className={ADMIN_INPUT_CLASS}
-          />
-          <TagDisplay tags={expertiseTags} />
-        </AdminFormField>
-
-        {/* Certifications */}
-        <AdminFormField
-          label={t('coach.profile.certifications')}
-          htmlFor="profile-certifications"
-        >
-          <input
-            id="profile-certifications"
-            type="text"
-            value={certificationsRaw}
-            onChange={(e) => setCertificationsRaw(e.target.value)}
-            placeholder={t('coach.profile.certificationsPlaceholder')}
-            className={ADMIN_INPUT_CLASS}
-          />
-          <TagDisplay tags={certificationTags} />
-        </AdminFormField>
+          {/* Certifications — full width */}
+          <AdminFormField
+            label={t('coach.profile.certifications')}
+            htmlFor="profile-certifications"
+          >
+            <input
+              id="profile-certifications"
+              type="text"
+              value={certificationsRaw}
+              onChange={(e) => setCertificationsRaw(e.target.value)}
+              placeholder={t('coach.profile.certificationsPlaceholder')}
+              className={ADMIN_INPUT_CLASS}
+            />
+            <TagDisplay tags={certificationTags} />
+          </AdminFormField>
+        </div>
 
         {/* Accepting clients toggle */}
-        <div className="bg-white border border-[#E8E4DF] rounded-xl p-4">
+        <div className="bg-white border border-[#E8E4DF] rounded-xl p-6">
           <Toggle
             id="profile-accepting"
             checked={acceptingClients}
@@ -403,14 +427,14 @@ export default function CoachProfile() {
           />
         </div>
 
-        {/* Submit */}
-        <div className="pt-2">
+        {/* Sticky save bar */}
+        <div className="sticky bottom-0 -mx-6 md:-mx-8 px-6 md:px-8 py-4 bg-white/95 backdrop-blur-sm border-t border-[#E8E4DF] flex justify-end">
           <button
             type="submit"
             disabled={isPending}
             className={[
-              'px-6 py-2.5 rounded-lg text-sm font-medium text-white',
-              'bg-[#0D9488] hover:bg-[#0B7C72] active:bg-[#7A6028]',
+              'px-8 py-2.5 rounded-lg text-sm font-medium text-white',
+              'bg-[#0D9488] hover:bg-[#0B7C72] active:bg-[#0a6e63]',
               'transition-colors duration-150',
               'disabled:opacity-50 disabled:cursor-not-allowed',
               "font-['Inter']",
