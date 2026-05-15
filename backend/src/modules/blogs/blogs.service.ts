@@ -8,10 +8,20 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { BlogPostEntity } from '../../db/entities/blog.entity.js';
 import { CategoryEntity } from '../../db/entities/product.entity.js';
+import { ProfileEntity } from '../../db/entities/profile.entity.js';
+import { CoachEntity } from '../../db/entities/coach.entity.js';
 import { BlogPostStatus } from '../../db/entities/enums.js';
 import { BlogTranslationsService } from './blog-translations.service.js';
 import { BlogPostTranslationEntity } from '../../db/entities/blog-translation.entity.js';
 import { buildOgHtml, getSiteUrl } from '../../common/utils/og-html.util.js';
+
+export interface BlogAuthor {
+  name: string | null;
+  bio: string | null;
+  avatarUrl: string | null;
+}
+
+export type BlogPostWithAuthor = BlogPostEntity & { author: BlogAuthor | null };
 
 // ---------------------------------------------------------------------------
 // DTOs
@@ -76,8 +86,36 @@ export class BlogsService {
     private readonly categoryRepo: Repository<CategoryEntity>,
     @InjectRepository(BlogPostTranslationEntity)
     private readonly translationRepo: Repository<BlogPostTranslationEntity>,
+    @InjectRepository(ProfileEntity)
+    private readonly profileRepo: Repository<ProfileEntity>,
+    @InjectRepository(CoachEntity)
+    private readonly coachRepo: Repository<CoachEntity>,
     private readonly translations: BlogTranslationsService,
   ) {}
+
+  /**
+   * Loads the public author payload for a blog post: name + avatar from
+   * `profiles`, bio from `coaches` (matched by user_id). Returns null when
+   * authorId is missing or no profile/coach record exists.
+   */
+  private async loadAuthor(
+    authorId: string | null,
+  ): Promise<BlogAuthor | null> {
+    if (!authorId) return null;
+
+    const [profile, coach] = await Promise.all([
+      this.profileRepo.findOne({ where: { id: authorId } }),
+      this.coachRepo.findOne({ where: { userId: authorId } }),
+    ]);
+
+    if (!profile && !coach) return null;
+
+    return {
+      name: profile?.fullName ?? null,
+      bio: coach?.bio ?? null,
+      avatarUrl: profile?.avatarUrl ?? null,
+    };
+  }
 
   // ---------------------------------------------------------------------------
   // Public endpoints
@@ -125,7 +163,7 @@ export class BlogsService {
    * If `lang` is provided and a translation exists, merges translated
    * fields into the response (fallback to PL for missing fields).
    */
-  async findBySlug(slug: string, lang?: string): Promise<BlogPostEntity> {
+  async findBySlug(slug: string, lang?: string): Promise<BlogPostWithAuthor> {
     const post = await this.blogRepo.findOne({
       where: { slug, status: BlogPostStatus.PUBLISHED },
     });
@@ -143,6 +181,8 @@ export class BlogsService {
         );
       });
 
+    const author = await this.loadAuthor(post.authorId);
+
     if (lang && lang !== 'pl') {
       const t = await this.translationRepo.findOne({
         where: { postId: post.id, languageCode: lang },
@@ -153,11 +193,12 @@ export class BlogsService {
           title: t.title ?? post.title,
           content: t.content ?? post.content,
           excerpt: t.excerpt ?? post.excerpt,
+          author,
         };
       }
     }
 
-    return post;
+    return { ...post, author };
   }
 
   /**

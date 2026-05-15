@@ -40,11 +40,9 @@ import { SEO } from '@/components/shared/SEO';
 import anetaAvatar from '@/assets/Ane2.jpg';
 
 const SITE_URL = 'https://spira-la.com';
-const DEFAULT_AUTHOR = {
-  name: 'Aneta Spirala',
-  role: 'Coach · Spirala',
-  avatar: anetaAvatar,
-};
+const AUTHOR_ROLE = 'Coach · Spirala';
+const AUTHOR_NAME_FALLBACK = 'Spirala';
+const AUTHOR_AVATAR_FALLBACK = anetaAvatar;
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -307,6 +305,11 @@ export default function BlogPost() {
     : `${SITE_URL}/og-image.jpg`;
   const category = displayedPost.categories?.[0]?.name;
 
+  const authorName = displayedPost.author?.name ?? AUTHOR_NAME_FALLBACK;
+  const authorBio = displayedPost.author?.bio ?? null;
+  const authorAvatar =
+    displayedPost.author?.avatarUrl ?? AUTHOR_AVATAR_FALLBACK;
+
   const articleJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -316,7 +319,7 @@ export default function BlogPost() {
     url: fullUrl,
     datePublished: displayedPost.publishedAt ?? displayedPost.createdAt,
     dateModified: displayedPost.updatedAt,
-    author: { '@type': 'Person', name: DEFAULT_AUTHOR.name },
+    author: { '@type': 'Person', name: authorName },
     publisher: {
       '@type': 'Organization',
       name: 'Spirala',
@@ -385,12 +388,12 @@ export default function BlogPost() {
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3">
             <div className="inline-flex items-center gap-2.5">
               <img
-                src={DEFAULT_AUTHOR.avatar}
-                alt={DEFAULT_AUTHOR.name}
+                src={authorAvatar}
+                alt={authorName}
                 className="w-9 h-9 rounded-full object-cover border-2 border-[#F0EDE8]"
               />
               <span className="font-['Lato'] text-[13px] font-semibold text-[#2D2D2D]">
-                {DEFAULT_AUTHOR.name}
+                {authorName}
               </span>
             </div>
             <span
@@ -455,34 +458,40 @@ export default function BlogPost() {
           </div>
 
           {/* Author bio card */}
-          <div className="mt-10 p-6 md:p-8 bg-[#F5F3EF] rounded-lg flex flex-col sm:flex-row items-start gap-5">
-            <img
-              src={DEFAULT_AUTHOR.avatar}
-              alt={DEFAULT_AUTHOR.name}
-              className="w-20 h-20 rounded-full object-cover border-2 border-white shrink-0"
-            />
-            <div className="flex flex-col gap-2">
-              <span className="font-['Lato'] text-[11px] font-semibold tracking-[0.2em] uppercase text-[#B8944A]">
-                O autorce
-              </span>
-              <h3 className="font-['Playfair_Display'] text-[20px] font-normal text-[#2D2D2D]">
-                {DEFAULT_AUTHOR.name}
-              </h3>
-              <p className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-[1.7]">
-                Coach systemowa, terapeutka i przewodniczka transformacji.
-                Towarzyszę kobietom w odnajdywaniu wewnętrznej równowagi,
-                uwalnianiu wzorców rodzinnych i budowaniu życia w zgodzie ze
-                sobą.
-              </p>
-              <Link
-                to="/o-mnie"
-                className="inline-flex items-center gap-1.5 font-['Lato'] text-[13px] font-semibold text-[#B8963E] hover:text-[#8A6F2E] transition-colors mt-1"
-              >
-                Poznaj mnie
-                <ArrowRight size={13} aria-hidden="true" />
-              </Link>
+          {(authorBio || displayedPost.author?.name) && (
+            <div className="mt-10 p-6 md:p-8 bg-[#F5F3EF] rounded-lg flex flex-col sm:flex-row items-start gap-5">
+              <img
+                src={authorAvatar}
+                alt={authorName}
+                className="w-20 h-20 rounded-full object-cover border-2 border-white shrink-0"
+              />
+              <div className="flex flex-col gap-2">
+                <span className="font-['Lato'] text-[11px] font-semibold tracking-[0.2em] uppercase text-[#B8944A]">
+                  O autorce
+                </span>
+                <h3 className="font-['Playfair_Display'] text-[20px] font-normal text-[#2D2D2D]">
+                  {authorName}
+                </h3>
+                {AUTHOR_ROLE && (
+                  <span className="font-['Lato'] text-[12px] text-[#8A8A8A]">
+                    {AUTHOR_ROLE}
+                  </span>
+                )}
+                {authorBio && (
+                  <p className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-[1.7] whitespace-pre-line">
+                    {authorBio}
+                  </p>
+                )}
+                <Link
+                  to="/o-mnie"
+                  className="inline-flex items-center gap-1.5 font-['Lato'] text-[13px] font-semibold text-[#B8963E] hover:text-[#8A6F2E] transition-colors mt-1"
+                >
+                  Poznaj mnie
+                  <ArrowRight size={13} aria-hidden="true" />
+                </Link>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Back to blog */}
           <div className="mt-12 text-center">
