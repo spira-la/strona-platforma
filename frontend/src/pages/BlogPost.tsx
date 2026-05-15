@@ -37,6 +37,7 @@ import {
   type BlogPost as BlogPostType,
 } from '@/clients/blogs.client';
 import { SEO } from '@/components/shared/SEO';
+import { EditableText } from '@/components/cms/EditableText';
 import anetaAvatar from '@/assets/Ane2.jpg';
 
 const SITE_URL = 'https://spira-la.com';
@@ -108,7 +109,12 @@ function ShareBar({ url, title }: ShareBarProps) {
     <div className="flex items-center justify-between flex-wrap gap-4 py-6 border-y border-[#E8E4DF]">
       <span className="inline-flex items-center gap-2 font-['Lato'] text-[13px] font-semibold tracking-[0.15em] uppercase text-[#8A8A8A]">
         <Share2 size={14} aria-hidden="true" />
-        Udostępnij artykuł
+        <EditableText
+          section="blogPost"
+          fieldPath="shareLabel"
+          as="span"
+          placeholder="Udostępnij artykuł"
+        />
       </span>
       <div className="flex items-center gap-2">
         {shareLinks.map(({ name, icon: Icon, href }) => (
@@ -466,9 +472,13 @@ export default function BlogPost() {
                 className="w-20 h-20 rounded-full object-cover border-2 border-white shrink-0"
               />
               <div className="flex flex-col gap-2">
-                <span className="font-['Lato'] text-[11px] font-semibold tracking-[0.2em] uppercase text-[#B8944A]">
-                  O autorce
-                </span>
+                <EditableText
+                  section="blogPost"
+                  fieldPath="aboutAuthorLabel"
+                  as="span"
+                  className="font-['Lato'] text-[11px] font-semibold tracking-[0.2em] uppercase text-[#B8944A]"
+                  placeholder="O autorce"
+                />
                 <h3 className="font-['Playfair_Display'] text-[20px] font-normal text-[#2D2D2D]">
                   {authorName}
                 </h3>
@@ -486,7 +496,12 @@ export default function BlogPost() {
                   to="/o-mnie"
                   className="inline-flex items-center gap-1.5 font-['Lato'] text-[13px] font-semibold text-[#B8963E] hover:text-[#8A6F2E] transition-colors mt-1"
                 >
-                  Poznaj mnie
+                  <EditableText
+                    section="blogPost"
+                    fieldPath="meetMeLink"
+                    as="span"
+                    placeholder="Poznaj mnie"
+                  />
                   <ArrowRight size={13} aria-hidden="true" />
                 </Link>
               </div>
@@ -500,7 +515,12 @@ export default function BlogPost() {
               className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-[#B8963E] hover:text-white hover:bg-[#B8963E] border border-[#B8963E] rounded-md px-6 py-3 transition-colors"
             >
               <ArrowLeft size={15} aria-hidden="true" />
-              Wróć do wszystkich artykułów
+              <EditableText
+                section="blogPost"
+                fieldPath="backToAllArticles"
+                as="span"
+                placeholder="Wróć do wszystkich artykułów"
+              />
             </Link>
           </div>
         </div>
