@@ -104,51 +104,71 @@ export interface CoachSession {
 
 // ─── API methods ──────────────────────────────────────────────────────────────
 
+type Envelope<T> = { success: boolean; data: T };
+
 export const coachClient = {
   getDashboard: (): Promise<CoachDashboardStats> =>
-    api.get<CoachDashboardStats>('/coach/me/dashboard'),
+    api
+      .get<Envelope<CoachDashboardStats>>('/coach/me/dashboard')
+      .then((r) => r.data),
 
   getProfile: (): Promise<CoachProfile> =>
-    api.get<CoachProfile>('/coach/me/profile'),
+    api.get<Envelope<CoachProfile>>('/coach/me/profile').then((r) => r.data),
 
   updateProfile: (data: UpdateCoachProfileData): Promise<CoachProfile> =>
-    api.patch<CoachProfile>('/coach/me/profile', data),
+    api
+      .patch<Envelope<CoachProfile>>('/coach/me/profile', data)
+      .then((r) => r.data),
 
   getAvailability: (): Promise<CoachAvailabilitySlot[]> =>
-    api.get<CoachAvailabilitySlot[]>('/coach/me/availability'),
+    api
+      .get<Envelope<CoachAvailabilitySlot[]>>('/coach/me/availability')
+      .then((r) => r.data),
 
   updateAvailability: (
     slots: CreateAvailabilitySlotData[],
   ): Promise<CoachAvailabilitySlot[]> =>
-    api.put<CoachAvailabilitySlot[]>('/coach/me/availability', slots),
+    api
+      .put<Envelope<CoachAvailabilitySlot[]>>('/coach/me/availability', slots)
+      .then((r) => r.data),
 
   getBlocks: (): Promise<CoachBlock[]> =>
-    api.get<CoachBlock[]>('/coach/me/blocks'),
+    api.get<Envelope<CoachBlock[]>>('/coach/me/blocks').then((r) => r.data),
 
   createBlock: (data: CreateBlockData): Promise<CoachBlock> =>
-    api.post<CoachBlock>('/coach/me/blocks', data),
+    api
+      .post<Envelope<CoachBlock>>('/coach/me/blocks', data)
+      .then((r) => r.data),
 
   deleteBlock: (id: string): Promise<void> =>
     api.delete<void>(`/coach/me/blocks/${id}`),
 
   getServices: (): Promise<CoachService[]> =>
-    api.get<CoachService[]>('/coach/me/services'),
+    api.get<Envelope<CoachService[]>>('/coach/me/services').then((r) => r.data),
 
   createService: (data: CreateCoachServiceData): Promise<CoachService> =>
-    api.post<CoachService>('/coach/me/services', data),
+    api
+      .post<Envelope<CoachService>>('/coach/me/services', data)
+      .then((r) => r.data),
 
   updateService: (
     id: string,
     data: UpdateCoachServiceData,
   ): Promise<CoachService> =>
-    api.put<CoachService>(`/coach/me/services/${id}`, data),
+    api
+      .put<Envelope<CoachService>>(`/coach/me/services/${id}`, data)
+      .then((r) => r.data),
 
   archiveService: (id: string): Promise<CoachService> =>
-    api.patch<CoachService>(`/coach/me/services/${id}/archive`),
+    api
+      .patch<Envelope<CoachService>>(`/coach/me/services/${id}/archive`)
+      .then((r) => r.data),
 
   restoreService: (id: string): Promise<CoachService> =>
-    api.patch<CoachService>(`/coach/me/services/${id}/restore`),
+    api
+      .patch<Envelope<CoachService>>(`/coach/me/services/${id}/restore`)
+      .then((r) => r.data),
 
   getSessions: (): Promise<CoachSession[]> =>
-    api.get<CoachSession[]>('/coach/me/sessions'),
+    api.get<Envelope<CoachSession[]>>('/coach/me/sessions').then((r) => r.data),
 };
