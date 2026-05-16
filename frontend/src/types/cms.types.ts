@@ -10,6 +10,7 @@ export type CMSSectionKey =
   | 'howIWork'
   | 'services'
   | 'blog'
+  | 'blogPost'
   | 'contact'
   | 'footer'
   | 'confirmation'
