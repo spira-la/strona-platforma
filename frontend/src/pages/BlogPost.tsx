@@ -554,6 +554,10 @@ export default function BlogPost() {
             </div>
           )}
 
+          {/* Conversion CTA — placed right at the end of the article so it's
+              visible without scrolling past the share/author blocks */}
+          <BlogCTA />
+
           {/* Share */}
           <div className="mt-10">
             <ShareBar url={fullUrl} title={displayedPost.title} />
@@ -603,9 +607,6 @@ export default function BlogPost() {
               </div>
             </div>
           )}
-
-          {/* Conversion CTA */}
-          <BlogCTA />
 
           {/* Back to blog */}
           <div className="mt-12 text-center">
