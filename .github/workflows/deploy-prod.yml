@@ -11,6 +11,13 @@ on:
         type: boolean
         default: true
 
+# Shared group with the dev/infra deploys so no two workflows ever run git on
+# the server at the same time. cancel-in-progress: false queues runs instead of
+# killing one mid-git (a killed git is what leaves stale index.lock/ref-locks).
+concurrency:
+  group: spirala-server-deploy
+  cancel-in-progress: false
+
 jobs:
   # ------------------------------------------------------------------
   # Detect which parts of the monorepo changed
@@ -55,6 +62,9 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             cd ${{ secrets.SPIRALA_APP_DIR_PROD }}
+            # Self-heal: clear stale git locks left by an interrupted/killed run
+            find .git -name '*.lock' -delete 2>/dev/null || true
+            git remote prune origin 2>/dev/null || true
             git fetch --all --prune --force
             git reset --hard origin/main
 

@@ -11,6 +11,15 @@ on:
         type: boolean
         default: true
 
+# Serialize every workflow that runs git on the server repo (dev + infra share
+# SPIRALA_APP_DIR). Without this, a push touching both backend/** and infra/**
+# launches deploy-dev and deploy-infra in parallel, and they collide on the same
+# .git dir → stale index.lock / ref-lock errors. cancel-in-progress: false so a
+# running deploy is never killed mid-git (which is what leaves the locks).
+concurrency:
+  group: spirala-server-deploy
+  cancel-in-progress: false
+
 jobs:
   # ------------------------------------------------------------------
   # Detect which parts of the monorepo changed
@@ -55,6 +64,9 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             cd ${{ secrets.SPIRALA_APP_DIR }}
+            # Self-heal: clear stale git locks left by an interrupted/killed run
+            find .git -name '*.lock' -delete 2>/dev/null || true
+            git remote prune origin 2>/dev/null || true
             git fetch --all --prune --force
             git reset --hard origin/dev
 
