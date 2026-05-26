@@ -39,7 +39,15 @@ const BATCH_CHAR_LIMIT = 2000;
 export class OllamaService {
   private readonly logger = new Logger(OllamaService.name);
   private readonly ollamaUrl: string;
-  private readonly model = 'gemma4:e2b';
+
+  /** Model tag — configurable so we can swap to a smaller one without a redeploy */
+  private readonly model: string;
+
+  /**
+   * How long Ollama keeps the model in RAM after a request. A short value
+   * frees memory on this RAM-constrained host once a translation burst ends.
+   */
+  private readonly keepAlive: string;
 
   /** 2 minutes per chunk — small blocks translate fast */
   private readonly chunkTimeoutMs = 2 * 60 * 1000;
@@ -49,6 +57,8 @@ export class OllamaService {
       this.config.get<string>('OLLAMA_URL') ??
       // eslint-disable-next-line sonarjs/no-clear-text-protocols -- internal Docker network
       'http://spirala-ollama:11434';
+    this.model = this.config.get<string>('OLLAMA_MODEL') ?? 'gemma3:1b';
+    this.keepAlive = this.config.get<string>('OLLAMA_KEEP_ALIVE') ?? '60s';
   }
 
   // ---------------------------------------------------------------------------
@@ -298,6 +308,7 @@ ${text}`;
           model: this.model,
           prompt,
           stream: false,
+          keep_alive: this.keepAlive,
           options: { num_ctx: 4096 },
         }),
         signal: controller.signal,

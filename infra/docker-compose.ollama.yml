@@ -7,14 +7,29 @@ services:
     volumes:
       - spirala-ollama-data:/root/.ollama
     restart: unless-stopped
+    environment:
+      # Unload the model from RAM 60s after the last request. Translations
+      # arrive in short bursts (title + excerpt + content, then EN & ES jobs),
+      # so 60s keeps it warm through one post but frees RAM when idle.
+      - OLLAMA_KEEP_ALIVE=60s
+      # Never hold more than one model / one request in memory at a time.
+      # Our translation queue is single-threaded, so extra slots only waste RAM.
+      - OLLAMA_MAX_LOADED_MODELS=1
+      - OLLAMA_NUM_PARALLEL=1
     networks:
       - spirala-dev-network
       - spirala-prod-network
     deploy:
       resources:
         limits:
-          cpus: '4.0'
-          memory: 10G
+          # Host has 4 cores / ~7.5G RAM. Translation must NEVER starve the
+          # site, so cap Ollama at half the cores and at a RAM ceiling that
+          # leaves the host without swapping (swap = disk thrash = site freeze).
+          # 2 cores + 3G is comfortable for gemma3:1b (~1.5-2G resident).
+          cpus: '2.0'
+          memory: 3G
+        reservations:
+          memory: 256M
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:11434/"]
       interval: 30s
