@@ -9,6 +9,14 @@ on:
       - 'infra/**'
   workflow_dispatch:
 
+# Same group as deploy-dev/deploy-prod. This workflow runs git on SPIRALA_APP_DIR
+# (the dev clone), so a push touching both infra/** and backend/** must NOT run
+# this in parallel with deploy-dev — that parallelism is what produced the .git
+# index.lock / ref-lock errors.
+concurrency:
+  group: spirala-server-deploy
+  cancel-in-progress: false
+
 jobs:
   deploy-ollama:
     runs-on: ubuntu-latest
@@ -21,6 +29,9 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             cd ${{ secrets.SPIRALA_APP_DIR }}
+            # Self-heal: clear stale git locks left by an interrupted/killed run
+            find .git -name '*.lock' -delete 2>/dev/null || true
+            git remote prune origin 2>/dev/null || true
             git fetch --all --prune --force
             git checkout origin/dev -- infra/
 

@@ -38,12 +38,19 @@ import {
 } from '@/clients/blogs.client';
 import { SEO } from '@/components/shared/SEO';
 import { EditableText } from '@/components/cms/EditableText';
+import { useCMS } from '@/contexts/CMSContext';
 import anetaAvatar from '@/assets/Ane2.jpg';
 
 const SITE_URL = 'https://spira-la.com';
 const AUTHOR_ROLE = 'Coach · Spirala';
 const AUTHOR_NAME_FALLBACK = 'Spirala';
 const AUTHOR_AVATAR_FALLBACK = anetaAvatar;
+
+// Shared with the Contact page: the WhatsApp number lives in the CMS so the
+// admin sets it once. Falls back to a placeholder until configured.
+const PHONE_FALLBACK = '+48 000 000 000';
+const WHATSAPP_MESSAGE_FALLBACK =
+  'Cześć! Czytałam artykuł na blogu Spirala i chciałabym umówić się na bezpłatną konsultację.';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -72,6 +79,21 @@ async function copyLinkToClipboard(url: string): Promise<void> {
   } catch {
     // Silent fail — clipboard may be unavailable
   }
+}
+
+// CMS values fall back when the field has never been set (raw === fieldPath).
+function readCmsValue(
+  raw: string,
+  fieldPath: string,
+  fallback: string,
+): string {
+  if (!raw || raw === fieldPath || raw.trim() === '') return fallback;
+  return raw.trim();
+}
+
+function whatsappHref(phone: string, message: string): string {
+  const digits = phone.replaceAll(/\D/g, '');
+  return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
 }
 
 // ---------------------------------------------------------------------------
@@ -143,6 +165,80 @@ function ShareBar({ url, title }: ShareBarProps) {
             Skopiuj link
           </span>
         </button>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// End-of-article CTA — book a session or start a free WhatsApp chat.
+// All copy is CMS-editable; the WhatsApp number is shared with the Contact
+// page via the `contact.info.phone` field.
+// ---------------------------------------------------------------------------
+
+function BlogCTA() {
+  const { getFieldValue } = useCMS();
+
+  const phone = readCmsValue(
+    getFieldValue('contact', 'info.phone'),
+    'info.phone',
+    PHONE_FALLBACK,
+  );
+  const whatsappMessage = readCmsValue(
+    getFieldValue('blogPost', 'ctaWhatsappMessage'),
+    'ctaWhatsappMessage',
+    WHATSAPP_MESSAGE_FALLBACK,
+  );
+
+  return (
+    <div className="mt-12 rounded-2xl border border-[#E8E4DF] bg-gradient-to-br from-[#F9F6F0] to-[#EDE8DC] p-8 md:p-10 text-center">
+      <EditableText
+        section="blogPost"
+        fieldPath="ctaHeading"
+        as="h3"
+        className="font-['Playfair_Display'] text-[24px] md:text-[28px] font-normal text-[#2D2D2D] mb-3"
+        placeholder="Gotowa na kolejny krok?"
+      />
+      <EditableText
+        section="blogPost"
+        fieldPath="ctaSubtitle"
+        as="p"
+        className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7] max-w-[560px] mx-auto mb-7"
+        placeholder="Umów indywidualną sesję lub napisz do mnie na WhatsApp — pierwsza rozmowa jest bez zobowiązań."
+      />
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+        {/* Primary — book a regular session (Services page) */}
+        <Link
+          to="/uslugi"
+          className="inline-flex items-center justify-center gap-2 w-full sm:w-auto font-['Lato'] text-[14px] font-semibold text-white rounded-lg px-8 py-[14px] transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A]"
+          style={{
+            background: 'linear-gradient(135deg, #B8944A 0%, #D4B97A 100%)',
+          }}
+        >
+          <EditableText
+            section="blogPost"
+            fieldPath="ctaSessionButton"
+            as="span"
+            placeholder="Umów sesję"
+          />
+          <ArrowRight size={15} aria-hidden="true" />
+        </Link>
+
+        {/* Secondary — free consultation directly on WhatsApp */}
+        <a
+          href={whatsappHref(phone, whatsappMessage)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center gap-2 w-full sm:w-auto font-['Lato'] text-[14px] font-semibold text-[#B8963E] bg-white border border-[#B8963E] rounded-lg px-8 py-[14px] transition-colors hover:bg-[rgba(184,148,74,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A]"
+        >
+          <MessageCircle size={16} aria-hidden="true" />
+          <EditableText
+            section="blogPost"
+            fieldPath="ctaWhatsappButton"
+            as="span"
+            placeholder="Bezpłatna konsultacja"
+          />
+        </a>
       </div>
     </div>
   );
@@ -457,6 +553,10 @@ export default function BlogPost() {
               ))}
             </div>
           )}
+
+          {/* Conversion CTA — placed right at the end of the article so it's
+              visible without scrolling past the share/author blocks */}
+          <BlogCTA />
 
           {/* Share */}
           <div className="mt-10">

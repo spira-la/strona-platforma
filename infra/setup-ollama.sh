@@ -5,7 +5,9 @@ set -euo pipefail
 # Run once on the server, or triggered by infra pipeline.
 
 COMPOSE_FILE="$(dirname "$0")/docker-compose.ollama.yml"
-MODEL="gemma4:e2b"
+# Keep in sync with the backend's OLLAMA_MODEL default. gemma3:1b is the
+# smallest Gemma 3 (~815MB), chosen to keep RAM/disk low on this small host.
+MODEL="${OLLAMA_MODEL:-gemma3:1b}"
 CONTAINER="spirala-ollama"
 
 echo "==> Starting Ollama container..."
@@ -25,7 +27,7 @@ done
 if docker exec "$CONTAINER" ollama list 2>/dev/null | grep -q "$MODEL"; then
   echo "==> Model $MODEL already present, skipping pull."
 else
-  echo "==> Pulling model $MODEL (~2GB, this may take a few minutes)..."
+  echo "==> Pulling model $MODEL (this may take a few minutes)..."
   docker exec "$CONTAINER" ollama pull "$MODEL"
 fi
 
