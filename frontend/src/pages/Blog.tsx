@@ -40,7 +40,7 @@ interface BlogCardProps {
 
 function BlogCard({ post }: BlogCardProps) {
   return (
-    <article className="flex flex-col bg-white rounded-lg overflow-hidden shadow-sm border border-[#F0EDE8] hover:shadow-md transition-shadow duration-300">
+    <article className="flex flex-col h-full bg-white rounded-lg overflow-hidden shadow-sm border border-[#F0EDE8] hover:shadow-md transition-shadow duration-300">
       <div className="relative overflow-hidden h-48">
         <img
           src={post.coverImageUrl ?? DEFAULT_COVER}
@@ -53,11 +53,11 @@ function BlogCard({ post }: BlogCardProps) {
         <span className="inline-block self-start font-['Lato'] text-[11px] font-semibold tracking-[0.08em] uppercase text-[#B8944A] bg-[#B8944A]/[0.1] rounded-full px-3 py-1">
           {getCategory(post)}
         </span>
-        <h3 className="font-['Cormorant_Garamond'] text-[17px] font-bold text-[#2D2D2D] leading-snug">
+        <h3 className="font-['Cormorant_Garamond'] text-[17px] font-bold text-[#2D2D2D] leading-snug line-clamp-2">
           {post.title}
         </h3>
         {post.excerpt && (
-          <p className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-relaxed flex-1">
+          <p className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-relaxed line-clamp-3">
             {post.excerpt}
           </p>
         )}
@@ -245,6 +245,7 @@ function ArticleGridSection({ posts, isLoading }: ArticleGridSectionProps) {
                 key={post.id}
                 animation="fade-up"
                 delay={stagger(i)}
+                className="h-full"
               >
                 <BlogCard post={post} />
               </ScrollReveal>
