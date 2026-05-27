@@ -111,6 +111,8 @@
       "phonePlaceholder": "e.g. +48 123 456 789",
       "bio": "Bio",
       "bioPlaceholder": "Tell clients about yourself...",
+      "subtitle": "Title / subtitle",
+      "subtitlePlaceholder": "e.g. Coach · Spirala",
       "location": "Location",
       "locationPlaceholder": "e.g. Warsaw, Poland",
       "website": "Website",

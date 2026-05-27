@@ -38,6 +38,7 @@ export interface UpdateProfileData {
   email?: string | null;
   phone?: string | null;
   bio?: string | null;
+  title?: string | null;
   expertise?: string[] | null;
   languages?: string[] | null;
   location?: string | null;
@@ -195,6 +196,7 @@ export class CoachPanelService {
     // Update coach fields
     const patch: Partial<CoachEntity> = {};
     if (data.bio !== undefined) patch.bio = data.bio ?? null;
+    if (data.title !== undefined) patch.title = data.title ?? null;
     if (data.expertise !== undefined) patch.expertise = data.expertise ?? null;
     if (data.languages !== undefined) patch.languages = data.languages ?? null;
     if (data.location !== undefined) patch.location = data.location ?? null;

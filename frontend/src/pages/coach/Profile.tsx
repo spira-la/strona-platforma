@@ -127,6 +127,7 @@ export default function CoachProfile() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [bio, setBio] = useState('');
+  const [coachTitle, setCoachTitle] = useState('');
   const [location, setLocation] = useState('');
   const [website, setWebsite] = useState('');
   const [timezone, setTimezone] = useState('Europe/Warsaw');
@@ -145,6 +146,7 @@ export default function CoachProfile() {
     setEmail(profile.email ?? '');
     setPhone(profile.phone ?? '');
     setBio(profile.bio ?? '');
+    setCoachTitle(profile.title ?? '');
     setLocation(profile.location ?? '');
     setWebsite(profile.website ?? '');
     setTimezone(profile.timezone ?? 'Europe/Warsaw');
@@ -181,6 +183,7 @@ export default function CoachProfile() {
       email: email || undefined,
       phone: phone || undefined,
       bio: bio || undefined,
+      title: coachTitle || undefined,
       location: location || undefined,
       website: website || undefined,
       timezone,
@@ -305,6 +308,21 @@ export default function CoachProfile() {
                 className={[ADMIN_INPUT_CLASS, 'resize-y min-h-[140px]'].join(
                   ' ',
                 )}
+              />
+            </AdminFormField>
+
+            {/* Subtitle shown under the name on the blog author card */}
+            <AdminFormField
+              label={t('coach.profile.subtitle')}
+              htmlFor="profile-subtitle"
+            >
+              <input
+                id="profile-subtitle"
+                type="text"
+                value={coachTitle}
+                onChange={(e) => setCoachTitle(e.target.value)}
+                placeholder={t('coach.profile.subtitlePlaceholder')}
+                className={ADMIN_INPUT_CLASS}
               />
             </AdminFormField>
           </div>
