@@ -16,6 +16,7 @@ export interface CoachProfile {
   email: string | null;
   phone: string | null;
   bio: string | null;
+  title: string | null;
   expertise: string[] | null;
   languages: string[] | null;
   location: string | null;
@@ -34,6 +35,7 @@ export interface UpdateCoachProfileData {
   email?: string;
   phone?: string;
   bio?: string;
+  title?: string;
   expertise?: string[];
   languages?: string[];
   location?: string;

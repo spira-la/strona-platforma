@@ -24,6 +24,7 @@ interface CreateCoachDto {
   email: string;
   phone?: string | null;
   bio?: string | null;
+  title?: string | null;
   expertise?: string[] | null;
   languages?: string[] | null;
   location?: string | null;
@@ -38,6 +39,7 @@ interface UpdateCoachDto {
   email?: string | null;
   phone?: string | null;
   bio?: string | null;
+  title?: string | null;
   expertise?: string[] | null;
   languages?: string[] | null;
   location?: string | null;

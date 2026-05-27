@@ -18,6 +18,7 @@ import { buildOgHtml, getSiteUrl } from '../../common/utils/og-html.util.js';
 export interface BlogAuthor {
   name: string | null;
   bio: string | null;
+  title: string | null;
   avatarUrl: string | null;
 }
 
@@ -113,6 +114,7 @@ export class BlogsService {
     return {
       name: profile?.fullName ?? null,
       bio: coach?.bio ?? null,
+      title: coach?.title ?? null,
       avatarUrl: profile?.avatarUrl ?? null,
     };
   }

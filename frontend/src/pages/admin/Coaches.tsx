@@ -147,6 +147,7 @@ interface CreateStep1 {
   email: string;
   phone: string;
   bio: string;
+  title: string;
   expertise: string;
   certifications: string;
   yearsExperience: string;
@@ -165,6 +166,7 @@ function buildStep1(): CreateStep1 {
     email: '',
     phone: '',
     bio: '',
+    title: '',
     expertise: '',
     certifications: '',
     yearsExperience: '',
@@ -245,6 +247,7 @@ function CoachCreateDialog({
       email: step1.email.trim(),
       phone: step1.phone.trim() || undefined,
       bio: step1.bio.trim() || undefined,
+      title: step1.title.trim() || undefined,
       expertise: step1.expertise
         ? parseCommaSeparated(step1.expertise)
         : undefined,
@@ -372,6 +375,20 @@ function CoachCreateDialog({
               onChange={(e) => setS1('bio', e.target.value)}
               placeholder={t('admin.coaches.form.bioPlaceholder')}
               className={`${ADMIN_INPUT_CLASS} resize-none`}
+            />
+          </AdminFormField>
+
+          <AdminFormField
+            label={t('admin.coaches.form.title')}
+            htmlFor="coach-title"
+          >
+            <input
+              id="coach-title"
+              type="text"
+              value={step1.title}
+              onChange={(e) => setS1('title', e.target.value)}
+              placeholder={t('admin.coaches.form.titlePlaceholder')}
+              className={ADMIN_INPUT_CLASS}
             />
           </AdminFormField>
 
@@ -511,6 +528,7 @@ interface EditFormState {
   email: string;
   phone: string;
   bio: string;
+  title: string;
   expertise: string;
   certifications: string;
   languages: string[];
@@ -526,6 +544,7 @@ function buildEditForm(coach: Coach): EditFormState {
     email: coach.email,
     phone: coach.phone ?? '',
     bio: coach.bio ?? '',
+    title: coach.title ?? '',
     expertise: (coach.expertise ?? []).join(', '),
     certifications: (coach.certifications ?? []).join(', '),
     languages: coach.languages ?? [],
@@ -571,6 +590,7 @@ function CoachEditDialog({
       email: form.email.trim() || coach.email,
       phone: form.phone.trim() || null,
       bio: form.bio.trim() || null,
+      title: form.title.trim() || null,
       expertise: parseCommaSeparated(form.expertise),
       certifications: parseCommaSeparated(form.certifications),
       languages: form.languages,
@@ -646,6 +666,20 @@ function CoachEditDialog({
           onChange={(e) => setField('bio', e.target.value)}
           placeholder={t('admin.coaches.form.bioPlaceholder')}
           className={`${ADMIN_INPUT_CLASS} resize-none`}
+        />
+      </AdminFormField>
+
+      <AdminFormField
+        label={t('admin.coaches.form.title')}
+        htmlFor="edit-coach-title"
+      >
+        <input
+          id="edit-coach-title"
+          type="text"
+          value={form.title}
+          onChange={(e) => setField('title', e.target.value)}
+          placeholder={t('admin.coaches.form.titlePlaceholder')}
+          className={ADMIN_INPUT_CLASS}
         />
       </AdminFormField>
 
