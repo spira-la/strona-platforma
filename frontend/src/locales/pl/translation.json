@@ -728,6 +728,8 @@
         "phonePlaceholder": "np. +48 123 456 789",
         "bio": "Bio",
         "bioPlaceholder": "Krótki opis coacha...",
+        "title": "Tytuł / podtytuł",
+        "titlePlaceholder": "np. Coach · Spirala",
         "expertise": "Specjalizacje (po przecinku)",
         "expertisePlaceholder": "np. CBT, Trauma, Coaching",
         "certifications": "Certyfikaty",

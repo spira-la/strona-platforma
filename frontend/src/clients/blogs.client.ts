@@ -16,6 +16,7 @@ export interface BlogCategory {
 export interface BlogAuthor {
   name: string | null;
   bio: string | null;
+  title: string | null;
   avatarUrl: string | null;
 }
 

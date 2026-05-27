@@ -11,6 +11,7 @@ export interface Coach {
   email: string;
   phone?: string | null;
   bio: string | null;
+  title?: string | null;
   expertise: string[] | null;
   certifications?: string[] | null;
   languages: string[] | null;
@@ -28,6 +29,7 @@ export interface CreateCoachData {
   email: string;
   phone?: string;
   bio?: string;
+  title?: string;
   expertise?: string[];
   certifications?: string[];
   yearsExperience?: number;

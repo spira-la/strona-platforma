@@ -780,6 +780,8 @@
         "phonePlaceholder": "e.g. +48 123 456 789",
         "bio": "Bio",
         "bioPlaceholder": "Short coach description...",
+        "title": "Title / subtitle",
+        "titlePlaceholder": "e.g. Coach · Spirala",
         "expertise": "Expertise (comma-separated)",
         "expertisePlaceholder": "e.g. CBT, Trauma, Coaching",
         "certifications": "Certifications",

@@ -409,6 +409,9 @@ export default function BlogPost() {
 
   const authorName = displayedPost.author?.name ?? AUTHOR_NAME_FALLBACK;
   const authorBio = displayedPost.author?.bio ?? null;
+  // Professional subtitle ("Coach · Spirala") now comes from the coach record,
+  // editable in the admin. Falls back to the default until an admin sets it.
+  const authorTitle = displayedPost.author?.title ?? AUTHOR_ROLE;
   const authorAvatar =
     displayedPost.author?.avatarUrl ?? AUTHOR_AVATAR_FALLBACK;
 
@@ -582,9 +585,9 @@ export default function BlogPost() {
                 <h3 className="font-['Playfair_Display'] text-[20px] font-normal text-[#2D2D2D]">
                   {authorName}
                 </h3>
-                {AUTHOR_ROLE && (
+                {authorTitle && (
                   <span className="font-['Lato'] text-[12px] text-[#8A8A8A]">
-                    {AUTHOR_ROLE}
+                    {authorTitle}
                   </span>
                 )}
                 {authorBio && (

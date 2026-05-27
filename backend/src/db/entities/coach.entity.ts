@@ -19,6 +19,13 @@ export class CoachEntity {
   @Column({ type: 'text', nullable: true })
   bio: string | null;
 
+  /**
+   * Public professional subtitle shown under the coach's name (e.g. on the
+   * blog author card): "Coach · Spirala". Editable per coach in the admin.
+   */
+  @Column({ type: 'text', nullable: true })
+  title: string | null;
+
   @Column({ type: 'text', array: true, nullable: true })
   expertise: string[] | null;
 

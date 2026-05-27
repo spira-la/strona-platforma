@@ -21,6 +21,7 @@ export interface CoachWithProfile {
   email: string;
   phone: string | null;
   bio: string | null;
+  title: string | null;
   expertise: string[] | null;
   languages: string[] | null;
   location: string | null;
@@ -39,6 +40,7 @@ export interface CreateCoachData {
   email: string;
   phone?: string | null;
   bio?: string | null;
+  title?: string | null;
   expertise?: string[] | null;
   languages?: string[] | null;
   location?: string | null;
@@ -53,6 +55,7 @@ export interface UpdateCoachData {
   email?: string | null;
   phone?: string | null;
   bio?: string | null;
+  title?: string | null;
   expertise?: string[] | null;
   languages?: string[] | null;
   location?: string | null;
@@ -90,6 +93,7 @@ export class CoachesService {
       email: profile?.email ?? '',
       phone: profile?.phone ?? null,
       bio: coach.bio,
+      title: coach.title,
       expertise: coach.expertise,
       languages: coach.languages,
       location: coach.location,
@@ -139,6 +143,7 @@ export class CoachesService {
         email: profile?.email ?? '',
         phone: profile?.phone ?? null,
         bio: coach.bio,
+        title: coach.title,
         expertise: coach.expertise,
         languages: coach.languages,
         location: coach.location,
@@ -220,6 +225,7 @@ export class CoachesService {
     const entity = this.coachRepo.create({
       userId: profile.id,
       bio: data.bio ?? null,
+      title: data.title ?? null,
       expertise: data.expertise ?? null,
       languages: data.languages ?? null,
       location: data.location ?? null,
@@ -263,6 +269,7 @@ export class CoachesService {
     const payload: Partial<CoachEntity> = {};
 
     if (data.bio !== undefined) payload.bio = data.bio ?? null;
+    if (data.title !== undefined) payload.title = data.title ?? null;
     if (data.expertise !== undefined)
       payload.expertise = data.expertise ?? null;
     if (data.languages !== undefined)
