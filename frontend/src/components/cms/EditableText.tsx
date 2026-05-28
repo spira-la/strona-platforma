@@ -410,9 +410,14 @@ export function EditableText({
           .join('');
 
   const fallback = placeholder ?? (childrenText || undefined) ?? resolvedValue;
-  const hasNoContent =
-    resolvedValue === fieldPath || resolvedValue.trim() === '';
-  const displayContent = hasNoContent ? fallback : resolvedValue;
+
+  // "Never set" → field key echoed back, CMS has no value yet → show fallback.
+  // "Explicitly blank" → admin saved an empty string → hide in read mode.
+  const neverSet = resolvedValue === fieldPath;
+  const explicitlyBlank =
+    hasContent && !neverSet && resolvedValue.trim() === '';
+  const displayContent =
+    neverSet || explicitlyBlank ? (fallback ?? '') : resolvedValue;
 
   const focusId = `${section}.${fieldPath}`;
   const { activeId, claim, release } = useCMSFocus();
@@ -582,6 +587,12 @@ export function EditableText({
   // During initial load with no cache and no fallback — return null to avoid layout shift.
   const hasFallback = !!(placeholder || children);
   if (isLoading && !hasContent && !hasFallback) {
+    return null;
+  }
+
+  // Admin explicitly cleared the text — hide element in public view.
+  // In edit mode we keep it visible so the admin can restore it.
+  if (explicitlyBlank && !isEditMode) {
     return null;
   }
 
@@ -759,7 +770,11 @@ export function EditableText({
                   },
                 }),
           },
-          render && !isEditing ? render(displayContent) : displayContent,
+          render && !isEditing
+            ? render(displayContent)
+            : isEditing || !explicitlyBlank
+              ? displayContent
+              : '[ vacío — click para editar ]',
         )}
         {floatingUi}
       </>
