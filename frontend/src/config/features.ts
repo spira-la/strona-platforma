@@ -12,7 +12,7 @@ export const featureFlags = {
   webinars: false,
   audioCourses: false,
   ebooks: false,
-  youtubeContent: true,
+  youtubeContent: false,
   giftPurchases: false,
   stripeConnect: false,
   reviews: false,
