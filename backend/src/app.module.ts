@@ -24,6 +24,7 @@ import { BookingsModule } from './modules/bookings/bookings.module.js';
 import { LivekitModule } from './modules/livekit/livekit.module.js';
 import { AvailabilityModule } from './modules/availability/availability.module.js';
 import { YouTubeModule } from './modules/youtube/youtube.module.js';
+import { PrerenderModule } from './modules/prerender/prerender.module.js';
 import { AppController } from './app.controller.js';
 
 @Module({
@@ -84,6 +85,7 @@ import { AppController } from './app.controller.js';
     LivekitModule,
     AvailabilityModule,
     YouTubeModule,
+    PrerenderModule,
   ],
   controllers: [AppController],
 })

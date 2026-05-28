@@ -24,8 +24,19 @@ async function bootstrap(): Promise<void> {
 
   app.use(json({ limit: '5mb' }));
 
-  // Global API prefix — sitemap.xml is excluded so it resolves at root, not /api/sitemap.xml
-  app.setGlobalPrefix('api', { exclude: ['sitemap.xml'] });
+  // Global API prefix — sitemap.xml and prerender/* are excluded so they resolve at root.
+  // prerender/* routes are consumed by nginx to serve semantic HTML to SEO crawlers.
+  app.setGlobalPrefix('api', {
+    exclude: [
+      'sitemap.xml',
+      'prerender/home',
+      'prerender/o-mnie',
+      'prerender/uslugi',
+      'prerender/jak-pracuje',
+      'prerender/kontakt',
+      'prerender/blog',
+    ],
+  });
 
   // CORS — origins are tightened in production via env
   app.enableCors({

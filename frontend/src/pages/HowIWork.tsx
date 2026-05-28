@@ -190,8 +190,9 @@ export default function HowIWork() {
     <main className="min-h-screen bg-white text-[#2D2D2D]">
       <SEO
         title="Jak pracuję"
-        description="Moje podejście do pracy — coaching somatyczny, coaching transformacyjny i psychobiologia stresu."
+        description="Jak przebiega coaching z Anetą? Poznaj moje podejście — od pierwszej rozmowy do trwałej zmiany. Praca oparta na uważności, sile wewnętrznej i sprawdzonych metodach."
         canonical="/jak-pracuje"
+        pathname="/jak-pracuje"
       />
 
       {/* ------------------------------------------------------------------ */}

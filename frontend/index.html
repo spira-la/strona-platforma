@@ -15,11 +15,17 @@
     </script>
 
     <title>Spirala — Mindset & Wellbeing Coaching</title>
-    <meta name="description" content="Coaching mindsetu i dobrostanu z Anetą — sesje indywidualne, pakiety, rozwój osobisty. Zarezerwuj sesję online." />
+    <meta name="description" content="Coaching mindsetu i wellbeing online z Anetą — odkryj wewnętrzną siłę, odzyskaj energię i kierunek w życiu. Sesje indywidualne i pakiety. Zarezerwuj bezpłatną rozmowę wstępną." />
     <meta name="theme-color" content="#B8963E" />
     <meta name="author" content="Spirala" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href="https://spira-la.com" />
+
+    <!-- hreflang — multilingual -->
+    <link rel="alternate" hreflang="pl" href="https://spira-la.com/" />
+    <link rel="alternate" hreflang="en" href="https://spira-la.com/en/" />
+    <link rel="alternate" hreflang="es" href="https://spira-la.com/es/" />
+    <link rel="alternate" hreflang="x-default" href="https://spira-la.com/" />
 
     <!-- Favicons — all sizes & formats -->
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
@@ -35,7 +41,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://spira-la.com" />
     <meta property="og:title" content="Spirala — Mindset & Wellbeing Coaching" />
-    <meta property="og:description" content="Coaching mindsetu i dobrostanu z Anetą — sesje indywidualne, pakiety, rozwój osobisty." />
+    <meta property="og:description" content="Coaching mindsetu i wellbeing online z Anetą — odkryj wewnętrzną siłę, odzyskaj energię i kierunek w życiu. Sesje indywidualne i pakiety. Zarezerwuj bezpłatną rozmowę wstępną." />
     <meta property="og:image" content="https://spira-la.com/og-image.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -48,7 +54,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Spirala — Mindset & Wellbeing Coaching" />
-    <meta name="twitter:description" content="Coaching mindsetu i dobrostanu z Anetą — sesje indywidualne, pakiety, rozwój osobisty." />
+    <meta name="twitter:description" content="Coaching mindsetu i wellbeing online z Anetą — odkryj wewnętrzną siłę, odzyskaj energię i kierunek w życiu. Sesje indywidualne i pakiety. Zarezerwuj bezpłatną rozmowę wstępną." />
     <meta name="twitter:image" content="https://spira-la.com/og-image.jpg" />
 
     <!-- MS Tile -->
@@ -60,22 +66,64 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "ProfessionalService",
+      "@type": ["ProfessionalService", "HealthAndBeautyBusiness"],
       "name": "Spirala",
-      "description": "Coaching mindsetu i dobrostanu z Anetą — sesje indywidualne, pakiety, rozwój osobisty.",
+      "description": "Profesjonalny coaching mindsetu i wellbeing online. Sesje indywidualne i pakiety z certyfikowaną coach Anetą. Pomagam odkryć wewnętrzną siłę i wprowadzić trwałe zmiany w życiu.",
       "url": "https://spira-la.com",
       "logo": "https://spira-la.com/spirala-logo.png",
       "image": "https://spira-la.com/og-image.jpg",
       "priceRange": "$$",
-      "serviceType": ["Mindset Coaching", "Wellbeing Coaching", "Rozwój osobisty"],
+      "serviceType": ["Mindset Coaching", "Wellbeing Coaching", "Coaching Online", "Rozwój osobisty"],
       "areaServed": {
         "@type": "Country",
         "name": "PL"
       },
       "availableLanguage": ["pl", "en", "es"],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Usługi coachingowe",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Sesja Indywidualna",
+              "description": "Indywidualna sesja coachingowa online z Anetą — coaching mindsetu i wellbeing."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Pakiet Sesji",
+              "description": "Pakiet sesji coachingowych online — coaching mindsetu i wellbeing z Anetą."
+            }
+          }
+        ]
+      },
       "sameAs": []
     }
     </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Aneta",
+      "jobTitle": "Mindset & Wellbeing Coach",
+      "url": "https://spira-la.com",
+      "image": "https://spira-la.com/og-image.jpg",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Spirala",
+        "url": "https://spira-la.com"
+      },
+      "knowsAbout": ["coaching", "mindset", "wellbeing", "rozwój osobisty", "uważność", "mindfulness"]
+    }
+    </script>
+
+    <!-- Preload hero image to improve LCP -->
+    <link rel="preload" as="image" href="/og-image.webp" type="image/webp" fetchpriority="high" />
 
     <!-- Google Fonts: Cormorant Garamond (headings) + Lato (body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -86,6 +134,20 @@
     />
   </head>
   <body>
+    <noscript>
+      <div style="max-width:640px;margin:3rem auto;font-family:sans-serif;padding:1.5rem;line-height:1.7;color:#333">
+        <h1 style="font-size:1.75rem;margin-bottom:1rem;color:#1a1a1a">Spirala — Mindset &amp; Wellbeing Coaching</h1>
+        <p>Cześć, jestem Aneta — coach mindsetu i wellbeing. Pomagam osobom w przełomowych momentach życia odzyskać klarowność, energię i kierunek działania poprzez indywidualne sesje coachingowe online.</p>
+        <h2 style="font-size:1.25rem;margin-top:1.5rem;margin-bottom:0.5rem">Usługi</h2>
+        <ul style="padding-left:1.25rem">
+          <li>Sesja Indywidualna — coaching mindsetu i wellbeing</li>
+          <li>Pakiet Sesji — kompleksowa praca nad zmianą</li>
+          <li>Coaching Online — wygodne sesje przez internet</li>
+        </ul>
+        <p style="margin-top:1.5rem">Aby umówić sesję lub dowiedzieć się więcej, napisz: <a href="mailto:kontakt@spira-la.com" style="color:#B8963E;text-decoration:underline">kontakt@spira-la.com</a></p>
+        <p style="margin-top:0.5rem"><a href="https://spira-la.com" style="color:#B8963E">spira-la.com</a></p>
+      </div>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -362,8 +362,9 @@ export default function Blog() {
     <main>
       <SEO
         title="Blog"
-        description="Artykuły o psychologii, coachingu, rozwoju osobistym i pracy z ciałem."
+        description="Artykuły o mindsetcie, wellbeing i rozwoju osobistym. Inspiracje, refleksje i praktyczne wskazówki Anety — coach online pomagającej odnaleźć wewnętrzną siłę."
         canonical="/blog"
+        pathname="/blog"
       />
       <HeroSection />
       {featured && <FeaturedPostSection post={featured} />}

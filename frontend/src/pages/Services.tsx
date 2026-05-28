@@ -321,8 +321,9 @@ export default function Services() {
     <main className="min-h-screen bg-white text-[#2D2D2D]">
       <SEO
         title="Usługi"
-        description="Sesje indywidualne i pakiety coachingowe mindsetu i dobrostanu — sprawdź ofertę i zarezerwuj wizytę online."
+        description="Sesje coachingowe i pakiety online z Anetą — coaching mindsetu, wellbeing i rozwój osobisty. Sprawdź ofertę i wybierz formę współpracy odpowiednią dla Ciebie."
         canonical="/uslugi"
+        pathname="/uslugi"
       />
 
       {/* ------------------------------------------------------------------ */}

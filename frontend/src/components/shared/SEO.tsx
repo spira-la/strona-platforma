@@ -16,6 +16,8 @@ interface SEOProps {
   ogType?: string;
   article?: ArticleMeta;
   noindex?: boolean;
+  pathname?: string;
+  schemaMarkup?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const SITE_NAME = 'Spirala';
@@ -33,6 +35,8 @@ export function SEO({
   ogType = 'website',
   article,
   noindex = false,
+  pathname,
+  schemaMarkup,
 }: SEOProps) {
   const fullTitle = title
     ? `${title} — ${SITE_NAME}`
@@ -99,6 +103,41 @@ export function SEO({
       {article?.tags?.map((tag) => (
         <meta key={tag} property="article:tag" content={tag} />
       ))}
+
+      {/* hreflang — multilingual alternate links */}
+      {pathname && (
+        <>
+          <link
+            rel="alternate"
+            hrefLang="pl"
+            href={`https://spira-la.com${pathname}`}
+          />
+          <link
+            rel="alternate"
+            hrefLang="en"
+            href={`https://spira-la.com/en${pathname}`}
+          />
+          <link
+            rel="alternate"
+            hrefLang="es"
+            href={`https://spira-la.com/es${pathname}`}
+          />
+          <link
+            rel="alternate"
+            hrefLang="x-default"
+            href={`https://spira-la.com${pathname}`}
+          />
+        </>
+      )}
+
+      {/* Per-page JSON-LD schema */}
+      {schemaMarkup && (
+        <script type="application/ld+json">
+          {JSON.stringify(
+            Array.isArray(schemaMarkup) ? schemaMarkup : [schemaMarkup],
+          )}
+        </script>
+      )}
     </Helmet>
   );
 }
