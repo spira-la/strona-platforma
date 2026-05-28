@@ -625,8 +625,9 @@ export default function Contact() {
     <main>
       <SEO
         title="Kontakt"
-        description="Skontaktuj się — formularz kontaktowy, e-mail i dane do rezerwacji sesji."
+        description="Skontaktuj się z Anetą — coach mindsetu i wellbeing. Zarezerwuj bezpłatną rozmowę wstępną lub napisz wiadomość. Sesje coachingowe online."
         canonical="/kontakt"
+        pathname="/kontakt"
       />
       <HeroSection />
       <ContactSection />

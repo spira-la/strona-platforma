@@ -1066,7 +1066,11 @@ function NewsletterBridge() {
 export default function Home() {
   return (
     <main>
-      <SEO canonical="/" />
+      <SEO
+        canonical="/"
+        pathname="/"
+        description="Coaching mindsetu i wellbeing online z Anetą — odkryj wewnętrzną siłę, odzyskaj energię i kierunek w życiu. Sesje indywidualne i pakiety. Zarezerwuj bezpłatną rozmowę wstępną."
+      />
       <HeroSection />
       <AboutSection />
       <HowIWorkSection />
