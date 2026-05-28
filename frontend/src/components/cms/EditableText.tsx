@@ -410,9 +410,14 @@ export function EditableText({
           .join('');
 
   const fallback = placeholder ?? (childrenText || undefined) ?? resolvedValue;
-  const hasNoContent =
-    resolvedValue === fieldPath || resolvedValue.trim() === '';
-  const displayContent = hasNoContent ? fallback : resolvedValue;
+
+  // "Never set" → field key echoed back, CMS has no value yet → show fallback.
+  // "Explicitly blank" → admin saved an empty string → hide in read mode.
+  const neverSet = resolvedValue === fieldPath;
+  const explicitlyBlank =
+    hasContent && !neverSet && resolvedValue.trim() === '';
+  const displayContent =
+    neverSet || explicitlyBlank ? (fallback ?? '') : resolvedValue;
 
   const focusId = `${section}.${fieldPath}`;
   const { activeId, claim, release } = useCMSFocus();
@@ -423,24 +428,41 @@ export function EditableText({
   const [rect, setRect] = useState<DOMRect | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const wrapperRef = useRef<HTMLElement>(null);
+  // Prevents the format popover / toolbar from jumping while the user
+  // is resizing text or typing. Set to true when editing starts or the
+  // format popover opens; cleared when both close.
+  const isFrozenRef = useRef(false);
   const [computedColor, setComputedColor] = useState('');
+
+  const freezePosition = useCallback(() => {
+    if (!isFrozenRef.current && wrapperRef.current) {
+      isFrozenRef.current = true;
+      setRect(wrapperRef.current.getBoundingClientRect());
+    }
+  }, []);
+
+  const unfreezePosition = useCallback(() => {
+    isFrozenRef.current = false;
+  }, []);
 
   // Keep the portal-rendered format button pinned to the text element
   // on scroll / resize / layout shifts. Always-on while in edit mode.
   useEffect(() => {
     if (!isEditMode) return;
     const update = () => {
-      if (wrapperRef.current) {
+      if (!wrapperRef.current) return;
+      // Skip rect update while the format popover or toolbar is open —
+      // prevents the popover from jumping as text is being resized.
+      if (!isFrozenRef.current) {
         setRect(wrapperRef.current.getBoundingClientRect());
-        // Detect actual rendered color from the inner Tag element (not the wrapper)
-        const inner =
-          wrapperRef.current.firstElementChild ?? wrapperRef.current;
-        const raw = getComputedStyle(inner).color;
-        const m = raw.match(/\d+/g);
-        if (m && m.length >= 3) {
-          const hex = `#${Number(m[0]).toString(16).padStart(2, '0')}${Number(m[1]).toString(16).padStart(2, '0')}${Number(m[2]).toString(16).padStart(2, '0')}`;
-          setComputedColor(hex);
-        }
+      }
+      // Always refresh color so the color picker stays accurate.
+      const inner = wrapperRef.current.firstElementChild ?? wrapperRef.current;
+      const raw = getComputedStyle(inner).color;
+      const m = raw.match(/\d+/g);
+      if (m && m.length >= 3) {
+        const hex = `#${Number(m[0]).toString(16).padStart(2, '0')}${Number(m[1]).toString(16).padStart(2, '0')}${Number(m[2]).toString(16).padStart(2, '0')}`;
+        setComputedColor(hex);
       }
     };
     update();
@@ -535,17 +557,19 @@ export function EditableText({
 
   const startEditing = useCallback(() => {
     if (!isEditMode || isOtherActive) return;
+    freezePosition();
     setIsEditing(true);
-  }, [isEditMode, isOtherActive]);
+  }, [isEditMode, isOtherActive, freezePosition]);
 
   const cancelEditing = useCallback(() => {
+    unfreezePosition();
     // Restore the original text (React will reconcile on next render)
     if (wrapperRef.current) {
       wrapperRef.current.textContent = displayContent;
       wrapperRef.current.blur();
     }
     setIsEditing(false);
-  }, [displayContent]);
+  }, [displayContent, unfreezePosition]);
 
   const saveEditing = useCallback(async () => {
     if (!isEditing) return;
@@ -562,9 +586,17 @@ export function EditableText({
       await updateField(section, fieldPath, trimmed);
     } finally {
       setIsSaving(false);
+      unfreezePosition();
       setIsEditing(false);
     }
-  }, [isEditing, resolvedValue, fieldPath, section, updateField]);
+  }, [
+    isEditing,
+    resolvedValue,
+    fieldPath,
+    section,
+    updateField,
+    unfreezePosition,
+  ]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLElement>) => {
@@ -582,6 +614,12 @@ export function EditableText({
   // During initial load with no cache and no fallback — return null to avoid layout shift.
   const hasFallback = !!(placeholder || children);
   if (isLoading && !hasContent && !hasFallback) {
+    return null;
+  }
+
+  // Admin explicitly cleared the text — hide element in public view.
+  // In edit mode we keep it visible so the admin can restore it.
+  if (explicitlyBlank && !isEditMode) {
     return null;
   }
 
@@ -633,6 +671,11 @@ export function EditableText({
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
+                  if (!showFormat) {
+                    freezePosition();
+                  } else if (!isEditing) {
+                    unfreezePosition();
+                  }
                   setShowFormat((v) => !v);
                 }}
                 className={`fixed z-[9999] w-6 h-6 flex items-center justify-center rounded-full shadow-lg border border-white/20 backdrop-blur-sm transition-colors ${
@@ -666,7 +709,10 @@ export function EditableText({
                     computedColor={computedColor}
                     onPatch={patchStyle}
                     onReset={resetStyle}
-                    onClose={() => setShowFormat(false)}
+                    onClose={() => {
+                      if (!isEditing) unfreezePosition();
+                      setShowFormat(false);
+                    }}
                   />
                 </div>
               )}
@@ -759,7 +805,11 @@ export function EditableText({
                   },
                 }),
           },
-          render && !isEditing ? render(displayContent) : displayContent,
+          render && !isEditing
+            ? render(displayContent)
+            : isEditing || !explicitlyBlank
+              ? displayContent
+              : '[ vacío — click para editar ]',
         )}
         {floatingUi}
       </>
