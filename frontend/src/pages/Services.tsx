@@ -353,8 +353,6 @@ export default function Services() {
           delay={200}
           className="relative z-10 max-w-[672px] mx-auto flex flex-col items-center gap-6"
         >
-          <SectionBadge label="Uslugi" />
-
           <EditableText
             section="services"
             fieldPath="heroTitle"

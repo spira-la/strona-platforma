@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { SEO } from '@/components/shared/SEO';
 import { useState } from 'react';
+import { useCMS } from '@/contexts/CMSContext';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableBackground } from '@/components/cms/EditableBackground';
 import { EditableOverlay } from '@/components/cms/EditableOverlay';
@@ -185,7 +186,14 @@ function FaqItem({
 // Page
 // ---------------------------------------------------------------------------
 
+function whatsappHref(phone: string): string {
+  const digits = phone.replaceAll(/\D/g, '');
+  return `https://wa.me/${digits}`;
+}
+
 export default function HowIWork() {
+  const { getFieldValue } = useCMS();
+  const phone = getFieldValue('contact', 'info.phone') || '+48000000000';
   return (
     <main className="min-h-screen bg-white text-[#2D2D2D]">
       <SEO
@@ -222,8 +230,6 @@ export default function HowIWork() {
           delay={200}
           className="relative z-10 flex flex-col items-center gap-6 max-w-[672px]"
         >
-          <SectionBadge label="Metoda pracy" />
-
           <EditableText
             section="howIWork"
             fieldPath="heroTitle"
@@ -602,7 +608,9 @@ export default function HowIWork() {
           />
           <div className="flex flex-col sm:flex-row gap-3 mt-2">
             <a
-              href="/kontakt"
+              href={whatsappHref(phone)}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-8 py-3 rounded-lg text-sm font-semibold bg-[#B8944A] text-white transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A] [font-family:'Lato',sans-serif]"
             >
               <EditableText
