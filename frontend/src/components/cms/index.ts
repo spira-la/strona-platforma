@@ -6,3 +6,5 @@ export { EditableOverlay } from './EditableOverlay';
 export { default as EditableOverlayDefault } from './EditableOverlay';
 export { CMSEditToolbar } from './CMSEditToolbar';
 export { default as CMSEditToolbarDefault } from './CMSEditToolbar';
+export { EditableButtonLink } from './EditableButtonLink';
+export { default as EditableButtonLinkDefault } from './EditableButtonLink';

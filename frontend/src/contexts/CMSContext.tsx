@@ -219,6 +219,8 @@ export function CMSProvider({ children }: CMSProviderProps) {
     // Backgrounds
     'Pos',
     'Fit',
+    // Button actions (global — same destination regardless of language)
+    'Action',
   ];
 
   // Fields that are images/media (stored at root fieldPath without suffix).

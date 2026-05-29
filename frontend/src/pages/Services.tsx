@@ -6,6 +6,7 @@ import { SEO } from '@/components/shared/SEO';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableBackground } from '@/components/cms/EditableBackground';
 import { EditableOverlay } from '@/components/cms/EditableOverlay';
+import { EditableButtonLink } from '@/components/cms/EditableButtonLink';
 import { BookingCalendar } from '@/components/booking/BookingCalendar';
 import { TimeSlotPicker } from '@/components/booking/TimeSlotPicker';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
@@ -507,10 +508,11 @@ export default function Services() {
               />
             </button>
 
-            <a
-              href="/kontakt"
-              className="inline-flex items-center justify-center px-8 py-3 rounded-lg text-sm font-semibold border border-white/50 text-white transition-colors hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
-              style={{ fontFamily: "'Lato', sans-serif" }}
+            <EditableButtonLink
+              section="services"
+              fieldPath="ctaBtn2"
+              defaultAction="internal:/kontakt"
+              className="items-center justify-center px-8 py-3 rounded-lg text-sm font-semibold border border-white/50 text-white transition-colors hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
             >
               <EditableText
                 section="services"
@@ -518,7 +520,7 @@ export default function Services() {
                 as="span"
                 placeholder="Napisz do mnie"
               />
-            </a>
+            </EditableButtonLink>
           </div>
         </ScrollReveal>
       </section>

@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight } from 'lucide-react';
-import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { useYouTubeVideos } from '@/hooks/useYouTubeVideos';
 import { YouTubeVideoCard } from './YouTubeVideoCard';
 import { EditableText } from '@/components/cms/EditableText';
@@ -43,10 +42,7 @@ function VideoCardSkeleton() {
 
 export function YouTubeSection() {
   const { t, i18n } = useTranslation();
-  const showYouTube = useFeatureFlag('youtubeContent');
   const { data, isLoading } = useYouTubeVideos(50);
-
-  if (!showYouTube) return null;
 
   const locale =
     i18n.language === 'pl'
