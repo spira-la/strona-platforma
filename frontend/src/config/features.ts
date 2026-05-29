@@ -12,7 +12,9 @@ export const featureFlags = {
   webinars: false,
   audioCourses: false,
   ebooks: false,
-  youtubeContent: true,
+  youtubeNavLink: true, // Botón "Wideo" en el navbar
+  youtubeHomeSection: false, // Sección de vídeos en la Home
+  youtubeContent: true, // Página /wideo completa
   giftPurchases: false,
   stripeConnect: false,
   reviews: false,

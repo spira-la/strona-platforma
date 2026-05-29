@@ -76,7 +76,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
   const { user, isAuthenticated, signOut } = useAuth();
   const { isAdmin, isCoach } = useRoles();
   const { openLogin } = useAuthStore();
-  const showYouTube = useFeatureFlag('youtubeContent');
+  const showYouTube = useFeatureFlag('youtubeNavLink');
 
   const NAV_LINKS = showYouTube
     ? [...BASE_NAV_LINKS, YOUTUBE_NAV_LINK]
@@ -87,6 +87,16 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
   const [langOpen, setLangOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
+  // Close all overlays on route change — React-recommended pattern:
+  // adjust state during render by comparing with the previous value.
+  const [trackedPathname, setTrackedPathname] = useState(location.pathname);
+  if (trackedPathname !== location.pathname) {
+    setTrackedPathname(location.pathname);
+    if (drawerOpen) setDrawerOpen(false);
+    if (langOpen) setLangOpen(false);
+    if (userMenuOpen) setUserMenuOpen(false);
+  }
+
   const langRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
@@ -96,15 +106,6 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
-
-  // Close drawer on route change — calling setState here is intentional:
-  // we are synchronising UI overlay state with the router (an external system).
-
-  useEffect(() => {
-    setDrawerOpen(false);
-    setLangOpen(false);
-    setUserMenuOpen(false);
-  }, [location.pathname]);
 
   // Close dropdowns on outside click
   useEffect(() => {

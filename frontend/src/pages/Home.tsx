@@ -7,6 +7,7 @@ import { EditableText } from '@/components/cms/EditableText';
 import { EditableImage } from '@/components/cms/EditableImage';
 import { EditableBackground } from '@/components/cms/EditableBackground';
 import { EditableOverlay } from '@/components/cms/EditableOverlay';
+import { EditableButtonLink } from '@/components/cms/EditableButtonLink';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
 import { SplitText } from '@/components/shared/SplitText';
 import { GoldLine } from '@/components/shared/GoldLine';
@@ -97,10 +98,11 @@ function HeroSection() {
         </ScrollReveal>
 
         <ScrollReveal animation="fade-up" delay={700} duration={800}>
-          <Link
-            to="/uslugi"
+          <EditableButtonLink
+            section="hero"
+            fieldPath="ctaLabel"
+            defaultAction="internal:/uslugi"
             className="mt-2 inline-flex items-center gap-2 font-['Lato'] text-[15px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-full px-10 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
-            aria-label="Zarezerwuj wizytę"
           >
             <EditableText
               section="hero"
@@ -108,7 +110,7 @@ function HeroSection() {
               placeholder="Zarezerwuj wizytę"
             />
             <ArrowRight size={16} aria-hidden="true" />
-          </Link>
+          </EditableButtonLink>
         </ScrollReveal>
       </div>
     </section>
@@ -189,8 +191,10 @@ function AboutSection() {
             placeholder='"Prawdziwa zmiana zaczyna się od odwagi spotkania z samą sobą."'
           />
 
-          <Link
-            to="/o-mnie"
+          <EditableButtonLink
+            section="about"
+            fieldPath="ctaLabel"
+            defaultAction="internal:/o-mnie"
             className="mt-1 inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-full px-8 py-[14px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
           >
             <EditableText
@@ -199,7 +203,7 @@ function AboutSection() {
               placeholder="Czytam dalej"
             />
             <ArrowRight size={14} aria-hidden="true" />
-          </Link>
+          </EditableButtonLink>
         </ScrollReveal>
       </div>
     </section>
@@ -344,8 +348,10 @@ function HowIWorkSection() {
         </div>
 
         {/* CTA */}
-        <Link
-          to="/jak-pracuje"
+        <EditableButtonLink
+          section="howIWork"
+          fieldPath="ctaLabel"
+          defaultAction="internal:/jak-pracuje"
           className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-full px-8 py-[14px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
         >
           <EditableText
@@ -354,7 +360,7 @@ function HowIWorkSection() {
             placeholder="Czytam dalej"
           />
           <ArrowRight size={14} aria-hidden="true" />
-        </Link>
+        </EditableButtonLink>
       </div>
     </section>
   );
@@ -418,8 +424,10 @@ function ServiceCard({
           className="font-['Cormorant_Garamond'] text-[24px] font-bold text-[#B8944A]"
           placeholder={defaultPrice}
         />
-        <Link
-          to={href}
+        <EditableButtonLink
+          section="services"
+          fieldPath={`${fieldBase}Cta`}
+          defaultAction={`internal:${href}`}
           className="mt-1 inline-flex items-center gap-2 font-['Lato'] text-[13px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-full px-6 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2 self-start"
         >
           <EditableText
@@ -428,7 +436,7 @@ function ServiceCard({
             placeholder={defaultCta}
           />
           <ArrowRight size={13} aria-hidden="true" />
-        </Link>
+        </EditableButtonLink>
       </div>
     </article>
   );
@@ -520,8 +528,10 @@ function ServicesSection() {
             className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-[1.7] max-w-[480px]"
             placeholder="Oferuję bezpłatną 20-minutową rozmowę wstępną. To dobry moment, aby sprawdzić, czy moje podejście jest tym, czego szukasz."
           />
-          <Link
-            to="/kontakt"
+          <EditableButtonLink
+            section="services"
+            fieldPath="bottomCtaLabel"
+            defaultAction="internal:/kontakt"
             className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-full px-8 py-[14px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
           >
             <EditableText
@@ -530,7 +540,7 @@ function ServicesSection() {
               placeholder="Piszę do Ciebie"
             />
             <ArrowRight size={14} aria-hidden="true" />
-          </Link>
+          </EditableButtonLink>
         </div>
       </div>
     </section>
@@ -903,8 +913,10 @@ function BlogSection() {
 
         {/* View all link */}
         <div className="flex justify-center">
-          <Link
-            to="/blog"
+          <EditableButtonLink
+            section="blog"
+            fieldPath="viewAllLabel"
+            defaultAction="internal:/blog"
             className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-[#B8944A] border border-[#B8944A] hover:bg-[#B8944A] hover:text-white active:bg-[#8A6F2E] active:border-[#8A6F2E] transition-colors duration-200 rounded-full px-8 py-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
           >
             <EditableText
@@ -913,7 +925,7 @@ function BlogSection() {
               placeholder="Wszystkie artykuły"
             />
             <ArrowRight size={14} aria-hidden="true" />
-          </Link>
+          </EditableButtonLink>
         </div>
       </div>
     </section>
@@ -976,8 +988,10 @@ function CtaSection() {
         {/* CTA buttons */}
         <div className="flex flex-col sm:flex-row items-center gap-3 mt-2">
           <ScrollReveal animation="fade-up" delay={stagger(0, 150) + 700}>
-            <Link
-              to="/uslugi"
+            <EditableButtonLink
+              section="cta"
+              fieldPath="primaryCtaLabel"
+              defaultAction="internal:/uslugi"
               className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-lg px-8 py-[14px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
             >
               <EditableText
@@ -986,12 +1000,14 @@ function CtaSection() {
                 placeholder="Wybieram termin"
               />
               <ArrowRight size={14} aria-hidden="true" />
-            </Link>
+            </EditableButtonLink>
           </ScrollReveal>
 
           <ScrollReveal animation="fade-up" delay={stagger(1, 150) + 700}>
-            <Link
-              to="/kontakt"
+            <EditableButtonLink
+              section="cta"
+              fieldPath="secondaryCtaLabel"
+              defaultAction="internal:/kontakt"
               className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-[#B8944A] border-2 border-[#B8944A] hover:bg-[#B8944A] hover:text-white active:bg-[#8A6F2E] active:border-[#8A6F2E] transition-colors duration-200 rounded-lg px-8 py-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
             >
               <EditableText
@@ -999,7 +1015,7 @@ function CtaSection() {
                 fieldPath="secondaryCtaLabel"
                 placeholder="Napisz do mnie"
               />
-            </Link>
+            </EditableButtonLink>
           </ScrollReveal>
         </div>
 
@@ -1065,7 +1081,7 @@ function NewsletterBridge() {
 // ---------------------------------------------------------------------------
 
 export default function Home() {
-  const showYouTube = useFeatureFlag('youtubeContent');
+  const showYouTube = useFeatureFlag('youtubeHomeSection');
 
   return (
     <main>
