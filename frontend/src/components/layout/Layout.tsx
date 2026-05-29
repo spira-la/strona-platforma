@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
-import { WebDesignRibbon } from './WebDesignRibbon';
 import { CMSEditToolbar } from '@/components/cms/CMSEditToolbar';
 import { AuthModal } from '@/components/auth/AuthModal';
 import { useSmoothScroll } from '@/hooks/useSmoothScroll';
@@ -22,13 +21,6 @@ const DARK_HERO_PAGES = new Set([
   '/tworzenie-stron',
 ]);
 
-/** Pages where the WebDesign pre-footer ribbon is hidden (legal / promotional). */
-const RIBBON_HIDDEN_PAGES = new Set([
-  '/tworzenie-stron',
-  '/polityka-prywatnosci',
-  '/regulamin',
-]);
-
 export function Layout({ children }: LayoutProps) {
   useSmoothScroll();
   const { pathname } = useLocation();
@@ -41,7 +33,6 @@ export function Layout({ children }: LayoutProps) {
       <main className={hasHero ? 'flex-1' : 'flex-1 pt-[72px]'}>
         {children}
       </main>
-      {!RIBBON_HIDDEN_PAGES.has(pathname) && <WebDesignRibbon />}
       <Footer />
       <CMSEditToolbar />
       <AuthModal />

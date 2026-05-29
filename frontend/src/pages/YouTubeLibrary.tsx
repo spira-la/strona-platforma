@@ -185,14 +185,6 @@ export default function YouTubeLibrary() {
           delay={200}
           className="relative z-10 max-w-[672px] mx-auto flex flex-col items-center gap-6"
         >
-          <SectionBadge>
-            <EditableText
-              section="youtube"
-              fieldPath="heroBadge"
-              placeholder="Wideo"
-            />
-          </SectionBadge>
-
           <EditableText
             section="youtube"
             fieldPath="heroTitle"
