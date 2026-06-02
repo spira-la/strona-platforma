@@ -249,18 +249,17 @@ export default function MamyNastolatkowCoaching() {
   return (
     <main className="min-h-screen bg-[#F9F6F0] text-[#2D2D2D]">
       <SEO
-        title="Coaching dla mam nastolatków"
+        title="Mama nastolatka"
         description="Twój nastolatek stał się obcą osobą we własnym domu? Pomogę Ci odbudować relację, zanim oddalicie się na dobre. Coaching dla mam nastolatków – Aneta Spirala."
-        canonical="/mamy-nastolatkow"
-        pathname="/mamy-nastolatkow"
+        canonical="/mama-nastolatka"
+        pathname="/mama-nastolatka"
       />
 
       {/* ---------------------------------------------------------------- */}
       {/* HERO                                                              */}
       {/* ---------------------------------------------------------------- */}
       <section
-        className="relative flex flex-col items-center justify-center text-center px-6 overflow-hidden"
-        style={{ height: '480px' }}
+        className="relative flex flex-col items-center justify-center text-center px-6 overflow-hidden h-[500px] md:h-[620px]"
         aria-label="Coaching dla mam nastolatków"
       >
         <EditableBackground
@@ -283,15 +282,6 @@ export default function MamyNastolatkowCoaching() {
           delay={200}
           className="relative z-10 flex flex-col items-center gap-5 max-w-4xl"
         >
-          <span className="inline-block px-5 py-2 rounded-2xl bg-white/10 text-[11px] uppercase tracking-[0.2em] text-white/80 [font-family:'Lato',sans-serif]">
-            <EditableText
-              section="mamyNastolatkow"
-              fieldPath="heroBadge"
-              as="span"
-              placeholder="MAMY NASTOLATKÓW"
-            />
-          </span>
-
           <EditableText
             section="mamyNastolatkow"
             fieldPath="heroQuote"

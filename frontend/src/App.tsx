@@ -424,7 +424,7 @@ function AppRoutes() {
           }
         />
         <Route
-          path="/mamy-nastolatkow"
+          path="/mama-nastolatka"
           element={
             <Suspense fallback={<LoadingFallback />}>
               <MamyNastolatkowCoaching />
