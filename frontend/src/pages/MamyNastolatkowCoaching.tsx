@@ -574,7 +574,7 @@ export default function MamyNastolatkowCoaching() {
           {/* Story top: image + first paragraph side by side */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <ScrollReveal animation="fade-up">
-              <div className="rounded-2xl overflow-hidden">
+              <div className="rounded-[20px] overflow-hidden">
                 <EditableImage
                   section="mamyNastolatkow"
                   fieldPath="storyPhoto"
