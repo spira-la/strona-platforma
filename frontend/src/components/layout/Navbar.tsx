@@ -26,6 +26,12 @@ interface NavLink {
 
 const BASE_NAV_LINKS: NavLink[] = [
   {
+    href: '/mamy-nastolatkow',
+    labelKey: 'common.mamyNastolatkow',
+    fieldPath: 'linkMamyNastolatkow',
+    editable: 'Mamy Nastolatków',
+  },
+  {
     href: '/o-mnie',
     labelKey: 'common.about',
     fieldPath: 'link1',

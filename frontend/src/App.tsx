@@ -22,6 +22,9 @@ const Blog = lazy(() => import('@/pages/Blog'));
 const BlogPost = lazy(() => import('@/pages/BlogPost'));
 const Contact = lazy(() => import('@/pages/Contact'));
 const WebDesignOffer = lazy(() => import('@/pages/WebDesignOffer'));
+const MamyNastolatkowCoaching = lazy(
+  () => import('@/pages/MamyNastolatkowCoaching'),
+);
 const Confirmation = lazy(() => import('@/pages/Confirmation'));
 const AuthCallback = lazy(() => import('@/pages/AuthCallback'));
 const PrivacyPolicy = lazy(() => import('@/pages/PrivacyPolicy'));
@@ -417,6 +420,14 @@ function AppRoutes() {
           element={
             <Suspense fallback={<LoadingFallback />}>
               <WebDesignOffer />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/mamy-nastolatkow"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <MamyNastolatkowCoaching />
             </Suspense>
           }
         />
