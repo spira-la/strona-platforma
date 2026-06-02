@@ -13,7 +13,7 @@ interface LayoutProps {
 /** Pages with dark hero background (image + overlay) — navbar text is white. */
 const DARK_HERO_PAGES = new Set([
   '/',
-  '/mamy-nastolatkow',
+  '/mama-nastolatka',
   '/o-mnie',
   '/jak-pracuje',
   '/uslugi',
