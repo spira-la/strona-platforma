@@ -13,12 +13,14 @@ interface LayoutProps {
 /** Pages with dark hero background (image + overlay) — navbar text is white. */
 const DARK_HERO_PAGES = new Set([
   '/',
+  '/mamy-nastolatkow',
   '/o-mnie',
   '/jak-pracuje',
   '/uslugi',
   '/blog',
   '/kontakt',
   '/tworzenie-stron',
+  '/wideo',
 ]);
 
 export function Layout({ children }: LayoutProps) {
