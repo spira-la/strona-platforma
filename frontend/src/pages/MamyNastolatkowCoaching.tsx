@@ -202,7 +202,7 @@ function TestimonialCard({
   initial,
 }: TestimonialCardProps) {
   return (
-    <div className="flex flex-col gap-5 p-8 rounded-xl bg-[#F9F6F0]">
+    <div className="flex flex-col gap-5 p-8 rounded-xl bg-white">
       <span
         className="text-[#B8944A] leading-none text-6xl font-bold [font-family:'Playfair_Display',serif]"
         aria-hidden="true"
@@ -272,7 +272,7 @@ export default function MamyNastolatkowCoaching() {
         <EditableOverlay
           section="mamyNastolatkow"
           fieldPath="heroBg"
-          color="26,18,8"
+          color="25,19,9"
           defaultTop={55}
           defaultBottom={80}
         />
@@ -571,47 +571,54 @@ export default function MamyNastolatkowCoaching() {
             </div>
           </ScrollReveal>
 
-          {/* Story: image + paragraphs */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Story top: image + first paragraph side by side */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <ScrollReveal animation="fade-up">
-              <div className="rounded-2xl overflow-hidden h-[400px]">
+              <div className="rounded-2xl overflow-hidden">
                 <EditableImage
                   section="mamyNastolatkow"
                   fieldPath="storyPhoto"
                   fallbackSrc="https://images.unsplash.com/photo-1610673893015-f0db3ea33fd6?w=700&q=80"
                   alt="Aneta – coaching dla mam nastolatków"
-                  className="w-full h-full object-cover"
+                  className="w-full h-[420px] lg:h-[520px] object-cover object-top"
                 />
               </div>
             </ScrollReveal>
-            <ScrollReveal
-              animation="fade-up"
-              delay={100}
-              className="flex flex-col gap-6 justify-center"
-            >
+            <ScrollReveal animation="fade-up" delay={100}>
               <EditableText
                 section="mamyNastolatkow"
                 fieldPath="storyP1"
                 as="p"
                 placeholder="Wiem, jak to jest – stać przed zamkniętymi drzwiami pokoju i czuć, że tracisz kontakt z osobą, którą kochasz najbardziej na świecie."
-                className="text-base leading-[1.7] text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-[#5A5550] [font-family:'Lato',sans-serif]"
               />
+            </ScrollReveal>
+          </div>
+
+          {/* Story bottom: full-width text */}
+          <ScrollReveal
+            animation="fade-up"
+            className="flex flex-col divide-y divide-[#E8E3DB]"
+          >
+            <div className="pb-7">
               <EditableText
                 section="mamyNastolatkow"
                 fieldPath="storyP2"
                 as="p"
                 placeholder="Przeszłam tę drogę sama. Moja relacja z córką przeszła przez najtrudniejszy okres i wyszła z niego silniejsza. To doświadczenie zmieniło nie tylko nasze życie, ale i moje podejście do pracy z innymi mamami."
-                className="text-base leading-[1.7] text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-[#5A5550] [font-family:'Lato',sans-serif]"
               />
+            </div>
+            <div className="pt-7">
               <EditableText
                 section="mamyNastolatkow"
                 fieldPath="storyP3"
                 as="p"
                 placeholder="Dziś pomagam mamom nastolatków odbudować bliskość – bo wiem, że nawet najtrudniejsza relacja może się zmienić, gdy zaczynamy od siebie."
-                className="text-base leading-[1.7] text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-[#5A5550] italic [font-family:'Lato',sans-serif]"
               />
-            </ScrollReveal>
-          </div>
+            </div>
+          </ScrollReveal>
 
           {/* Reason cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -650,9 +657,110 @@ export default function MamyNastolatkowCoaching() {
       </section>
 
       {/* ---------------------------------------------------------------- */}
+      {/* JAK TO WYGLĄDA W PRAKTYCE — numbered steps                      */}
+      {/* ---------------------------------------------------------------- */}
+      <section
+        className="px-6 py-16 sm:py-20 bg-white"
+        aria-label="Jak to wygląda w praktyce"
+      >
+        <div className="max-w-[800px] mx-auto flex flex-col gap-10">
+          <ScrollReveal animation="fade-up">
+            <div className="flex flex-col items-center gap-4 text-center">
+              <SectionBadge label="JAK ZACZĄĆ" gold />
+              <EditableText
+                section="mamyNastolatkow"
+                fieldPath="practiceHeading"
+                as="h2"
+                placeholder="Jak to wygląda w praktyce"
+                className="text-3xl sm:text-4xl font-bold text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+              />
+            </div>
+          </ScrollReveal>
+
+          <div className="flex flex-col">
+            {(
+              [
+                {
+                  n: 1,
+                  titleField: 'practiceStep1Title',
+                  titlePlaceholder: 'Piszesz do mnie',
+                  descField: 'practiceStep1Desc',
+                  descPlaceholder:
+                    'Przez WhatsApp lub formularz. Bez przygotowania, bez wiedzy co powiedzieć. Wystarczy, że czujesz, że coś jest nie tak.',
+                },
+                {
+                  n: 2,
+                  titleField: 'practiceStep2Title',
+                  titlePlaceholder: 'Rozmawiamy — bezpłatnie, 20 minut',
+                  descField: 'practiceStep2Desc',
+                  descPlaceholder:
+                    'Opowiadasz mi, co się dzieje. Ja słucham bez oceniania. Razem sprawdzamy, czy i jak mogę Ci pomóc.',
+                },
+                {
+                  n: 3,
+                  titleField: 'practiceStep3Title',
+                  titlePlaceholder: 'Zaczynamy pracę — we własnym tempie',
+                  descField: 'practiceStep3Desc',
+                  descPlaceholder:
+                    'Sesja 1 na 1 albo pakiet — decydujemy razem. Wszystko dzieje się w Twoim tempie, bez pośpiechu.',
+                },
+              ] as const
+            ).map(
+              (
+                { n, titleField, titlePlaceholder, descField, descPlaceholder },
+                i,
+                arr,
+              ) => (
+                <ScrollReveal key={n} animation="fade-up" delay={stagger(i)}>
+                  <div className="flex gap-8 py-8 border-t border-[#E8E3DB] items-start">
+                    {/* Large decorative number */}
+                    <span
+                      className="text-[72px] leading-none font-bold text-[#B8944A]/20 select-none flex-shrink-0 w-16 text-right [font-family:'Playfair_Display',serif]"
+                      aria-hidden="true"
+                    >
+                      {n}
+                    </span>
+
+                    {/* Content */}
+                    <div className="flex flex-col gap-2 pt-2">
+                      <div className="flex items-center gap-3">
+                        <span className="flex items-center justify-center w-6 h-6 rounded-full bg-[#B8944A] text-white text-[11px] font-bold flex-shrink-0 [font-family:'Lato',sans-serif]">
+                          {n}
+                        </span>
+                        <EditableText
+                          section="mamyNastolatkow"
+                          fieldPath={titleField}
+                          as="h3"
+                          placeholder={titlePlaceholder}
+                          className="text-lg font-semibold text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                        />
+                      </div>
+                      <EditableText
+                        section="mamyNastolatkow"
+                        fieldPath={descField}
+                        as="p"
+                        placeholder={descPlaceholder}
+                        className="text-[15px] leading-relaxed text-[#6B6B6B] pl-9 [font-family:'Lato',sans-serif]"
+                      />
+                    </div>
+                  </div>
+                  {i === arr.length - 1 && (
+                    <div className="border-t border-[#E8E3DB]" />
+                  )}
+                </ScrollReveal>
+              ),
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------------------- */}
       {/* TESTIMONIALS                                                      */}
       {/* ---------------------------------------------------------------- */}
-      <section className="px-6 py-16 sm:py-20 bg-white" aria-label="Opinie mam">
+      <section
+        className="px-6 py-16 sm:py-20 bg-[#F9F6F0]"
+        aria-label="Opinie mam"
+      >
         <div className="max-w-[1200px] mx-auto flex flex-col items-center gap-12">
           <ScrollReveal animation="fade-up">
             <div className="flex flex-col items-center gap-4">
@@ -719,17 +827,16 @@ export default function MamyNastolatkowCoaching() {
         <EditableBackground
           section="mamyNastolatkow"
           fieldPath="ctaBg"
-          fallbackSrc="https://images.unsplash.com/photo-1588338949261-659fc6fed20b?w=1400&q=80"
+          fallbackSrc="https://images.unsplash.com/photo-1448375240586-882707db888b?w=1400&q=80"
           className="absolute inset-0"
           aria-hidden={true}
         />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'linear-gradient(to bottom, rgba(23,58,94,0.9) 0%, rgba(23,58,94,0.8) 50%, rgba(23,58,94,0.6) 100%)',
-          }}
-          aria-hidden="true"
+        <EditableOverlay
+          section="mamyNastolatkow"
+          fieldPath="ctaBg"
+          color="30,21,6"
+          defaultTop={72}
+          defaultBottom={78}
         />
 
         <ScrollReveal
