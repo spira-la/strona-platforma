@@ -23,7 +23,8 @@ export type CMSSectionKey =
   | 'webDesign'
   | 'privacy'
   | 'terms'
-  | 'youtube';
+  | 'youtube'
+  | 'mamyNastolatkow';
 
 export interface CMSContentResponse {
   success: boolean;
