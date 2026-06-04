@@ -98,19 +98,35 @@ function HeroSection() {
         </ScrollReveal>
 
         <ScrollReveal animation="fade-up" delay={700} duration={800}>
-          <EditableButtonLink
-            section="hero"
-            fieldPath="ctaLabel"
-            defaultAction="internal:/uslugi"
-            className="mt-2 inline-flex items-center gap-2 font-['Lato'] text-[15px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-full px-10 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
-          >
-            <EditableText
+          <div className="mt-2 flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center">
+            {/* Button 1 — gold filled, primary */}
+            <EditableButtonLink
               section="hero"
-              fieldPath="ctaLabel"
-              placeholder="Zarezerwuj wizytę"
-            />
-            <ArrowRight size={16} aria-hidden="true" />
-          </EditableButtonLink>
+              fieldPath="ctaBtn1"
+              defaultAction="internal:/mama-nastolatka"
+              className="inline-flex items-center justify-center gap-2 font-['Lato'] text-[15px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-full px-10 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
+            >
+              <EditableText
+                section="hero"
+                fieldPath="ctaBtn1"
+                placeholder="Jestem mamą nastolatka →"
+              />
+            </EditableButtonLink>
+
+            {/* Button 2 — outline white, secondary */}
+            <EditableButtonLink
+              section="hero"
+              fieldPath="ctaBtn2"
+              defaultAction="internal:/jak-pracuje"
+              className="inline-flex items-center justify-center gap-2 font-['Lato'] text-[15px] font-semibold text-white bg-transparent border-2 border-white hover:bg-white/15 active:bg-white/25 transition-colors duration-200 rounded-full px-10 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
+            >
+              <EditableText
+                section="hero"
+                fieldPath="ctaBtn2"
+                placeholder="Szukam zmiany dla siebie →"
+              />
+            </EditableButtonLink>
+          </div>
         </ScrollReveal>
       </div>
     </section>
