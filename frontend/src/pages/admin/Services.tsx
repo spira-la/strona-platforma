@@ -29,6 +29,7 @@ import {
   type Service,
   type CreateServiceData,
 } from '@/clients/services.client';
+import { coachesClient, type Coach } from '@/clients/coaches.client';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -50,6 +51,7 @@ function deriveAvgPrice(services: Service[]): string {
 // ---------------------------------------------------------------------------
 
 interface FormState {
+  coachId: string;
   name: string;
   description: string;
   durationMinutes: string;
@@ -62,6 +64,7 @@ interface FormState {
 function buildInitialForm(service?: Service): FormState {
   if (service) {
     return {
+      coachId: service.coachId ?? '',
       name: service.name,
       description: service.description ?? '',
       durationMinutes: String(service.durationMinutes),
@@ -72,6 +75,7 @@ function buildInitialForm(service?: Service): FormState {
     };
   }
   return {
+    coachId: '',
     name: '',
     description: '',
     durationMinutes: '',
@@ -84,6 +88,7 @@ function buildInitialForm(service?: Service): FormState {
 
 function formToApiData(form: FormState): CreateServiceData {
   return {
+    coachId: form.coachId || null,
     name: form.name.trim(),
     description: form.description.trim() || null,
     durationMinutes: Number(form.durationMinutes),
@@ -119,6 +124,11 @@ function ServiceFormDialog({
   const [errors, setErrors] = useState<
     Partial<Record<keyof FormState, string>>
   >({});
+
+  const { data: coaches = [] } = useQuery<Coach[]>({
+    queryKey: ['coaches'],
+    queryFn: () => coachesClient.getAll(),
+  });
 
   const setField = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -167,6 +177,23 @@ function ServiceFormDialog({
       isLoading={isSaving}
       submitLabel={submitLabel}
     >
+      {/* Coach */}
+      <AdminFormField label="Coach" htmlFor="service-coach">
+        <select
+          id="service-coach"
+          value={form.coachId}
+          onChange={(e) => setField('coachId', e.target.value)}
+          className={ADMIN_INPUT_CLASS}
+        >
+          <option value="">-- bez coacha --</option>
+          {coaches.map((coach) => (
+            <option key={coach.id} value={coach.id}>
+              {coach.fullName} ({coach.email})
+            </option>
+          ))}
+        </select>
+      </AdminFormField>
+
       {/* Name */}
       <AdminFormField
         label={t('admin.services.form.name')}

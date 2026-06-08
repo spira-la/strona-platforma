@@ -1,15 +1,13 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag';
-import { Calendar } from 'lucide-react';
 import { SEO } from '@/components/shared/SEO';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableBackground } from '@/components/cms/EditableBackground';
 import { EditableOverlay } from '@/components/cms/EditableOverlay';
 import { EditableButtonLink } from '@/components/cms/EditableButtonLink';
-import { BookingCalendar } from '@/components/booking/BookingCalendar';
-import { TimeSlotPicker } from '@/components/booking/TimeSlotPicker';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
+import { servicesClient, type Service } from '@/clients/services.client';
 
 // ---------------------------------------------------------------------------
 // Small reusable primitives (scoped to this file)
@@ -39,11 +37,11 @@ interface ServiceCardProps {
   desc2Placeholder: string;
   desc3Field: string;
   desc3Placeholder: string;
-  priceField: string;
-  pricePlaceholder: string;
   ctaLabel: string;
   onCta: () => void;
   highlighted?: boolean;
+  /** Real product from DB — price and session info always comes from here */
+  service?: Service | null;
 }
 
 function ServiceCard({
@@ -55,12 +53,25 @@ function ServiceCard({
   desc2Placeholder,
   desc3Field,
   desc3Placeholder,
-  priceField,
-  pricePlaceholder,
   ctaLabel,
   onCta,
   highlighted = false,
+  service,
 }: ServiceCardProps) {
+  const price = service
+    ? new Intl.NumberFormat('pl-PL', {
+        style: 'currency',
+        currency: service.currency ?? 'PLN',
+        maximumFractionDigits: 0,
+      }).format(service.priceCents / 100)
+    : null;
+
+  const sessionLabel = service
+    ? service.sessionCount && service.sessionCount > 1
+      ? `${service.sessionCount} sesji · ${service.durationMinutes} min/sesja`
+      : `${service.durationMinutes} min`
+    : null;
+
   return (
     <article
       className={`h-full flex flex-col rounded-2xl p-8 border transition-shadow hover:shadow-lg ${
@@ -102,13 +113,18 @@ function ServiceCard({
       </div>
 
       <div className="mt-6 pt-6 border-t border-[#F0EDE8] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <EditableText
-          section="services"
-          fieldPath={priceField}
-          as="p"
-          placeholder={pricePlaceholder}
-          className="text-xl font-bold text-[#B8944A] [font-family:'Lato',sans-serif]"
-        />
+        <div className="flex flex-col gap-0.5">
+          {price ? (
+            <p className="text-xl font-bold text-[#B8944A] [font-family:'Lato',sans-serif]">
+              {price}
+            </p>
+          ) : null}
+          {sessionLabel ? (
+            <p className="text-xs text-[#8A8A8A] [font-family:'Lato',sans-serif]">
+              {sessionLabel}
+            </p>
+          ) : null}
+        </div>
 
         <button
           type="button"
@@ -127,195 +143,32 @@ function ServiceCard({
 }
 
 // ---------------------------------------------------------------------------
-// Booking section
-// ---------------------------------------------------------------------------
-
-type BookingStep = 'date' | 'time' | 'confirmed';
-
-/** Animated wrapper for booking step transitions */
-function BookingTransition({
-  children,
-  show,
-}: {
-  children: React.ReactNode;
-  show: boolean;
-}) {
-  return (
-    <div
-      aria-hidden={!show}
-      className="transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] overflow-hidden"
-      style={{
-        opacity: show ? 1 : 0,
-        transform: show
-          ? 'translateY(0) scale(1)'
-          : 'translateY(16px) scale(0.98)',
-        filter: show ? 'none' : 'blur(4px)',
-        pointerEvents: show ? 'auto' : 'none',
-        // Collapse the element out of the flow when hidden so sibling
-        // blocks do not get pushed down by an invisible placeholder.
-        maxHeight: show ? undefined : 0,
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-function BookingSection() {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedTime, setSelectedTime] = useState<string | null>(null);
-  const [step, setStep] = useState<BookingStep>('date');
-
-  function handleSelectDate(date: Date) {
-    setSelectedDate(date);
-    setSelectedTime(null);
-    setStep('time');
-  }
-
-  function handleSelectTime(time: string) {
-    setSelectedTime(time);
-  }
-
-  function handleConfirm() {
-    setStep('confirmed');
-  }
-
-  function handleReset() {
-    setSelectedDate(null);
-    setSelectedTime(null);
-    setStep('date');
-  }
-
-  return (
-    <section
-      id="rezerwacja"
-      className="px-6 py-16 sm:py-24 bg-[#FAF8F5]"
-      aria-label="Wybierz termin sesji"
-    >
-      <div className="max-w-[1024px] mx-auto">
-        {/* Heading */}
-        <div className="flex flex-col items-center text-center gap-4 mb-12">
-          <SectionBadge label="Rezerwacja" />
-          <EditableText
-            section="booking"
-            fieldPath="sectionTitle"
-            as="h2"
-            placeholder="WYBIERZ TERMIN"
-            className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
-          />
-          <EditableText
-            section="booking"
-            fieldPath="sectionDesc"
-            as="p"
-            placeholder="Wybierz date i godzine, ktora Ci odpowiada. Sesja trwa 60 minut."
-            className="text-sm sm:text-base leading-relaxed max-w-[576px] text-[#6B6B6B] [font-family:'Lato',sans-serif]"
-          />
-        </div>
-
-        {/* Confirmed state */}
-        <BookingTransition
-          show={step === 'confirmed' && !!selectedDate && !!selectedTime}
-        >
-          <div className="max-w-[448px] mx-auto text-center p-10 rounded-lg bg-white border border-[#E8E4DF] shadow-sm">
-            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-[rgba(184,148,74,0.1)] text-[#B8944A] mx-auto mb-5">
-              <Calendar size={28} />
-            </div>
-            <h3 className="text-xl font-black uppercase tracking-tight text-[#2D2D2D] mb-3 [font-family:'Cormorant_Garamond',serif]">
-              Termin wybrany
-            </h3>
-            <p className="text-sm text-[#6B6B6B] mb-6 [font-family:'Lato',sans-serif]">
-              Twoja sesja zostala wstepnie zarezerwowana. Otrzymasz
-              potwierdzenie na adres e-mail.
-            </p>
-            <button
-              type="button"
-              onClick={handleReset}
-              className="inline-flex items-center justify-center px-7 py-2.5 rounded-lg text-sm font-semibold border border-[#B8944A] text-[#B8944A] transition-colors hover:bg-[rgba(184,148,74,0.06)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A]"
-              style={{ fontFamily: "'Lato', sans-serif" }}
-            >
-              Zarezerwuj inny termin
-            </button>
-          </div>
-        </BookingTransition>
-
-        {/* Calendar + time picker side by side */}
-        <BookingTransition show={step !== 'confirmed'}>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Always show calendar */}
-            <BookingCalendar
-              selectedDate={selectedDate}
-              onSelectDate={handleSelectDate}
-            />
-
-            {/* Time picker — shown after date is picked */}
-            <div className="relative">
-              {/* Placeholder — fades out when time picker appears */}
-              <div
-                className="absolute inset-0 flex items-center justify-center rounded-lg border border-dashed border-[#D4B97A] bg-[rgba(184,148,74,0.04)] p-10 text-center transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)]"
-                style={{
-                  opacity: step === 'time' && selectedDate ? 0 : 1,
-                  transform:
-                    step === 'time' && selectedDate
-                      ? 'scale(0.95)'
-                      : 'scale(1)',
-                  pointerEvents:
-                    step === 'time' && selectedDate ? 'none' : 'auto',
-                }}
-              >
-                <div className="flex flex-col items-center gap-3">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[rgba(184,148,74,0.1)] text-[#B8944A]">
-                    <Calendar size={22} />
-                  </div>
-                  <p
-                    className="text-sm text-[#8A8A8A] max-w-[200px]"
-                    style={{ fontFamily: "'Lato', sans-serif" }}
-                  >
-                    Najpierw wybierz date z kalendarza
-                  </p>
-                </div>
-              </div>
-
-              {/* Time picker — fades in */}
-              <div
-                className="transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)]"
-                style={{
-                  opacity: step === 'time' && selectedDate ? 1 : 0,
-                  transform:
-                    step === 'time' && selectedDate
-                      ? 'translateY(0) scale(1)'
-                      : 'translateY(20px) scale(0.97)',
-                  filter:
-                    step === 'time' && selectedDate ? 'none' : 'blur(6px)',
-                }}
-              >
-                {selectedDate && (
-                  <TimeSlotPicker
-                    selectedDate={selectedDate}
-                    selectedTime={selectedTime}
-                    onSelectTime={handleSelectTime}
-                    onConfirm={handleConfirm}
-                    duration={60}
-                  />
-                )}
-              </div>
-            </div>
-          </div>
-        </BookingTransition>
-      </div>
-    </section>
-  );
-}
-
-// ---------------------------------------------------------------------------
 // Page
 // ---------------------------------------------------------------------------
+
+// (BookingSection removed — booking happens on /rezerwacja)
 
 export default function Services() {
   const navigate = useNavigate();
   const showPurchaseFlow = useFeatureFlag('purchaseFlow');
 
-  function goToBookingFlow() {
-    navigate(showPurchaseFlow ? '/rezerwacja' : '/kontakt');
+  const { data: services } = useQuery({
+    queryKey: ['services', 'active'],
+    queryFn: () => servicesClient.getAll(),
+    enabled: showPurchaseFlow,
+  });
+  const activeServices = (services ?? []).filter((s) => s.isActive);
+  const singleService =
+    activeServices.find((s) => (s.sessionCount ?? 1) === 1) ?? null;
+  const packageService =
+    activeServices.find((s) => (s.sessionCount ?? 1) > 1) ?? null;
+
+  function goToBookingFlow(service: typeof singleService) {
+    if (!showPurchaseFlow) {
+      navigate('/kontakt');
+      return;
+    }
+    navigate(service ? `/rezerwacja?service=${service.id}` : '/rezerwacja');
   }
 
   return (
@@ -411,10 +264,9 @@ export default function Services() {
                 desc2Placeholder="Pracujemy z Twoimi celami, wartosciami, przekonaniami i wzorcami — w bezpiecznej i wspierajacej przestrzeni."
                 desc3Field="card1Desc3"
                 desc3Placeholder="Sesja trwa 60 minut. Mozliwosc pracy online lub stacjonarnie."
-                priceField="card1Price"
-                pricePlaceholder="150 zl - sesja"
                 ctaLabel="Wybieram"
-                onCta={goToBookingFlow}
+                onCta={() => goToBookingFlow(singleService)}
+                service={singleService}
               />
             </ScrollReveal>
 
@@ -428,25 +280,15 @@ export default function Services() {
                 desc2Placeholder="Pakiet umozliwia systemowe podejscie do Twoich celow i zapewnia ciaglosc procesu — bez przerw i powrotow do punktu wyjscia."
                 desc3Field="card2Desc3"
                 desc3Placeholder="Waznosc pakietu: 3 miesiace od zakupu. Terminy ustalamy elastycznie."
-                priceField="card2Price"
-                pricePlaceholder="1 200 zl - pakiet"
                 ctaLabel="Wybieram"
-                onCta={goToBookingFlow}
+                onCta={() => goToBookingFlow(packageService)}
+                service={packageService}
                 highlighted
               />
             </ScrollReveal>
           </div>
         </div>
       </section>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* BOOKING SECTION — hidden until purchaseFlow flag is enabled         */}
-      {/* ------------------------------------------------------------------ */}
-      {showPurchaseFlow && (
-        <ScrollReveal animation="fade-up">
-          <BookingSection />
-        </ScrollReveal>
-      )}
 
       {/* ------------------------------------------------------------------ */}
       {/* CTA                                                                  */}
@@ -493,7 +335,7 @@ export default function Services() {
           <div className="flex flex-col sm:flex-row gap-3 mt-2">
             <button
               type="button"
-              onClick={goToBookingFlow}
+              onClick={() => goToBookingFlow(singleService)}
               className="inline-flex items-center justify-center px-8 py-3 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A]"
               style={{
                 background: 'linear-gradient(135deg, #B8944A 0%, #D4B97A 100%)',

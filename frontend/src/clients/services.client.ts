@@ -28,6 +28,7 @@ export interface CreateServiceData {
   sessionCount?: number;
   priceCents: number;
   currency?: string;
+  coachId?: string | null;
   isActive?: boolean;
   sortOrder?: number;
 }

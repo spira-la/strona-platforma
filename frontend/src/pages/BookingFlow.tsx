@@ -5,6 +5,7 @@ import { Check, ChevronLeft } from 'lucide-react';
 import { SEO } from '@/components/shared/SEO';
 import { MultiSessionPicker } from '@/components/booking/MultiSessionPicker';
 import { servicesClient, type Service } from '@/clients/services.client';
+import { coachesClient } from '@/clients/coaches.client';
 import { useCartStore } from '@/stores/cart.store';
 
 function formatPrice(priceCents: number, currency: string): string {
@@ -41,6 +42,14 @@ export default function BookingFlow() {
     queryFn: () => servicesClient.getAll(),
   });
 
+  const { data: coaches } = useQuery({
+    queryKey: ['coaches'],
+    queryFn: () => coachesClient.getAll(),
+  });
+
+  // Fallback for single-coach platform: use first active coach when service has no coachId
+  const defaultCoachId = coaches?.[0]?.id ?? null;
+
   const activeServices = (services ?? []).filter((s) => s.isActive);
 
   const [selectedId, setSelectedId] = useState<string | null>(
@@ -68,7 +77,7 @@ export default function BookingFlow() {
         sessionCount: service.sessionCount ?? 1,
         priceCents: service.priceCents,
         currency: service.currency ?? 'PLN',
-        coachId: service.coachId ?? '',
+        coachId: service.coachId ?? defaultCoachId ?? '',
       });
     }
   }
@@ -83,7 +92,7 @@ export default function BookingFlow() {
       sessionCount: selectedService.sessionCount ?? 1,
       priceCents: selectedService.priceCents,
       currency: selectedService.currency ?? 'PLN',
-      coachId: selectedService.coachId ?? '',
+      coachId: selectedService.coachId ?? defaultCoachId ?? '',
     });
     setSlots(cartSlots);
     navigate('/checkout');
@@ -161,16 +170,16 @@ export default function BookingFlow() {
                 }}
               />
 
-              {!selectedService.coachId && (
+              {!(selectedService.coachId ?? defaultCoachId) && (
                 <div className="rounded-lg border border-[#E8C469] bg-[#FFF8E1] p-4 text-sm text-[#6B5A1F]">
                   Ta usluga nie ma przypisanego coacha — skontaktuj sie z
                   administracja, zanim wykonasz rezerwacje.
                 </div>
               )}
 
-              {selectedService.coachId && (
+              {(selectedService.coachId ?? defaultCoachId) && (
                 <MultiSessionPicker
-                  coachId={selectedService.coachId}
+                  coachId={(selectedService.coachId ?? defaultCoachId)!}
                   sessionCount={selectedService.sessionCount ?? 1}
                   durationMinutes={selectedService.durationMinutes}
                   selected={cartSlots}

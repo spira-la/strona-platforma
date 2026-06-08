@@ -6,8 +6,8 @@ export const featureFlags = {
   newsletter: true,
   seoManagement: true,
 
-  // Hidden — preserved for future
-  purchaseFlow: false,
+  // Active for Spirala launch
+  purchaseFlow: true,
   multiCoach: false,
   webinars: false,
   audioCourses: false,

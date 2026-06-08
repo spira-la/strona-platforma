@@ -2,12 +2,15 @@ import { useEffect, useState } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Check, CreditCard, Loader2, ChevronLeft } from 'lucide-react';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
 import { SEO } from '@/components/shared/SEO';
 import { useCartStore, selectSubtotalCents } from '@/stores/cart.store';
 import { useAuth } from '@/contexts/AuthContext';
 import { ordersClient } from '@/clients/orders.client';
 import { stripeClient } from '@/clients/stripe.client';
 import { api } from '@/clients/api';
+import { StripePaymentForm } from '@/components/checkout/StripePaymentForm';
 
 interface CouponValidationResult {
   valid: boolean;
@@ -53,6 +56,16 @@ export default function Checkout() {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Real-mode: after order is created we store clientSecret + orderId to mount Elements
+  const [pendingPayment, setPendingPayment] = useState<{
+    clientSecret: string;
+    orderId: string;
+  } | null>(null);
+
+  const stripePromise = stripeConfig?.publishableKey
+    ? loadStripe(stripeConfig.publishableKey)
+    : null;
 
   // Pre-fill from auth if available
   useEffect(() => {
@@ -127,20 +140,17 @@ export default function Checkout() {
       });
 
       if (order.paymentIntent.mocked || stripeConfig?.mockMode) {
-        // Mock flow: instantly confirm via the backend mock endpoint.
-        // In real mode you'd call Stripe.js here with clientSecret instead.
         await stripeClient.mockConfirm(order.paymentIntent.id);
+        cart.clear();
+        navigate(`/zamowienie/${order.orderId}`);
       } else {
-        // Real Stripe flow would be wired here with @stripe/stripe-js.
-        setError(
-          'Real Stripe checkout is not wired yet. Set STRIPE_MOCK_MODE=true to test.',
-        );
+        // Real mode: mount Elements with the clientSecret so user can enter payment details
+        setPendingPayment({
+          clientSecret: order.paymentIntent.clientSecret,
+          orderId: order.orderId,
+        });
         setSubmitting(false);
-        return;
       }
-
-      cart.clear();
-      navigate(`/zamowienie/${order.orderId}`);
     } catch (error_) {
       setError((error_ as Error).message);
       setSubmitting(false);
@@ -372,34 +382,60 @@ export default function Checkout() {
                   className="text-[11px] text-[#8A8A8A] mt-3 px-3 py-2 rounded bg-[#FFF8E1] border border-[#E8C469]"
                   style={{ fontFamily: "'Lato', sans-serif" }}
                 >
-                  Tryb testowy — kliknij „Zaplac”, aby potwierdzic platnosc bez
+                  Tryb testowy — kliknij „Zaplac", aby potwierdzic platnosc bez
                   prawdziwej transakcji.
                 </p>
               )}
 
-              <button
-                type="button"
-                onClick={handlePay}
-                disabled={submitting}
-                className="mt-5 w-full py-3 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
-                style={{
-                  background:
-                    'linear-gradient(135deg, #B8944A 0%, #D4B97A 100%)',
-                  fontFamily: "'Lato', sans-serif",
-                }}
-              >
-                {submitting ? (
-                  <>
-                    <Loader2 size={16} className="animate-spin" />{' '}
-                    Przetwarzanie…
-                  </>
-                ) : (
-                  <>
-                    <CreditCard size={16} /> Zaplac{' '}
-                    {formatPrice(total, currency)}
-                  </>
-                )}
-              </button>
+              {/* Real Stripe Elements form — appears after order is created */}
+              {pendingPayment && stripePromise ? (
+                <div className="mt-5">
+                  <Elements
+                    stripe={stripePromise}
+                    options={{
+                      clientSecret: pendingPayment.clientSecret,
+                      appearance: {
+                        theme: 'stripe',
+                        variables: {
+                          colorPrimary: '#B8944A',
+                          borderRadius: '8px',
+                        },
+                      },
+                      locale: 'pl',
+                    }}
+                  >
+                    <StripePaymentForm
+                      totalLabel={formatPrice(total, currency)}
+                      returnUrl={`${globalThis.location.origin}/zamowienie/${pendingPayment.orderId}`}
+                      onError={(msg) => setError(msg)}
+                    />
+                  </Elements>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handlePay}
+                  disabled={submitting}
+                  className="mt-5 w-full py-3 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
+                  style={{
+                    background:
+                      'linear-gradient(135deg, #B8944A 0%, #D4B97A 100%)',
+                    fontFamily: "'Lato', sans-serif",
+                  }}
+                >
+                  {submitting ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" />{' '}
+                      Przetwarzanie…
+                    </>
+                  ) : (
+                    <>
+                      <CreditCard size={16} /> Zaplac{' '}
+                      {formatPrice(total, currency)}
+                    </>
+                  )}
+                </button>
+              )}
 
               {error && (
                 <p
