@@ -106,7 +106,14 @@ export function toCssStyle(s: TextStyleState): React.CSSProperties {
   if (s.italic) style.fontStyle = 'italic';
   if (s.multiline) style.whiteSpace = 'pre-wrap';
   if (s.align) style.textAlign = s.align;
-  if (s.size !== 1) style.fontSize = `${s.size}em`;
+  if (s.size !== 1) {
+    const delta = +(s.size - 1).toFixed(4);
+    // Only the delta above 1em (the admin-added extra) scales down on mobile.
+    // The 1em base stays fixed so text never shrinks below the inherited size.
+    // --cms-diff-scale is defined in spirala-theme.css per breakpoint.
+    style.fontSize =
+      delta === 0 ? '1em' : `calc(1em + ${delta}em * var(--cms-diff-scale, 1))`;
+  }
   if (s.color) style.color = s.color;
   if (s.maxWidth > 0) style.maxWidth = `${s.maxWidth}px`;
   if (s.maxHeight > 0) {

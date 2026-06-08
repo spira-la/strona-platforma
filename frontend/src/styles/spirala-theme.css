@@ -359,6 +359,31 @@ html.lenis body {
 }
 
 /* ---------------------------------------------------------------------------
+   CMS responsive text scale
+   Only the delta above 1em (the admin's added size) is compressed on small
+   screens — the base never shrinks below inherited, so small edits stay readable.
+   Formula used in EditableText: calc(1em + Δem * var(--cms-diff-scale, 1))
+--------------------------------------------------------------------------- */
+:root {
+  --cms-diff-scale: 1;
+}
+@media (max-width: 1024px) {
+  :root {
+    --cms-diff-scale: 0.78;
+  }
+}
+@media (max-width: 768px) {
+  :root {
+    --cms-diff-scale: 0.55;
+  }
+}
+@media (max-width: 480px) {
+  :root {
+    --cms-diff-scale: 0.38;
+  }
+}
+
+/* ---------------------------------------------------------------------------
    Subscript / Superscript (inline safety on mobile)
 --------------------------------------------------------------------------- */
 .prose sub,
