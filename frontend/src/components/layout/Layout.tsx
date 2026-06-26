@@ -14,6 +14,7 @@ interface LayoutProps {
 const DARK_HERO_PAGES = new Set([
   '/',
   '/mama-nastolatka',
+  '/matka-zona-kochanka',
   '/o-mnie',
   '/jak-pracuje',
   '/uslugi',
