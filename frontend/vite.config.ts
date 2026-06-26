@@ -28,14 +28,17 @@ export default defineConfig({
             id.includes('/react/') ||
             id.includes('/react-dom/') ||
             id.includes('/react-router-dom/')
-          ) return 'vendor-react';
+          )
+            return 'vendor-react';
           if (id.includes('@tanstack/react-query')) return 'vendor-query';
           if (
             id.includes('react-hook-form') ||
             id.includes('@hookform/') ||
             id.includes('/zod/')
-          ) return 'vendor-forms';
-          if (id.includes('i18next') || id.includes('react-i18next')) return 'vendor-i18n';
+          )
+            return 'vendor-forms';
+          if (id.includes('i18next') || id.includes('react-i18next'))
+            return 'vendor-i18n';
           if (id.includes('@radix-ui/')) return 'vendor-radix';
         },
       },

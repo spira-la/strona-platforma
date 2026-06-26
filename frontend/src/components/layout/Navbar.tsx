@@ -17,47 +17,87 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 import spiralaIcon from '@/assets/spirala-icon.png';
 
+// ---------------------------------------------------------------------------
+// Nav structure types
+// ---------------------------------------------------------------------------
+
 interface NavLink {
+  type: 'link';
   href: string;
   labelKey: string;
   fieldPath: string;
   editable: string;
 }
 
-const BASE_NAV_LINKS: NavLink[] = [
+interface NavGroupItem {
+  href: string;
+  labelKey: string;
+  fieldPath: string;
+  editable: string;
+}
+
+interface NavGroup {
+  type: 'group';
+  id: string;
+  labelKey: string;
+  fieldPath: string;
+  editable: string;
+  items: NavGroupItem[];
+}
+
+type NavEntry = NavLink | NavGroup;
+
+// ---------------------------------------------------------------------------
+// Nav config
+// ---------------------------------------------------------------------------
+
+const DIRECT_NAV_LINKS: NavLink[] = [
   {
-    href: '/mama-nastolatka',
-    labelKey: 'common.mamyNastolatkow',
-    fieldPath: 'linkMamyNastolatkow',
-    editable: 'Mama nastolatka',
-  },
-  {
+    type: 'link',
     href: '/o-mnie',
     labelKey: 'common.about',
     fieldPath: 'link1',
     editable: 'O Mnie',
   },
   {
+    type: 'link',
     href: '/jak-pracuje',
     labelKey: 'common.howIWork',
     fieldPath: 'link2',
     editable: 'Jak Pracuję',
   },
   {
+    type: 'link',
     href: '/uslugi',
     labelKey: 'common.services',
     fieldPath: 'link3',
     editable: 'Usługi',
   },
-  {
-    href: '/blog',
-    labelKey: 'common.blog',
-    fieldPath: 'link4',
-    editable: 'Blog',
-  },
 ];
 
-const YOUTUBE_NAV_LINK: NavLink = {
+const SPEC_GROUP: NavGroup = {
+  type: 'group',
+  id: 'specializations',
+  labelKey: 'common.specializations',
+  fieldPath: 'groupSpecjalizacje',
+  editable: 'Specjalizacje',
+  items: [
+    {
+      href: '/mama-nastolatka',
+      labelKey: 'common.mamyNastolatkow',
+      fieldPath: 'linkMamyNastolatkow',
+      editable: 'Mama nastolatka',
+    },
+    {
+      href: '/matka-zona-kochanka',
+      labelKey: 'common.motherWifeLover',
+      fieldPath: 'linkMotherWifeLover',
+      editable: 'Matka, żona, kochanka',
+    },
+  ],
+};
+
+const YOUTUBE_ITEM: NavGroupItem = {
   href: '/wideo',
   labelKey: 'common.video',
   fieldPath: 'link5',
@@ -70,11 +110,19 @@ const LANGUAGES = [
   { code: 'es', label: 'ES' },
 ];
 
+// ---------------------------------------------------------------------------
+// Props
+// ---------------------------------------------------------------------------
+
 interface NavbarProps {
   transparent?: boolean;
-  /** When true, navbar text is white over dark hero images. When false + transparent, text stays dark. */
+  /** When true, navbar text is white over dark hero images. */
   darkHero?: boolean;
 }
+
+// ---------------------------------------------------------------------------
+// Navbar
+// ---------------------------------------------------------------------------
 
 export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
   const { t, i18n } = useTranslation();
@@ -84,27 +132,52 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
   const { openLogin } = useAuthStore();
   const showYouTube = useFeatureFlag('youtubeNavLink');
 
-  const NAV_LINKS = showYouTube
-    ? [...BASE_NAV_LINKS, YOUTUBE_NAV_LINK]
-    : BASE_NAV_LINKS;
+  const contentGroup: NavGroup = {
+    type: 'group',
+    id: 'content',
+    labelKey: 'common.content',
+    fieldPath: 'groupTresci',
+    editable: 'Treści',
+    items: [
+      {
+        href: '/blog',
+        labelKey: 'common.blog',
+        fieldPath: 'link4',
+        editable: 'Blog',
+      },
+      ...(showYouTube ? [YOUTUBE_ITEM] : []),
+    ],
+  };
+
+  const NAV_ENTRIES: NavEntry[] = [
+    ...DIRECT_NAV_LINKS,
+    SPEC_GROUP,
+    contentGroup,
+  ];
 
   const [scrolled, setScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  // Which desktop dropdown group is open (by id)
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
+  // Which mobile accordion group is expanded (by id)
+  const [mobileOpenGroup, setMobileOpenGroup] = useState<string | null>(null);
 
-  // Close all overlays on route change — React-recommended pattern:
-  // adjust state during render by comparing with the previous value.
+  // Close all overlays on route change
   const [trackedPathname, setTrackedPathname] = useState(location.pathname);
   if (trackedPathname !== location.pathname) {
     setTrackedPathname(location.pathname);
     if (drawerOpen) setDrawerOpen(false);
     if (langOpen) setLangOpen(false);
     if (userMenuOpen) setUserMenuOpen(false);
+    if (openGroup) setOpenGroup(null);
+    if (mobileOpenGroup) setMobileOpenGroup(null);
   }
 
   const langRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const groupRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
   // Shadow on scroll
   useEffect(() => {
@@ -115,7 +188,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
 
   // Close dropdowns on outside click
   useEffect(() => {
-    if (!langOpen && !userMenuOpen) return;
+    if (!langOpen && !userMenuOpen && !openGroup) return;
     const handler = (e: MouseEvent) => {
       if (
         langOpen &&
@@ -131,10 +204,16 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
       ) {
         setUserMenuOpen(false);
       }
+      if (openGroup) {
+        const ref = groupRefs.current.get(openGroup);
+        if (ref && !ref.contains(e.target as Node)) {
+          setOpenGroup(null);
+        }
+      }
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
-  }, [langOpen, userMenuOpen]);
+  }, [langOpen, userMenuOpen, openGroup]);
 
   const userInitial =
     user?.user_metadata?.full_name?.[0]?.toUpperCase() ??
@@ -148,6 +227,8 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
   };
 
   const isActive = (href: string) => location.pathname === href;
+  const isGroupActive = (group: NavGroup) =>
+    group.items.some((item) => isActive(item.href));
   const isTransparentMode = transparent && !scrolled;
   const useWhiteText = isTransparentMode && darkHero;
 
@@ -158,6 +239,27 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
     void i18n.changeLanguage(code);
     setLangOpen(false);
   };
+
+  const toggleGroup = (id: string) => {
+    setOpenGroup((prev) => (prev === id ? null : id));
+  };
+
+  const toggleMobileGroup = (id: string) => {
+    setMobileOpenGroup((prev) => (prev === id ? null : id));
+  };
+
+  // Shared text colour helpers
+  const linkClass = (active: boolean) =>
+    [
+      "font-['Lato'] text-[14px] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded",
+      useWhiteText
+        ? active
+          ? 'text-white font-medium'
+          : 'text-white/70 hover:text-white'
+        : active
+          ? 'text-[#B8944A] font-medium'
+          : 'text-[#8A8A8A] hover:text-[#2D2D2D]',
+    ].join(' ');
 
   return (
     <>
@@ -196,30 +298,100 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
             </span>
           </Link>
 
-          {/* Desktop nav links */}
-          <ul className="hidden md:flex items-center gap-8" role="list">
-            {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <Link
-                  to={link.href}
-                  className={[
-                    "font-['Lato'] text-[14px] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded",
-                    useWhiteText
-                      ? isActive(link.href)
-                        ? 'text-white font-medium'
-                        : 'text-white/70 hover:text-white'
-                      : isActive(link.href)
-                        ? 'text-[#B8944A] font-medium'
-                        : 'text-[#8A8A8A] hover:text-[#2D2D2D]',
-                  ].join(' ')}
-                  aria-current={isActive(link.href) ? 'page' : undefined}
-                >
-                  <EditableText section="navbar" fieldPath={link.fieldPath}>
-                    {t(link.labelKey)}
-                  </EditableText>
-                </Link>
-              </li>
-            ))}
+          {/* Desktop nav */}
+          <ul className="hidden md:flex items-center gap-6" role="list">
+            {NAV_ENTRIES.map((entry) => {
+              if (entry.type === 'link') {
+                return (
+                  <li key={entry.href}>
+                    <Link
+                      to={entry.href}
+                      className={linkClass(isActive(entry.href))}
+                      aria-current={isActive(entry.href) ? 'page' : undefined}
+                    >
+                      <EditableText
+                        section="navbar"
+                        fieldPath={entry.fieldPath}
+                      >
+                        {t(entry.labelKey)}
+                      </EditableText>
+                    </Link>
+                  </li>
+                );
+              }
+
+              // NavGroup — dropdown
+              const active = isGroupActive(entry);
+              const isOpen = openGroup === entry.id;
+              return (
+                <li key={entry.id} className="relative">
+                  <div
+                    ref={(el) => {
+                      if (el) groupRefs.current.set(entry.id, el);
+                      else groupRefs.current.delete(entry.id);
+                    }}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => toggleGroup(entry.id)}
+                      className={[
+                        'flex items-center gap-1',
+                        linkClass(active),
+                      ].join(' ')}
+                      aria-haspopup="menu"
+                      aria-expanded={isOpen}
+                    >
+                      <EditableText
+                        section="navbar"
+                        fieldPath={entry.fieldPath}
+                      >
+                        {t(entry.labelKey)}
+                      </EditableText>
+                      <ChevronDown
+                        size={12}
+                        className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                        aria-hidden="true"
+                      />
+                    </button>
+
+                    {isOpen && (
+                      <div
+                        className="absolute top-full left-1/2 -translate-x-1/2 pt-3 z-20"
+                        role="menu"
+                        aria-label={t(entry.labelKey)}
+                      >
+                        <ul className="w-[220px] bg-white border border-[#F0EDE8] rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.10)] py-2">
+                          {entry.items.map((item) => (
+                            <li key={item.href} role="none">
+                              <Link
+                                to={item.href}
+                                role="menuitem"
+                                className={[
+                                  "block px-4 py-2.5 font-['Lato'] text-[13px] transition-colors duration-150 hover:bg-[#FAF8F5] focus-visible:outline-none focus-visible:bg-[#FAF8F5]",
+                                  isActive(item.href)
+                                    ? 'text-[#B8944A] font-medium'
+                                    : 'text-[#4A4A4A] hover:text-[#B8944A]',
+                                ].join(' ')}
+                                aria-current={
+                                  isActive(item.href) ? 'page' : undefined
+                                }
+                              >
+                                <EditableText
+                                  section="navbar"
+                                  fieldPath={item.fieldPath}
+                                >
+                                  {t(item.labelKey)}
+                                </EditableText>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
           </ul>
 
           {/* Desktop right side: language switcher + CTA */}
@@ -404,29 +576,86 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
           'fixed top-[72px] left-0 right-0 z-40 bg-white border-b border-[#F0EDE8] shadow-lg md:hidden',
           'transition-all duration-300 ease-in-out overflow-hidden',
           drawerOpen
-            ? 'max-h-[500px] opacity-100'
+            ? 'max-h-[600px] opacity-100'
             : 'max-h-0 opacity-0 pointer-events-none',
         ].join(' ')}
       >
         <ul className="flex flex-col px-4 pt-4 pb-6 gap-1" role="list">
-          {NAV_LINKS.map((link) => (
-            <li key={link.href}>
-              <Link
-                to={link.href}
-                className={[
-                  "block py-3 px-2 font-['Lato'] text-[15px] border-b border-[#F0EDE8] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded",
-                  isActive(link.href)
-                    ? 'text-[#B8944A] font-medium'
-                    : 'text-[#2D2D2D] hover:text-[#B8944A]',
-                ].join(' ')}
-                aria-current={isActive(link.href) ? 'page' : undefined}
-              >
-                <EditableText section="navbar" fieldPath={link.fieldPath}>
-                  {t(link.labelKey)}
-                </EditableText>
-              </Link>
-            </li>
-          ))}
+          {NAV_ENTRIES.map((entry) => {
+            if (entry.type === 'link') {
+              return (
+                <li key={entry.href}>
+                  <Link
+                    to={entry.href}
+                    className={[
+                      "block py-3 px-2 font-['Lato'] text-[15px] border-b border-[#F0EDE8] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded",
+                      isActive(entry.href)
+                        ? 'text-[#B8944A] font-medium'
+                        : 'text-[#2D2D2D] hover:text-[#B8944A]',
+                    ].join(' ')}
+                    aria-current={isActive(entry.href) ? 'page' : undefined}
+                  >
+                    <EditableText section="navbar" fieldPath={entry.fieldPath}>
+                      {t(entry.labelKey)}
+                    </EditableText>
+                  </Link>
+                </li>
+              );
+            }
+
+            // NavGroup — accordion
+            const expanded = mobileOpenGroup === entry.id;
+            const active = isGroupActive(entry);
+            return (
+              <li key={entry.id}>
+                <button
+                  type="button"
+                  onClick={() => toggleMobileGroup(entry.id)}
+                  className={[
+                    "w-full flex items-center justify-between py-3 px-2 font-['Lato'] text-[15px] border-b border-[#F0EDE8] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded",
+                    active ? 'text-[#B8944A] font-medium' : 'text-[#2D2D2D]',
+                  ].join(' ')}
+                  aria-expanded={expanded}
+                >
+                  <EditableText section="navbar" fieldPath={entry.fieldPath}>
+                    {t(entry.labelKey)}
+                  </EditableText>
+                  <ChevronDown
+                    size={15}
+                    className={`transition-transform duration-200 text-[#8A8A8A] ${expanded ? 'rotate-180' : ''}`}
+                    aria-hidden="true"
+                  />
+                </button>
+                {expanded && (
+                  <ul className="flex flex-col border-b border-[#F0EDE8]">
+                    {entry.items.map((item) => (
+                      <li key={item.href}>
+                        <Link
+                          to={item.href}
+                          className={[
+                            "block py-2.5 pl-6 pr-2 font-['Lato'] text-[14px] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded",
+                            isActive(item.href)
+                              ? 'text-[#B8944A] font-medium'
+                              : 'text-[#6B6B6B] hover:text-[#B8944A]',
+                          ].join(' ')}
+                          aria-current={
+                            isActive(item.href) ? 'page' : undefined
+                          }
+                        >
+                          <EditableText
+                            section="navbar"
+                            fieldPath={item.fieldPath}
+                          >
+                            {t(item.labelKey)}
+                          </EditableText>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            );
+          })}
 
           {/* Language row */}
           <li className="flex items-center gap-2 pt-4 pb-2 px-2">
