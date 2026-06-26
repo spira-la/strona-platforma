@@ -24,7 +24,8 @@ export type CMSSectionKey =
   | 'privacy'
   | 'terms'
   | 'youtube'
-  | 'mamyNastolatkow';
+  | 'mamyNastolatkow'
+  | 'motherWifeLover';
 
 export interface CMSContentResponse {
   success: boolean;
