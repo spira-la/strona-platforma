@@ -635,6 +635,13 @@
       },
       "errors": {
         "loadFailed": "Nie udało się załadować języków. Odśwież stronę."
+      },
+      "retranslate": {
+        "title": "Przetłumacz treść CMS",
+        "description": "Ponownie przetłumaczy wszystkie polskie pola CMS na angielski i hiszpański. Przydatne gdy tłumaczenia są niekompletne lub błędne.",
+        "button": "Przetłumacz wszystko",
+        "running": "Tłumaczenie w toku...",
+        "success": "Tłumaczenie uruchomione. Treść CMS zostanie zaktualizowana w tle."
       }
     },
     "contact": {

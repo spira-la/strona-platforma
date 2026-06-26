@@ -111,4 +111,19 @@ export const cmsClient = {
       `/cms/image?section=${encodeURIComponent(section)}&fieldPath=${encodeURIComponent(fieldPath)}&language=${encodeURIComponent(language)}`,
     );
   },
+
+  /**
+   * Trigger re-translation of all CMS Polish content to EN + ES.
+   * Returns 202 Accepted — translation runs in the background.
+   */
+  retranslateAll(): Promise<{
+    success: boolean;
+    message: string;
+    enqueued: number;
+  }> {
+    return api.post<{ success: boolean; message: string; enqueued: number }>(
+      '/cms/retranslate-all',
+      {},
+    );
+  },
 };

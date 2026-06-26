@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BlogPostEntity } from '../../db/entities/blog.entity.js';
 import { BlogPostTranslationEntity } from '../../db/entities/blog-translation.entity.js';
-import { OllamaService } from '../../core/ollama.service.js';
+import { OpenRouterService } from '../../core/openrouter.service.js';
 
 // All supported languages
 const ALL_LANGS = ['pl', 'en', 'es'] as const;
@@ -31,7 +31,7 @@ export class BlogTranslationsService {
     private readonly blogRepo: Repository<BlogPostEntity>,
     @InjectRepository(BlogPostTranslationEntity)
     private readonly translationRepo: Repository<BlogPostTranslationEntity>,
-    private readonly ollama: OllamaService,
+    private readonly openRouter: OpenRouterService,
   ) {}
 
   // ---------------------------------------------------------------------------
@@ -123,17 +123,17 @@ export class BlogTranslationsService {
     try {
       // Title + excerpt: plain text, single call each
       const translatedTitle = post.title
-        ? await this.ollama.translate(post.title, sourceLang, targetLang)
+        ? await this.openRouter.translate(post.title, sourceLang, targetLang)
         : null;
 
       const translatedExcerpt = post.excerpt
-        ? await this.ollama.translate(post.excerpt, sourceLang, targetLang)
+        ? await this.openRouter.translate(post.excerpt, sourceLang, targetLang)
         : null;
 
       // Content: HTML from TipTap, chunked by block tags
       const translatedContent =
         post.content && post.content.length > 0
-          ? await this.ollama.translateHtml(
+          ? await this.openRouter.translateHtml(
               post.content,
               sourceLang,
               targetLang,

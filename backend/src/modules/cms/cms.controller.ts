@@ -11,6 +11,7 @@ import {
   UseInterceptors,
   UploadedFile,
   BadRequestException,
+  HttpStatus,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -159,6 +160,24 @@ export class CmsController {
       message: 'Section updated successfully',
       version: result.version,
       updatedAt: result.updatedAt,
+    };
+  }
+
+  /**
+   * POST /api/cms/retranslate-all
+   * Admin — re-enqueue all Polish CMS text fields for translation to EN + ES.
+   * Useful after switching translation provider or fixing bad auto-translations.
+   * Returns 202 Accepted with the count of jobs enqueued; translation runs in background.
+   */
+  @Post('retranslate-all')
+  @HttpCode(HttpStatus.ACCEPTED)
+  async retranslateAll() {
+    const result = await this.cms.retranslateAll();
+    await this.purgeCmsContent();
+    return {
+      success: true,
+      message: `Re-translation started. ${result.enqueued} fields enqueued for EN + ES.`,
+      enqueued: result.enqueued,
     };
   }
 

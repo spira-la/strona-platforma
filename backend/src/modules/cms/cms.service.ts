@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CacheService } from '../../core/cache.service.js';
 import { StorageService } from '../../core/storage.service.js';
-import { OllamaService } from '../../core/ollama.service.js';
+import { OpenRouterService } from '../../core/openrouter.service.js';
 import { CmsContentEntity } from '../../db/entities/cms-content.entity.js';
 
 const CACHE_KEY = 'cms:content:main_page';
@@ -39,7 +39,7 @@ export class CmsService {
     private readonly repo: Repository<CmsContentEntity>,
     private readonly cache: CacheService,
     private readonly storage: StorageService,
-    private readonly ollama: OllamaService,
+    private readonly openRouter: OpenRouterService,
   ) {}
 
   async getContent(): Promise<CMSDocument> {
@@ -281,6 +281,58 @@ export class CmsService {
   }
 
   /**
+   * Re-enqueues ALL translatable text fields from the Polish CMS content
+   * to EN and ES. Useful to run after switching the translation provider
+   * or fixing bad auto-translations. Non-blocking — returns the count of
+   * fields enqueued.
+   */
+  async retranslateAll(): Promise<{ enqueued: number }> {
+    const doc = await this.getContent();
+    const content = doc.content;
+    let enqueued = 0;
+
+    for (const [section, langMap] of Object.entries(content)) {
+      const plContent = langMap['pl'];
+      if (!plContent) continue;
+
+      const flatFields = this.flattenFields(plContent);
+
+      for (const [fieldPath, value] of Object.entries(flatFields)) {
+        if (typeof value !== 'string' || !value.trim()) continue;
+        if (this.isStyleField(fieldPath)) continue;
+
+        for (const lang of ['en', 'es']) {
+          this.enqueueTranslation(section, fieldPath, value, lang);
+          enqueued++;
+        }
+      }
+    }
+
+    this.logger.log(`retranslateAll: enqueued ${enqueued} translation jobs`);
+    return { enqueued };
+  }
+
+  /** Flattens a nested object into dot-notation paths. */
+  private flattenFields(
+    obj: Record<string, unknown>,
+    prefix = '',
+  ): Record<string, string> {
+    const result: Record<string, string> = {};
+    for (const [key, val] of Object.entries(obj)) {
+      const path = prefix ? `${prefix}.${key}` : key;
+      if (typeof val === 'string') {
+        result[path] = val;
+      } else if (val !== null && typeof val === 'object') {
+        Object.assign(
+          result,
+          this.flattenFields(val as Record<string, unknown>, path),
+        );
+      }
+    }
+    return result;
+  }
+
+  /**
    * Propagates a PL edit to EN + ES:
    * - Style fields → copied directly (same value)
    * - Text fields → enqueued for translation via Ollama
@@ -386,7 +438,7 @@ export class CmsService {
     targetLang: string;
   }): Promise<void> {
     try {
-      const translated = await this.ollama.translate(
+      const translated = await this.openRouter.translate(
         job.value,
         'pl',
         job.targetLang,
