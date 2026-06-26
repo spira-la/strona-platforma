@@ -164,6 +164,16 @@ export class CmsController {
   }
 
   /**
+   * GET /api/cms/translation-status
+   * Admin — returns current translation queue progress for frontend polling.
+   */
+  @Get('translation-status')
+  @Header('Cache-Control', 'no-store')
+  getTranslationStatus() {
+    return { success: true, ...this.cms.getTranslationStatus() };
+  }
+
+  /**
    * POST /api/cms/retranslate-all
    * Admin — re-enqueue all Polish CMS text fields for translation to EN + ES.
    * Useful after switching translation provider or fixing bad auto-translations.

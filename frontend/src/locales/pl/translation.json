@@ -641,7 +641,9 @@
         "description": "Ponownie przetłumaczy wszystkie polskie pola CMS na angielski i hiszpański. Przydatne gdy tłumaczenia są niekompletne lub błędne.",
         "button": "Przetłumacz wszystko",
         "running": "Tłumaczenie w toku...",
-        "success": "Tłumaczenie uruchomione. Treść CMS zostanie zaktualizowana w tle."
+        "fieldsTranslated": "pól przetłumaczonych",
+        "success": "Tłumaczenie zakończone. Treść CMS została zaktualizowana.",
+        "nothingToTranslate": "Brak treści do przetłumaczenia (brak pól PL w CMS)."
       }
     },
     "contact": {

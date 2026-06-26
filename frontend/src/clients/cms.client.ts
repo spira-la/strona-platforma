@@ -113,6 +113,20 @@ export const cmsClient = {
   },
 
   /**
+   * Poll the background translation queue status.
+   */
+  getTranslationStatus(): Promise<{
+    success: boolean;
+    isProcessing: boolean;
+    queueSize: number;
+    completed: number;
+    total: number;
+    startedAt: string | null;
+  }> {
+    return api.get('/cms/translation-status');
+  },
+
+  /**
    * Trigger re-translation of all CMS Polish content to EN + ES.
    * Returns 202 Accepted — translation runs in the background.
    */

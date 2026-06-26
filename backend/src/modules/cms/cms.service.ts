@@ -34,6 +34,11 @@ export class CmsService {
   }> = [];
   private isTranslating = false;
 
+  // Progress tracking for retranslateAll runs
+  private translationTotal = 0;
+  private translationCompleted = 0;
+  private translationLastStartedAt: Date | null = null;
+
   constructor(
     @InjectRepository(CmsContentEntity)
     private readonly repo: Repository<CmsContentEntity>,
@@ -289,7 +294,19 @@ export class CmsService {
   async retranslateAll(): Promise<{ enqueued: number }> {
     const doc = await this.getContent();
     const content = doc.content;
-    let enqueued = 0;
+
+    // Clear any pending jobs and reset progress counters
+    this.translateQueue.length = 0;
+    this.translationCompleted = 0;
+    this.translationTotal = 0;
+    this.translationLastStartedAt = new Date();
+
+    const jobs: Array<{
+      section: string;
+      fieldPath: string;
+      value: string;
+      targetLang: string;
+    }> = [];
 
     for (const [section, langMap] of Object.entries(content)) {
       const plContent = langMap['pl'];
@@ -302,14 +319,39 @@ export class CmsService {
         if (this.isStyleField(fieldPath)) continue;
 
         for (const lang of ['en', 'es']) {
-          this.enqueueTranslation(section, fieldPath, value, lang);
-          enqueued++;
+          jobs.push({ section, fieldPath, value, targetLang: lang });
         }
       }
     }
 
-    this.logger.log(`retranslateAll: enqueued ${enqueued} translation jobs`);
-    return { enqueued };
+    this.translationTotal = jobs.length;
+    for (const job of jobs) {
+      this.translateQueue.push(job);
+    }
+
+    this.logger.log(`retranslateAll: enqueued ${jobs.length} translation jobs`);
+
+    // Start processing if not already running
+    void this.processTranslateQueue();
+
+    return { enqueued: jobs.length };
+  }
+
+  /** Returns current translation queue status for frontend polling. */
+  getTranslationStatus(): {
+    isProcessing: boolean;
+    queueSize: number;
+    completed: number;
+    total: number;
+    startedAt: string | null;
+  } {
+    return {
+      isProcessing: this.isTranslating,
+      queueSize: this.translateQueue.length,
+      completed: this.translationCompleted,
+      total: this.translationTotal,
+      startedAt: this.translationLastStartedAt?.toISOString() ?? null,
+    };
   }
 
   /** Flattens a nested object into dot-notation paths. */
@@ -476,11 +518,13 @@ export class CmsService {
       );
 
       this.cache.delete(CACHE_KEY);
+      this.translationCompleted++;
 
       this.logger.log(
-        `CMS translated: ${job.section}.${job.fieldPath} → ${job.targetLang}`,
+        `CMS translated [${this.translationCompleted}/${this.translationTotal}]: ${job.section}.${job.fieldPath} → ${job.targetLang}`,
       );
     } catch (error) {
+      this.translationCompleted++;
       this.logger.error(
         `CMS translate failed: ${job.section}.${job.fieldPath} → ${job.targetLang}: ${String(error)}`,
       );

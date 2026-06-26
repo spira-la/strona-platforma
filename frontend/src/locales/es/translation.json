@@ -641,7 +641,9 @@
         "description": "Vuelve a traducir todos los campos del CMS en polaco al inglés y español. Útil cuando las traducciones están incompletas o son incorrectas.",
         "button": "Retraducir todo",
         "running": "Traduciendo...",
-        "success": "Traducción iniciada. El contenido CMS se actualizará en segundo plano."
+        "fieldsTranslated": "campos traducidos",
+        "success": "Traducción completada. El contenido CMS ha sido actualizado.",
+        "nothingToTranslate": "Nada que traducir (no se encontraron campos PL en el CMS)."
       }
     },
     "contact": {
