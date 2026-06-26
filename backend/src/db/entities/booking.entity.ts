@@ -3,7 +3,6 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn,
   Index,
 } from 'typeorm';
 import { BookingStatus } from './enums';
@@ -23,8 +22,8 @@ export class BookingEntity {
   @Column({ name: 'coach_id', type: 'uuid' })
   coachId: string;
 
-  @Column({ name: 'user_id', type: 'uuid' })
-  userId: string;
+  @Column({ name: 'user_id', type: 'uuid', nullable: true })
+  userId: string | null;
 
   @Column({ name: 'start_time', type: 'timestamptz' })
   startTime: Date;
@@ -40,8 +39,8 @@ export class BookingEntity {
   })
   status: BookingStatus | null;
 
-  @Column({ name: 'meeting_link', type: 'text', nullable: true })
-  meetingLink: string | null;
+  @Column({ name: 'meeting_url', type: 'text', nullable: true })
+  meetingUrl: string | null;
 
   @Column({ name: 'livekit_room_name', type: 'text', nullable: true })
   livekitRoomName: string | null;
@@ -69,7 +68,4 @@ export class BookingEntity {
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz', nullable: true })
   createdAt: Date | null;
-
-  @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz', nullable: true })
-  updatedAt: Date | null;
 }

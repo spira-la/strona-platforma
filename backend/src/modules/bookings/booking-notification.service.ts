@@ -131,7 +131,7 @@ export class BookingNotificationService {
           : null);
 
       const sessionLink =
-        ctx.booking.meetingLink ??
+        ctx.booking.meetingUrl ??
         `${this.frontendUrl}/session/${ctx.booking.id}`;
 
       const icsAttachment = this.ics.buildAttachment(
@@ -190,7 +190,7 @@ export class BookingNotificationService {
           : null);
 
       const sessionLink =
-        ctx.booking.meetingLink ??
+        ctx.booking.meetingUrl ??
         `${this.frontendUrl}/session/${ctx.booking.id}`;
 
       const icsAttachment = this.ics.buildAttachment(
@@ -250,6 +250,104 @@ export class BookingNotificationService {
     } catch (error) {
       this.logger.error(
         `Failed to send reschedule email for ${ctx.booking.id}: ${(error as Error).message}`,
+      );
+    }
+  }
+
+  async sendCancellation(ctx: NotificationContext): Promise<void> {
+    try {
+      const service =
+        ctx.service ??
+        (ctx.booking.serviceId
+          ? await this.services.findOne({
+              where: { id: ctx.booking.serviceId },
+            })
+          : null);
+
+      const sessionLink =
+        ctx.booking.meetingUrl ??
+        `${this.frontendUrl}/session/${ctx.booking.id}`;
+
+      // METHOD:CANCEL removes the event from the client's calendar app
+      const icsAttachment = this.ics.buildAttachment(
+        {
+          uid: `booking-${ctx.booking.id}@spirala`,
+          method: 'CANCEL',
+          sequence: (ctx.booking.rescheduleCount ?? 0) + 1,
+          summary: `Spirala — ${service?.name ?? 'Session'}`,
+          description: `Your Spirala session has been cancelled.\n\nOriginal link: ${sessionLink}`,
+          url: sessionLink,
+          start: ctx.booking.startTime,
+          end: ctx.booking.endTime,
+          organizerName: 'Spirala',
+          organizerEmail: this.adminEmail ?? 'noreply@spira.la',
+          attendees: [{ name: ctx.customerName, email: ctx.customerEmail }],
+        },
+        `spirala-cancellation-${ctx.booking.id}.ics`,
+      );
+
+      const when = this.formatDateTime(ctx.booking.startTime);
+      const firstName = ctx.customerName.split(/\s+/)[0] ?? ctx.customerName;
+
+      await this.email.sendMail({
+        to: ctx.customerEmail,
+        subject: `Sesja anulowana — ${when}`,
+        html: wrapWithSpiralaLayout({
+          preheader: `Twoja sesja ${service?.name ?? ''} na ${when} została anulowana`,
+          title: 'Sesja anulowana',
+          subtitle: 'Anulowanie rezerwacji',
+          body: `
+            <p style="margin: 0 0 16px; font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #2D2D2D; line-height: 1.7;">
+              Cześć <strong>${escapeHtml(firstName)}</strong>,
+            </p>
+            <p style="margin: 0 0 24px; font-family: 'Lato', Arial, sans-serif; font-size: 15px; color: #2D2D2D; line-height: 1.7;">
+              Informujemy, że Twoja sesja została anulowana.
+            </p>
+            <table style="width: 100%; border-collapse: collapse; margin: 0 0 24px;">
+              ${service ? kvRow('Usługa', escapeHtml(service.name)) : ''}
+              ${ctx.coachName ? kvRow('Coach', escapeHtml(ctx.coachName)) : ''}
+              ${kvRow('Termin', `<span style="color:#8A8A8A;text-decoration:line-through;">${escapeHtml(when)}</span>`)}
+              ${ctx.booking.cancellationReason ? kvRow('Powód', escapeHtml(ctx.booking.cancellationReason)) : ''}
+            </table>
+            <p style="margin: 0 0 24px; font-family: 'Lato', Arial, sans-serif; font-size: 14px; color: #6B6B6B; line-height: 1.7;">
+              Załączony plik <strong>.ics</strong> automatycznie usunie wydarzenie z Twojego kalendarza.
+            </p>
+            <p style="margin: 0 0 24px; font-family: 'Lato', Arial, sans-serif; font-size: 14px; color: #6B6B6B; line-height: 1.7;">
+              Jeśli masz pytania, skontaktuj się z nami odpowiadając na tego maila.
+            </p>
+            <p style="margin: 32px 0 0; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; color: #2D2D2D; font-style: italic;">
+              Z pozdrowieniem,<br>
+              <strong style="font-style: normal;">Aneta Mroczko</strong>
+            </p>
+          `,
+        }),
+        attachments: [icsAttachment],
+      });
+
+      // Also notify the admin
+      if (this.adminEmail) {
+        await this.email.sendMail({
+          to: this.adminEmail,
+          subject: `Anulowanie sesji — ${ctx.customerName} — ${when}`,
+          html: wrapWithSpiralaLayout({
+            preheader: `Sesja ${ctx.customerName} na ${when} została anulowana`,
+            title: 'Sesja anulowana',
+            subtitle: 'Anulowanie przez coacha',
+            body: `
+              <table style="width: 100%; border-collapse: collapse; margin: 0;">
+                ${kvRow('Klient', `${escapeHtml(ctx.customerName)} <span style="color:#6B6B6B;">&lt;<a href="mailto:${escapeHtml(ctx.customerEmail)}" style="color:#B8963E;text-decoration:none;">${escapeHtml(ctx.customerEmail)}</a>&gt;</span>`)}
+                ${service ? kvRow('Usługa', escapeHtml(service.name)) : ''}
+                ${kvRow('Termin', `<span style="text-decoration:line-through;">${escapeHtml(when)}</span>`)}
+                ${ctx.booking.cancellationReason ? kvRow('Powód', escapeHtml(ctx.booking.cancellationReason)) : ''}
+                ${kvRow('Booking ID', `<code style="font-family:monospace;font-size:12px;color:#6B6B6B;">${escapeHtml(ctx.booking.id)}</code>`)}
+              </table>
+            `,
+          }),
+        });
+      }
+    } catch (error) {
+      this.logger.error(
+        `Failed to send cancellation email for ${ctx.booking.id}: ${(error as Error).message}`,
       );
     }
   }

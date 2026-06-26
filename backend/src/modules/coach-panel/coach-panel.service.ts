@@ -2,6 +2,8 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
+  BadRequestException,
+  ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, MoreThan } from 'typeorm';
@@ -15,6 +17,7 @@ import {
 } from '../../db/entities/availability.entity.js';
 import { OrderEntity } from '../../db/entities/order.entity.js';
 import { BookingStatus, OrderStatus } from '../../db/entities/enums.js';
+import { BookingNotificationService } from '../bookings/booking-notification.service.js';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -28,9 +31,24 @@ export interface AvailabilitySlot {
 }
 
 export interface CreateBlockData {
-  startDate: string;
-  endDate: string;
+  startAt: string;
+  endAt: string;
   reason?: string | null;
+}
+
+export interface RescheduleSessionData {
+  newStartAt: string;
+  newEndAt: string;
+  reason?: string;
+}
+
+export interface CreateManualSessionData {
+  clientEmail: string;
+  clientName?: string;
+  serviceId?: string;
+  startAt: string;
+  endAt: string;
+  notes?: string;
 }
 
 export interface UpdateProfileData {
@@ -83,6 +101,8 @@ export class CoachPanelService {
 
     @InjectRepository(ProfileEntity)
     private readonly profileRepo: Repository<ProfileEntity>,
+
+    private readonly notifications: BookingNotificationService,
   ) {}
 
   // ---------------------------------------------------------------------------
@@ -263,7 +283,7 @@ export class CoachPanelService {
     const coach = await this.resolveCoach(userId);
     return this.blockRepo.find({
       where: { coachId: coach.id },
-      order: { startDate: 'ASC' },
+      order: { startTime: 'ASC' },
     });
   }
 
@@ -275,8 +295,8 @@ export class CoachPanelService {
 
     const entity = this.blockRepo.create({
       coachId: coach.id,
-      startDate: data.startDate,
-      endDate: data.endDate,
+      startTime: new Date(data.startAt),
+      endTime: new Date(data.endAt),
       reason: data.reason ?? null,
     });
 
@@ -317,11 +337,325 @@ export class CoachPanelService {
   // Sessions
   // ---------------------------------------------------------------------------
 
-  async getSessions(userId: string): Promise<BookingEntity[]> {
+  async getSessions(userId: string): Promise<CoachSessionDto[]> {
     const coach = await this.resolveCoach(userId);
-    return this.bookingRepo.find({
-      where: { coachId: coach.id },
-      order: { startTime: 'DESC' },
+
+    const rows = await this.bookingRepo
+      .createQueryBuilder('b')
+      .leftJoin(OrderEntity, 'o', 'o.id = b.order_id')
+      .leftJoin(CoachingServiceEntity, 's', 's.id = b.service_id')
+      .select('b.id', 'id')
+      .addSelect('b.status', 'status')
+      .addSelect('b.startTime', 'startAt')
+      .addSelect('b.endTime', 'endAt')
+      .addSelect("COALESCE(o.customer_name, 'Nieznany')", 'clientName')
+      .addSelect("COALESCE(o.customer_email, '')", 'clientEmail')
+      .addSelect("COALESCE(s.name, '')", 'serviceName')
+      .addSelect('b.meetingUrl', 'meetingUrl')
+      .addSelect('b.notes', 'notes')
+      .addSelect('b.rescheduledAt', 'rescheduledAt')
+      .addSelect('b.cancellationReason', 'cancellationReason')
+      .where('b.coach_id = :coachId', { coachId: coach.id })
+      .orderBy('b.start_time', 'DESC')
+      .getRawMany<CoachSessionDto>();
+
+    // For manual sessions (no order), parse client info from notes JSON
+    return rows.map((row) => {
+      if (row.clientName === 'Nieznany' && row.notes) {
+        try {
+          const parsed = JSON.parse(row.notes) as {
+            manualClient?: { name?: string; email?: string };
+          };
+          if (parsed.manualClient) {
+            return {
+              ...row,
+              clientName: parsed.manualClient.name || 'Klient',
+              clientEmail: parsed.manualClient.email || '',
+            };
+          }
+        } catch {
+          // ignore malformed notes
+        }
+      }
+      return row;
     });
   }
+
+  // ---------------------------------------------------------------------------
+  // Session actions (coach-initiated)
+  // ---------------------------------------------------------------------------
+
+  async cancelSession(
+    userId: string,
+    bookingId: string,
+    reason?: string,
+  ): Promise<void> {
+    const coach = await this.resolveCoach(userId);
+    const booking = await this.bookingRepo.findOne({
+      where: { id: bookingId },
+    });
+    if (!booking) throw new NotFoundException('Session not found');
+    if (booking.coachId !== coach.id)
+      throw new ForbiddenException('Not your session');
+    if (booking.status === BookingStatus.CANCELLED) {
+      throw new BadRequestException('Session is already cancelled');
+    }
+    booking.status = BookingStatus.CANCELLED;
+    booking.cancellationReason = reason ?? null;
+    await this.bookingRepo.save(booking);
+
+    // Resolve client info for cancellation email
+    let customerEmail: string | null = null;
+    let customerName = 'Klient';
+    if (booking.orderId) {
+      const order = await this.orderRepo.findOne({
+        where: { id: booking.orderId },
+      });
+      customerEmail = order?.customerEmail ?? null;
+      customerName = order?.customerName ?? 'Klient';
+    } else if (booking.notes) {
+      try {
+        const parsed = JSON.parse(booking.notes) as {
+          manualClient?: { email?: string; name?: string };
+        };
+        customerEmail = parsed.manualClient?.email ?? null;
+        customerName = parsed.manualClient?.name || 'Klient';
+      } catch {
+        /* ignore */
+      }
+    }
+
+    if (customerEmail) {
+      const profile = await this.profileRepo.findOne({ where: { id: userId } });
+      void this.notifications.sendCancellation({
+        booking,
+        customerEmail,
+        customerName,
+        coachName: profile?.fullName ?? null,
+        coachEmail: profile?.email ?? null,
+      });
+    }
+  }
+
+  async rescheduleSession(
+    userId: string,
+    bookingId: string,
+    data: RescheduleSessionData,
+  ): Promise<void> {
+    const coach = await this.resolveCoach(userId);
+    const booking = await this.bookingRepo.findOne({
+      where: { id: bookingId },
+    });
+    if (!booking) throw new NotFoundException('Session not found');
+    if (booking.coachId !== coach.id)
+      throw new ForbiddenException('Not your session');
+    if (booking.status !== BookingStatus.CONFIRMED) {
+      throw new BadRequestException('Can only reschedule confirmed sessions');
+    }
+
+    const newStart = new Date(data.newStartAt);
+    const newEnd = new Date(data.newEndAt);
+    if (newEnd <= newStart)
+      throw new BadRequestException('End must be after start');
+
+    // Conflict check (coach's other confirmed bookings)
+    const conflict = await this.bookingRepo
+      .createQueryBuilder('b')
+      .where('b.coach_id = :coachId', { coachId: coach.id })
+      .andWhere('b.id != :id', { id: bookingId })
+      .andWhere('b.status = :status', { status: BookingStatus.CONFIRMED })
+      .andWhere('b.start_time < :end', { end: newEnd })
+      .andWhere('b.end_time > :start', { start: newStart })
+      .getOne();
+    if (conflict) {
+      throw new ConflictException(
+        'New time conflicts with an existing session',
+      );
+    }
+
+    const previousStart = booking.startTime;
+    booking.rescheduledFrom = booking.startTime;
+    booking.rescheduledAt = new Date();
+    booking.rescheduleReason = data.reason ?? null;
+    booking.rescheduleCount = (booking.rescheduleCount ?? 0) + 1;
+    booking.startTime = newStart;
+    booking.endTime = newEnd;
+    await this.bookingRepo.save(booking);
+
+    // Resolve client info for reschedule email
+    let customerEmail: string | null = null;
+    let customerName = 'Klient';
+    if (booking.orderId) {
+      const order = await this.orderRepo.findOne({
+        where: { id: booking.orderId },
+      });
+      customerEmail = order?.customerEmail ?? null;
+      customerName = order?.customerName ?? 'Klient';
+    } else if (booking.notes) {
+      try {
+        const parsed = JSON.parse(booking.notes) as {
+          manualClient?: { email?: string; name?: string };
+        };
+        customerEmail = parsed.manualClient?.email ?? null;
+        customerName = parsed.manualClient?.name || 'Klient';
+      } catch {
+        /* ignore */
+      }
+    }
+
+    if (customerEmail) {
+      const profile = await this.profileRepo.findOne({ where: { id: userId } });
+      void this.notifications.sendRescheduled(
+        {
+          booking,
+          customerEmail,
+          customerName,
+          coachName: profile?.fullName ?? null,
+          coachEmail: profile?.email ?? null,
+        },
+        previousStart,
+      );
+    }
+  }
+
+  async createManualSession(
+    userId: string,
+    data: CreateManualSessionData,
+  ): Promise<CoachSessionDto> {
+    const coach = await this.resolveCoach(userId);
+
+    const start = new Date(data.startAt);
+    const end = new Date(data.endAt);
+    if (end <= start) throw new BadRequestException('End must be after start');
+
+    // Store client info in notes as JSON for manual sessions without an order
+    const notes = JSON.stringify({
+      manualClient: { name: data.clientName ?? '', email: data.clientEmail },
+      ...(data.notes ? { coachNotes: data.notes } : {}),
+    });
+
+    let booking = this.bookingRepo.create({
+      coachId: coach.id,
+      userId: null,
+      orderId: null,
+      serviceId: data.serviceId ?? null,
+      startTime: start,
+      endTime: end,
+      status: BookingStatus.CONFIRMED,
+      notes,
+    });
+
+    booking = await this.bookingRepo.save(booking);
+    booking.meetingUrl = `${process.env.FRONTEND_URL ?? ''}/meeting/${booking.id}`;
+    await this.bookingRepo.save(booking);
+
+    // Resolve service and coach profile for email
+    let svc: CoachingServiceEntity | null = null;
+    if (data.serviceId) {
+      svc = await this.serviceRepo.findOne({ where: { id: data.serviceId } });
+    }
+    const profile = await this.profileRepo.findOne({ where: { id: userId } });
+
+    // Send confirmation email to client (non-blocking)
+    void this.notifications.sendConfirmation({
+      booking,
+      service: svc,
+      customerEmail: data.clientEmail,
+      customerName: data.clientName || 'Klient',
+      coachName: profile?.fullName ?? null,
+      coachEmail: profile?.email ?? null,
+    });
+
+    return {
+      id: booking.id,
+      status: booking.status ?? BookingStatus.CONFIRMED,
+      startAt: booking.startTime.toISOString(),
+      endAt: booking.endTime.toISOString(),
+      clientName: data.clientName || 'Klient',
+      clientEmail: data.clientEmail,
+      serviceName: svc?.name ?? '',
+      meetingUrl: booking.meetingUrl,
+      notes: booking.notes,
+      rescheduledAt: null,
+      cancellationReason: null,
+    };
+  }
+
+  // ---------------------------------------------------------------------------
+  // Past clients list (for manual session autocomplete)
+  // ---------------------------------------------------------------------------
+
+  async getClients(userId: string): Promise<CoachClientDto[]> {
+    const coach = await this.resolveCoach(userId);
+
+    // Clients from paid orders
+    const orderClients = await this.orderRepo
+      .createQueryBuilder('o')
+      .select('o.customer_email', 'email')
+      .addSelect('MAX(o.customer_name)', 'name')
+      .innerJoin(
+        BookingEntity,
+        'b',
+        'b.order_id = o.id AND b.coach_id = :coachId',
+        { coachId: coach.id },
+      )
+      .where('o.customer_email IS NOT NULL')
+      .andWhere("o.customer_email != ''")
+      .groupBy('o.customer_email')
+      .orderBy('MAX(o.created_at)', 'DESC')
+      .getRawMany<{ email: string; name: string }>();
+
+    // Clients from manual sessions (stored in notes JSON, orderId IS NULL)
+    const manualBookings = await this.bookingRepo
+      .createQueryBuilder('b')
+      .select('b.notes', 'notes')
+      .where('b.coach_id = :coachId', { coachId: coach.id })
+      .andWhere('b.order_id IS NULL')
+      .andWhere('b.notes IS NOT NULL')
+      .getRawMany<{ notes: string }>();
+
+    const manualClients: CoachClientDto[] = [];
+    const seenEmails = new Set(orderClients.map((c) => c.email.toLowerCase()));
+
+    for (const b of manualBookings) {
+      if (!b.notes) continue; // already filtered by IS NOT NULL, but guard anyway
+      try {
+        const parsed = JSON.parse(b.notes) as {
+          manualClient?: { email?: string; name?: string };
+        };
+        const email = parsed.manualClient?.email;
+        const name = parsed.manualClient?.name ?? '';
+        if (email && !seenEmails.has(email.toLowerCase())) {
+          seenEmails.add(email.toLowerCase());
+          manualClients.push({ email, name });
+        }
+      } catch {
+        // ignore malformed notes
+      }
+    }
+
+    return [
+      ...orderClients.map((c) => ({ email: c.email, name: c.name ?? '' })),
+      ...manualClients,
+    ];
+  }
+}
+
+export interface CoachClientDto {
+  email: string;
+  name: string;
+}
+
+export interface CoachSessionDto {
+  id: string;
+  status: string;
+  startAt: string;
+  endAt: string;
+  clientName: string;
+  clientEmail: string;
+  serviceName: string;
+  meetingUrl: string | null;
+  notes: string | null;
+  rescheduledAt: string | null;
+  cancellationReason: string | null;
 }

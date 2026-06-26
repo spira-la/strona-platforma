@@ -21,6 +21,9 @@ import {
   UpdateProfileData,
   AvailabilitySlot,
   CreateBlockData,
+  RescheduleSessionData,
+  CreateManualSessionData,
+  CoachClientDto,
 } from './coach-panel.service.js';
 
 // ---------------------------------------------------------------------------
@@ -29,11 +32,14 @@ import {
 
 type UpdateProfileBody = UpdateProfileData;
 
-interface UpdateAvailabilityBody {
-  slots: AvailabilitySlot[];
-}
+// Body can be either { slots: [...] } or the array directly
+type UpdateAvailabilityBody =
+  | { slots?: AvailabilitySlot[] }
+  | AvailabilitySlot[];
 
 type CreateBlockBody = CreateBlockData;
+type RescheduleBody = RescheduleSessionData;
+type CreateManualSessionBody = CreateManualSessionData;
 
 // ---------------------------------------------------------------------------
 // Controller
@@ -121,10 +127,10 @@ export class CoachPanelController {
     @CurrentUser() user: User,
     @Body() body: UpdateAvailabilityBody,
   ) {
-    const data = await this.coachPanel.updateAvailability(
-      user.id,
-      body.slots ?? [],
-    );
+    const slots: AvailabilitySlot[] = Array.isArray(body)
+      ? body
+      : ((body as { slots?: AvailabilitySlot[] }).slots ?? []);
+    const data = await this.coachPanel.updateAvailability(user.id, slots);
     return { success: true, data };
   }
 
@@ -138,7 +144,13 @@ export class CoachPanelController {
    */
   @Get('availability/blocks')
   async getBlocks(@CurrentUser() user: User) {
-    const data = await this.coachPanel.getBlocks(user.id);
+    const blocks = await this.coachPanel.getBlocks(user.id);
+    const data = blocks.map((b) => ({
+      id: b.id,
+      startAt: b.startTime.toISOString(),
+      endAt: b.endTime.toISOString(),
+      reason: b.reason ?? null,
+    }));
     return { success: true, data };
   }
 
@@ -184,6 +196,18 @@ export class CoachPanelController {
   // ---------------------------------------------------------------------------
 
   /**
+   * GET /api/coach/me/clients
+   * Returns distinct past clients (from orders + manual sessions).
+   */
+  @Get('clients')
+  async getClients(
+    @CurrentUser() user: User,
+  ): Promise<{ success: boolean; data: CoachClientDto[] }> {
+    const data = await this.coachPanel.getClients(user.id);
+    return { success: true, data };
+  }
+
+  /**
    * GET /api/coach/me/sessions
    * Returns all bookings for this coach, ordered by startTime DESC.
    */
@@ -191,5 +215,47 @@ export class CoachPanelController {
   async getSessions(@CurrentUser() user: User) {
     const data = await this.coachPanel.getSessions(user.id);
     return { success: true, data };
+  }
+
+  /**
+   * POST /api/coach/me/sessions/manual
+   * Create a manual (coach-initiated) session for a client.
+   */
+  @Post('sessions/manual')
+  @HttpCode(HttpStatus.CREATED)
+  async createManualSession(
+    @CurrentUser() user: User,
+    @Body() body: CreateManualSessionBody,
+  ) {
+    const data = await this.coachPanel.createManualSession(user.id, body);
+    return { success: true, data };
+  }
+
+  /**
+   * PATCH /api/coach/me/sessions/:id/cancel
+   * Cancel a session owned by this coach.
+   */
+  @Patch('sessions/:id/cancel')
+  async cancelSession(
+    @CurrentUser() user: User,
+    @Param('id') id: string,
+    @Body() body: { reason?: string },
+  ) {
+    await this.coachPanel.cancelSession(user.id, id, body.reason);
+    return { success: true, data: null };
+  }
+
+  /**
+   * PATCH /api/coach/me/sessions/:id/reschedule
+   * Reschedule a session to a new time.
+   */
+  @Patch('sessions/:id/reschedule')
+  async rescheduleSession(
+    @CurrentUser() user: User,
+    @Param('id') id: string,
+    @Body() body: RescheduleBody,
+  ) {
+    await this.coachPanel.rescheduleSession(user.id, id, body);
+    return { success: true, data: null };
   }
 }

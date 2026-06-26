@@ -72,9 +72,18 @@ export function MultiSessionPicker({
       onChange(selected.filter((s) => s.startTime !== slot.startTime));
       return;
     }
-    if (selected.length >= sessionCount) return;
+    // Remove any existing slot on the same day before adding the new one
+    const slotYmd = viewDate ? toYmd(viewDate) : null;
+    const withoutSameDay = slotYmd
+      ? selected.filter((s) => toYmd(new Date(s.startTime)) !== slotYmd)
+      : selected;
+    if (
+      withoutSameDay.length === selected.length &&
+      selected.length >= sessionCount
+    )
+      return;
     onChange([
-      ...selected,
+      ...withoutSameDay,
       { startTime: slot.startTime, endTime: slot.endTime },
     ]);
   }
@@ -88,13 +97,26 @@ export function MultiSessionPicker({
     return h >= 12;
   });
 
+  const hasSameDaySlot = viewDate
+    ? selected.some((s) => toYmd(new Date(s.startTime)) === toYmd(viewDate))
+    : false;
+
   const allChosen = selected.length === sessionCount;
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <BookingCalendar
         selectedDate={viewDate}
-        onSelectDate={(d) => setViewDate(d)}
+        onSelectDate={(d) => {
+          if (viewDate && toYmd(viewDate) !== toYmd(d)) {
+            const prevYmd = toYmd(viewDate);
+            const filtered = selected.filter(
+              (s) => toYmd(new Date(s.startTime)) !== prevYmd,
+            );
+            if (filtered.length !== selected.length) onChange(filtered);
+          }
+          setViewDate(d);
+        }}
       />
 
       <div className="rounded-lg overflow-hidden border border-[#E8E4DF] bg-white shadow-sm">
@@ -168,7 +190,9 @@ export function MultiSessionPicker({
                   label="Rano"
                   slots={morning}
                   selectedStartTimes={selectedStartTimes}
-                  disableUnselected={selected.length >= sessionCount}
+                  disableUnselected={
+                    selected.length >= sessionCount && !hasSameDaySlot
+                  }
                   onToggle={toggleSlot}
                 />
               )}
@@ -177,7 +201,9 @@ export function MultiSessionPicker({
                   label="Po poludniu"
                   slots={afternoon}
                   selectedStartTimes={selectedStartTimes}
-                  disableUnselected={selected.length >= sessionCount}
+                  disableUnselected={
+                    selected.length >= sessionCount && !hasSameDaySlot
+                  }
                   onToggle={toggleSlot}
                 />
               )}

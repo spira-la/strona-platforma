@@ -43,7 +43,7 @@ export class BookingsService {
   async create(input: CreateBookingInput): Promise<BookingEntity> {
     const booking = this.bookings.create({
       orderId: input.orderId,
-      userId: input.userId ?? '00000000-0000-0000-0000-000000000000',
+      userId: input.userId ?? null,
       coachId: input.coachId,
       serviceId: input.serviceId,
       startTime: input.startTime,
@@ -56,7 +56,7 @@ export class BookingsService {
     // Deterministic LiveKit room name (matches BeWonderMe convention so
     // the recording template URL and host nginx CORS are interchangeable).
     saved.livekitRoomName = `meeting-${saved.id}`;
-    saved.meetingLink = `${process.env.FRONTEND_URL ?? ''}/meeting/${saved.id}`;
+    saved.meetingUrl = `${process.env.FRONTEND_URL ?? ''}/meeting/${saved.id}`;
     await this.bookings.save(saved);
 
     return saved;

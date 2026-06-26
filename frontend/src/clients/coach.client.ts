@@ -102,6 +102,25 @@ export interface CoachSession {
   endAt: string;
   status: string;
   serviceName: string;
+  meetingUrl: string | null;
+  notes: string | null;
+  rescheduledAt: string | null;
+  cancellationReason: string | null;
+}
+
+export interface RescheduleSessionData {
+  newStartAt: string;
+  newEndAt: string;
+  reason?: string;
+}
+
+export interface CreateManualSessionData {
+  clientEmail: string;
+  clientName?: string;
+  serviceId?: string;
+  startAt: string;
+  endAt: string;
+  notes?: string;
 }
 
 // ─── API methods ──────────────────────────────────────────────────────────────
@@ -135,15 +154,17 @@ export const coachClient = {
       .then((r) => r.data),
 
   getBlocks: (): Promise<CoachBlock[]> =>
-    api.get<Envelope<CoachBlock[]>>('/coach/me/blocks').then((r) => r.data),
+    api
+      .get<Envelope<CoachBlock[]>>('/coach/me/availability/blocks')
+      .then((r) => r.data),
 
   createBlock: (data: CreateBlockData): Promise<CoachBlock> =>
     api
-      .post<Envelope<CoachBlock>>('/coach/me/blocks', data)
+      .post<Envelope<CoachBlock>>('/coach/me/availability/blocks', data)
       .then((r) => r.data),
 
   deleteBlock: (id: string): Promise<void> =>
-    api.delete<void>(`/coach/me/blocks/${id}`),
+    api.delete<void>(`/coach/me/availability/blocks/${id}`),
 
   getServices: (): Promise<CoachService[]> =>
     api.get<Envelope<CoachService[]>>('/coach/me/services').then((r) => r.data),
@@ -173,4 +194,20 @@ export const coachClient = {
 
   getSessions: (): Promise<CoachSession[]> =>
     api.get<Envelope<CoachSession[]>>('/coach/me/sessions').then((r) => r.data),
+
+  cancelSession: (id: string, reason?: string): Promise<void> =>
+    api.patch<void>(`/coach/me/sessions/${id}/cancel`, { reason }),
+
+  rescheduleSession: (id: string, data: RescheduleSessionData): Promise<void> =>
+    api.patch<void>(`/coach/me/sessions/${id}/reschedule`, data),
+
+  createManualSession: (data: CreateManualSessionData): Promise<CoachSession> =>
+    api
+      .post<Envelope<CoachSession>>('/coach/me/sessions/manual', data)
+      .then((r) => r.data),
+
+  getClients: (): Promise<{ email: string; name: string }[]> =>
+    api
+      .get<Envelope<{ email: string; name: string }[]>>('/coach/me/clients')
+      .then((r) => r.data),
 };

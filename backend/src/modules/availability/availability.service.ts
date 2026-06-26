@@ -1,10 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import {
-  AvailabilityEntity,
-  AvailabilityBlockEntity,
-} from '../../db/entities/availability.entity.js';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
+import { DataSource, Repository } from 'typeorm';
+import { AvailabilityEntity } from '../../db/entities/availability.entity.js';
 import { BookingEntity } from '../../db/entities/booking.entity.js';
 import { SlotHoldEntity } from '../../db/entities/slot-hold.entity.js';
 import { CoachEntity } from '../../db/entities/coach.entity.js';
@@ -19,10 +16,10 @@ export interface AvailableSlot {
 @Injectable()
 export class AvailabilityService {
   constructor(
+    @InjectDataSource()
+    private readonly dataSource: DataSource,
     @InjectRepository(AvailabilityEntity)
     private readonly availability: Repository<AvailabilityEntity>,
-    @InjectRepository(AvailabilityBlockEntity)
-    private readonly blocks: Repository<AvailabilityBlockEntity>,
     @InjectRepository(BookingEntity)
     private readonly bookings: Repository<BookingEntity>,
     @InjectRepository(SlotHoldEntity)
@@ -61,11 +58,17 @@ export class AvailabilityService {
     if (schedules.length === 0) return [];
 
     // Full-day blocks covering this date
-    const blocks = await this.blocks.find({
-      where: { coachId: input.coachId },
-    });
-    const isBlocked = blocks.some((b) => {
-      return input.date >= b.startDate && input.date <= b.endDate;
+    const blockRows = await this.dataSource.query<
+      { start_time: string; end_time: string }[]
+    >(
+      `SELECT start_time, end_time FROM availability_blocks WHERE coach_id = $1`,
+      [input.coachId],
+    );
+    const dayTs = new Date(`${input.date}T00:00:00Z`).getTime();
+    const isBlocked = blockRows.some((b) => {
+      const bs = new Date(b.start_time).getTime();
+      const be = new Date(b.end_time).getTime();
+      return dayTs >= bs && dayTs < be;
     });
     if (isBlocked) return [];
 
@@ -77,17 +80,17 @@ export class AvailabilityService {
     const [bookings, activeHolds] = await Promise.all([
       this.bookings
         .createQueryBuilder('b')
-        .where('b.coach_id = :coachId', { coachId: input.coachId })
+        .where('b.coachId = :coachId', { coachId: input.coachId })
         .andWhere('b.status = :status', { status: BookingStatus.CONFIRMED })
-        .andWhere('b.start_time < :end', { end: new Date(dayEndMs) })
-        .andWhere('b.end_time > :start', { start: new Date(dayStartMs) })
+        .andWhere('b.startTime < :end', { end: new Date(dayEndMs) })
+        .andWhere('b.endTime > :start', { start: new Date(dayStartMs) })
         .getMany(),
       this.holds
         .createQueryBuilder('h')
-        .where('h.coach_id = :coachId', { coachId: input.coachId })
-        .andWhere('h.expires_at > :now', { now: new Date() })
-        .andWhere('h.start_time < :end', { end: new Date(dayEndMs) })
-        .andWhere('h.end_time > :start', { start: new Date(dayStartMs) })
+        .where('h.coachId = :coachId', { coachId: input.coachId })
+        .andWhere('h.expiresAt > :now', { now: new Date() })
+        .andWhere('h.startTime < :end', { end: new Date(dayEndMs) })
+        .andWhere('h.endTime > :start', { start: new Date(dayStartMs) })
         .getMany(),
     ]);
 

@@ -54,15 +54,12 @@ interface UpdateCoachDto {
 // Controller
 // ---------------------------------------------------------------------------
 
-@UseGuards(SupabaseAuthGuard, RolesGuard)
-@Roles('admin')
 @Controller('coaches')
 export class CoachesController {
   constructor(private readonly coaches: CoachesService) {}
 
   /**
-   * GET /api/coaches
-   * Admin — list all coaches with their profile data (fullName, email joined from profiles).
+   * GET /api/coaches — public, used by booking flow to resolve default coachId
    */
   @Get()
   async findAll() {
@@ -71,8 +68,7 @@ export class CoachesController {
   }
 
   /**
-   * GET /api/coaches/:id
-   * Admin — get a single coach with profile data.
+   * GET /api/coaches/:id — public
    */
   @Get(':id')
   async findOne(@Param('id') id: string) {
@@ -81,10 +77,10 @@ export class CoachesController {
   }
 
   /**
-   * POST /api/coaches
-   * Admin — create a coach record from an existing user.
-   * Promotes the user's profile role to COACH if needed.
+   * POST /api/coaches — admin only
    */
+  @UseGuards(SupabaseAuthGuard, RolesGuard)
+  @Roles('admin')
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() body: CreateCoachDto) {
@@ -93,9 +89,10 @@ export class CoachesController {
   }
 
   /**
-   * PUT /api/coaches/:id
-   * Admin — update coach-specific fields (bio, expertise, etc.).
+   * PUT /api/coaches/:id — admin only
    */
+  @UseGuards(SupabaseAuthGuard, RolesGuard)
+  @Roles('admin')
   @Put(':id')
   async update(@Param('id') id: string, @Body() body: UpdateCoachDto) {
     const data = await this.coaches.update(id, body);
@@ -103,9 +100,10 @@ export class CoachesController {
   }
 
   /**
-   * PATCH /api/coaches/:id/archive
-   * Admin — soft-delete a coach (isActive=false).
+   * PATCH /api/coaches/:id/archive — admin only
    */
+  @UseGuards(SupabaseAuthGuard, RolesGuard)
+  @Roles('admin')
   @Patch(':id/archive')
   async archive(@Param('id') id: string) {
     const data = await this.coaches.archive(id);
@@ -113,9 +111,10 @@ export class CoachesController {
   }
 
   /**
-   * PATCH /api/coaches/:id/restore
-   * Admin — restore an archived coach (isActive=true).
+   * PATCH /api/coaches/:id/restore — admin only
    */
+  @UseGuards(SupabaseAuthGuard, RolesGuard)
+  @Roles('admin')
   @Patch(':id/restore')
   async restore(@Param('id') id: string) {
     const data = await this.coaches.restore(id);

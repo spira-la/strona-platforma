@@ -31,11 +31,11 @@ export class AvailabilityBlockEntity {
   @Column({ name: 'coach_id', type: 'uuid', nullable: true })
   coachId: string | null;
 
-  @Column({ name: 'start_date', type: 'date' })
-  startDate: string;
+  @Column({ name: 'start_time', type: 'timestamptz' })
+  startTime: Date;
 
-  @Column({ name: 'end_date', type: 'date' })
-  endDate: string;
+  @Column({ name: 'end_time', type: 'timestamptz' })
+  endTime: Date;
 
   @Column({ type: 'text', nullable: true })
   reason: string | null;

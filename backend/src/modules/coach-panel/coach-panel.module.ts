@@ -11,6 +11,7 @@ import {
 import { OrderEntity } from '../../db/entities/order.entity.js';
 import { CoachPanelService } from './coach-panel.service.js';
 import { CoachPanelController } from './coach-panel.controller.js';
+import { BookingsModule } from '../bookings/bookings.module.js';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { CoachPanelController } from './coach-panel.controller.js';
       AvailabilityBlockEntity,
       OrderEntity,
     ]),
+    BookingsModule,
   ],
   controllers: [CoachPanelController],
   providers: [CoachPanelService],

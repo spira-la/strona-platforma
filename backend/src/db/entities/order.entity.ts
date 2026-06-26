@@ -32,23 +32,11 @@ export class OrderEntity {
   @Column({ name: 'amount_cents', type: 'int' })
   amountCents: number;
 
-  @Column({ name: 'tax_cents', type: 'int', default: 0, nullable: true })
-  taxCents: number | null;
-
   @Column({ type: 'text', default: 'PLN', nullable: true })
   currency: string | null;
 
   @Column({ name: 'stripe_payment_intent_id', type: 'text', nullable: true })
   stripePaymentIntentId: string | null;
-
-  @Column({ name: 'sessions_total', type: 'int' })
-  sessionsTotal: number;
-
-  @Column({ name: 'sessions_remaining', type: 'int' })
-  sessionsRemaining: number;
-
-  @Column({ name: 'invoice_number', type: 'text', nullable: true })
-  invoiceNumber: string | null;
 
   @Column({ name: 'coupon_id', type: 'uuid', nullable: true })
   couponId: string | null;

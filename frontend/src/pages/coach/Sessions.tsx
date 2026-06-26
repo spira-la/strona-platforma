@@ -1,13 +1,17 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from '@tanstack/react-query';
-import { Calendar, CheckCircle2, XCircle, Clock } from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { Calendar, List, CheckCircle2, XCircle, Clock } from 'lucide-react';
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
 import { AdminStatCard } from '@/components/admin/AdminStatCard';
 import { AdminFilterTabs } from '@/components/admin/AdminFilterTabs';
 import { AdminTable } from '@/components/admin/AdminTable';
 import type { AdminTableColumn } from '@/components/admin/AdminTable';
 import { coachClient, type CoachSession } from '@/clients/coach.client';
+import { CoachWeekCalendar } from '@/components/coach/CoachWeekCalendar';
+import { SessionDetailModal } from '@/components/coach/SessionDetailModal';
+import { RescheduleModal } from '@/components/coach/RescheduleModal';
+import { ManualSessionModal } from '@/components/coach/ManualSessionModal';
 
 // ─── Teal accent constant ─────────────────────────────────────────────────────
 
@@ -105,15 +109,99 @@ type StatusFilter = 'all' | 'confirmed' | 'completed' | 'cancelled';
 export default function CoachSessions() {
   const { t } = useTranslation();
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [view, setView] = useState<'calendar' | 'table'>('calendar');
+  const queryClient = useQueryClient();
 
-  // ─── Query ────────────────────────────────────────────────────────────────
+  // ─── Modal state ──────────────────────────────────────────────────────────
+  const [detailSession, setDetailSession] = useState<CoachSession | null>(null);
+  const [rescheduleSession, setRescheduleSession] =
+    useState<CoachSession | null>(null);
+  const [manualPrefill, setManualPrefill] = useState<{
+    date: string;
+    startTime: string;
+  } | null>(null);
+
+  // ─── Queries ──────────────────────────────────────────────────────────────
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['coach-sessions'],
     queryFn: () => coachClient.getSessions(),
   });
 
+  const { data: blocksData } = useQuery({
+    queryKey: ['coach-blocks'],
+    queryFn: () => coachClient.getBlocks(),
+  });
+
+  const { data: availabilityData } = useQuery({
+    queryKey: ['coach-availability'],
+    queryFn: () => coachClient.getAvailability(),
+  });
+
+  const { data: profileData } = useQuery({
+    queryKey: ['coach-profile'],
+    queryFn: () => coachClient.getProfile(),
+  });
+
+  const { data: servicesData } = useQuery({
+    queryKey: ['coach-services'],
+    queryFn: () => coachClient.getServices(),
+  });
+
+  const { data: clientsData } = useQuery({
+    queryKey: ['coach-clients'],
+    queryFn: () => coachClient.getClients(),
+  });
+
+  const createBlockMutation = useMutation({
+    mutationFn: coachClient.createBlock,
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ['coach-blocks'] }),
+  });
+
+  const deleteBlockMutation = useMutation({
+    mutationFn: coachClient.deleteBlock,
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ['coach-blocks'] }),
+  });
+
+  const cancelSessionMutation = useMutation({
+    mutationFn: (id: string) => coachClient.cancelSession(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['coach-sessions'] });
+      setDetailSession(null);
+    },
+  });
+
+  const rescheduleSessionMutation = useMutation({
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: Parameters<typeof coachClient.rescheduleSession>[1];
+    }) => coachClient.rescheduleSession(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['coach-sessions'] });
+      setRescheduleSession(null);
+      setDetailSession(null);
+    },
+  });
+
+  const createManualSessionMutation = useMutation({
+    mutationFn: coachClient.createManualSession,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['coach-sessions'] });
+      setManualPrefill(null);
+    },
+  });
+
   const sessions = data ?? [];
+  const blocks = blocksData ?? [];
+  const availability = availabilityData ?? [];
+  const services = servicesData ?? [];
+  const pastClients = clientsData ?? [];
+  const coachId = (profileData as { id?: string } | undefined)?.id ?? '';
 
   // Derived stats
   const confirmed = sessions.filter((s) => s.status === 'confirmed');
@@ -211,49 +299,136 @@ export default function CoachSessions() {
         />
       </div>
 
-      {/* Filter tabs */}
-      <div className="mb-4">
-        <AdminFilterTabs<StatusFilter>
-          tabs={[
-            {
-              value: 'all',
-              label: t('coach.sessions.filter.all'),
-              count: sessions.length,
-            },
-            {
-              value: 'confirmed',
-              label: t('coach.sessions.filter.confirmed'),
-              count: confirmed.length,
-            },
-            {
-              value: 'completed',
-              label: t('coach.sessions.filter.completed'),
-              count: completed.length,
-            },
-            {
-              value: 'cancelled',
-              label: t('coach.sessions.filter.cancelled'),
-              count: cancelled.length,
-            },
-          ]}
-          active={statusFilter}
-          onChange={setStatusFilter}
-          isLoading={isLoading}
-        />
+      {/* View toggle */}
+      <div className="flex items-center gap-1 mb-4 p-1 bg-[#F5F2ED] rounded-lg w-fit">
+        <button
+          onClick={() => setView('calendar')}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
+            view === 'calendar'
+              ? 'bg-white text-[#B8944A] shadow-sm'
+              : 'text-[#6B6B6B] hover:text-[#2D2D2D]'
+          }`}
+          style={{ fontFamily: "'Lato', sans-serif" }}
+        >
+          <Calendar size={13} /> Kalendarz
+        </button>
+        <button
+          onClick={() => setView('table')}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
+            view === 'table'
+              ? 'bg-white text-[#B8944A] shadow-sm'
+              : 'text-[#6B6B6B] hover:text-[#2D2D2D]'
+          }`}
+          style={{ fontFamily: "'Lato', sans-serif" }}
+        >
+          <List size={13} /> Lista
+        </button>
       </div>
 
-      {/* Table */}
-      <AdminTable<CoachSession>
-        columns={columns}
-        data={filtered}
-        keyExtractor={(s) => s.id}
-        isLoading={isLoading}
-        isError={isError}
-        errorMessage={t('coach.sessions.errors.loadFailed')}
-        emptyIcon={Calendar}
-        emptyMessage={t('coach.sessions.empty.noSessions')}
-        ariaLabel={t('coach.sessions.table.label')}
-      />
+      {/* Calendar view */}
+      {view === 'calendar' && (
+        <CoachWeekCalendar
+          sessions={sessions}
+          blocks={blocks}
+          availability={availability}
+          onCreateBlock={(data) => createBlockMutation.mutate(data)}
+          onDeleteBlock={(id) => deleteBlockMutation.mutate(id)}
+          onSessionClick={setDetailSession}
+          onScheduleManual={(date, startTime) =>
+            setManualPrefill({ date, startTime })
+          }
+          isCreating={createBlockMutation.isPending}
+        />
+      )}
+
+      {/* ─── Session Detail Modal ─── */}
+      {detailSession && (
+        <SessionDetailModal
+          session={detailSession}
+          onClose={() => setDetailSession(null)}
+          onReschedule={(s) => {
+            setDetailSession(null);
+            setRescheduleSession(s);
+          }}
+          onCancel={(s) => cancelSessionMutation.mutate(s.id)}
+          isCancelling={cancelSessionMutation.isPending}
+        />
+      )}
+
+      {/* ─── Reschedule Modal ─── */}
+      {rescheduleSession && coachId && (
+        <RescheduleModal
+          session={rescheduleSession}
+          coachId={coachId}
+          onSubmit={(id, data) =>
+            rescheduleSessionMutation.mutate({ id, data })
+          }
+          onClose={() => setRescheduleSession(null)}
+          isSubmitting={rescheduleSessionMutation.isPending}
+        />
+      )}
+
+      {/* ─── Manual Session Modal ─── */}
+      {manualPrefill && (
+        <ManualSessionModal
+          prefillDate={manualPrefill.date}
+          prefillStart={manualPrefill.startTime}
+          services={services}
+          pastClients={pastClients}
+          onSubmit={(data) => createManualSessionMutation.mutate(data)}
+          onClose={() => setManualPrefill(null)}
+          isSubmitting={createManualSessionMutation.isPending}
+        />
+      )}
+
+      {/* Table view */}
+      {view === 'table' && (
+        <>
+          {/* Filter tabs */}
+          <div className="mb-4">
+            <AdminFilterTabs<StatusFilter>
+              tabs={[
+                {
+                  value: 'all',
+                  label: t('coach.sessions.filter.all'),
+                  count: sessions.length,
+                },
+                {
+                  value: 'confirmed',
+                  label: t('coach.sessions.filter.confirmed'),
+                  count: confirmed.length,
+                },
+                {
+                  value: 'completed',
+                  label: t('coach.sessions.filter.completed'),
+                  count: completed.length,
+                },
+                {
+                  value: 'cancelled',
+                  label: t('coach.sessions.filter.cancelled'),
+                  count: cancelled.length,
+                },
+              ]}
+              active={statusFilter}
+              onChange={setStatusFilter}
+              isLoading={isLoading}
+            />
+          </div>
+
+          {/* Table */}
+          <AdminTable<CoachSession>
+            columns={columns}
+            data={filtered}
+            keyExtractor={(s) => s.id}
+            isLoading={isLoading}
+            isError={isError}
+            errorMessage={t('coach.sessions.errors.loadFailed')}
+            emptyIcon={Calendar}
+            emptyMessage={t('coach.sessions.empty.noSessions')}
+            ariaLabel={t('coach.sessions.table.label')}
+          />
+        </>
+      )}
     </div>
   );
 }
