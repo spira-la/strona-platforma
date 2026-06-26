@@ -140,4 +140,17 @@ export const cmsClient = {
       {},
     );
   },
+
+  /**
+   * Seed static default PL values for EditableText fields that have never
+   * been saved to CMS. Skips fields that already have a PL value.
+   */
+  bulkSeed(
+    entries: Array<{ section: string; fieldPath: string; value: string }>,
+  ): Promise<{ success: boolean; seeded: number; message: string }> {
+    return api.post<{ success: boolean; seeded: number; message: string }>(
+      '/cms/bulk-seed',
+      { entries },
+    );
+  },
 };

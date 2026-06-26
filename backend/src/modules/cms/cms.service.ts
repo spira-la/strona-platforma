@@ -286,6 +286,72 @@ export class CmsService {
   }
 
   /**
+   * Seeds PL values for static EditableText defaults that have never been
+   * saved to the CMS. Skips any field that already has a PL value so it
+   * is safe to call repeatedly without overwriting admin edits.
+   */
+  async bulkSeed(
+    entries: Array<{ section: string; fieldPath: string; value: string }>,
+  ): Promise<{ seeded: number }> {
+    if (entries.length === 0) return { seeded: 0 };
+
+    const doc = await this.getContent();
+    const content = { ...doc.content };
+    let seeded = 0;
+
+    for (const { section, fieldPath, value } of entries) {
+      if (!value.trim()) continue;
+
+      // Skip if PL already has a value for this field
+      const plData = content[section]?.['pl'];
+      if (plData) {
+        const existing = this.flattenFields(plData);
+        if (existing[fieldPath]) continue;
+      }
+
+      if (!content[section]) content[section] = {};
+      if (!content[section]['pl']) content[section]['pl'] = {};
+
+      const parts = fieldPath.split('.');
+      let cursor: Record<string, unknown> = content[section]['pl'];
+      for (let i = 0; i < parts.length - 1; i++) {
+        const key = parts[i];
+        if (typeof cursor[key] !== 'object' || cursor[key] === null) {
+          cursor[key] = {};
+        }
+        cursor = cursor[key] as Record<string, unknown>;
+      }
+      cursor[parts.at(-1)!] = value;
+      seeded++;
+    }
+
+    if (seeded === 0) return { seeded: 0 };
+
+    const newVersion = (doc.version || 0) + 1;
+    const now = new Date();
+
+    if (doc.version === 0) {
+      const entity = this.repo.create({
+        id: DOC_ID,
+        content,
+        version: newVersion,
+        updatedAt: now,
+      });
+      await this.repo.save(entity);
+    } else {
+      await this.repo.update(
+        { id: DOC_ID },
+        { content, version: newVersion, updatedAt: now },
+      );
+    }
+
+    this.cache.delete(CACHE_KEY);
+    this.logger.log(`CMS bulk-seeded ${seeded} PL fields`);
+
+    return { seeded };
+  }
+
+  /**
    * Re-enqueues ALL translatable text fields from the Polish CMS content
    * to EN and ES. Useful to run after switching the translation provider
    * or fixing bad auto-translations. Non-blocking — returns the count of

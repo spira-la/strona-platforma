@@ -696,6 +696,15 @@
         "fieldsTranslated": "fields translated",
         "success": "Translation complete. CMS content has been updated.",
         "nothingToTranslate": "Nothing to translate (no PL fields found in CMS)."
+      },
+      "seed": {
+        "title": "Seed static text fields",
+        "description": "{{count}} fields with static Polish text detected on visited pages. Save them to CMS first, then translate.",
+        "descriptionNone": "No new fields to seed. Browse site pages to detect static text.",
+        "button": "Seed + translate ({{count}})",
+        "running": "Seeding and translating...",
+        "success": "Seeded {{seeded}} fields. Translation in progress.",
+        "nothingNew": "All fields are already saved in CMS."
       }
     },
     "contact": {

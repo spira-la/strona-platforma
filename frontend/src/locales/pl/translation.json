@@ -644,6 +644,15 @@
         "fieldsTranslated": "pól przetłumaczonych",
         "success": "Tłumaczenie zakończone. Treść CMS została zaktualizowana.",
         "nothingToTranslate": "Brak treści do przetłumaczenia (brak pól PL w CMS)."
+      },
+      "seed": {
+        "title": "Inicjuj teksty statyczne",
+        "description": "{{count}} pól z domyślnym tekstem polskim wykrytych na odwiedzonych stronach. Zapisz je do CMS, a następnie przetłumacz.",
+        "descriptionNone": "Brak nowych pól do inicjalizacji. Przeglądaj strony witryny aby wykryć statyczne teksty.",
+        "button": "Inicjuj + przetłumacz ({{count}})",
+        "running": "Inicjalizacja i tłumaczenie...",
+        "success": "Zainicjowano {{seeded}} pól. Tłumaczenie w toku.",
+        "nothingNew": "Wszystkie pola są już zapisane w CMS."
       }
     },
     "contact": {

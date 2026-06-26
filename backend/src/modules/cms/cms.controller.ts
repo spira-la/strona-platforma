@@ -41,6 +41,10 @@ interface InitializeDto {
   force?: boolean;
 }
 
+interface BulkSeedDto {
+  entries: Array<{ section: string; fieldPath: string; value: string }>;
+}
+
 interface ImageUploadBody {
   section: string;
   fieldPath: string;
@@ -188,6 +192,28 @@ export class CmsController {
       success: true,
       message: `Re-translation started. ${result.enqueued} fields enqueued for EN + ES.`,
       enqueued: result.enqueued,
+    };
+  }
+
+  /**
+   * POST /api/cms/bulk-seed
+   * Admin — save static PL fallback values for EditableText fields that
+   * have never been edited. Skips fields that already have a PL value.
+   * Returns 200 with the count of newly seeded fields.
+   */
+  @Post('bulk-seed')
+  @HttpCode(HttpStatus.OK)
+  @Header('Cache-Control', 'no-store')
+  async bulkSeed(@Body() body: BulkSeedDto) {
+    const entries = Array.isArray(body.entries) ? body.entries : [];
+    const { seeded } = await this.cms.bulkSeed(entries);
+    if (seeded > 0) {
+      await this.purgeCmsContent();
+    }
+    return {
+      success: true,
+      seeded,
+      message: `Seeded ${seeded} PL fields.`,
     };
   }
 

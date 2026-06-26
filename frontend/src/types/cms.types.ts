@@ -69,6 +69,12 @@ export interface EditableImageProps {
   containerClassName?: string;
 }
 
+export interface UnsetDefaultField {
+  section: CMSSectionKey;
+  fieldPath: string;
+  value: string;
+}
+
 export interface CMSContextValue {
   content: Record<string, Record<CMSLanguage, Record<string, unknown>>>;
   isLoading: boolean;
@@ -82,4 +88,12 @@ export interface CMSContextValue {
     value: string,
   ) => Promise<void>;
   refresh: () => Promise<void>;
+  /** Register a field that has never been saved to CMS (shows static fallback). */
+  registerDefault: (
+    section: CMSSectionKey,
+    fieldPath: string,
+    value: string,
+  ) => void;
+  /** Returns all fields registered as unset in the current session. */
+  getUnsetDefaults: () => UnsetDefaultField[];
 }
