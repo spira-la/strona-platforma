@@ -14,6 +14,7 @@ import type {
   CMSContextValue,
   CMSLanguage,
   CMSSectionKey,
+  UnsetDefaultField,
 } from '@/types/cms.types';
 
 // ---------------------------------------------------------------------------
@@ -122,6 +123,10 @@ export function CMSProvider({ children }: CMSProviderProps) {
 
   // Track latest version to keep cache consistent
   const versionRef = useRef<number>(readCache()?.version ?? 0);
+
+  // Collects EditableText fields that have never been saved to CMS.
+  // Uses a ref (not state) so registration doesn't cause re-renders.
+  const defaultFieldsRef = useRef<Map<string, UnsetDefaultField>>(new Map());
 
   // Fetches the full content payload (expensive; cached by Cloudflare).
   const fetchContent = useCallback(async (): Promise<void> => {
@@ -309,6 +314,21 @@ export function CMSProvider({ children }: CMSProviderProps) {
     [i18n.language],
   );
 
+  const registerDefault = useCallback(
+    (section: CMSSectionKey, fieldPath: string, value: string) => {
+      defaultFieldsRef.current.set(`${section}.${fieldPath}`, {
+        section,
+        fieldPath,
+        value,
+      });
+    },
+    [],
+  );
+
+  const getUnsetDefaults = useCallback((): UnsetDefaultField[] => {
+    return [...defaultFieldsRef.current.values()];
+  }, []);
+
   const value: CMSContextValue = {
     content,
     isLoading,
@@ -318,6 +338,8 @@ export function CMSProvider({ children }: CMSProviderProps) {
     getFieldValue,
     updateField,
     refresh: fetchContent,
+    registerDefault,
+    getUnsetDefaults,
   };
 
   return <CMSContext.Provider value={value}>{children}</CMSContext.Provider>;

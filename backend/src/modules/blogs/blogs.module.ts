@@ -14,7 +14,7 @@ import { BlogsController } from './blogs.controller.js';
 
 @Module({
   imports: [
-    // CoreModule is @Global() — StorageService and OllamaService are automatically available
+    // CoreModule is @Global() — StorageService and OpenRouterService are automatically available
     TypeOrmModule.forFeature([
       BlogPostEntity,
       BlogCommentEntity,

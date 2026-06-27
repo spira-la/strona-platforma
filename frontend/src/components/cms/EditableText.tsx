@@ -402,8 +402,14 @@ export function EditableText({
   multiline: _multilineProp,
   render,
 }: EditableTextProps) {
-  const { isLoading, isEditMode, getFieldValue, updateField, content } =
-    useCMS();
+  const {
+    isLoading,
+    isEditMode,
+    getFieldValue,
+    updateField,
+    content,
+    registerDefault,
+  } = useCMS();
 
   const resolvedValue = getFieldValue(section, fieldPath);
   const hasContent = Object.keys(content).length > 0;
@@ -425,6 +431,13 @@ export function EditableText({
     hasContent && !neverSet && resolvedValue.trim() === '';
   const displayContent =
     neverSet || explicitlyBlank ? (fallback ?? '') : resolvedValue;
+
+  // Register fields that have never been saved so admins can bulk-seed them.
+  useEffect(() => {
+    if (neverSet && fallback && fallback !== fieldPath && fallback.trim()) {
+      registerDefault(section, fieldPath, fallback);
+    }
+  }, [neverSet, fallback, fieldPath, section, registerDefault]);
 
   const focusId = `${section}.${fieldPath}`;
   const { activeId, claim, release } = useCMSFocus();

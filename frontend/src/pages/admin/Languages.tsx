@@ -8,7 +8,11 @@ import {
   Pencil,
   ToggleLeft,
   ToggleRight,
+  Languages as LanguagesIcon,
+  Sparkles,
 } from 'lucide-react';
+import { cmsClient } from '@/clients/cms.client';
+import { useCMS } from '@/contexts/CMSContext';
 import {
   AdminPageHeader,
   AdminStatCard,
@@ -268,6 +272,7 @@ type StatusFilter = 'active' | 'archived';
 export default function AdminLanguages() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const { getUnsetDefaults } = useCMS();
 
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('active');
@@ -275,6 +280,88 @@ export default function AdminLanguages() {
   const [editingLanguage, setEditingLanguage] = useState<Language | null>(null);
   const [confirmLanguage, setConfirmLanguage] = useState<Language | null>(null);
   const [togglingId, setTogglingId] = useState<string | null>(null);
+
+  // ─── CMS retranslate + progress polling ─────────────────────────────────────
+
+  const [isPolling, setIsPolling] = useState(false);
+  const unsetDefaults = getUnsetDefaults();
+
+  const { data: translationStatus, refetch: refetchStatus } = useQuery({
+    queryKey: ['cms-translation-status'],
+    queryFn: () => cmsClient.getTranslationStatus(),
+    refetchInterval: isPolling ? 1500 : false,
+    enabled: isPolling,
+  });
+
+  const isTranslating =
+    isPolling &&
+    (translationStatus?.isProcessing === true ||
+      ((translationStatus?.total ?? 0) > 0 &&
+        (translationStatus?.completed ?? 0) < (translationStatus?.total ?? 0)));
+
+  const translationProgress =
+    (translationStatus?.total ?? 0) > 0
+      ? Math.round(
+          ((translationStatus?.completed ?? 0) /
+            (translationStatus?.total ?? 1)) *
+            100,
+        )
+      : 0;
+
+  // Stop polling once the queue is done
+  if (
+    isPolling &&
+    translationStatus &&
+    !translationStatus.isProcessing &&
+    translationStatus.queueSize === 0 &&
+    translationStatus.total > 0 &&
+    translationStatus.completed >= translationStatus.total
+  ) {
+    setIsPolling(false);
+    toast.success(t('admin.languages.retranslate.success'));
+  }
+
+  const retranslateMutation = useMutation({
+    mutationFn: () => cmsClient.retranslateAll(),
+    onSuccess: (data) => {
+      if (data.enqueued === 0) {
+        toast.success(t('admin.languages.retranslate.nothingToTranslate'));
+      } else {
+        setIsPolling(true);
+        void refetchStatus();
+      }
+    },
+    onError: (err) => {
+      toast.error(err instanceof Error ? err.message : t('admin.common.error'));
+    },
+  });
+
+  const seedAndTranslateMutation = useMutation({
+    mutationFn: async () => {
+      const defaults = getUnsetDefaults();
+      const seedResult =
+        defaults.length > 0
+          ? await cmsClient.bulkSeed(defaults)
+          : { seeded: 0 };
+      const retranslateResult = await cmsClient.retranslateAll();
+      return {
+        seeded: seedResult.seeded,
+        enqueued: retranslateResult.enqueued,
+      };
+    },
+    onSuccess: ({ seeded, enqueued }) => {
+      if (enqueued === 0 && seeded === 0) {
+        toast.success(t('admin.languages.seed.nothingNew'));
+      } else {
+        toast.success(t('admin.languages.seed.success', { seeded }));
+        setIsPolling(true);
+        void refetchStatus();
+      }
+    },
+    onError: (err) => {
+      toast.error(err instanceof Error ? err.message : t('admin.common.error'));
+    },
+  });
 
   // ─── Query ──────────────────────────────────────────────────────────────────
 
@@ -526,6 +613,107 @@ export default function AdminLanguages() {
           label={t('admin.languages.stats.archived')}
           value={isLoading ? '—' : archivedLanguages.length}
         />
+      </div>
+
+      {/* CMS re-translation panel */}
+      <div className="mb-6 rounded-xl border border-[#EDE8DC] bg-[#F9F6F0] overflow-hidden">
+        <div className="p-4 flex flex-col sm:flex-row sm:items-center gap-3">
+          <div className="flex items-center gap-3 flex-1 min-w-0">
+            <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-[#B8963E]/10 flex items-center justify-center">
+              <LanguagesIcon size={18} className="text-[#B8963E]" />
+            </div>
+            <div className="min-w-0">
+              <p className="font-['Inter'] text-[13px] font-semibold text-[#2D2D2D]">
+                {t('admin.languages.retranslate.title')}
+              </p>
+              <p className="font-['Inter'] text-[12px] text-[#6B6B6B] leading-snug mt-0.5">
+                {isTranslating && translationStatus
+                  ? `${translationStatus.completed} / ${translationStatus.total} ${t('admin.languages.retranslate.fieldsTranslated')}`
+                  : t('admin.languages.retranslate.description')}
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => retranslateMutation.mutate()}
+            disabled={retranslateMutation.isPending || isTranslating}
+            className="flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg bg-[#B8963E] text-white font-['Inter'] text-[13px] font-medium hover:bg-[#8A6F2E] transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
+          >
+            {retranslateMutation.isPending || isTranslating ? (
+              <>
+                <span className="inline-block w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                {t('admin.languages.retranslate.running')}
+              </>
+            ) : (
+              <>
+                <LanguagesIcon size={14} />
+                {t('admin.languages.retranslate.button')}
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* Progress bar — only visible while translating */}
+        {isTranslating && (translationStatus?.total ?? 0) > 0 && (
+          <div className="px-4 pb-4">
+            <div className="w-full h-1.5 bg-[#EDE8DC] rounded-full overflow-hidden">
+              <div
+                className="h-full bg-[#B8963E] rounded-full transition-all duration-500"
+                style={{ width: `${translationProgress}%` }}
+              />
+            </div>
+            <p className="mt-1.5 font-['Inter'] text-[11px] text-[#8A8A8A] text-right">
+              {translationProgress}%
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Seed static defaults panel */}
+      <div className="mb-6 rounded-xl border border-[#EDE8DC] bg-[#F9F6F0] overflow-hidden">
+        <div className="p-4 flex flex-col sm:flex-row sm:items-center gap-3">
+          <div className="flex items-center gap-3 flex-1 min-w-0">
+            <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-[#B8963E]/10 flex items-center justify-center">
+              <Sparkles size={18} className="text-[#B8963E]" />
+            </div>
+            <div className="min-w-0">
+              <p className="font-['Inter'] text-[13px] font-semibold text-[#2D2D2D]">
+                {t('admin.languages.seed.title')}
+              </p>
+              <p className="font-['Inter'] text-[12px] text-[#6B6B6B] leading-snug mt-0.5">
+                {unsetDefaults.length > 0
+                  ? t('admin.languages.seed.description', {
+                      count: unsetDefaults.length,
+                    })
+                  : t('admin.languages.seed.descriptionNone')}
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => seedAndTranslateMutation.mutate()}
+            disabled={
+              seedAndTranslateMutation.isPending ||
+              isTranslating ||
+              unsetDefaults.length === 0
+            }
+            className="flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg bg-[#B8963E] text-white font-['Inter'] text-[13px] font-medium hover:bg-[#8A6F2E] transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
+          >
+            {seedAndTranslateMutation.isPending || isTranslating ? (
+              <>
+                <span className="inline-block w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                {t('admin.languages.seed.running')}
+              </>
+            ) : (
+              <>
+                <Sparkles size={14} />
+                {t('admin.languages.seed.button', {
+                  count: unsetDefaults.length,
+                })}
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Status filter tabs */}

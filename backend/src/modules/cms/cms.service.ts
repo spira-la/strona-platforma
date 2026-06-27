@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CacheService } from '../../core/cache.service.js';
 import { StorageService } from '../../core/storage.service.js';
-import { OllamaService } from '../../core/ollama.service.js';
+import { OpenRouterService } from '../../core/openrouter.service.js';
 import { CmsContentEntity } from '../../db/entities/cms-content.entity.js';
 
 const CACHE_KEY = 'cms:content:main_page';
@@ -34,12 +34,17 @@ export class CmsService {
   }> = [];
   private isTranslating = false;
 
+  // Progress tracking for retranslateAll runs
+  private translationTotal = 0;
+  private translationCompleted = 0;
+  private translationLastStartedAt: Date | null = null;
+
   constructor(
     @InjectRepository(CmsContentEntity)
     private readonly repo: Repository<CmsContentEntity>,
     private readonly cache: CacheService,
     private readonly storage: StorageService,
-    private readonly ollama: OllamaService,
+    private readonly openRouter: OpenRouterService,
   ) {}
 
   async getContent(): Promise<CMSDocument> {
@@ -281,6 +286,161 @@ export class CmsService {
   }
 
   /**
+   * Seeds PL values for static EditableText defaults that have never been
+   * saved to the CMS. Skips any field that already has a PL value so it
+   * is safe to call repeatedly without overwriting admin edits.
+   */
+  async bulkSeed(
+    entries: Array<{ section: string; fieldPath: string; value: string }>,
+  ): Promise<{ seeded: number }> {
+    if (entries.length === 0) return { seeded: 0 };
+
+    const doc = await this.getContent();
+    const content = { ...doc.content };
+    let seeded = 0;
+
+    for (const { section, fieldPath, value } of entries) {
+      if (!value.trim()) continue;
+
+      // Skip if PL already has a value for this field
+      const plData = content[section]?.['pl'];
+      if (plData) {
+        const existing = this.flattenFields(plData);
+        if (existing[fieldPath]) continue;
+      }
+
+      if (!content[section]) content[section] = {};
+      if (!content[section]['pl']) content[section]['pl'] = {};
+
+      const parts = fieldPath.split('.');
+      let cursor: Record<string, unknown> = content[section]['pl'];
+      for (let i = 0; i < parts.length - 1; i++) {
+        const key = parts[i];
+        if (typeof cursor[key] !== 'object' || cursor[key] === null) {
+          cursor[key] = {};
+        }
+        cursor = cursor[key] as Record<string, unknown>;
+      }
+      cursor[parts.at(-1)!] = value;
+      seeded++;
+    }
+
+    if (seeded === 0) return { seeded: 0 };
+
+    const newVersion = (doc.version || 0) + 1;
+    const now = new Date();
+
+    if (doc.version === 0) {
+      const entity = this.repo.create({
+        id: DOC_ID,
+        content,
+        version: newVersion,
+        updatedAt: now,
+      });
+      await this.repo.save(entity);
+    } else {
+      await this.repo.update(
+        { id: DOC_ID },
+        { content, version: newVersion, updatedAt: now },
+      );
+    }
+
+    this.cache.delete(CACHE_KEY);
+    this.logger.log(`CMS bulk-seeded ${seeded} PL fields`);
+
+    return { seeded };
+  }
+
+  /**
+   * Re-enqueues ALL translatable text fields from the Polish CMS content
+   * to EN and ES. Useful to run after switching the translation provider
+   * or fixing bad auto-translations. Non-blocking — returns the count of
+   * fields enqueued.
+   */
+  async retranslateAll(): Promise<{ enqueued: number }> {
+    const doc = await this.getContent();
+    const content = doc.content;
+
+    // Clear any pending jobs and reset progress counters
+    this.translateQueue.length = 0;
+    this.translationCompleted = 0;
+    this.translationTotal = 0;
+    this.translationLastStartedAt = new Date();
+
+    const jobs: Array<{
+      section: string;
+      fieldPath: string;
+      value: string;
+      targetLang: string;
+    }> = [];
+
+    for (const [section, langMap] of Object.entries(content)) {
+      const plContent = langMap['pl'];
+      if (!plContent) continue;
+
+      const flatFields = this.flattenFields(plContent);
+
+      for (const [fieldPath, value] of Object.entries(flatFields)) {
+        if (typeof value !== 'string' || !value.trim()) continue;
+        if (this.isStyleField(fieldPath)) continue;
+
+        for (const lang of ['en', 'es']) {
+          jobs.push({ section, fieldPath, value, targetLang: lang });
+        }
+      }
+    }
+
+    this.translationTotal = jobs.length;
+    for (const job of jobs) {
+      this.translateQueue.push(job);
+    }
+
+    this.logger.log(`retranslateAll: enqueued ${jobs.length} translation jobs`);
+
+    // Start processing if not already running
+    void this.processTranslateQueue();
+
+    return { enqueued: jobs.length };
+  }
+
+  /** Returns current translation queue status for frontend polling. */
+  getTranslationStatus(): {
+    isProcessing: boolean;
+    queueSize: number;
+    completed: number;
+    total: number;
+    startedAt: string | null;
+  } {
+    return {
+      isProcessing: this.isTranslating,
+      queueSize: this.translateQueue.length,
+      completed: this.translationCompleted,
+      total: this.translationTotal,
+      startedAt: this.translationLastStartedAt?.toISOString() ?? null,
+    };
+  }
+
+  /** Flattens a nested object into dot-notation paths. */
+  private flattenFields(
+    obj: Record<string, unknown>,
+    prefix = '',
+  ): Record<string, string> {
+    const result: Record<string, string> = {};
+    for (const [key, val] of Object.entries(obj)) {
+      const path = prefix ? `${prefix}.${key}` : key;
+      if (typeof val === 'string') {
+        result[path] = val;
+      } else if (val !== null && typeof val === 'object') {
+        Object.assign(
+          result,
+          this.flattenFields(val as Record<string, unknown>, path),
+        );
+      }
+    }
+    return result;
+  }
+
+  /**
    * Propagates a PL edit to EN + ES:
    * - Style fields → copied directly (same value)
    * - Text fields → enqueued for translation via Ollama
@@ -386,7 +546,7 @@ export class CmsService {
     targetLang: string;
   }): Promise<void> {
     try {
-      const translated = await this.ollama.translate(
+      const translated = await this.openRouter.translate(
         job.value,
         'pl',
         job.targetLang,
@@ -424,11 +584,13 @@ export class CmsService {
       );
 
       this.cache.delete(CACHE_KEY);
+      this.translationCompleted++;
 
       this.logger.log(
-        `CMS translated: ${job.section}.${job.fieldPath} → ${job.targetLang}`,
+        `CMS translated [${this.translationCompleted}/${this.translationTotal}]: ${job.section}.${job.fieldPath} → ${job.targetLang}`,
       );
     } catch (error) {
+      this.translationCompleted++;
       this.logger.error(
         `CMS translate failed: ${job.section}.${job.fieldPath} → ${job.targetLang}: ${String(error)}`,
       );

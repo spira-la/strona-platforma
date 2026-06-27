@@ -111,4 +111,46 @@ export const cmsClient = {
       `/cms/image?section=${encodeURIComponent(section)}&fieldPath=${encodeURIComponent(fieldPath)}&language=${encodeURIComponent(language)}`,
     );
   },
+
+  /**
+   * Poll the background translation queue status.
+   */
+  getTranslationStatus(): Promise<{
+    success: boolean;
+    isProcessing: boolean;
+    queueSize: number;
+    completed: number;
+    total: number;
+    startedAt: string | null;
+  }> {
+    return api.get('/cms/translation-status');
+  },
+
+  /**
+   * Trigger re-translation of all CMS Polish content to EN + ES.
+   * Returns 202 Accepted — translation runs in the background.
+   */
+  retranslateAll(): Promise<{
+    success: boolean;
+    message: string;
+    enqueued: number;
+  }> {
+    return api.post<{ success: boolean; message: string; enqueued: number }>(
+      '/cms/retranslate-all',
+      {},
+    );
+  },
+
+  /**
+   * Seed static default PL values for EditableText fields that have never
+   * been saved to CMS. Skips fields that already have a PL value.
+   */
+  bulkSeed(
+    entries: Array<{ section: string; fieldPath: string; value: string }>,
+  ): Promise<{ success: boolean; seeded: number; message: string }> {
+    return api.post<{ success: boolean; seeded: number; message: string }>(
+      '/cms/bulk-seed',
+      { entries },
+    );
+  },
 };

@@ -79,13 +79,10 @@ const envSchema = z.object({
   CLOUDFLARE_API_TOKEN: z.string().optional(),
   SITE_URL: z.string().optional(),
 
-  // Ollama — AI translation service (optional, defaults to local Docker port)
-  // eslint-disable-next-line sonarjs/no-clear-text-protocols -- internal Docker network, no TLS
-  OLLAMA_URL: z.string().optional().default('http://spirala-ollama:11434'),
-  // Translation model tag — smallest Gemma 3 (gemma3:1b). Swap via env if needed.
-  OLLAMA_MODEL: z.string().optional().default('gemma3:1b'),
-  // How long Ollama keeps the model resident in RAM after a request (frees RAM when idle)
-  OLLAMA_KEEP_ALIVE: z.string().optional().default('60s'),
+  // OpenRouter — cloud AI translation service
+  OPENROUTER_API_KEY: z.string().optional().default(''),
+  // Model to use for translations — gpt-4o-mini is cheap and excellent for PL/EN/ES
+  OPENROUTER_MODEL: z.string().optional().default('openai/gpt-4o-mini'),
 
   // YouTube — default channel handle for /api/youtube/videos (feature flag: youtubeContent)
   YOUTUBE_CHANNEL_HANDLE: z.string().optional().default('@Ane-Spirala'),

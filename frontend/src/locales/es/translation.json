@@ -2,6 +2,9 @@
   "common": {
     "home": "Inicio",
     "mamyNastolatkow": "Mama nastolatka",
+    "motherWifeLover": "Madre, esposa, amante",
+    "specializations": "Especializaciones",
+    "content": "Contenido",
     "about": "Sobre mí",
     "howIWork": "Cómo trabajo",
     "services": "Servicios",
@@ -635,6 +638,24 @@
       },
       "errors": {
         "loadFailed": "No se pudieron cargar los idiomas. Actualiza la página."
+      },
+      "retranslate": {
+        "title": "Retraducir contenido CMS",
+        "description": "Vuelve a traducir todos los campos del CMS en polaco al inglés y español. Útil cuando las traducciones están incompletas o son incorrectas.",
+        "button": "Retraducir todo",
+        "running": "Traduciendo...",
+        "fieldsTranslated": "campos traducidos",
+        "success": "Traducción completada. El contenido CMS ha sido actualizado.",
+        "nothingToTranslate": "Nada que traducir (no se encontraron campos PL en el CMS)."
+      },
+      "seed": {
+        "title": "Inicializar textos estáticos",
+        "description": "{{count}} campos con texto polaco estático detectados en páginas visitadas. Guárdalos en el CMS y luego tradúcelos.",
+        "descriptionNone": "No hay campos nuevos para inicializar. Navega por las páginas del sitio para detectar textos estáticos.",
+        "button": "Inicializar + traducir ({{count}})",
+        "running": "Inicializando y traduciendo...",
+        "success": "Se inicializaron {{seeded}} campos. Traducción en curso.",
+        "nothingNew": "Todos los campos ya están guardados en el CMS."
       }
     },
     "contact": {

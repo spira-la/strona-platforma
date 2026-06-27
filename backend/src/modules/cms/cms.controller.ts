@@ -11,6 +11,7 @@ import {
   UseInterceptors,
   UploadedFile,
   BadRequestException,
+  HttpStatus,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -38,6 +39,10 @@ interface UpdateSectionDto {
 interface InitializeDto {
   content?: Record<string, Record<string, Record<string, unknown>>>;
   force?: boolean;
+}
+
+interface BulkSeedDto {
+  entries: Array<{ section: string; fieldPath: string; value: string }>;
 }
 
 interface ImageUploadBody {
@@ -159,6 +164,56 @@ export class CmsController {
       message: 'Section updated successfully',
       version: result.version,
       updatedAt: result.updatedAt,
+    };
+  }
+
+  /**
+   * GET /api/cms/translation-status
+   * Admin — returns current translation queue progress for frontend polling.
+   */
+  @Get('translation-status')
+  @Header('Cache-Control', 'no-store')
+  getTranslationStatus() {
+    return { success: true, ...this.cms.getTranslationStatus() };
+  }
+
+  /**
+   * POST /api/cms/retranslate-all
+   * Admin — re-enqueue all Polish CMS text fields for translation to EN + ES.
+   * Useful after switching translation provider or fixing bad auto-translations.
+   * Returns 202 Accepted with the count of jobs enqueued; translation runs in background.
+   */
+  @Post('retranslate-all')
+  @HttpCode(HttpStatus.ACCEPTED)
+  async retranslateAll() {
+    const result = await this.cms.retranslateAll();
+    await this.purgeCmsContent();
+    return {
+      success: true,
+      message: `Re-translation started. ${result.enqueued} fields enqueued for EN + ES.`,
+      enqueued: result.enqueued,
+    };
+  }
+
+  /**
+   * POST /api/cms/bulk-seed
+   * Admin — save static PL fallback values for EditableText fields that
+   * have never been edited. Skips fields that already have a PL value.
+   * Returns 200 with the count of newly seeded fields.
+   */
+  @Post('bulk-seed')
+  @HttpCode(HttpStatus.OK)
+  @Header('Cache-Control', 'no-store')
+  async bulkSeed(@Body() body: BulkSeedDto) {
+    const entries = Array.isArray(body.entries) ? body.entries : [];
+    const { seeded } = await this.cms.bulkSeed(entries);
+    if (seeded > 0) {
+      await this.purgeCmsContent();
+    }
+    return {
+      success: true,
+      seeded,
+      message: `Seeded ${seeded} PL fields.`,
     };
   }
 

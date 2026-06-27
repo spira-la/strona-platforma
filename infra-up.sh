@@ -5,9 +5,11 @@ set -euo pipefail
 # touched by the CI/CD pipeline:
 #   - spirala-db       (PostgreSQL — dev + prod databases)
 #   - spirala-redis    (cache — dev + prod)
-#   - spirala-ollama   (LLM for translations)
 #   - spirala-nginx    (reverse proxy)
 #   - tunnel-spirala   (Cloudflare tunnel)
+#
+# NOTE: Ollama (local LLM) has been removed. Translations now use OpenRouter cloud API.
+# Set OPENROUTER_API_KEY in backend/.env to enable auto-translation.
 #
 # Run this once on the server after reboot, or whenever you need to
 # restore these services without disturbing the backend/frontend.
@@ -33,9 +35,6 @@ docker compose -f docker-compose.db.yml up -d
 echo "==> Starting Redis (dev + prod)..."
 docker compose -f infra/docker-compose.redis.yml up -d
 
-echo "==> Starting Ollama..."
-docker compose -f infra/docker-compose.ollama.yml up -d
-
 echo "==> Starting Nginx..."
 docker compose -f docker-compose.nginx.yml up -d
 
@@ -44,4 +43,4 @@ docker compose -f docker-compose.tunnel.yml up -d
 
 echo "==> Done. Status:"
 docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" \
-  | grep -E "spirala-db|spirala-redis|spirala-ollama|spirala-nginx|tunnel-spirala" || true
+  | grep -E "spirala-db|spirala-redis|spirala-nginx|tunnel-spirala" || true
