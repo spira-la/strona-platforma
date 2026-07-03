@@ -4,6 +4,8 @@ export { EditableImage } from './EditableImage';
 export { default as EditableImageDefault } from './EditableImage';
 export { EditableOverlay } from './EditableOverlay';
 export { default as EditableOverlayDefault } from './EditableOverlay';
+export { EditableBackgroundColor } from './EditableBackgroundColor';
+export { default as EditableBackgroundColorDefault } from './EditableBackgroundColor';
 export { CMSEditToolbar } from './CMSEditToolbar';
 export { default as CMSEditToolbarDefault } from './CMSEditToolbar';
 export { EditableButtonLink } from './EditableButtonLink';

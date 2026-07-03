@@ -36,7 +36,9 @@
     "size": "Tamaño",
     "overlay": "Capa de oscuridad",
     "overlayTop": "Arriba",
-    "overlayBottom": "Abajo"
+    "overlayBottom": "Abajo",
+    "backgroundColor": "Color de fondo",
+    "pickColor": "Elegir color"
   },
   "navbar": {
     "cta": "Reservar sesión"
