@@ -36,7 +36,9 @@
     "size": "Rozmiar",
     "overlay": "Nakładka (ciemność)",
     "overlayTop": "Góra",
-    "overlayBottom": "Dół"
+    "overlayBottom": "Dół",
+    "backgroundColor": "Kolor tła",
+    "pickColor": "Wybierz kolor"
   },
   "navbar": {
     "cta": "Umów wizytę"

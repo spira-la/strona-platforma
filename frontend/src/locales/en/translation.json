@@ -36,7 +36,9 @@
     "size": "Size",
     "overlay": "Overlay (darkness)",
     "overlayTop": "Top",
-    "overlayBottom": "Bottom"
+    "overlayBottom": "Bottom",
+    "backgroundColor": "Background color",
+    "pickColor": "Pick color"
   },
   "navbar": {
     "cta": "Book a session"

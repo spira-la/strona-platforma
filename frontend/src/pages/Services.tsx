@@ -6,7 +6,9 @@ import { SEO } from '@/components/shared/SEO';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableBackground } from '@/components/cms/EditableBackground';
 import { EditableOverlay } from '@/components/cms/EditableOverlay';
+import { EditableBackgroundColor } from '@/components/cms/EditableBackgroundColor';
 import { EditableButtonLink } from '@/components/cms/EditableButtonLink';
+import { EditableImage } from '@/components/cms/EditableImage';
 import { BookingCalendar } from '@/components/booking/BookingCalendar';
 import { TimeSlotPicker } from '@/components/booking/TimeSlotPicker';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
@@ -31,6 +33,8 @@ function SectionBadge({ label }: { label: string }) {
 // ---------------------------------------------------------------------------
 
 interface ServiceCardProps {
+  eyebrowField?: string;
+  eyebrowPlaceholder?: string;
   titleField: string;
   titlePlaceholder: string;
   desc1Field: string;
@@ -39,6 +43,12 @@ interface ServiceCardProps {
   desc2Placeholder: string;
   desc3Field: string;
   desc3Placeholder: string;
+  desc4Field?: string;
+  desc4Placeholder?: string;
+  desc5Field?: string;
+  desc5Placeholder?: string;
+  forWhomField?: string;
+  forWhomPlaceholder?: string;
   priceField: string;
   pricePlaceholder: string;
   ctaLabel: string;
@@ -47,6 +57,8 @@ interface ServiceCardProps {
 }
 
 function ServiceCard({
+  eyebrowField,
+  eyebrowPlaceholder,
   titleField,
   titlePlaceholder,
   desc1Field,
@@ -55,6 +67,12 @@ function ServiceCard({
   desc2Placeholder,
   desc3Field,
   desc3Placeholder,
+  desc4Field,
+  desc4Placeholder,
+  desc5Field,
+  desc5Placeholder,
+  forWhomField,
+  forWhomPlaceholder,
   priceField,
   pricePlaceholder,
   ctaLabel,
@@ -69,6 +87,16 @@ function ServiceCard({
           : 'border-[#E8E4DF] bg-white'
       }`}
     >
+      {eyebrowField && (
+        <EditableText
+          section="services"
+          fieldPath={eyebrowField}
+          as="p"
+          placeholder={eyebrowPlaceholder}
+          className="text-xs font-semibold uppercase tracking-[0.2em] text-[#B8944A] mb-2 [font-family:'Lato',sans-serif]"
+        />
+      )}
+
       <EditableText
         section="services"
         fieldPath={titleField}
@@ -99,6 +127,39 @@ function ServiceCard({
           placeholder={desc3Placeholder}
           className="text-[15px] leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
         />
+        {desc4Field && (
+          <EditableText
+            section="services"
+            fieldPath={desc4Field}
+            as="p"
+            placeholder={desc4Placeholder}
+            className="text-[15px] leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+          />
+        )}
+        {desc5Field && (
+          <EditableText
+            section="services"
+            fieldPath={desc5Field}
+            as="p"
+            placeholder={desc5Placeholder}
+            className="text-[15px] leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+          />
+        )}
+
+        {forWhomField && (
+          <div className="mt-2 border-l-2 border-[#D4B97A] pl-4">
+            <p className="text-[13px] font-bold uppercase tracking-wide text-[#2D2D2D] mb-1 [font-family:'Lato',sans-serif]">
+              Dla kogo?
+            </p>
+            <EditableText
+              section="services"
+              fieldPath={forWhomField}
+              as="p"
+              placeholder={forWhomPlaceholder}
+              className="text-[15px] leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+            />
+          </div>
+        )}
       </div>
 
       <div className="mt-6 pt-6 border-t border-[#F0EDE8] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -403,14 +464,20 @@ export default function Services() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <ScrollReveal animation="fade-up" delay={stagger(0)}>
               <ServiceCard
+                eyebrowField="card1Eyebrow"
+                eyebrowPlaceholder="sesja rozpoznania"
                 titleField="card1Title"
-                titlePlaceholder="SESJA 1 NA 1"
+                titlePlaceholder="Odsłona"
                 desc1Field="card1Desc1"
-                desc1Placeholder="Indywidualna sesja coachingowa lub terapeutyczna, w pelni dopasowana do Twoich potrzeb i aktualnej sytuacji zyciowej."
+                desc1Placeholder="Jest coś, co Cię uwiera. Nie musisz jeszcze wiedzieć, jak to nazwać ani skąd dokładnie się wzięło. Wystarczy, że czujesz — to już czas, żeby się temu przyjrzeć."
                 desc2Field="card1Desc2"
-                desc2Placeholder="Pracujemy z Twoimi celami, wartosciami, przekonaniami i wzorcami — w bezpiecznej i wspierajacej przestrzeni."
+                desc2Placeholder="Odsłona to godzina tylko dla Ciebie. Przestrzeń, w której to, co niewidoczne, zaczyna nabierać kształtu. Nie przychodzisz z gotowym tematem ani precyzyjną diagnozą — przychodzisz z tym, co aktualnie najbardziej ciąży, nie daje spokoju, wraca w tych samych momentach. Ja umiem to rozpoznać, nawet jeśli Ty jeszcze nie potrafisz tego nazwać."
                 desc3Field="card1Desc3"
-                desc3Placeholder="Sesja trwa 60 minut. Mozliwosc pracy online lub stacjonarnie."
+                desc3Placeholder="Razem odkryjemy, co naprawdę stoi za tą trudnością. Nie pod powierzchnią pierwszego wrażenia, ale głębiej — tam, gdzie mieszkają przekonania, blokady i wzorce, które działają po cichu, w tle Twojego życia. Bo to, co uwiera dzisiaj, ma zwykle korzenie znacznie starsze niż sama sytuacja."
+                desc4Field="card1Desc4"
+                desc4Placeholder="Nie dostaniesz ode mnie ogólnej rady, którą mogłabyś przeczytać wszędzie. Dostaniesz odpowiedź, która jest Twoja — bo to Ty ją niesiesz w sobie, tylko potrzebujesz kogoś, kto pomoże Ci ją odsłonić."
+                forWhomField="card1ForWhom"
+                forWhomPlaceholder='Dla Ciebie, jeśli masz jedno konkretne "uwiera" i chcesz w końcu zobaczyć, co się za nim kryje.'
                 priceField="card1Price"
                 pricePlaceholder="150 zl - sesja"
                 ctaLabel="Wybieram"
@@ -420,22 +487,167 @@ export default function Services() {
 
             <ScrollReveal animation="fade-up" delay={stagger(1)}>
               <ServiceCard
+                eyebrowField="card2Eyebrow"
+                eyebrowPlaceholder="pełny cykl zmiany"
                 titleField="card2Title"
-                titlePlaceholder="PAKIET 4 SESJE"
+                titlePlaceholder="Spirala przemiany"
                 desc1Field="card2Desc1"
-                desc1Placeholder="Cztery sesje w cenie trzech — idealne dla osob, ktore chca glebszej, dluzszej pracy nad sob i osiagnieciem trwalej zmiany."
+                desc1Placeholder="Jest taki moment, kiedy już wiesz, że czas przestać czekać. Że ta zmiana, o której myślisz od miesięcy, nie przyjdzie sama. Wtedy zaczyna się Spirala Przemiany."
                 desc2Field="card2Desc2"
-                desc2Placeholder="Pakiet umozliwia systemowe podejscie do Twoich celow i zapewnia ciaglosc procesu — bez przerw i powrotow do punktu wyjscia."
+                desc2Placeholder="To sześć spotkań rozłożonych na trzy miesiące — każde po godzinie, każde kolejny krok w głąb. Bo prawdziwa praca nie mieści się w jednej rozmowie. Potrzebuje czasu i odwagi, żeby naprawdę na siebie spojrzeć — nie po to, żeby wrócić do dawna, ale żeby dojść do miejsca, w którym jeszcze nie byłaś."
                 desc3Field="card2Desc3"
-                desc3Placeholder="Waznosc pakietu: 3 miesiace od zakupu. Terminy ustalamy elastycznie."
+                desc3Placeholder="Między sesjami nie zostajesz sama. Towarzyszę Ci na WhatsApp, dostajesz konkretne ćwiczenia dopasowane do tego, co właśnie się w Tobie dzieje. Bo ciało pamięta wszystko, a umysł jest plastyczny — zmiana, która przychodzi z prawdziwego zrozumienia siebie, po prostu zostaje."
+                desc4Field="card2Desc4"
+                desc4Placeholder="Sięgamy tam, gdzie wzorce się zaczęły — do relacji z rodzicami, dzieciństwa, a czasem jeszcze wcześniej, do samych początków Twojego życia. Nazywamy to, co dotąd nie miało imienia. I rozplątujemy, krok po kroku, to, co przez lata było splątane."
+                desc5Field="card2Desc5"
+                desc5Placeholder="W pakiecie oszczędzasz na cenie — a zyskujesz coś ważniejszego: ciągłość. Terminy ustalamy elastycznie, wszystko dzieje się w Twoim tempie."
+                forWhomField="card2ForWhom"
+                forWhomPlaceholder="Dla tych, którzy wiedzą już, że chcą konkretnej zmiany — i chcą zrobić to porządnie, zaangażować się w pełni."
                 priceField="card2Price"
                 pricePlaceholder="1 200 zl - pakiet"
-                ctaLabel="Wybieram"
+                ctaLabel="Wybieram pakiet"
                 onCta={goToBookingFlow}
                 highlighted
               />
             </ScrollReveal>
           </div>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------------------ */}
+      {/* KOMPAS WEWNETRZNY — coaching w drodze                                */}
+      {/* ------------------------------------------------------------------ */}
+      <section
+        className="relative overflow-hidden px-6 py-16 sm:py-24"
+        aria-label="Kompas wewnetrzny"
+      >
+        <EditableBackgroundColor
+          section="services"
+          fieldPath="compassBg"
+          defaultColor="#1F2A1D"
+        />
+        <div className="relative z-10 max-w-[1024px] mx-auto">
+          <ScrollReveal animation="fade-up">
+            <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-10 lg:gap-12 items-center">
+              {/* Text column */}
+              <div className="order-2 lg:order-1 flex flex-col gap-4">
+                <span
+                  className="inline-block self-start px-4 py-1 text-xs font-semibold uppercase tracking-widest rounded-full border border-[#D4B97A] text-[#D4B97A] bg-[rgba(212,185,122,0.1)]"
+                  style={{ fontFamily: "'Lato', sans-serif" }}
+                >
+                  <EditableText
+                    section="services"
+                    fieldPath="compassBadge"
+                    placeholder="super spersonalizowana oferta"
+                  />
+                </span>
+
+                <EditableText
+                  section="services"
+                  fieldPath="compassTitle"
+                  as="h3"
+                  placeholder="Kompas wewnętrzny"
+                  className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white [font-family:'Cormorant_Garamond',serif]"
+                />
+
+                <EditableText
+                  section="services"
+                  fieldPath="compassSubtitle"
+                  as="p"
+                  placeholder="transformacja na beskidzkim szlaku"
+                  className="text-base sm:text-lg italic text-[#D4B97A] [font-family:'Lato',sans-serif]"
+                />
+
+                <div className="flex flex-col gap-3 mt-2">
+                  <EditableText
+                    section="services"
+                    fieldPath="compassP1"
+                    as="p"
+                    placeholder="Jesteś kobietą, która czuje więcej w lesie niż w czterech ścianach gabinetu. Górski grzbiet, szum drzew, ścieżka, która się nie kończy — to Twój żywioł. Jeśli poznawanie siebie idzie Ci lepiej w ruchu niż w bezruchu, ta oferta jest stworzona dla Ciebie. Dosłownie — bo zaplanuję ją od zera, dopasowaną do Twojego tempa, Twoich preferencji i miejsca, które wybierzesz."
+                    className="text-[15px] leading-relaxed text-white/80 [font-family:'Lato',sans-serif]"
+                  />
+                  <EditableText
+                    section="services"
+                    fieldPath="compassP2"
+                    as="p"
+                    placeholder="Masz ochotę iść grzbietem przez Pieniny? Bardzo proszę. Wolisz dziksze, mniej uczęszczane ścieżki Beskidu Niskiego? To miód na moje serce. Gorce, Babia Góra, bieszczadzkie połoniny — wybór jest ogromny, a każda z tych gór niesie inną energię."
+                    className="text-[15px] leading-relaxed text-white/80 [font-family:'Lato',sans-serif]"
+                  />
+                  <EditableText
+                    section="services"
+                    fieldPath="compassP3"
+                    as="p"
+                    placeholder="Na tej wyprawie idziesz Ty — ze swoimi wyzwaniami, bolączkami, sprawami, w których utknęłaś i po prostu potrzebujesz kogoś obok. Kogoś, kto spojrzy z innej perspektywy. Kto Cię przez to przeprowadzi. Kogoś z doświadczeniem, wiedzą i intuicją, kto zaprowadzi Cię tam, gdzie sama dotrzeć nie umiałaś."
+                    className="text-[15px] leading-relaxed text-white/80 [font-family:'Lato',sans-serif]"
+                  />
+                  <EditableText
+                    section="services"
+                    fieldPath="compassP4"
+                    as="p"
+                    placeholder="Coaching w drodze to jednodniowy wypad w góry lesiste."
+                    className="text-[15px] leading-relaxed font-bold text-white [font-family:'Lato',sans-serif]"
+                  />
+                  <EditableText
+                    section="services"
+                    fieldPath="compassP5"
+                    as="p"
+                    placeholder="W Tatry Cię nie zabiorę — mam lęk wysokości, a poza tym ostra wspinaczka nie sprzyja rozmowom ramię w ramię. Ale to żadna strata. Beskidy dają nam tyle możliwości, że starczy na lata."
+                    className="text-[15px] leading-relaxed text-white/80 [font-family:'Lato',sans-serif]"
+                  />
+                  <EditableText
+                    section="services"
+                    fieldPath="compassP6"
+                    as="p"
+                    placeholder="Skąd pomysł, by połączyć pracę z pasją?"
+                    className="text-[15px] leading-relaxed font-bold text-white [font-family:'Lato',sans-serif]"
+                  />
+                  <EditableText
+                    section="services"
+                    fieldPath="compassP7"
+                    as="p"
+                    placeholder="Bo w górach jest wszystko, co kocham. Po śmierci rodziców to właśnie tam koiłam zranione serce i przeżywałam swoją samotność — przemierzając szlaki od schroniska do schroniska. W ten sposób przełamałam wiele lęków i zbudowałam w sobie poczucie bezpieczeństwa. Przez trzy lata mieszkałam w Beskidzie Niskim i nigdy — ani wcześniej, ani później — nie byłam tak połączona z naturą. A natura to najlepsze lekarstwo na wszystko. Myśli stają się klarowniejsze, problemy — mniejsze i możliwe do rozwiązania. Natura przypomina, że to tylko problem w Twojej głowie. I dodam jeszcze jedno: wyzwania, które stanęły na Twojej drodze, są do rozwiązania — teraz, przez Ciebie. Ty znajdziesz najlepsze rozwiązanie dla tego, z czym się dziś zmagasz. A ja z przyjemnością Ci w tym potowarzyszę — będę wspierać Cię w zmianie perspektywy, w innym spojrzeniu na to, co się dzieje. Wtedy rozwiązania przychodzą same. I jak się później okazuje — są prostsze, niż mogło się wydawać."
+                    className="text-[15px] leading-relaxed text-white/80 [font-family:'Lato',sans-serif]"
+                  />
+                  <EditableText
+                    section="services"
+                    fieldPath="compassP8"
+                    as="p"
+                    placeholder="Poczułaś to? Tu decyzja nie zapada w głowie. To trzeba poczuć. A ja już jestem — i przebieram nogami, żeby stworzyć piękny plan na nasze wspólne wyjście w Karpaty."
+                    className="text-[15px] leading-relaxed text-white/80 [font-family:'Lato',sans-serif]"
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  onClick={goToBookingFlow}
+                  className="inline-flex items-center justify-center self-start mt-4 px-7 py-2.5 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A]"
+                  style={{
+                    background:
+                      'linear-gradient(135deg, #B8944A 0%, #D4B97A 100%)',
+                    fontFamily: "'Lato', sans-serif",
+                  }}
+                >
+                  <EditableText
+                    section="services"
+                    fieldPath="compassCtaLabel"
+                    as="span"
+                    placeholder="Zaplanuj wyprawę"
+                  />
+                </button>
+              </div>
+
+              {/* Image column */}
+              <div className="order-1 lg:order-2 h-64 lg:h-full min-h-[320px] overflow-hidden rounded-lg">
+                <EditableImage
+                  section="services"
+                  fieldPath="compassImage"
+                  fallbackSrc="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1000&q=80"
+                  alt="Szlak w górach leśnych"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
