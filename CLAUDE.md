@@ -1,489 +1,374 @@
-# CLAUDE.md - Spirala Development Guidelines
+# OrionOps — Tech Lead / Architect — plans tasks, reviews code, does NOT write code
 
-> Instructions for Claude Code to work effectively with the Spirala codebase.
+## MCP Tools
 
----
+You have access to OrionOps MCP tools. **Use them proactively** before starting work.
 
-## Excluded Directories
+### Context & Briefing
 
-**DO NOT analyze, search, or modify these directories:**
+| Tool | When to Use |
+|------|-------------|
+| `search_guidelines` | Before implementing — get patterns, best practices, standards |
+| `search_project_config` | Get architecture, endpoints, service details |
+| `get_documentation` | Get library/framework/API documentation |
+| `get_role_context` | Get the full context for your current role |
 
-```
-**/node_modules/**
-**/dist/**
-**/lib/**
-**/.next/**
-ref/**              # Reference project (BeWonderMe) - read-only
-```
+### Task Management
 
----
+| Tool | When to Use |
+|------|-------------|
+| `list_tasks` | See tasks for this project |
+| `create_task` | Create a new task with title, description, priority |
+| `get_next_task` | Find the next unblocked, unassigned task |
+| `task_claim` | Claim a task before starting work |
+| `task_progress` | Report progress while working |
+| `task_complete` | Finish a task with summary + files changed |
+| `add_dependency` | Set execution order between tasks |
 
-## Project Identity
+### Session Continuity
 
-**Spirala** (domain: spira-la) is a coaching/therapy platform migrated from BeWonderMe.
+| Tool | When to Use |
+|------|-------------|
+| `save_context` | After significant work — persist progress for next session |
+| `get_context` | Start of session — retrieve what was done last time |
 
-- **Frontend**: React 19 + Vite 7 + TypeScript 5.9
-- **Backend**: NestJS 11 + Node.js 22 + TypeScript 5.7
-- **Database**: PostgreSQL via Supabase + Drizzle ORM
-- **Auth**: Supabase Authentication
-- **Payments**: Stripe (Cards, BLIK)
-- **Storage**: Cloudflare R2 (S3-compatible)
-- **CDN/DNS**: Cloudflare
-- **i18n**: Polish (primary), English (secondary)
+### Resources
 
-### Zero Firebase
-
-This project has **no Firebase dependencies**. All Firebase services have been replaced:
-- Firebase Auth → Supabase Auth
-- Firebase Firestore → PostgreSQL (Supabase) + Drizzle ORM
-- Firebase Storage → Cloudflare R2
-- Firebase Analytics → Cloudflare Analytics
-- Firestore rules → Supabase RLS policies
-
----
-
-## Critical Rule: Hide, Don't Delete
-
-**All BeWonderMe features are preserved in the codebase behind feature flags.** This includes:
-- Multi-coach marketplace
-- Webinars / LiveKit streaming
-- Audio courses / Ebook player
-- YouTube integration
-- Gift purchases
-- Stripe Connect (coach payouts)
-- Coach panel
-- Reviews system
-
-**NEVER delete these modules.** They will be reactivated in the future. Use feature flags to control visibility.
+| Tool | When to Use |
+|------|-------------|
+| `create_resource` | Upload documentation, agents, or skills to OrionOps |
+| `set_project` | Select the active project (call with no args to list) |
 
 ---
 
-## Architecture
+## Project Configuration
 
-### Frontend Structure
+The `.orion/orionops.json` file links this directory to an OrionOps project. Task and context tools use `project_id` from this file automatically.
 
-```
-src/
-├── components/
-│   ├── ui/               # shadcn/ui primitives (Spirala themed)
-│   ├── layout/           # Navbar, Footer, SectionHero
-│   ├── booking/          # BookingCalendar, TimeSlotPicker
-│   ├── blog/             # BlogCard, BlogGrid
-│   ├── services/         # ServiceCard
-│   └── shared/           # NewsletterSignup, ContactForm
-├── pages/                # Route pages
-├── hooks/                # Custom hooks
-├── stores/               # Zustand stores
-├── clients/              # API clients
-├── types/                # TypeScript types
-├── schemas/              # Zod schemas
-├── config/
-│   └── features.ts       # Feature flags configuration
-├── locales/
-│   ├── pl/               # Polish (primary)
-│   └── en/               # English (secondary)
-└── styles/
-    └── spirala-theme.css # CSS variables for Spirala theme
-```
+If missing, call `set_project()` to list available projects and select one.
 
-### Backend Structure
+---
+
+## Workflow
 
 ```
-backend/src/
-├── modules/              # NestJS feature modules (35+)
-│   ├── stripe/           # Payments (active)
-│   ├── bookings/         # Session booking (active)
-│   ├── email/            # Transactional emails (active)
-│   ├── invoice/          # PDF generation (active)
-│   ├── blogs/            # Blog system (active)
-│   ├── newsletter/       # Email subscriptions (active)
-│   ├── coupons/          # Discount codes (active)
-│   ├── images/           # Image processing (active)
-│   ├── webinars/         # [HIDDEN] Feature flag: webinars
-│   ├── livekit/          # [HIDDEN] Feature flag: webinars
-│   ├── products/         # [HIDDEN] Feature flag: audioCourses
-│   ├── stripe-connect/   # [HIDDEN] Feature flag: stripeConnect
-│   └── [feature]/        # Other modules
-├── common/
-│   ├── decorators/       # @Auth, @CurrentUser, @FeatureFlag
-│   ├── filters/          # HTTP exception handling
-│   ├── guards/           # SupabaseAuthGuard, FeatureFlagGuard, RolesGuard
-│   └── interceptors/     # Cache control
-├── core/
-│   ├── database.service.ts    # Drizzle ORM + PostgreSQL
-│   ├── storage.service.ts     # Cloudflare R2 (S3 SDK)
-│   └── slug.service.ts        # URL slug generation
-└── config/
-    └── supabase.config.ts     # Supabase client
+1. Read .orion/orionops.json → get project_id
+2. get_context(project_id) → check for prior work to resume
+3. search_guidelines(query) → get relevant patterns before coding
+4. task_claim(task_id, agent_id) → claim the task you're working on
+5. Implement following the project's patterns and standards
+6. task_progress(task_id, agent_id, progress) → report progress
+7. task_complete(task_id, agent_id, summary, files_modified) → finish with summary
+8. save_context(project_id, current_task, status, files_modified) → persist for next session
 ```
 
 ---
 
-## Design System - Spirala
+## Task Lifecycle
 
-### Colors
+### Creating Tasks
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `spirala-gold` | #B8963E | Buttons, accents, gradient headers |
-| `spirala-gold-light` | #D4B96A | Hover states, subtle accents |
-| `spirala-gold-dark` | #8A6F2E | Active states |
-| `spirala-cream` | #F9F6F0 | Section backgrounds |
-| `spirala-cream-dark` | #EDE8DC | Footer, dividers |
+When planning work, create tasks via MCP:
 
-### Typography
+1. **Create parent task**: `create_task(title, description, priority)`
+2. **Create subtasks**: `create_task(title, description, parent_id)`
+3. **Set dependencies**: `add_dependency(task_id, dependency_id)`
+4. Set `work_focus` in metadata: backend, frontend, database, devops, testing
 
-| Element | Font | Weight | Usage |
-|---------|------|--------|-------|
-| Headings | Playfair Display | 700-900 | Page titles, section headings |
-| Body | Inter | 400 | Paragraphs, UI text |
-| Buttons | Inter | 500-600 | CTAs, navigation |
+### Working on Tasks
 
-### Visual Language
+1. `task_claim(task_id, agent_id)` — claim before starting
+2. `task_progress(task_id, agent_id, progress)` — report periodically
+3. `task_complete(task_id, agent_id, summary, files_modified)` — finish with summary
 
-- Nature photography (forests, meadows, sunlight)
-- Gold gradient overlays on hero images
-- Generous whitespace
-- Rounded corners (subtle, not excessive)
-- Elegant, warm, not clinical
+The completion summary is stored permanently and used to update project documentation.
 
 ---
 
-## Development Principles
+## Session Continuity
 
-### SOLID Principles (Mandatory)
+Tokens run out. Sessions end. **Your work must not be lost.**
 
-| Principle | Application |
-|-----------|-------------|
-| **SRP** | One component = one purpose |
-| **OCP** | Extend via composition, not modification |
-| **LSP** | Components/hooks are interchangeable |
-| **ISP** | Small, focused interfaces |
-| **DIP** | Depend on abstractions (ApiClient interface, not fetch directly) |
+### Save Progress
 
-### Pragmatic Principles
+Before your session ends or after significant work:
 
-| Principle | Rule |
-|-----------|------|
-| **DRY** | Extract after 2 repetitions, not before |
-| **KISS** | Simplest solution wins |
-| **YAGNI** | Don't build it until you need it |
-| **Fail Fast** | Validate inputs immediately, return early |
-
-### Anti-Patterns to Avoid
-
-```typescript
-// BAD: useEffect for derived state
-useEffect(() => setFullName(first + last), [first, last]);
-
-// GOOD: Compute directly
-const fullName = `${first} ${last}`;
-
-// BAD: Callback hell
-useEffect(() => { fetch().then(x => setState(x.map(y => ...))); }, []);
-
-// GOOD: TanStack Query
-const { data } = useQuery({ queryKey: ['items'], queryFn: fetchItems });
-
-// BAD: Direct Firestore queries (OLD PATTERN)
-this.firestore.collection('bookings').where('userId', '==', userId);
-
-// GOOD: Drizzle ORM (NEW PATTERN)
-await db.select().from(bookings).where(eq(bookings.userId, userId));
 ```
+save_context(
+  project_id="<from .orion/orionops.json>",
+  current_task="What you were working on",
+  status="in_progress",
+  files_modified=[{"path": "src/file.go", "action": "modified", "summary": "Added handler"}],
+  decisions=[{"decision": "Chose X over Y", "rationale": "Because..."}]
+)
+```
+
+### Resume Previous Work
+
+At the start of a new session:
+
+```
+get_context(project_id="<from .orion/orionops.json>")
+```
+
+Returns: last task, decisions, files modified, blockers, and session history.
 
 ---
 
-## React Patterns
+## Role Constraints
 
-### State Management Hierarchy
-
-1. **Local state**: `useState` for component-only state
-2. **Derived state**: Compute from existing state, no hooks
-3. **URL state**: `useSearchParams` for shareable state
-4. **Server state**: TanStack Query for API data
-5. **Global client state**: Zustand stores (minimal)
-6. **Context**: Auth, Theme (stable, rarely-changing)
-
-### Component Patterns
-
-- Functional components only
-- Composition over configuration
-- Lazy load routes and heavy components
-- Error boundaries for resilience
-- `forwardRef` for reusable components
-
-### Form Handling
-
-```typescript
-// React Hook Form + Zod (standard pattern)
-const schema = z.object({
-  email: z.string().email(),
-  name: z.string().min(2),
-});
-type FormData = z.infer<typeof schema>;
-const { register, handleSubmit } = useForm<FormData>({
-  resolver: zodResolver(schema),
-});
-```
+- You are an ARCHITECT. You do NOT write code directly.
+- Your job: read project context from MCP, break requirements into tasks, assign work focus.
+- Use orion task create to create tasks. Use orion task list to review progress.
+- When reviewing code, use read-only operations. Suggest changes, don't implement them.
+- Always query MCP for project context before planning: search_guidelines, search_project_config, get_documentation.
 
 ---
 
-## NestJS Patterns
+## Transitioning from Planning to Execution
 
-### Guards
+After the architect finishes analyzing a project and creating tasks, the user needs to start working. **Do not leave the user wondering what to do next.**
 
-```typescript
-// Auth: Supabase JWT verification
-@UseGuards(SupabaseAuthGuard)
-@Controller('bookings')
-export class BookingsController {}
+### If you are the architect (planning role):
+After creating all tasks, **always provide a clear handoff**:
+1. List the tasks you created with their IDs, focus, and priority
+2. Tell the user to run: `! orion task start` (auto-picks next unblocked task)
+3. Explain: `orion task start` will automatically switch the agent profile and inject only the skills that specific task needs — **no manual focus switching required**
 
-// Roles: admin, user, coach
-@Roles('admin')
-@UseGuards(RolesGuard)
-@Post()
-async create() {}
+### If you are a developer (execution role):
+You were loaded by `orion task start`. Your agent and skills are already configured for the current task. Just work on it. When done:
+```bash
+! orion task done <task-id>
+```
+This marks the task as finished, cleans injected files, and saves context. Then run `! orion task start` for the next one.
 
-// Feature flags: hide dormant features
-@UseGuards(FeatureFlagGuard)
-@FeatureFlag('webinars')
-@Controller('api/webinars')
-export class WebinarsController {}
+### How agent switching works automatically:
+```
+orion task start           → picks next task
+                           → reads work_focus from metadata (e.g., "backend")
+                           → selects the right agent (e.g., backend-dev)
+                           → reads required_skills from metadata
+                           → injects ONLY those skills into .claude/
+                           → marks task as processing
+                           → launches Claude with the right context
 ```
 
-### Database Queries (Drizzle ORM)
-
-```typescript
-// Type-safe queries
-const result = await db
-  .select()
-  .from(bookings)
-  .innerJoin(orders, eq(bookings.orderId, orders.id))
-  .where(eq(bookings.userId, userId));
-
-// Inserts with returning
-const [newBooking] = await db
-  .insert(bookings)
-  .values({ userId, coachId, startTime, endTime })
-  .returning();
-```
-
-### Storage (Cloudflare R2)
-
-```typescript
-// Upload via S3-compatible API
-await this.s3.send(new PutObjectCommand({
-  Bucket: this.bucket,
-  Key: path,
-  Body: file,
-  ContentType: contentType,
-}));
-```
+The user never needs to run `orion focus` manually during task execution.
 
 ---
 
-## Feature Flags
+## Multi-Agent Dispatch
 
-```typescript
-// Frontend: conditional rendering
-const showWebinars = useFeatureFlag('webinars');
-{showWebinars && <Route path="/webinars" element={<Webinars />} />}
+You can delegate tasks to other AI agents running in different IDEs and models. This works like a swarm — you orchestrate from here while specialized agents work in parallel.
 
-// Backend: guard decorator
-@FeatureFlag('webinars')
-@Controller('api/webinars')
-export class WebinarsController {}
+### Dispatching a Task
+
+When you create subtasks, set `work_focus` and `suggested_ide` in metadata:
+
+```
+create_task(
+  title: "Add unit tests for Invoice",
+  metadata: {
+    "work_focus": "testing",
+    "suggested_ide": "opencode",
+    "suggested_agent": "qa-tester"
+  }
+)
 ```
 
-### Current Flag State (Spirala Launch)
-
-| Flag | State | Feature |
-|------|-------|---------|
-| booking | ON | Session booking |
-| packages | ON | Session packages |
-| blog | ON | Blog system |
-| newsletter | ON | Email subscriptions |
-| seoManagement | ON | SEO management |
-| multiCoach | OFF | Multiple coaches |
-| webinars | OFF | Live webinars |
-| audioCourses | OFF | Audio courses |
-| ebooks | OFF | Ebook reader |
-| youtubeContent | OFF | YouTube integration |
-| giftPurchases | OFF | Gift purchases |
-| stripeConnect | OFF | Coach payouts |
-| reviews | OFF | Product reviews |
-| multiCurrency | OFF | Multiple currencies |
-
----
-
-## Development Commands
-
-### Frontend
+Then tell the user to run in their terminal:
 
 ```bash
-npm run dev              # Dev server (http://localhost:5173)
-npm run build            # Production build
-npm run build:dev        # Dev build (keeps console.log)
-npm run lint             # ESLint with auto-fix
-npm run preview          # Preview production build
+! orion task start --task <task-id> --ide opencode
 ```
 
-### Backend
+This launches OpenCode (or any IDE) with:
+- MCP configured and connected to OrionOps
+- The right agent profile and skills for the task
+- The task pre-loaded and ready to claim
+
+### Available IDEs
+
+| IDE | Command | Best For |
+|-----|---------|----------|
+| Claude Code | `--ide claude` | Complex tasks, architecture, multi-file changes, orchestration |
+| OpenCode | `--ide opencode` | Quick tasks, scripting, simple fixes, delegated work |
+
+### Task-Scoped Skill Loading
+
+When creating tasks, set `required_skills` in metadata to inject ONLY the skills the task needs:
+
+```
+create_task(
+  title: "Add Invoice GORM model and migration",
+  metadata: {
+    "work_focus": "backend",
+    "required_skills": ["go-model", "pg-migration"],
+    "suggested_ide": "opencode"
+  }
+)
+```
+
+Without `required_skills`, the full role skill set is loaded. With it, only the listed skills are injected — reducing noise and improving focus.
+
+### Direct Swarm Delegation via Bash
+
+You can directly delegate self-contained tasks to other AI CLIs without the user opening a new terminal. This is fire-and-forget — no interactivity, best for well-scoped tasks.
+
+**Delegate to OpenCode:**
+```bash
+opencode run "Implement the Invoice GORM model in orion-nexus-core/internal/models/invoice.go following hexagonal architecture. Use UUID PK, schema-qualified TableName, and soft deletes."
+```
+
+**Delegate to another Claude instance:**
+```bash
+claude --print "Write unit tests for the Invoice service in orion-nexus-core/internal/services/invoice_test.go. Use table-driven tests with testify/assert."
+```
+
+**When to use direct delegation:**
+- Task is self-contained (single file or small scope)
+- Clear, specific instructions (no discovery needed)
+- No interactive feedback required
+- The delegated agent has access to the same workspace
+
+**When NOT to use — dispatch via `orion task start` instead:**
+- Task requires MCP context (guidelines, project config)
+- Task spans multiple files or needs planning
+- You need progress tracking and quality gates
+
+### Monitoring Delegated Tasks
+
+```
+list_tasks(state: "processing")  → see what's being worked on
+get_task(task_id)                 → check a specific task's progress
+```
+
+### Agent Profiles
+
+| Agent | Focus | Skills |
+|-------|-------|--------|
+| `architect` | Orchestration, planning | task-planning, architecture-analysis |
+| `backend-dev` | Go, GORM, APIs | go-model, go-service, go-handler, pg-migration |
+| `frontend-dev` | Vue 3, PrimeVue | vue-page, vue-store, vue-composable |
+| `qa-tester` | Tests, code review | go-unit-test, go-integration-test, code-review |
+
+---
+
+## Subagent-Driven Development (Swarm Mode)
+
+For multi-task execution, use the **subagent swarm pattern**: you orchestrate, OpenCode implements.
+
+### Delegation Command
 
 ```bash
-cd backend
-npm run start:dev        # Dev with hot reload
-npm run start:prod       # Production
-npm run build            # Compile TypeScript
-npm run lint             # ESLint
-npm run test             # Unit tests
+! orion task delegate <task-id>
 ```
 
-### Database
+This builds a **self-contained prompt** with:
+- Full task requirements
+- Structural context from the code graph (functions, types, blast radius)
+- Implementer instructions (TDD, self-review)
+- Status protocol
+
+Then launches OpenCode with that prompt. The subagent runs in isolation.
+
+### Status Protocol
+
+Every subagent reports one of these statuses:
+
+| Status | Meaning | Your Action |
+|--------|---------|-------------|
+| `DONE` | Complete, tests pass | Run spec review |
+| `DONE_WITH_CONCERNS` | Complete but has concerns | Read concerns, decide |
+| `NEEDS_CONTEXT` | Missing info | Answer questions, re-delegate |
+| `BLOCKED` | Cannot proceed | Fix blocker or reassign |
+
+### Two-Stage Review Gates
+
+After implementation:
+1. **Spec compliance** (FIRST): Did they build what was requested?
+2. **Code quality** (SECOND): Is it well-built? (only if spec passes)
+
+### Model Stratification
+
+- **Mechanical tasks** (1-2 files, clear spec): delegate to OpenCode
+- **Integration tasks** (multi-file): keep in Claude Code or delegate with extra context
+- **Architecture/design/review**: always keep in Claude Code
+
+### Workflow Example
+
+```
+1. list_tasks(state: "pending")         → See all tasks
+2. For each task:
+   a. Simple (1-2 files)?  → ! orion task delegate <id>
+   b. Complex (multi-file)? → ! orion task start <id>
+3. After delegate returns:
+   a. STATUS: DONE → run spec review → quality review → task done
+   b. STATUS: NEEDS_CONTEXT → answer, re-delegate
+   c. STATUS: BLOCKED → fix blocker, re-delegate
+4. ! orion task done <id> --status DONE
+```
+
+---
+
+## Profile Switching (InjectProfileOPS)
+
+Your agent profile (role, skills, constraints) is auto-injected based on your current task.
+The profile is set at session start and can be detected mid-session via keywords.
+
+### How it works
+
+1. **SessionStart hook**: Fetches your next/assigned task, detects the right role, injects agent + skills
+2. **UserPromptSubmit hook**: Detects task references or role keywords in your prompts
+3. If a profile change is needed mid-session, you'll be asked to run `/resume`
+
+### Manual profile switch
+
+Tell the user to run in their terminal:
 
 ```bash
-npx drizzle-kit generate  # Generate migration from schema changes
-npx drizzle-kit migrate   # Run pending migrations
-npx drizzle-kit studio    # Visual DB browser
-npx supabase start        # Local Supabase (PostgreSQL + Auth)
-npx supabase db reset     # Reset local DB
+! orion focus backend              # Switch to backend profile
+! orion focus frontend             # Switch to frontend profile
+! orion focus --task <task-id>     # Auto-detect profile from task
+! orion focus auto --task next     # Auto-detect from next available task
+! orion focus status               # Show current active profiles
 ```
 
-### Backend Restrictions
+After switching, restart the session to load the new agent and skills.
 
-- Modify code, compile, run locally
-- Do NOT install from scratch (`npm install` in fresh backend) without permission
-- Do NOT deploy (manual by project owner)
+### Setting work_focus on tasks
+
+When creating tasks, set `work_focus` in metadata for automatic profile detection:
+
+```
+create_task(
+  title: "Add Invoice API endpoints",
+  metadata: { "work_focus": "backend" }
+)
+```
+
+Valid work_focus values: `architect`, `backend`, `frontend`, `fullstack`, `devops`, `database`, `testing`
 
 ---
 
-## i18n Requirements
+## CLI Commands
 
-```typescript
-// Always use t() for user-facing text
-const { t } = useTranslation();
-return <h1>{t('welcome.title')}</h1>;
-
-// Never hardcode strings
-// BAD: <button>Zarezerwuj</button>
-// GOOD: <button>{t('common.book')}</button>
-```
-
-### Translation Files
-
-```
-src/locales/
-├── pl/translation.json   # Polish (primary)
-└── en/translation.json   # English (secondary)
-```
-
----
-
-## Security Checklist
-
-- [ ] Validate all inputs with Zod schemas
-- [ ] Use Supabase Auth guards for protected routes
-- [ ] Verify purchase ownership before content access
-- [ ] Sanitize HTML content (DOMPurify)
-- [ ] Use parameterized Drizzle queries (built-in SQL injection protection)
-- [ ] Validate Stripe webhook signatures
-- [ ] Keep secrets in environment variables (not in code)
-- [ ] Run as non-root in Docker containers
-- [ ] Supabase RLS policies for row-level security
-
----
-
-## Code Review Checklist
-
-Before completing any task, verify:
-
-- [ ] No code duplication (DRY)
-- [ ] Single responsibility per component/function (SRP)
-- [ ] No prop drilling (use Context/stores)
-- [ ] All text uses i18n `t()` function
-- [ ] TypeScript strict mode passes
-- [ ] Zod validation for inputs
-- [ ] Error boundaries for async components
-- [ ] Loading states handled
-- [ ] Mobile responsive
-- [ ] Accessibility (ARIA, keyboard nav)
-- [ ] Feature flags checked for hidden features
-
----
-
-## Working with Claude
-
-### Before Writing Code
-
-1. **Search first**: Check `src/hooks/`, `src/components/`, `src/clients/` for existing code
-2. **Extend, don't duplicate**: Modify existing utilities rather than creating new ones
-3. **Plan the approach**: Identify which files to modify
-4. **Consider impact**: Changes to shared code affect multiple features
-5. **Check feature flags**: Don't modify hidden feature code unless specifically asked
-
-### Code Style
-
-- Functional components only
-- Hooks for all side effects
-- shadcn/ui for UI components
-- TanStack Query for server state
-- Drizzle ORM for database queries
-- Zod for validation
-- Tailwind for styling (use `spirala-*` theme tokens)
-
-### Commit Messages
-
-```
-feat: add booking calendar component
-fix: correct payment amount calculation
-refactor: migrate bookings module to Drizzle ORM
-style: apply Spirala theme to blog cards
-chore: update Supabase client configuration
+```bash
+orion task start --task <id> --ide <ide>  # Dispatch task to a specific IDE
+orion task start                          # Auto-pick next task for current IDE
+orion task list                           # List all tasks
+orion task done <id>                      # Mark task complete
+orion focus <role>                        # Switch agent role
+orion focus --task <id>                   # Auto-detect role from task
+orion focus auto --task next              # Auto-inject from next task
+orion ide add <ide>                       # Add IDE integration
+orion ide list                            # Show configured IDEs
+orion start                               # Launch AI assistant
 ```
 
 ---
 
-## Quick Reference
-
-### Tech Stack Versions
-
-| Package | Version |
-|---------|---------|
-| React | 19.x |
-| TypeScript | 5.9+ |
-| Vite | 7.x |
-| NestJS | 11.x |
-| Drizzle ORM | Latest |
-| Supabase JS | 2.x |
-| Stripe | 19.x |
-| TanStack Query | 5.x |
-| Zustand | 5.x |
-| i18next | 25.x |
-| Zod | 3.x (FE) / 4.x (BE) |
-| @aws-sdk/client-s3 | 3.x |
-| Tailwind CSS | 3.x |
-| shadcn/ui | Latest |
-
-### Key Files
-
-| Purpose | Location |
-|---------|----------|
-| Routes | `src/App.tsx` |
-| Auth Context | `src/contexts/AuthContext.tsx` |
-| Feature Flags | `src/config/features.ts` |
-| API Clients | `src/clients/` |
-| Hooks | `src/hooks/` |
-| UI Components | `src/components/ui/` |
-| Drizzle Schema | `backend/src/db/schema.ts` |
-| Supabase Config | `backend/src/config/supabase.config.ts` |
-| Storage Service | `backend/src/core/storage.service.ts` |
-| Design Reference | `spirala.pen` (Pencil MCP) |
-| Migration Plan | `plan/` directory |
-
-### Reference Project
-
-The original BeWonderMe codebase is at `ref/BeWonderMeFE/` for reference. Read-only - do not modify.
+**Powered by OrionOps** — Multi-agent AI development platform
 
 <!-- ORIONOPS:BEGIN -->
 ## OrionOps Integration
@@ -494,23 +379,36 @@ This project is connected to OrionOps for AI-assisted development.
 
 When the user asks "what's next?", "continue", "what should I do?", or starts a new session:
 
-1. **OrionOps Context** (ALWAYS first): Call `get_context(project_id)` + `list_tasks(project_id)`
+1. **OrionOps Context** (ALWAYS first): Call `get_context(project_id)` + `list_tasks(project_id)` (default = YOUR tasks + unclaimed; never other users')
    - ANY status is relevant: `blocked`, `in_progress`, `completed` — all contain useful info
    - A `blocked` context tells you what went wrong and what to fix
    - A `completed` context tells you what was done and what comes next
    - An `in_progress` context tells you what to continue working on
-   - `list_tasks` shows the full backlog with states and priorities
+   - `list_tasks` shows YOUR backlog (assigned to you) with states and priorities
+   - To see unclaimed tasks, use `list_tasks(scope='unassigned')` — only when the user asks
 2. **Local files**: Check for `plans/`, `PLAN.md`, `tasks/`, `TODO.md` in the project root
 3. **Git history**: `git log --oneline -10` to understand recent changes
+
+### Team Awareness — Collision Avoidance (MUST FOLLOW)
+
+Several developers work on this project at the same time, each with their own AI session. OrionOps is the team's shared second brain: every session publishes what it is doing (current task + files touched) and every session MUST check what teammates are doing before writing code.
+
+1. **Before starting ANY implementation** (not just at session start): call `list_tasks(project_id, scope='all', state='in_progress')` AND `list_contexts()` to see teammates' active work. The SessionStart hook injects a "Team Activity" snapshot, but it goes stale — re-check before you actually edit.
+2. **Overlap check**: call `check_conflicts(project_id, files=[...])` with the files you plan to touch — it returns teammates' active sessions and in-progress tasks that overlap. (A PreToolUse hook also fires this automatically on your first edit of each file.) For detail on a specific session use `get_context(context_id=...)`.
+3. **On overlap**: STOP and tell the user exactly who is working on what (task title, files, last update). Do NOT silently edit the same files — coordinate first (e.g. `comment_task`), or scope your change to avoid the shared files.
+4. **Claim before working**: `task_claim(task_id)` before touching code for a task. NEVER work on a task claimed by or assigned to someone else.
+5. **Publish your own work**: `save_context` with a SPECIFIC `current_task` and the REAL `files_modified` list, and `task_progress` on your claimed task. Teammates' collision checks are only as good as what you publish.
+6. Scope semantics: the `list_tasks` default (your tasks + unclaimed) is for picking YOUR next work. Collision checks REQUIRE `scope='all'`. Reading teammates' tasks is always fine; modifying them is not.
 
 ### Session Lifecycle (MUST FOLLOW)
 
 1. **Session Start**: Call `get_context(project_id)` to retrieve prior work — regardless of status.
-2. **Before Coding**: Call `search_guidelines` and `search_project_config` for patterns.
-3. **Task Claim**: Call `task_claim(task_id, agent_id)` before starting any task.
-4. **During Work**: Call `task_progress(task_id, agent_id, progress)` periodically.
-5. **Task Done**: Call `task_complete(task_id, agent_id, summary, files_modified)` when finished.
-6. **Session End**: **ALWAYS** call `save_context(...)` to persist progress — even if blocked or incomplete.
+2. **Team Check**: Call `list_tasks(project_id, scope='all', state='in_progress')` + `list_contexts()` — verify no teammate is already touching the files you plan to change (see Team Awareness above).
+3. **Before Coding**: Call `search_guidelines` and `search_project_config` for patterns.
+4. **Task Claim**: Call `task_claim(task_id, agent_id)` before starting any task.
+5. **During Work**: Call `task_progress(task_id, agent_id, progress)` periodically.
+6. **Task Done**: Call `task_complete(task_id, agent_id, summary, files_modified)` when finished.
+7. **Session End**: **ALWAYS** call `save_context(...)` to persist progress — even if blocked or incomplete.
 
 ### After `/clear` or New Conversation
 
@@ -522,7 +420,10 @@ When the user asks "what's next?", "continue", "what should I do?", or starts a 
 |------|-------------|
 | `get_context` | **Start of every session** — retrieve prior work (any status) |
 | `save_context` | **End of every session** — persist progress for next time |
-| `list_tasks` | See current tasks, backlog, and priorities |
+| `list_tasks` | See YOUR tasks + unclaimed (default). scope='mine'=strictly yours, scope='all'=everything (REQUIRED for team collision checks — read-only). |
+| `list_contexts` | Team awareness — see every session's current task/status on this project before editing shared files |
+| `check_conflicts` | BEFORE editing — pass the files you plan to touch; returns teammates' overlapping sessions/tasks |
+| `comment_task` | Coordinate with teammates on a task (e.g. flag a file overlap) |
 | `search_guidelines` | Before implementing — get coding patterns and standards |
 | `search_project_config` | Architecture decisions — find existing conventions |
 | `get_role_context` | When switching roles — get full agent profile |
@@ -533,62 +434,3 @@ When the user asks "what's next?", "continue", "what should I do?", or starts a 
 ### Project: spirala
 
 <!-- ORIONOPS:END -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
