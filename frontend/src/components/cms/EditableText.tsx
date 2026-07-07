@@ -51,7 +51,7 @@ export function CMSFocusProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-function useCMSFocus() {
+export function useCMSFocus() {
   return useContext(CMSFocusContext);
 }
 

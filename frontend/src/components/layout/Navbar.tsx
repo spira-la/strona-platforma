@@ -10,7 +10,7 @@ import {
   User,
   LayoutDashboard,
 } from 'lucide-react';
-import { EditableText } from '@/components/cms/EditableText';
+import { EditableText, useCMSFocus } from '@/components/cms/EditableText';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRoles } from '@/hooks/useRoles';
 import { useAuthStore } from '@/stores/auth.store';
@@ -131,6 +131,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
   const { isAdmin, isCoach } = useRoles();
   const { openLogin } = useAuthStore();
   const showYouTube = useFeatureFlag('youtubeNavLink');
+  const { activeId } = useCMSFocus();
 
   const contentGroup: NavGroup = {
     type: 'group',
@@ -190,6 +191,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
   useEffect(() => {
     if (!langOpen && !userMenuOpen && !openGroup) return;
     const handler = (e: MouseEvent) => {
+      if (activeId) return;
       if (
         langOpen &&
         langRef.current &&
@@ -213,7 +215,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
-  }, [langOpen, userMenuOpen, openGroup]);
+  }, [langOpen, userMenuOpen, openGroup, activeId]);
 
   const userInitial =
     user?.user_metadata?.full_name?.[0]?.toUpperCase() ??
