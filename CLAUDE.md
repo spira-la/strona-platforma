@@ -1,3 +1,85 @@
+# Spirala — Guía del Proyecto
+
+> Esta sección es específica de Spirala y describe cómo funciona realmente el sistema. La sección "OrionOps" más abajo es la herramienta interna de gestión de tareas/equipo — es genérica, no describe la arquitectura de Spirala. **Si estás resolviendo un pedido de la clienta sobre el sitio, esta sección de arriba es la que importa.**
+
+## Qué es Spirala
+
+Spirala (dominio `spira-la`) es una plataforma de coaching/terapia para una sola coach, migrada desde un producto anterior ("BeWonderMe") que era multi-coach/marketplace. Ver `plan/01-estrategia-general.md` para el detalle completo.
+
+**Filosofía central — "Ocultar, no eliminar":** todo el código de features que hoy no se usan (multi-coach, marketplace, webinars, audio courses/ebooks, YouTube, gift purchases, Stripe Connect, panel de coach completo, reviews, CMS avanzado) **se mantiene en el codebase**, oculto detrás de feature flags (`plan/02-feature-flags.md`). Nunca borres ni reescribas ese código pensando que "no se usa" — está ahí para reactivarse en el futuro sin rehacer nada. Si una tarea parece requerir borrar un módulo entero, es casi seguro que la respuesta correcta es un feature flag, no un `rm`.
+
+## Stack real (verificado contra el código, no contra los planes originales)
+
+| Capa | Tecnología |
+|------|-----------|
+| Frontend | React 19 + Vite 7 + TypeScript, Tailwind + shadcn/ui + Radix |
+| Estado | Zustand (global) + TanStack Query (server state) |
+| Backend | NestJS 11 + Node 22 + TypeScript |
+| Base de datos | PostgreSQL (Supabase) + **TypeORM** (`@nestjs/typeorm`) — no Drizzle, aunque los docs originales en `plan/03-base-de-datos.md` y `plan/06-backend.md` lo mencionen; el equipo pivoteó a TypeORM durante la implementación |
+| Auth | Supabase Auth (JWT) |
+| Storage | Cloudflare R2 (S3-compatible, `@aws-sdk/client-s3`) |
+| Pagos | Stripe |
+| i18n | i18next — **PL (principal) + EN + ES, siempre las 3** |
+| Diseño de referencia | `spirala.pen` (Pencil) — dorado/tierra, Playfair Display + sans, fotografía de naturaleza |
+
+Los agentes en `.claude/agents/` ya reflejan este stack real. Si algún documento en `plan/` contradice el código (p. ej. menciona Drizzle), **el código gana** — esos planes son históricos, no la fuente de verdad actual.
+
+## El sistema de CMS — cada sección nueva debe ser editable
+
+Esto es lo más importante para cualquier pedido de la clienta: **todo texto visible en cualquier página debe pasar por el sistema de CMS inline-editing**, nunca un string JSX crudo. Esto es lo que le permite a la clienta editar el contenido de su sitio sin tocar código, y lo que dispara la auto-traducción a EN/ES.
+
+Regla de oro:
+```tsx
+// MAL — nunca así
+<h1>Matka, żona, kochanka</h1>
+
+// BIEN
+<EditableText section="motherWifeLover" fieldPath="hero.title">
+  Matka, żona, kochanka
+</EditableText>
+```
+
+Al crear o modificar cualquier página:
+1. Todo texto visible envuelto en `<EditableText section="X" fieldPath="y.z">fallback en PL</EditableText>`
+2. Nueva sección registrada en `CMSSectionKey` (`frontend/src/types/cms.types.ts`) — TypeScript debe fallar si usás una key no registrada, es intencional
+3. Si la página tiene hero oscuro con overlay dorado, agregar su ruta a `DARK_HERO_PAGES` en `frontend/src/components/layout/Layout.tsx`
+4. Claves de traducción agregadas a **las tres** locales: `frontend/src/locales/{pl,en,es}/translation.json`
+5. Después de desplegar: la clienta (como admin) navega la página → `/admin/languages` → "Seed + Translate"
+
+Guía completa, con todos los archivos clave y el flujo de seed/translate: skill **`cms-editable-text`** (`.claude/skills/cms-editable-text/SKILL.md`) — se carga automáticamente en los agentes de frontend/fullstack, pero aplica siempre, sin excepción, para cualquier página nueva.
+
+## Feature flags
+
+Sistema formal (no código muerto) que controla qué está visible. Ver `plan/02-feature-flags.md` para la lista completa y `common/guards/feature-flag.guard.ts` / `useFeatureFlag()` para la implementación. Antes de tocar cualquier módulo marcado como oculto (webinars, audioCourses, ebooks, youtubeContent, giftPurchases, stripeConnect, multiCoach, etc.), confirmá si el pedido es "activar el flag" en vez de "reescribir el módulo".
+
+## Flujo de trabajo con la clienta
+
+La clienta pide cambios usando su propia app de Claude (Claude Code sobre este mismo repo) y los sube a la rama `dev` para poder verlos antes de que lleguen a producción (`main`). Cuando trabajes en un pedido suyo:
+
+- No asumas que "simplificar" significa borrar código de features ocultas — ver filosofía arriba
+- Cualquier página/sección nueva sigue el patrón CMS de arriba, sin excepciones
+- Respetá el stack real de la tabla arriba (TypeORM, no Drizzle; Supabase Auth, no Firebase; R2, no Firebase Storage — Firebase fue eliminado por completo del proyecto)
+- Si el pedido implica un cambio de esquema de base de datos, seguí el flujo de migraciones de TypeORM (`npm run db:generate` → revisar el SQL generado → `npm run db:migrate`) — nunca editar una migración ya aplicada
+- Mantené las 3 traducciones (PL/EN/ES) sincronizadas siempre que se agregue texto nuevo
+
+## Agentes y skills disponibles (`.claude/agents/`, `.claude/skills/`)
+
+| Agente | Uso |
+|--------|-----|
+| `frontend-developer` | Páginas/componentes React siguiendo el design system y el patrón CMS |
+| `backend-developer` | Endpoints NestJS, TypeORM, guards de feature flags |
+| `fullstack-developer` | Features de punta a punta (DB → API → UI) |
+| `architect-reviewer` | Revisión de decisiones de arquitectura/migración (solo lectura, no implementa) |
+| `database-architect` | Diseño de entidades TypeORM, migraciones, políticas RLS |
+| `ui-ux-designer` | Crítica de UI/UX con base en research, específica de la estética Spirala |
+| `seo-analyzer` | Auditorías SEO, consciente de las 3 locales y del sistema de CMS |
+
+Skills: `cms-editable-text` (obligatoria en toda página nueva), `react-best-practices`, `react-patterns`.
+
+Se eliminaron de este repo agentes/skills que no correspondían al stack real (Vue, Go/GORM, scaffolding de proyectos Next.js/GraphQL desde cero) — habían quedado de una plantilla genérica y podían llevar a Claude a escribir código en un framework que este proyecto no usa.
+
+---
+
 # OrionOps — Tech Lead / Architect — plans tasks, reviews code, does NOT write code
 
 ## MCP Tools
@@ -434,5 +516,7 @@ Several developers work on this project at the same time, each with their own AI
 ### Project: spirala
 
 <!-- ORIONOPS:END -->
+
+
 
 
