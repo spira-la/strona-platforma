@@ -1,0 +1,13 @@
+{
+  "mcp": {
+    "orionops": {
+      "args": [
+        "mcp",
+        "serve"
+      ],
+      "command": "/usr/local/bin/orion",
+      "enabled": true,
+      "type": "local"
+    }
+  }
+}

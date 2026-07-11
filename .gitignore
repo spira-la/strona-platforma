@@ -19,6 +19,8 @@ plan/infra.md
 # API keys / secrets (plain text files with credentials)
 openrouter
 creds.md
+.env.orion
+.env.orion.bak
 
 # IDE
 .idea/
@@ -52,13 +54,13 @@ drizzle/meta/_journal.json.bak
 ref/
 
 # Claude
-.claude/
+# .claude/agents and .claude/skills ARE committed on purpose (shared team config) —
+# only local/machine-specific or auto-generated files under .claude/ are ignored below.
+.claude/settings.local.json
+.claude/agents/AGENT.md
 creds.md
 dev.sh
 
 # OrionOps (auto-added by orion setup)
-.env.orion
-.mcp.json
-.claude/settings.local.json
 .orion/
 claudebk/

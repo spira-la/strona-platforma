@@ -323,7 +323,7 @@ export default function MotherWifeLover() {
           <EditableButtonLink
             section="motherWifeLover"
             fieldPath="ctaBtn"
-            defaultAction="booking"
+            defaultAction="calendly"
             className="mt-2 inline-flex items-center justify-center px-10 py-4 rounded-full bg-[#B8944A] text-white text-base font-bold transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A] [font-family:'Lato',sans-serif]"
           >
             <EditableText

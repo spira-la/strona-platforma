@@ -1,3 +1,125 @@
+# Spirala — Guía del Proyecto
+
+> Esta sección es específica de Spirala y describe cómo funciona realmente el sistema. La sección "OrionOps" más abajo es la herramienta interna de gestión de tareas/equipo — es genérica, no describe la arquitectura de Spirala. **Si estás resolviendo un pedido de la clienta sobre el sitio, esta sección de arriba es la que importa.**
+
+## Qué es Spirala
+
+Spirala (dominio `spira-la`) es una plataforma de coaching/terapia para una sola coach, migrada desde un producto anterior ("BeWonderMe") que era multi-coach/marketplace. Ver `plan/01-estrategia-general.md` para el detalle completo.
+
+**Filosofía central — "Ocultar, no eliminar":** todo el código de features que hoy no se usan (multi-coach, marketplace, webinars, audio courses/ebooks, YouTube, gift purchases, Stripe Connect, panel de coach completo, reviews, CMS avanzado) **se mantiene en el codebase**, oculto detrás de feature flags (`plan/02-feature-flags.md`). Nunca borres ni reescribas ese código pensando que "no se usa" — está ahí para reactivarse en el futuro sin rehacer nada. Si una tarea parece requerir borrar un módulo entero, es casi seguro que la respuesta correcta es un feature flag, no un `rm`.
+
+## Stack real (verificado contra el código, no contra los planes originales)
+
+| Capa | Tecnología |
+|------|-----------|
+| Frontend | React 19 + Vite 7 + TypeScript, Tailwind + shadcn/ui + Radix |
+| Estado | Zustand (global) + TanStack Query (server state) |
+| Backend | NestJS 11 + Node 22 + TypeScript |
+| Base de datos | PostgreSQL (Supabase) + **TypeORM** (`@nestjs/typeorm`) — no Drizzle, aunque los docs originales en `plan/03-base-de-datos.md` y `plan/06-backend.md` lo mencionen; el equipo pivoteó a TypeORM durante la implementación |
+| Auth | Supabase Auth (JWT) |
+| Storage | Cloudflare R2 (S3-compatible, `@aws-sdk/client-s3`) |
+| Pagos | Stripe |
+| i18n | i18next — **PL (principal) + EN + ES, siempre las 3** |
+| Diseño de referencia | `spirala.pen` (Pencil) — dorado/tierra, Playfair Display + sans, fotografía de naturaleza |
+
+Los agentes en `.claude/agents/` ya reflejan este stack real. Si algún documento en `plan/` contradice el código (p. ej. menciona Drizzle), **el código gana** — esos planes son históricos, no la fuente de verdad actual.
+
+## El sistema de CMS — cada sección nueva debe ser editable
+
+Esto es lo más importante para cualquier pedido de la clienta: **todo texto visible en cualquier página debe pasar por el sistema de CMS inline-editing**, nunca un string JSX crudo. Esto es lo que le permite a la clienta editar el contenido de su sitio sin tocar código, y lo que dispara la auto-traducción a EN/ES.
+
+Regla de oro:
+```tsx
+// MAL — nunca así
+<h1>Matka, żona, kochanka</h1>
+
+// BIEN
+<EditableText section="motherWifeLover" fieldPath="hero.title">
+  Matka, żona, kochanka
+</EditableText>
+```
+
+Al crear o modificar cualquier página:
+1. Todo texto visible envuelto en `<EditableText section="X" fieldPath="y.z">fallback en PL</EditableText>`
+2. Nueva sección registrada en `CMSSectionKey` (`frontend/src/types/cms.types.ts`) — TypeScript debe fallar si usás una key no registrada, es intencional
+3. Si la página tiene hero oscuro con overlay dorado, agregar su ruta a `DARK_HERO_PAGES` en `frontend/src/components/layout/Layout.tsx`
+4. Claves de traducción agregadas a **las tres** locales: `frontend/src/locales/{pl,en,es}/translation.json`
+5. Después de desplegar: la clienta (como admin) navega la página → `/admin/languages` → "Seed + Translate"
+
+Guía completa, con todos los archivos clave y el flujo de seed/translate: skill **`cms-editable-text`** (`.claude/skills/cms-editable-text/SKILL.md`) — se carga automáticamente en los agentes de frontend/fullstack, pero aplica siempre, sin excepción, para cualquier página nueva.
+
+## Feature flags
+
+Sistema formal (no código muerto) que controla qué está visible. Ver `plan/02-feature-flags.md` para la lista completa y `common/guards/feature-flag.guard.ts` / `useFeatureFlag()` para la implementación. Antes de tocar cualquier módulo marcado como oculto (webinars, audioCourses, ebooks, youtubeContent, giftPurchases, stripeConnect, multiCoach, etc.), confirmá si el pedido es "activar el flag" en vez de "reescribir el módulo".
+
+## Infraestructura y CI/CD — qué pasa realmente al hacer `git push`
+
+**No hay Vercel/Netlify/plataforma gestionada.** Es un servidor propio (self-hosted) con Docker + nginx, desplegado por GitHub Actions vía SSH. Hacer push a `dev` o `main` dispara un deploy real a un servidor real — no es solo "subir código para revisar un diff", literalmente reconstruye y reinicia contenedores en una URL pública.
+
+### Los dos entornos siempre activos
+
+| Rama | Trigger | Frontend | Backend API | URLs |
+|------|---------|----------|--------------|------|
+| `dev` | push a `dev` | contenedor `spirala-fe-dev`, puerto 45000 | contenedor `spirala-be-dev`, puerto 45002 | `dev.spira-la.com` / `apidev.spira-la.com` |
+| `main` | push a `main` | contenedor `spirala-fe`, puerto 45001 | contenedor `spirala-be`, puerto 45003 | `spira-la.com` / `api.spira-la.com` |
+
+Workflows: `.github/workflows/deploy-dev.yml` y `deploy-prod.yml` (estructura idéntica, apuntan a servidores/carpetas distintas). Ambos:
+1. Detectan qué cambió (`frontend/**`, `backend/**`, `nginx/**`) con `dorny/paths-filter` — solo reconstruye lo que cambió, salvo `workflow_dispatch` con `force_all: true`.
+2. Por SSH: `git fetch --all --prune --force && git reset --hard origin/<rama>` en el servidor (el servidor tiene su propio clone, ej. `SPIRALA_APP_DIR` / `SPIRALA_APP_DIR_PROD`, secrets de GitHub).
+3. **Si cambió el backend**: `npm ci` + `npm run db:migrate` **antes** de reconstruir la imagen — las migraciones de TypeORM corren automáticamente en cada deploy, contra `backend/.env.development` o `backend/.env.production` (archivos que viven **solo en el servidor**, no están en git ni existen en este checkout local — si un cambio necesita una env var nueva, hay que agregarla manualmente en el servidor, algo que una sesión de Claude Code no puede hacer por SSH).
+4. Reconstruye con Docker Buildkit (`CACHEBUST=$(git rev-parse HEAD)` para invalidar cache), levanta con `--force-recreate`, health-check con reintentos contra `/api/health` (backend) y `/health` (frontend).
+5. Si cambió `nginx/**`: recarga la config del reverse proxy (`nginx -t && nginx -s reload`).
+6. `deploy-infra.yml` (trigger: cambios en `infra/**`) gestiona por separado el contenedor de Ollama.
+7. Los tres workflows comparten `concurrency: group: spirala-server-deploy` — nunca corren git en el servidor en paralelo (evita locks corruptos).
+
+**⚠️ Riesgo real a tener en cuenta:** el comando de migración es `npm run db:migrate 2>&1 || echo "WARNING..."` — **si la migración falla, el deploy NO se detiene**, solo imprime un warning y sigue construyendo/desplegando el backend igual. Si tu cambio incluye una migración de schema, verificá manualmente (o pedile al equipo que verifique) que corrió bien en el servidor — no asumas que un deploy "verde" significa que la migración se aplicó.
+
+### Deploy manual (alternativa a esperar el push)
+
+`./deploy.sh dev` o `./deploy.sh prod` hace lo mismo de forma interactiva/local (pensado para correr con acceso SSH al servidor, no desde cualquier laptop) — mismo flujo: git sync, migración, build, health-check. `deploy-frontend-dev.sh` / `deploy-frontend-prod.sh` son versiones que solo tocan el frontend.
+
+### Docker compose — qué levanta cada archivo
+
+- `docker-compose.dev.yml` / `docker-compose.prod.yml` (raíz) → contenedor de frontend (nginx sirviendo el build de Vite, `Dockerfile` multi-stage en la raíz)
+- `backend/docker-compose.dev.yml` / `backend/docker-compose.yml` → contenedor de backend (NestJS, `backend/Dockerfile` multi-stage)
+- `docker-compose.nginx.yml` → reverse proxy compartido (`network_mode: host`, así puede recargar config sin reconstruir imagen)
+- `infra/docker-compose.redis.yml`, `infra/docker-compose.ollama.yml` → servicios compartidos (cache, traducción local) en una red Docker externa (`spirala-dev-network` / `spirala-prod-network`) — no se redeploy con cada push, se gestionan aparte
+- Las env vars de build del frontend (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`) están hardcodeadas en los `docker-compose.*.yml` como build args — **esto es intencional, no una fuga de secreto**: la anon key de Supabase está diseñada para ser pública, la seguridad real la dan las políticas RLS, no el secreto de esta key
+
+### Instalación de dependencias
+
+No hay un solo `npm install` — es un monorepo con tres `package.json` independientes: raíz (solo husky/lint-staged), `frontend/` y `backend/`. Cada uno con su propio `npm ci` dentro del Dockerfile/pipeline correspondiente. Si agregás una dependencia, instalala en el `package.json` correcto (`frontend/` para UI, `backend/` para NestJS), nunca en la raíz salvo que sea una herramienta de todo el repo (como husky).
+
+## Flujo de trabajo con la clienta
+
+La clienta pide cambios usando su propia app de Claude (Claude Code sobre este mismo repo) y los sube a la rama `dev` para poder verlos en `dev.spira-la.com` antes de que lleguen a producción (`main` → `spira-la.com`). Como no sabe programar, este flujo es su única forma de validar cambios — no asumas que puede revisar código o depurar un deploy roto por su cuenta. Cuando trabajes en un pedido suyo:
+
+- **Nunca pushear directo a `main`** — todo pedido de la clienta va a `dev` primero; el push a `dev` ya dispara un deploy real (ver sección de Infraestructura y CI/CD arriba), así que un error ahí también es visible en la URL pública de dev, no solo en el código
+- Si el pedido incluye una migración de base de datos, recordá que el pipeline la corre sola pero **no aborta el deploy si falla** — prestá atención extra a que el schema realmente haya cambiado antes de dar la tarea por terminada
+- No asumas que "simplificar" significa borrar código de features ocultas — ver filosofía arriba
+- Cualquier página/sección nueva sigue el patrón CMS de arriba, sin excepciones
+- Respetá el stack real de la tabla arriba (TypeORM, no Drizzle; Supabase Auth, no Firebase; R2, no Firebase Storage — Firebase fue eliminado por completo del proyecto)
+- Si el pedido implica un cambio de esquema de base de datos, seguí el flujo de migraciones de TypeORM (`npm run db:generate` → revisar el SQL generado → `npm run db:migrate`) — nunca editar una migración ya aplicada
+- Mantené las 3 traducciones (PL/EN/ES) sincronizadas siempre que se agregue texto nuevo
+
+## Agentes y skills disponibles (`.claude/agents/`, `.claude/skills/`)
+
+| Agente | Uso |
+|--------|-----|
+| `frontend-developer` | Páginas/componentes React siguiendo el design system y el patrón CMS |
+| `backend-developer` | Endpoints NestJS, TypeORM, guards de feature flags |
+| `fullstack-developer` | Features de punta a punta (DB → API → UI) |
+| `architect-reviewer` | Revisión de decisiones de arquitectura/migración (solo lectura, no implementa) |
+| `database-architect` | Diseño de entidades TypeORM, migraciones, políticas RLS |
+| `ui-ux-designer` | Crítica de UI/UX con base en research, específica de la estética Spirala |
+| `seo-analyzer` | Auditorías SEO, consciente de las 3 locales y del sistema de CMS |
+
+Skills: `cms-editable-text` (obligatoria en toda página nueva), `react-best-practices`, `react-patterns`.
+
+Se eliminaron de este repo agentes/skills que no correspondían al stack real (Vue, Go/GORM, scaffolding de proyectos Next.js/GraphQL desde cero) — habían quedado de una plantilla genérica y podían llevar a Claude a escribir código en un framework que este proyecto no usa.
+
+---
+
 # OrionOps — Tech Lead / Architect — plans tasks, reviews code, does NOT write code
 
 ## MCP Tools
@@ -434,5 +556,11 @@ Several developers work on this project at the same time, each with their own AI
 ### Project: spirala
 
 <!-- ORIONOPS:END -->
+
+
+
+
+
+
 
 

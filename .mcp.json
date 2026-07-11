@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "orionops": {
+      "args": [
+        "mcp",
+        "serve"
+      ],
+      "command": "/usr/local/bin/orion",
+      "type": "stdio"
+    }
+  }
+}
