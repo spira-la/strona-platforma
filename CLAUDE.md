@@ -52,10 +52,50 @@ Guía completa, con todos los archivos clave y el flujo de seed/translate: skill
 
 Sistema formal (no código muerto) que controla qué está visible. Ver `plan/02-feature-flags.md` para la lista completa y `common/guards/feature-flag.guard.ts` / `useFeatureFlag()` para la implementación. Antes de tocar cualquier módulo marcado como oculto (webinars, audioCourses, ebooks, youtubeContent, giftPurchases, stripeConnect, multiCoach, etc.), confirmá si el pedido es "activar el flag" en vez de "reescribir el módulo".
 
+## Infraestructura y CI/CD — qué pasa realmente al hacer `git push`
+
+**No hay Vercel/Netlify/plataforma gestionada.** Es un servidor propio (self-hosted) con Docker + nginx, desplegado por GitHub Actions vía SSH. Hacer push a `dev` o `main` dispara un deploy real a un servidor real — no es solo "subir código para revisar un diff", literalmente reconstruye y reinicia contenedores en una URL pública.
+
+### Los dos entornos siempre activos
+
+| Rama | Trigger | Frontend | Backend API | URLs |
+|------|---------|----------|--------------|------|
+| `dev` | push a `dev` | contenedor `spirala-fe-dev`, puerto 45000 | contenedor `spirala-be-dev`, puerto 45002 | `dev.spira-la.com` / `apidev.spira-la.com` |
+| `main` | push a `main` | contenedor `spirala-fe`, puerto 45001 | contenedor `spirala-be`, puerto 45003 | `spira-la.com` / `api.spira-la.com` |
+
+Workflows: `.github/workflows/deploy-dev.yml` y `deploy-prod.yml` (estructura idéntica, apuntan a servidores/carpetas distintas). Ambos:
+1. Detectan qué cambió (`frontend/**`, `backend/**`, `nginx/**`) con `dorny/paths-filter` — solo reconstruye lo que cambió, salvo `workflow_dispatch` con `force_all: true`.
+2. Por SSH: `git fetch --all --prune --force && git reset --hard origin/<rama>` en el servidor (el servidor tiene su propio clone, ej. `SPIRALA_APP_DIR` / `SPIRALA_APP_DIR_PROD`, secrets de GitHub).
+3. **Si cambió el backend**: `npm ci` + `npm run db:migrate` **antes** de reconstruir la imagen — las migraciones de TypeORM corren automáticamente en cada deploy, contra `backend/.env.development` o `backend/.env.production` (archivos que viven **solo en el servidor**, no están en git ni existen en este checkout local — si un cambio necesita una env var nueva, hay que agregarla manualmente en el servidor, algo que una sesión de Claude Code no puede hacer por SSH).
+4. Reconstruye con Docker Buildkit (`CACHEBUST=$(git rev-parse HEAD)` para invalidar cache), levanta con `--force-recreate`, health-check con reintentos contra `/api/health` (backend) y `/health` (frontend).
+5. Si cambió `nginx/**`: recarga la config del reverse proxy (`nginx -t && nginx -s reload`).
+6. `deploy-infra.yml` (trigger: cambios en `infra/**`) gestiona por separado el contenedor de Ollama.
+7. Los tres workflows comparten `concurrency: group: spirala-server-deploy` — nunca corren git en el servidor en paralelo (evita locks corruptos).
+
+**⚠️ Riesgo real a tener en cuenta:** el comando de migración es `npm run db:migrate 2>&1 || echo "WARNING..."` — **si la migración falla, el deploy NO se detiene**, solo imprime un warning y sigue construyendo/desplegando el backend igual. Si tu cambio incluye una migración de schema, verificá manualmente (o pedile al equipo que verifique) que corrió bien en el servidor — no asumas que un deploy "verde" significa que la migración se aplicó.
+
+### Deploy manual (alternativa a esperar el push)
+
+`./deploy.sh dev` o `./deploy.sh prod` hace lo mismo de forma interactiva/local (pensado para correr con acceso SSH al servidor, no desde cualquier laptop) — mismo flujo: git sync, migración, build, health-check. `deploy-frontend-dev.sh` / `deploy-frontend-prod.sh` son versiones que solo tocan el frontend.
+
+### Docker compose — qué levanta cada archivo
+
+- `docker-compose.dev.yml` / `docker-compose.prod.yml` (raíz) → contenedor de frontend (nginx sirviendo el build de Vite, `Dockerfile` multi-stage en la raíz)
+- `backend/docker-compose.dev.yml` / `backend/docker-compose.yml` → contenedor de backend (NestJS, `backend/Dockerfile` multi-stage)
+- `docker-compose.nginx.yml` → reverse proxy compartido (`network_mode: host`, así puede recargar config sin reconstruir imagen)
+- `infra/docker-compose.redis.yml`, `infra/docker-compose.ollama.yml` → servicios compartidos (cache, traducción local) en una red Docker externa (`spirala-dev-network` / `spirala-prod-network`) — no se redeploy con cada push, se gestionan aparte
+- Las env vars de build del frontend (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`) están hardcodeadas en los `docker-compose.*.yml` como build args — **esto es intencional, no una fuga de secreto**: la anon key de Supabase está diseñada para ser pública, la seguridad real la dan las políticas RLS, no el secreto de esta key
+
+### Instalación de dependencias
+
+No hay un solo `npm install` — es un monorepo con tres `package.json` independientes: raíz (solo husky/lint-staged), `frontend/` y `backend/`. Cada uno con su propio `npm ci` dentro del Dockerfile/pipeline correspondiente. Si agregás una dependencia, instalala en el `package.json` correcto (`frontend/` para UI, `backend/` para NestJS), nunca en la raíz salvo que sea una herramienta de todo el repo (como husky).
+
 ## Flujo de trabajo con la clienta
 
-La clienta pide cambios usando su propia app de Claude (Claude Code sobre este mismo repo) y los sube a la rama `dev` para poder verlos antes de que lleguen a producción (`main`). Cuando trabajes en un pedido suyo:
+La clienta pide cambios usando su propia app de Claude (Claude Code sobre este mismo repo) y los sube a la rama `dev` para poder verlos en `dev.spira-la.com` antes de que lleguen a producción (`main` → `spira-la.com`). Como no sabe programar, este flujo es su única forma de validar cambios — no asumas que puede revisar código o depurar un deploy roto por su cuenta. Cuando trabajes en un pedido suyo:
 
+- **Nunca pushear directo a `main`** — todo pedido de la clienta va a `dev` primero; el push a `dev` ya dispara un deploy real (ver sección de Infraestructura y CI/CD arriba), así que un error ahí también es visible en la URL pública de dev, no solo en el código
+- Si el pedido incluye una migración de base de datos, recordá que el pipeline la corre sola pero **no aborta el deploy si falla** — prestá atención extra a que el schema realmente haya cambiado antes de dar la tarea por terminada
 - No asumas que "simplificar" significa borrar código de features ocultas — ver filosofía arriba
 - Cualquier página/sección nueva sigue el patrón CMS de arriba, sin excepciones
 - Respetá el stack real de la tabla arriba (TypeORM, no Drizzle; Supabase Auth, no Firebase; R2, no Firebase Storage — Firebase fue eliminado por completo del proyecto)
@@ -516,6 +556,10 @@ Several developers work on this project at the same time, each with their own AI
 ### Project: spirala
 
 <!-- ORIONOPS:END -->
+
+
+
+
 
 
 
