@@ -301,7 +301,7 @@ export default function MamyNastolatkowCoaching() {
           <EditableButtonLink
             section="mamyNastolatkow"
             fieldPath="heroCTA"
-            defaultAction="booking"
+            defaultAction="calendly"
             className="mt-2 inline-flex items-center justify-center px-8 py-4 rounded-lg bg-[#B8944A] text-white text-sm font-normal transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A] [font-family:'Lato',sans-serif]"
           >
             <EditableText
@@ -536,7 +536,7 @@ export default function MamyNastolatkowCoaching() {
             <EditableButtonLink
               section="mamyNastolatkow"
               fieldPath="perspCTA"
-              defaultAction="booking"
+              defaultAction="calendly"
               className="inline-flex items-center justify-center px-10 py-4 rounded-lg bg-[#B8944A] text-white text-sm font-normal transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A] [font-family:'Lato',sans-serif]"
             >
               <EditableText
@@ -861,7 +861,7 @@ export default function MamyNastolatkowCoaching() {
           <EditableButtonLink
             section="mamyNastolatkow"
             fieldPath="ctaBtn"
-            defaultAction="booking"
+            defaultAction="calendly"
             className="mt-2 inline-flex items-center justify-center px-10 py-4 rounded-full bg-[#B8944A] text-white text-base font-bold transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A] [font-family:'Lato',sans-serif]"
           >
             <EditableText

@@ -8,6 +8,7 @@ import {
   ArrowLeft,
   ArrowRight,
   Calendar,
+  CalendarCheck,
   Clock,
   Copy,
   Mail,
@@ -46,11 +47,9 @@ const AUTHOR_ROLE = 'Coach · Spirala';
 const AUTHOR_NAME_FALLBACK = 'Spirala';
 const AUTHOR_AVATAR_FALLBACK = anetaAvatar;
 
-// Shared with the Contact page: the WhatsApp number lives in the CMS so the
+// Shared with the Contact page: the Calendly link lives in the CMS so the
 // admin sets it once. Falls back to a placeholder until configured.
-const PHONE_FALLBACK = '+48 000 000 000';
-const WHATSAPP_MESSAGE_FALLBACK =
-  'Cześć! Czytałam artykuł na blogu Spirala i chciałabym umówić się na bezpłatną konsultację.';
+const CALENDLY_URL_FALLBACK = 'https://calendly.com/';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -89,11 +88,6 @@ function readCmsValue(
 ): string {
   if (!raw || raw === fieldPath || raw.trim() === '') return fallback;
   return raw.trim();
-}
-
-function whatsappHref(phone: string, message: string): string {
-  const digits = phone.replaceAll(/\D/g, '');
-  return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
 }
 
 // ---------------------------------------------------------------------------
@@ -171,23 +165,18 @@ function ShareBar({ url, title }: ShareBarProps) {
 }
 
 // ---------------------------------------------------------------------------
-// End-of-article CTA — book a session or start a free WhatsApp chat.
-// All copy is CMS-editable; the WhatsApp number is shared with the Contact
-// page via the `contact.info.phone` field.
+// End-of-article CTA — book a session or a free Calendly consultation.
+// All copy is CMS-editable; the Calendly link is shared with the Contact
+// page via the `contact.info.calendlyUrl` field.
 // ---------------------------------------------------------------------------
 
 function BlogCTA() {
   const { getFieldValue } = useCMS();
 
-  const phone = readCmsValue(
-    getFieldValue('contact', 'info.phone'),
-    'info.phone',
-    PHONE_FALLBACK,
-  );
-  const whatsappMessage = readCmsValue(
-    getFieldValue('blogPost', 'ctaWhatsappMessage'),
-    'ctaWhatsappMessage',
-    WHATSAPP_MESSAGE_FALLBACK,
+  const calendlyUrl = readCmsValue(
+    getFieldValue('contact', 'info.calendlyUrl'),
+    'info.calendlyUrl',
+    CALENDLY_URL_FALLBACK,
   );
 
   return (
@@ -224,14 +213,14 @@ function BlogCTA() {
           <ArrowRight size={15} aria-hidden="true" />
         </Link>
 
-        {/* Secondary — free consultation directly on WhatsApp */}
+        {/* Secondary — free consultation via Calendly */}
         <a
-          href={whatsappHref(phone, whatsappMessage)}
+          href={calendlyUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center gap-2 w-full sm:w-auto font-['Lato'] text-[14px] font-semibold text-[#B8963E] bg-white border border-[#B8963E] rounded-lg px-8 py-[14px] transition-colors hover:bg-[rgba(184,148,74,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A]"
         >
-          <MessageCircle size={16} aria-hidden="true" />
+          <CalendarCheck size={16} aria-hidden="true" />
           <EditableText
             section="blogPost"
             fieldPath="ctaWhatsappButton"

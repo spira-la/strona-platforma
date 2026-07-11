@@ -8,6 +8,7 @@ import {
   ExternalLink,
   Mail,
   Phone,
+  Calendar,
   Info,
   RotateCcw,
 } from 'lucide-react';
@@ -47,6 +48,7 @@ import type { CMSSectionKey } from '@/types/cms.types';
 
 export type ButtonActionType =
   | 'whatsapp'
+  | 'calendly'
   | 'internal'
   | 'facebook'
   | 'instagram'
@@ -63,6 +65,7 @@ const ACTION_FIELD_SUFFIX = 'Action';
 
 const VALID_TYPES = new Set<ButtonActionType>([
   'whatsapp',
+  'calendly',
   'internal',
   'facebook',
   'instagram',
@@ -90,12 +93,20 @@ function parse(raw: string): ButtonAction | null {
 function resolveHref(
   action: ButtonAction,
   phone: string,
+  calendlyUrl: string,
 ): { href: string; target: string; rel: string } {
   switch (action.type) {
     case 'whatsapp': {
       const digits = (action.value || phone).replaceAll(/\D/g, '');
       return {
         href: `https://wa.me/${digits}`,
+        target: '_blank',
+        rel: 'noopener noreferrer',
+      };
+    }
+    case 'calendly': {
+      return {
+        href: action.value || calendlyUrl || '#',
         target: '_blank',
         rel: 'noopener noreferrer',
       };
@@ -144,6 +155,15 @@ const TYPE_OPTIONS: TypeOption[] = [
     type: 'whatsapp',
     label: 'WhatsApp',
     Icon: MessageCircle,
+    needsValue: false,
+    inputType: 'none',
+    inputLabel: '',
+    inputPlaceholder: '',
+  },
+  {
+    type: 'calendly',
+    label: 'Calendly',
+    Icon: Calendar,
     needsValue: false,
     inputType: 'none',
     inputLabel: '',
@@ -244,6 +264,16 @@ const FLAT_OPTIONS: FlatOption[] = [
     Icon: MessageCircle,
   },
   {
+    key: 'calendly',
+    label: 'Calendly (rezerwacja)',
+    action: { type: 'calendly', value: '' },
+    needsInput: false,
+    inputLabel: '',
+    inputPlaceholder: '',
+    inputKind: 'none',
+    Icon: Calendar,
+  },
+  {
     key: 'facebook',
     label: 'Facebook',
     action: { type: 'facebook', value: '' },
@@ -320,6 +350,7 @@ function actionToKey(action: ButtonAction): string {
 interface ActionPickerProps {
   current: ButtonAction;
   phone: string;
+  calendlyUrl: string;
   isModified: boolean;
   onSave: (action: ButtonAction) => void;
   onReset: () => void;
@@ -329,6 +360,7 @@ interface ActionPickerProps {
 function ActionPicker({
   current,
   phone,
+  calendlyUrl,
   isModified,
   onSave,
   onReset,
@@ -359,6 +391,7 @@ function ActionPicker({
   const OptionIcon = opt.Icon;
   const isPhoneAuto =
     opt.action.type === 'whatsapp' || opt.action.type === 'tel';
+  const isCalendlyAuto = opt.action.type === 'calendly';
 
   return (
     <div
@@ -389,6 +422,13 @@ function ActionPicker({
               onChange={(e) => handleKeyChange(e.target.value)}
               className="w-full appearance-none pl-9 pr-8 py-2.5 rounded-lg border border-[#E0DBD5] text-[13px] text-[#2D2D2D] bg-white focus:outline-none focus:ring-2 focus:ring-[#B8944A] focus:border-transparent cursor-pointer font-['Lato']"
             >
+              <optgroup label="Rezerwacja">
+                {FLAT_OPTIONS.filter((o) => o.key === 'calendly').map((o) => (
+                  <option key={o.key} value={o.key}>
+                    {o.label}
+                  </option>
+                ))}
+              </optgroup>
               <optgroup label="Wiadomości">
                 {FLAT_OPTIONS.filter((o) =>
                   ['whatsapp', 'facebook', 'instagram'].includes(o.key),
@@ -447,6 +487,23 @@ function ActionPicker({
               <br />
               <span className="text-[11px] text-[#9A9390]">
                 Zmień w: Kontakt → Telefon
+              </span>
+            </p>
+          </div>
+        )}
+
+        {/* Calendly auto-info */}
+        {isCalendlyAuto && (
+          <div className="flex items-start gap-2 px-3 py-2.5 bg-[#FAF8F5] rounded-lg border border-[#F0EDE8]">
+            <Info size={13} className="text-[#B8944A] mt-0.5 flex-shrink-0" />
+            <p className="text-[12px] text-[#6B6B6B] leading-relaxed font-['Lato']">
+              Link:{' '}
+              <strong className="text-[#2D2D2D] break-all">
+                {calendlyUrl || 'nie ustawiono'}
+              </strong>
+              <br />
+              <span className="text-[11px] text-[#9A9390]">
+                Zmień w: Kontakt → Rezerwacja (Calendly)
               </span>
             </p>
           </div>
@@ -527,11 +584,16 @@ export function EditableButtonLink({
   const effectiveRaw = neverSet ? defaultAction : rawCms;
 
   const phone = getFieldValue('contact', 'info.phone');
+  const rawCalendlyUrl = getFieldValue('contact', 'info.calendlyUrl');
+  const calendlyUrl =
+    rawCalendlyUrl === 'info.calendlyUrl' || rawCalendlyUrl.trim() === ''
+      ? ''
+      : rawCalendlyUrl.trim();
   const action: ButtonAction = parse(effectiveRaw) ?? {
     type: 'whatsapp',
     value: '',
   };
-  const { href, target, rel } = resolveHref(action, phone);
+  const { href, target, rel } = resolveHref(action, phone, calendlyUrl);
 
   const [showPicker, setShowPicker] = useState(false);
   const [rect, setRect] = useState<DOMRect | null>(null);
@@ -655,6 +717,7 @@ export function EditableButtonLink({
             <ActionPicker
               current={action}
               phone={phone}
+              calendlyUrl={calendlyUrl}
               isModified={!neverSet}
               onSave={handleSave}
               onReset={handleReset}

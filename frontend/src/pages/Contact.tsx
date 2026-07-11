@@ -5,7 +5,14 @@ import { EditableBackground } from '@/components/cms/EditableBackground';
 import { EditableOverlay } from '@/components/cms/EditableOverlay';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Phone, Mail, Clock, CheckCircle, AlertCircle } from 'lucide-react';
+import {
+  Phone,
+  Mail,
+  Clock,
+  Calendar,
+  CheckCircle,
+  AlertCircle,
+} from 'lucide-react';
 import { EditableText } from '@/components/cms/EditableText';
 import { ScrollReveal } from '@/components/shared/ScrollReveal';
 import { contactClient } from '@/clients/contact.client';
@@ -13,6 +20,7 @@ import { useCMS } from '@/contexts/CMSContext';
 
 const PHONE_FALLBACK = '+48 000 000 000';
 const EMAIL_FALLBACK = 'contact@spira-la.com';
+const CALENDLY_URL_FALLBACK = 'https://calendly.com/twoja-nazwa';
 
 function readCmsValue(
   raw: string,
@@ -82,6 +90,11 @@ function ContactInfoColumn() {
     getFieldValue('contact', 'info.phone'),
     'info.phone',
     PHONE_FALLBACK,
+  );
+  const calendlyUrl = readCmsValue(
+    getFieldValue('contact', 'info.calendlyUrl'),
+    'info.calendlyUrl',
+    CALENDLY_URL_FALLBACK,
   );
 
   return (
@@ -154,6 +167,35 @@ function ContactInfoColumn() {
               as="span"
               className="font-['Lato'] text-[15px] text-[#2D2D2D] group-hover:text-[#B8944A] transition-colors"
               placeholder="+48 000 000 000"
+            />
+          </div>
+        </a>
+
+        <a
+          href={calendlyUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-3 group"
+          aria-label="Zarezerwuj termin w Calendly"
+        >
+          <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#B8944A]/[0.1] text-[#B8944A] flex-shrink-0">
+            <Calendar size={18} aria-hidden="true" />
+          </div>
+          <div>
+            <p className="font-['Lato'] text-[12px] text-[#8A8A8A] uppercase tracking-wide">
+              <EditableText
+                section="contact"
+                fieldPath="infoCalendlyLabel"
+                as="span"
+                placeholder="Rezerwacja"
+              />
+            </p>
+            <EditableText
+              section="contact"
+              fieldPath="info.calendlyUrl"
+              as="span"
+              className="font-['Lato'] text-[15px] text-[#2D2D2D] group-hover:text-[#B8944A] transition-colors"
+              placeholder="https://calendly.com/twoja-nazwa"
             />
           </div>
         </a>

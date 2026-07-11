@@ -603,7 +603,7 @@ export default function HowIWork() {
             <EditableButtonLink
               section="howIWork"
               fieldPath="ctaBtn1"
-              defaultAction="whatsapp"
+              defaultAction="calendly"
               className="items-center justify-center px-8 py-3 rounded-lg text-sm font-semibold bg-[#B8944A] text-white transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A] [font-family:'Lato',sans-serif]"
             >
               <EditableText
