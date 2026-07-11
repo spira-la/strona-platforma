@@ -25,7 +25,7 @@ const WebDesignOffer = lazy(() => import('@/pages/WebDesignOffer'));
 const MamyNastolatkowCoaching = lazy(
   () => import('@/pages/MamyNastolatkowCoaching'),
 );
-const MotherWifeLover = lazy(() => import('@/pages/MotherWifeLover'));
+const KochankaCoaching = lazy(() => import('@/pages/KochankaCoaching'));
 const Confirmation = lazy(() => import('@/pages/Confirmation'));
 const AuthCallback = lazy(() => import('@/pages/AuthCallback'));
 const PrivacyPolicy = lazy(() => import('@/pages/PrivacyPolicy'));
@@ -436,7 +436,7 @@ function AppRoutes() {
           path="/matka-zona-kochanka"
           element={
             <Suspense fallback={<LoadingFallback />}>
-              <MotherWifeLover />
+              <KochankaCoaching />
             </Suspense>
           }
         />

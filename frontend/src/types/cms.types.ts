@@ -25,7 +25,9 @@ export type CMSSectionKey =
   | 'terms'
   | 'youtube'
   | 'mamyNastolatkow'
-  | 'motherWifeLover';
+  | 'motherWifeLover'
+  | 'kochanka'
+  | 'roles';
 
 export interface CMSContentResponse {
   success: boolean;

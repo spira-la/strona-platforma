@@ -48,6 +48,30 @@ function SectionBadge({ children }: SectionBadgeProps) {
   );
 }
 
+// Renders CMS paragraph text line-by-line, styling the "Matka Żona i
+// Kochanka" line as a gold heading (matches the quote/CTA gold accent)
+// without needing a separate CMS field for it.
+function renderAboutParagraph(content: string): React.ReactNode {
+  return content.split('\n').map((line, i) => {
+    const isHeading = /^matka\s+żona\s+i\s+kochanka\.?$/i.test(line.trim());
+    if (isHeading) {
+      return (
+        <span
+          key={i}
+          className="block font-['Cormorant_Garamond'] text-[22px] md:text-[26px] font-bold text-[#B8944A] mt-3 mb-1"
+        >
+          {line.trim()}
+        </span>
+      );
+    }
+    return (
+      <span key={i} className="block">
+        {line.length ? line : ' '}
+      </span>
+    );
+  });
+}
+
 // ---------------------------------------------------------------------------
 // 1. Hero Section
 // ---------------------------------------------------------------------------
@@ -103,27 +127,13 @@ function HeroSection() {
             <EditableButtonLink
               section="hero"
               fieldPath="ctaBtn1"
-              defaultAction="internal:/mama-nastolatka"
+              defaultAction="calendly"
               className="inline-flex items-center justify-center gap-2 font-['Lato'] text-[15px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-full px-10 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
             >
               <EditableText
                 section="hero"
                 fieldPath="ctaBtn1"
-                placeholder="Jestem mamą nastolatka →"
-              />
-            </EditableButtonLink>
-
-            {/* Button 2 — outline white, secondary */}
-            <EditableButtonLink
-              section="hero"
-              fieldPath="ctaBtn2"
-              defaultAction="internal:/jak-pracuje"
-              className="inline-flex items-center justify-center gap-2 font-['Lato'] text-[15px] font-semibold text-white bg-transparent border-2 border-white hover:bg-white/15 active:bg-white/25 transition-colors duration-200 rounded-full px-10 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
-            >
-              <EditableText
-                section="hero"
-                fieldPath="ctaBtn2"
-                placeholder="Szukam zmiany dla siebie →"
+                placeholder="Umawiam się na rozmowę →"
               />
             </EditableButtonLink>
           </div>
@@ -143,28 +153,12 @@ function AboutSection() {
       className="bg-white py-16 md:py-20 px-6 md:px-[120px]"
       aria-labelledby="about-heading"
     >
-      <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-[60px]">
-        {/* Image */}
+      <div className="max-w-[1200px] mx-auto flex flex-col gap-10 md:gap-12">
+        {/* Text — full width */}
         <ScrollReveal
-          animation="clip-left"
+          animation="fade-up"
           delay={300}
-          className="flex-shrink-0 w-full md:w-[480px]"
-        >
-          <EditableImage
-            section="about"
-            fieldPath="photo"
-            fallbackSrc={ane1Photo}
-            alt="Aneta — terapeutka i coach"
-            className="object-cover rounded-[20px]"
-            containerClassName="w-full md:w-[480px] h-[360px] md:h-[520px] rounded-[20px]"
-          />
-        </ScrollReveal>
-
-        {/* Text */}
-        <ScrollReveal
-          animation="clip-right"
-          delay={500}
-          className="flex flex-col items-start gap-5 flex-1"
+          className="flex flex-col items-start gap-5 w-full"
         >
           <SectionBadge>
             <EditableText
@@ -189,6 +183,7 @@ function AboutSection() {
             as="p"
             className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7]"
             placeholder="Jestem terapeutką i coachem z wieloletnim doświadczeniem. Pomagam osobom przejść przez trudne momenty życia, odnaleźć wewnętrzną siłę i zbudować głębszą relację ze sobą. Moja praca opiera się na szacunku, empatii i głębokim zrozumieniu ludzkiej natury."
+            render={renderAboutParagraph}
           />
 
           <EditableText
@@ -197,28 +192,205 @@ function AboutSection() {
             as="p"
             className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7]"
             placeholder="Wierzę, że każdy człowiek nosi w sobie ogromny potencjał. Moją rolą jest towarzyszenie w jego odkrywaniu — krok po kroku, w bezpiecznej przestrzeni, w rytmie natury."
+            render={renderAboutParagraph}
           />
+        </ScrollReveal>
 
-          <EditableText
-            section="about"
-            fieldPath="quote"
-            as="blockquote"
-            className="font-['Cormorant_Garamond'] text-[18px] italic text-[#B8944A] leading-[1.5] border-l-2 border-[#B8944A] pl-4"
-            placeholder='"Prawdziwa zmiana zaczyna się od odwagi spotkania z samą sobą."'
-          />
+        {/* Image + gold quote */}
+        <div className="flex flex-col md:flex-row items-center gap-10 md:gap-[60px]">
+          <ScrollReveal
+            animation="clip-left"
+            delay={300}
+            className="flex-shrink-0 w-full md:w-[480px]"
+          >
+            <EditableImage
+              section="about"
+              fieldPath="photo"
+              fallbackSrc={ane1Photo}
+              alt="Aneta — terapeutka i coach"
+              className="object-cover rounded-[20px]"
+              containerClassName="w-full md:w-[480px] h-[360px] md:h-[520px] rounded-[20px]"
+            />
+          </ScrollReveal>
 
-          <EditableButtonLink
-            section="about"
-            fieldPath="ctaLabel"
-            defaultAction="internal:/o-mnie"
-            className="mt-1 inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-full px-8 py-[14px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
+          <ScrollReveal
+            animation="clip-right"
+            delay={500}
+            className="flex-1"
           >
             <EditableText
               section="about"
-              fieldPath="ctaLabel"
-              placeholder="Czytam dalej"
+              fieldPath="quote"
+              as="blockquote"
+              className="font-['Cormorant_Garamond'] text-[18px] italic text-[#B8944A] leading-[1.5] border-l-2 border-[#B8944A] pl-4"
+              placeholder='"Prawdziwa zmiana zaczyna się od odwagi spotkania z samą sobą."'
             />
-            <ArrowRight size={14} aria-hidden="true" />
+          </ScrollReveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 2b. Roles Section — Matka, Żona, Kochanka
+// ---------------------------------------------------------------------------
+
+interface RoleCardProps {
+  titleField: string;
+  titlePlaceholder: string;
+  descField: string;
+  descPlaceholder: string;
+  photoField: string;
+  photoFallback: string;
+  photoAlt: string;
+  ctaField?: string;
+  ctaPlaceholder?: string;
+  ctaAction?: string;
+}
+
+function RoleCard({
+  titleField,
+  titlePlaceholder,
+  descField,
+  descPlaceholder,
+  photoField,
+  photoFallback,
+  photoAlt,
+  ctaField,
+  ctaPlaceholder,
+  ctaAction,
+}: RoleCardProps) {
+  return (
+    <div className="flex flex-col gap-4 p-8 rounded-xl bg-[#F9F6F0] border border-[#F0EDE8] h-full">
+      <EditableText
+        section="roles"
+        fieldPath={titleField}
+        as="h3"
+        placeholder={titlePlaceholder}
+        className="text-2xl text-[#2D2D2D] font-['Cormorant_Garamond'] font-bold"
+      />
+      <EditableText
+        section="roles"
+        fieldPath={descField}
+        as="p"
+        placeholder={descPlaceholder}
+        className="text-sm leading-relaxed text-[#6B6B6B] font-['Lato']"
+      />
+      <div className="mt-auto rounded-lg overflow-hidden">
+        <EditableImage
+          section="roles"
+          fieldPath={photoField}
+          fallbackSrc={photoFallback}
+          alt={photoAlt}
+          className="w-full h-44 object-cover"
+          containerClassName="w-full h-44 rounded-lg"
+        />
+      </div>
+      {ctaField && (
+        <EditableButtonLink
+          section="roles"
+          fieldPath={ctaField}
+          defaultAction={ctaAction}
+          className="inline-flex items-center justify-center gap-2 font-['Lato'] text-[13px] font-semibold text-[#B8944A] border border-[#B8944A] hover:bg-[#B8944A] hover:text-white transition-colors duration-200 rounded-full px-6 py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
+        >
+          <EditableText
+            section="roles"
+            fieldPath={ctaField}
+            placeholder={ctaPlaceholder}
+          />
+        </EditableButtonLink>
+      )}
+    </div>
+  );
+}
+
+function RolesSection() {
+  return (
+    <section
+      className="px-6 py-16 md:py-20 bg-white"
+      aria-label="Matka, żona, kochanka — trzy role"
+    >
+      <div className="max-w-[1200px] mx-auto flex flex-col items-center gap-10">
+        <ScrollReveal animation="fade-up">
+          <div className="flex flex-col items-center text-center gap-4 max-w-[700px]">
+            <SectionBadge>
+              <EditableText
+                section="roles"
+                fieldPath="badge"
+                placeholder="Role kobiece"
+              />
+            </SectionBadge>
+            <EditableText
+              section="roles"
+              fieldPath="title"
+              as="h2"
+              className="font-['Cormorant_Garamond'] text-[2rem] md:text-[2.25rem] font-bold text-[#2D2D2D] leading-[1.15] tracking-[-0.5px]"
+              placeholder="Trzy role, jedna kobieta"
+            />
+            <EditableText
+              section="roles"
+              fieldPath="intro"
+              as="p"
+              className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7]"
+              placeholder="Matka. Żona. Kochanka. Trzy role, w które wchodzi niejedna kobieta — rzadko pytając, na ile są jej własne, a na ile odziedziczone."
+            />
+          </div>
+        </ScrollReveal>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
+          <ScrollReveal animation="fade-up" delay={stagger(0)}>
+            <RoleCard
+              titleField="role1Title"
+              titlePlaceholder="Matka"
+              descField="role1Desc"
+              descPlaceholder="Uczysz się kochać bezwarunkowo, czasem gubiąc siebie po drodze. Dajesz z siebie wszystko, zanim zapytasz, co zostaje dla Ciebie."
+              photoField="role1Photo"
+              photoFallback="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=700&q=80"
+              photoAlt="Matka — rola macierzyństwa"
+              ctaField="role1Cta"
+              ctaPlaceholder="Czytam dalej"
+              ctaAction="internal:/mama-nastolatka"
+            />
+          </ScrollReveal>
+          <ScrollReveal animation="fade-up" delay={stagger(1)}>
+            <RoleCard
+              titleField="role2Title"
+              titlePlaceholder="Żona"
+              descField="role2Desc"
+              descPlaceholder="Budujesz wspólne życie i wspólny dom. A jednocześnie codziennie negocjujesz, ile z siebie możesz oddać, nie znikając przy tym samej."
+              photoField="role2Photo"
+              photoFallback="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=700&q=80"
+              photoAlt="Żona — rola partnerki w związku"
+              ctaField="role2Cta"
+              ctaPlaceholder="Czytam dalej"
+              ctaAction="internal:/jak-pracuje"
+            />
+          </ScrollReveal>
+          <ScrollReveal animation="fade-up" delay={stagger(2)}>
+            <RoleCard
+              titleField="role3Title"
+              titlePlaceholder="Kochanka"
+              descField="role3Desc"
+              descPlaceholder="Rola, o której mówi się najmniej. Ta, w której czekasz, chowasz się i wciąż masz nadzieję, że kiedyś zostaniesz wybrana."
+              photoField="role3Photo"
+              photoFallback="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=700&q=80"
+              photoAlt="Kochanka — rola, o której się nie mówi"
+              ctaField="role3Cta"
+              ctaPlaceholder="Czytam dalej"
+              ctaAction="internal:/matka-zona-kochanka"
+            />
+          </ScrollReveal>
+        </div>
+
+        <ScrollReveal animation="fade-up">
+          <EditableButtonLink
+            section="roles"
+            fieldPath="cta"
+            defaultAction="internal:/o-mnie"
+            className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-full px-8 py-[14px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
+          >
+            <EditableText section="roles" fieldPath="cta" placeholder="Czytam dalej" />
           </EditableButtonLink>
         </ScrollReveal>
       </div>
@@ -1108,6 +1280,7 @@ export default function Home() {
       />
       <HeroSection />
       <AboutSection />
+      <RolesSection />
       <HowIWorkSection />
       <ServicesSection />
       <TestimonialsSection />
