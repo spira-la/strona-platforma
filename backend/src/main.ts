@@ -35,6 +35,9 @@ async function bootstrap(): Promise<void> {
       'prerender/jak-pracuje',
       'prerender/kontakt',
       'prerender/blog',
+      'prerender/mama-nastolatka',
+      'prerender/matka-zona-kochanka',
+      'prerender/tworzenie-stron',
     ],
   });
 
