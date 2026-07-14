@@ -240,6 +240,39 @@ export class CmsService {
     return this.storage;
   }
 
+  /**
+   * Reads a single field value (e.g. a hero image URL) without pulling in
+   * the whole content document. Media fields (heroBg, etc.) are always
+   * stored under 'pl' regardless of locale, matching the frontend's
+   * MEDIA_FIELD_PATTERNS convention — so language is only consulted for
+   * non-media fields. Returns undefined if the field was never set.
+   */
+  async getFieldValue(
+    section: string,
+    fieldPath: string,
+    language = 'pl',
+  ): Promise<string | undefined> {
+    const doc = await this.getContent();
+    const sectionData = doc.content[section];
+    if (!sectionData) return undefined;
+
+    const lang = this.isStyleField(fieldPath) ? 'pl' : language;
+    const langData = sectionData[lang] ?? sectionData['pl'];
+    if (!langData) return undefined;
+
+    const value = fieldPath
+      .split('.')
+      .reduce<unknown>(
+        (acc, key) =>
+          acc && typeof acc === 'object'
+            ? (acc as Record<string, unknown>)[key]
+            : undefined,
+        langData,
+      );
+
+    return typeof value === 'string' && value.trim() ? value : undefined;
+  }
+
   // ---------------------------------------------------------------------------
   // CMS auto-translation (PL → EN, ES) — background FIFO queue
   // ---------------------------------------------------------------------------

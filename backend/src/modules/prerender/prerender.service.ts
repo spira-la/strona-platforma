@@ -10,6 +10,7 @@
  */
 import { Injectable } from '@nestjs/common';
 import { escapeHtml } from '../../common/utils/og-html.util.js';
+import { CmsService } from '../cms/cms.service.js';
 
 const SITE_URL = 'https://spira-la.com';
 const SITE_NAME = 'Spirala';
@@ -24,18 +25,57 @@ interface PageMeta {
   path: string;
   jsonLd: string;
   bodyContent: string;
+  /** og:image / twitter:image — defaults to the site logo if omitted. */
+  image?: string;
 }
 
 @Injectable()
 export class PrerenderService {
+  constructor(private readonly cms: CmsService) {}
+
   // ---------------------------------------------------------------------------
   // Internal helpers
   // ---------------------------------------------------------------------------
+
+  /**
+   * Crops Unsplash-hosted fallback images to a clean 1200x630 for link
+   * previews (the on-page hero uses a different crop via CSS background
+   * positioning, so we request our own here). CMS-uploaded images (R2) are
+   * returned as-is — the admin is expected to upload something reasonable.
+   */
+  private toOgCrop(url: string): string {
+    try {
+      const u = new URL(url);
+      if (u.hostname !== 'images.unsplash.com') return url;
+      u.searchParams.set('w', '1200');
+      u.searchParams.set('h', '630');
+      u.searchParams.set('fit', 'crop');
+      u.searchParams.set('q', '80');
+      return u.toString();
+    } catch {
+      return url;
+    }
+  }
+
+  /**
+   * Resolves the real hero image for a page: whatever the admin uploaded
+   * via the CMS for `section.heroBg`, or the page's hardcoded Unsplash
+   * fallback if nothing was ever uploaded. This is what makes link
+   * previews show the actual page photo instead of the site logo.
+   */
+  private async resolveHeroImage(
+    section: string,
+    fallback: string,
+  ): Promise<string> {
+    const cmsValue = await this.cms.getFieldValue(section, 'heroBg');
+    return this.toOgCrop(cmsValue || fallback);
+  }
 
   private buildHtml(meta: PageMeta): string {
     const safeTitle = escapeHtml(meta.title);
     const safeDescription = escapeHtml(meta.description);
     const safeCanonical = escapeHtml(meta.canonical);
+    const safeImage = escapeHtml(meta.image || OG_IMAGE);
     const enUrl = escapeHtml(
       `${SITE_URL}/en${meta.path === '/' ? '' : meta.path}`,
     );
@@ -64,7 +104,7 @@ export class PrerenderService {
   <meta property="og:url" content="${safeCanonical}" />
   <meta property="og:title" content="${safeTitle}" />
   <meta property="og:description" content="${safeDescription}" />
-  <meta property="og:image" content="${escapeHtml(OG_IMAGE)}" />
+  <meta property="og:image" content="${safeImage}" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:locale" content="pl_PL" />
@@ -74,7 +114,7 @@ export class PrerenderService {
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="${safeTitle}" />
   <meta name="twitter:description" content="${safeDescription}" />
-  <meta name="twitter:image" content="${escapeHtml(OG_IMAGE)}" />
+  <meta name="twitter:image" content="${safeImage}" />
 
   <!-- Structured Data -->
   <script type="application/ld+json">${meta.jsonLd}</script>
@@ -113,7 +153,11 @@ export class PrerenderService {
   // Public page renderers
   // ---------------------------------------------------------------------------
 
-  renderHome(): string {
+  async renderHome(): Promise<string> {
+    const image = await this.resolveHeroImage(
+      'hero',
+      'https://images.unsplash.com/photo-1744192876531-f00759ed9c57?q=80&w=2070&auto=format&fit=crop',
+    );
     const jsonLd = JSON.stringify([
       {
         '@context': 'https://schema.org',
@@ -173,10 +217,15 @@ export class PrerenderService {
       path: '/',
       jsonLd,
       bodyContent,
+      image,
     });
   }
 
-  renderAbout(): string {
+  async renderAbout(): Promise<string> {
+    const image = await this.resolveHeroImage(
+      'about',
+      'https://images.unsplash.com/photo-1669493032929-791a77069ee4?q=80&w=1920&auto=format&fit=crop',
+    );
     const jsonLd = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'Person',
@@ -210,10 +259,15 @@ export class PrerenderService {
       path: '/o-mnie',
       jsonLd,
       bodyContent,
+      image,
     });
   }
 
-  renderServices(): string {
+  async renderServices(): Promise<string> {
+    const image = await this.resolveHeroImage(
+      'services',
+      'https://images.unsplash.com/photo-1448375240586-882707db888b?w=1400&q=80',
+    );
     const jsonLd = JSON.stringify([
       {
         '@context': 'https://schema.org',
@@ -267,10 +321,15 @@ export class PrerenderService {
       path: '/uslugi',
       jsonLd,
       bodyContent,
+      image,
     });
   }
 
-  renderHowIWork(): string {
+  async renderHowIWork(): Promise<string> {
+    const image = await this.resolveHeroImage(
+      'howIWork',
+      'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1400&q=80',
+    );
     const jsonLd = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'WebPage',
@@ -307,6 +366,7 @@ export class PrerenderService {
       path: '/jak-pracuje',
       jsonLd,
       bodyContent,
+      image,
     });
   }
 
@@ -341,7 +401,11 @@ export class PrerenderService {
     });
   }
 
-  renderBlog(): string {
+  async renderBlog(): Promise<string> {
+    const image = await this.resolveHeroImage(
+      'blog',
+      'https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=2070&auto=format&fit=crop',
+    );
     const jsonLd = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'Blog',
@@ -370,6 +434,114 @@ export class PrerenderService {
       path: '/blog',
       jsonLd,
       bodyContent,
+      image,
+    });
+  }
+
+  async renderMamaNastolatka(): Promise<string> {
+    const image = await this.resolveHeroImage(
+      'mamyNastolatkow',
+      'https://images.unsplash.com/photo-1747600569107-faf7e569faf8?w=1400&q=80',
+    );
+    const jsonLd = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: 'Mama nastolatka — Spirala Coaching',
+      description:
+        'Coaching dla mam nastolatków — odbuduj relację z dzieckiem, zanim oddalicie się na dobre.',
+      url: `${SITE_URL}/mama-nastolatka`,
+      isPartOf: { '@type': 'WebSite', name: 'Spirala', url: SITE_URL },
+    });
+
+    const bodyContent = `
+    <h1>Twój nastolatek stał się obcą osobą we własnym domu?</h1>
+    <p>Pomogę Ci odbudować relację, zanim oddalicie się na dobre.</p>
+    <p>
+      Coaching dla mam nastolatków — przestrzeń, w której zrozumiesz, co się
+      dzieje w waszej relacji, i znajdziesz sposób na powrót do bliskości.
+    </p>
+    <p><a href="${escapeHtml(SITE_URL)}/kontakt">Zarezerwuj bezpłatną rozmowę wstępną</a></p>`;
+
+    return this.buildHtml({
+      title: 'Mama nastolatka — Spirala',
+      description:
+        'Twój nastolatek stał się obcą osobą we własnym domu? Pomogę Ci odbudować relację, zanim oddalicie się na dobre. Coaching dla mam nastolatków – Aneta Spirala.',
+      canonical: `${SITE_URL}/mama-nastolatka`,
+      path: '/mama-nastolatka',
+      jsonLd,
+      bodyContent,
+      image,
+    });
+  }
+
+  async renderKochanka(): Promise<string> {
+    const image = await this.resolveHeroImage(
+      'kochanka',
+      'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1600&q=80',
+    );
+    const jsonLd = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: 'Dlaczego przyciągasz żonatych mężczyzn? — Spirala Coaching',
+      description:
+        'Pięciotygodniowy proces transformacji dla kobiet, które chcą porzucić rolę kochanki i wybrać relację opartą na szacunku i prawdzie.',
+      url: `${SITE_URL}/matka-zona-kochanka`,
+      isPartOf: { '@type': 'WebSite', name: 'Spirala', url: SITE_URL },
+    });
+
+    const bodyContent = `
+    <h1>Dlaczego przyciągasz żonatych mężczyzn?</h1>
+    <p>
+      Pięciotygodniowy proces transformacji dla kobiet, które chcą porzucić
+      rolę kochanki i wybrać relację opartą na szacunku i prawdzie.
+    </p>
+    <p><a href="${escapeHtml(SITE_URL)}/kontakt">Zarezerwuj bezpłatną rozmowę wstępną</a></p>`;
+
+    return this.buildHtml({
+      title: 'Dlaczego przyciągasz żonatych mężczyzn? — Spirala',
+      description:
+        'Pięciotygodniowy proces transformacji dla kobiet, które chcą porzucić rolę kochanki i wybrać relację opartą na szacunku i prawdzie. Sesje z Anetą, Spirala.',
+      canonical: `${SITE_URL}/matka-zona-kochanka`,
+      path: '/matka-zona-kochanka',
+      jsonLd,
+      bodyContent,
+      image,
+    });
+  }
+
+  async renderWebDesignOffer(): Promise<string> {
+    const image = await this.resolveHeroImage(
+      'webDesign',
+      'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop',
+    );
+    const jsonLd = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: 'Tworzenie stron internetowych',
+      description:
+        'Eleganckie, wydajne strony z panelem CMS dla coachów, terapeutów i specjalistów.',
+      provider: { '@type': 'Person', name: 'Aneta' },
+      url: `${SITE_URL}/tworzenie-stron`,
+    });
+
+    const bodyContent = `
+    <h1>Strona, która opowiada Twoją historię</h1>
+    <p>
+      Projektuję i wdrażam elegancki, wydajny serwis dla coachów, terapeutów
+      i specjalistów — z panelem CMS, wielojęzycznością i pełnym wsparciem
+      technicznym.
+    </p>
+    <p><a href="${escapeHtml(SITE_URL)}/kontakt">Zapytaj o wycenę</a></p>`;
+
+    return this.buildHtml({
+      title: 'Tworzenie stron internetowych — Spirala',
+      description:
+        'Eleganckie, wydajne strony z panelem CMS dla coachów, terapeutów i specjalistów. Projekt, wdrożenie i wsparcie techniczne w jednej cenie.',
+      canonical: `${SITE_URL}/tworzenie-stron`,
+      path: '/tworzenie-stron',
+      jsonLd,
+      bodyContent,
+      image,
     });
   }
 }
