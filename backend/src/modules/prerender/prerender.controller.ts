@@ -21,29 +21,29 @@ export class PrerenderController {
   @Get('home')
   @Header('Content-Type', 'text/html; charset=utf-8')
   @Header('Cache-Control', 'public, max-age=600, s-maxage=3600')
-  home(@Res() res: Response): void {
-    res.send(this.prerenderService.renderHome());
+  async home(@Res() res: Response): Promise<void> {
+    res.send(await this.prerenderService.renderHome());
   }
 
   @Get('o-mnie')
   @Header('Content-Type', 'text/html; charset=utf-8')
   @Header('Cache-Control', 'public, max-age=600, s-maxage=3600')
-  about(@Res() res: Response): void {
-    res.send(this.prerenderService.renderAbout());
+  async about(@Res() res: Response): Promise<void> {
+    res.send(await this.prerenderService.renderAbout());
   }
 
   @Get('uslugi')
   @Header('Content-Type', 'text/html; charset=utf-8')
   @Header('Cache-Control', 'public, max-age=600, s-maxage=3600')
-  services(@Res() res: Response): void {
-    res.send(this.prerenderService.renderServices());
+  async services(@Res() res: Response): Promise<void> {
+    res.send(await this.prerenderService.renderServices());
   }
 
   @Get('jak-pracuje')
   @Header('Content-Type', 'text/html; charset=utf-8')
   @Header('Cache-Control', 'public, max-age=600, s-maxage=3600')
-  howIWork(@Res() res: Response): void {
-    res.send(this.prerenderService.renderHowIWork());
+  async howIWork(@Res() res: Response): Promise<void> {
+    res.send(await this.prerenderService.renderHowIWork());
   }
 
   @Get('kontakt')
@@ -56,7 +56,28 @@ export class PrerenderController {
   @Get('blog')
   @Header('Content-Type', 'text/html; charset=utf-8')
   @Header('Cache-Control', 'public, max-age=600, s-maxage=3600')
-  blog(@Res() res: Response): void {
-    res.send(this.prerenderService.renderBlog());
+  async blog(@Res() res: Response): Promise<void> {
+    res.send(await this.prerenderService.renderBlog());
+  }
+
+  @Get('mama-nastolatka')
+  @Header('Content-Type', 'text/html; charset=utf-8')
+  @Header('Cache-Control', 'public, max-age=600, s-maxage=3600')
+  async mamaNastolatka(@Res() res: Response): Promise<void> {
+    res.send(await this.prerenderService.renderMamaNastolatka());
+  }
+
+  @Get('matka-zona-kochanka')
+  @Header('Content-Type', 'text/html; charset=utf-8')
+  @Header('Cache-Control', 'public, max-age=600, s-maxage=3600')
+  async kochanka(@Res() res: Response): Promise<void> {
+    res.send(await this.prerenderService.renderKochanka());
+  }
+
+  @Get('tworzenie-stron')
+  @Header('Content-Type', 'text/html; charset=utf-8')
+  @Header('Cache-Control', 'public, max-age=600, s-maxage=3600')
+  async webDesignOffer(@Res() res: Response): Promise<void> {
+    res.send(await this.prerenderService.renderWebDesignOffer());
   }
 }
