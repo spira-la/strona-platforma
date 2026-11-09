@@ -20,7 +20,6 @@ import bouquetArt from '@/assets/watercolor/bouquet.webp';
 import butterflyArt from '@/assets/watercolor/butterfly-pink.webp';
 import dragonflyArt from '@/assets/watercolor/dragonfly-blue.webp';
 import { eventsClient } from '@/clients/events.client';
-import quoteArt from '@/assets/watercolor/quote-joy.webp';
 
 // ---------------------------------------------------------------------------
 // Home — "Życie w teraz" (2026-11 redesign)
@@ -42,7 +41,6 @@ const S = 'homeNow' as const;
 // "human" sunflowers 1627891374362-c6ca6c675cb3 (client: "nie dobrze to
 // wygląda" — replaced by her painted forget-me-not bouquet).
 const HERO_ART = heroArt;
-const QUOTE_ART = quoteArt;
 const HUMAN_ART = bouquetArt;
 
 const eyebrow =
@@ -338,44 +336,19 @@ function StepsSection() {
 // ---------------------------------------------------------------------------
 
 function QuoteSection() {
+  // White section (client: alternate coloured / white backgrounds). The big
+  // rainbow butterfly carries the colour. The former watercolor background
+  // (assets/watercolor/quote-joy.webp, CMS field quote.artBg) is no longer
+  // rendered here.
   return (
     <section
-      className="relative overflow-hidden px-6 py-24 md:py-32"
+      className="relative overflow-hidden bg-white px-6 py-20 md:py-28"
       aria-label="Cytat"
     >
-      <EditableBackground
-        section={S}
-        fieldPath="quote.artBg"
-        fallbackSrc={QUOTE_ART}
-        className="absolute inset-0"
-        aria-hidden={true}
-      />
-      <EditableOverlay
-        section={S}
-        fieldPath="quote.artBg"
-        color="255,255,255"
-        defaultTop={0}
-        defaultBottom={0}
-      />
-      {/* On phones the wide painting is cropped to its light middle — add two
-          blots so the quote still sits among colors. */}
-      <div
-        className="pointer-events-none absolute inset-0 isolate md:hidden"
-        aria-hidden="true"
-      >
-        <WatercolorAccent
-          tone="cool"
-          className="-left-20 -top-16 w-[200px] opacity-45"
-        />
-        <WatercolorAccent
-          tone="warm"
-          className="-bottom-16 -right-20 w-[200px] opacity-45"
-        />
-      </div>
-      <ScrollReveal animation="blur" className="relative z-10">
+      <ScrollReveal animation="blur">
         <figure className="mx-auto flex max-w-[860px] flex-col items-center gap-6 text-center">
           {/* rainbow butterfly — lightness and change */}
-          <div className="relative h-[62px] w-[72px] md:h-[84px] md:w-[96px]">
+          <div className="relative h-[118px] w-[140px] md:h-[170px] md:w-[200px]">
             <WatercolorFriend kind="wings" float className="inset-0 w-full" />
           </div>
           <EditableText
@@ -387,6 +360,7 @@ function QuoteSection() {
             Uważaj, co myślisz, co mówisz i co robisz — bo to niebawem stanie
             się Twoją rzeczywistością.
           </EditableText>
+          <RainbowStroke className="w-[160px] md:w-[220px]" />
           <EditableText
             section={S}
             fieldPath="quote.author"
@@ -454,7 +428,7 @@ const inviteTitle =
 
 function InviteSection() {
   return (
-    <section className="relative isolate overflow-hidden bg-white px-6 py-20 md:px-12 lg:px-[120px] md:py-28">
+    <section className="relative isolate overflow-hidden bg-surface px-6 py-20 md:px-12 lg:px-[120px] md:py-28">
       <WatercolorAccent
         tone="warm"
         className="-left-20 -top-24 w-[260px] opacity-20 md:w-[340px]"

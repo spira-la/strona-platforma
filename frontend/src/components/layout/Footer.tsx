@@ -168,7 +168,7 @@ export function Footer() {
 
   return (
     <footer
-      className="bg-surface"
+      className="border-t border-line bg-surface"
       role="contentinfo"
       aria-label="Stopka strony"
     >
