@@ -56,12 +56,12 @@ function MessageViewDialog({ message, onClose }: MessageViewDialogProps) {
       />
 
       {/* Panel */}
-      <div className="relative z-10 w-full max-w-lg bg-white rounded-xl shadow-2xl border border-[#E8E4DF] flex flex-col max-h-[80vh]">
+      <div className="relative z-10 w-full max-w-lg bg-white rounded-xl shadow-2xl border border-line flex flex-col max-h-[80vh]">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#E8E4DF] flex-shrink-0">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-line flex-shrink-0">
           <h2
             id="msg-dialog-title"
-            className="font-['Cormorant_Garamond',serif] font-bold text-[18px] text-[#2D2D2D]"
+            className="font-['Cormorant_Garamond',serif] font-bold text-[18px] text-ink"
           >
             {t('admin.contact.messageDialog.title')} {message.name}
           </h2>
@@ -69,7 +69,7 @@ function MessageViewDialog({ message, onClose }: MessageViewDialogProps) {
             type="button"
             onClick={onClose}
             aria-label={t('common.cancel')}
-            className="flex items-center justify-center w-8 h-8 rounded-lg text-[#6B6B6B] hover:text-[#2D2D2D] hover:bg-[#F9F6F0] transition-colors"
+            className="flex items-center justify-center w-8 h-8 rounded-lg text-ink-soft hover:text-ink hover:bg-surface transition-colors"
           >
             <X size={18} />
           </button>
@@ -80,13 +80,13 @@ function MessageViewDialog({ message, onClose }: MessageViewDialogProps) {
           {/* Meta */}
           <dl className="grid grid-cols-1 gap-2 text-[13px]">
             <div className="flex gap-2">
-              <dt className="text-[#8A8A8A] font-medium min-w-[80px]">
+              <dt className="text-ink-muted font-medium min-w-[80px]">
                 Email:
               </dt>
-              <dd className="text-[#2D2D2D] break-all">
+              <dd className="text-ink break-all">
                 <a
                   href={`mailto:${message.email}`}
-                  className="hover:text-[#B8963E] underline"
+                  className="hover:text-brand underline"
                 >
                   {message.email}
                 </a>
@@ -94,37 +94,37 @@ function MessageViewDialog({ message, onClose }: MessageViewDialogProps) {
             </div>
             {message.phone && (
               <div className="flex gap-2">
-                <dt className="text-[#8A8A8A] font-medium min-w-[80px]">
+                <dt className="text-ink-muted font-medium min-w-[80px]">
                   {t('admin.contact.messageDialog.phone')}:
                 </dt>
-                <dd className="text-[#2D2D2D]">{message.phone}</dd>
+                <dd className="text-ink">{message.phone}</dd>
               </div>
             )}
             <div className="flex gap-2">
-              <dt className="text-[#8A8A8A] font-medium min-w-[80px]">
+              <dt className="text-ink-muted font-medium min-w-[80px]">
                 {t('admin.contact.messageDialog.date')}:
               </dt>
-              <dd className="text-[#2D2D2D]">
+              <dd className="text-ink">
                 {formatDate(message.createdAt)}
               </dd>
             </div>
           </dl>
 
           {/* Divider */}
-          <hr className="border-[#E8E4DF]" />
+          <hr className="border-line" />
 
           {/* Message text */}
-          <p className="font-['Inter'] text-[14px] text-[#2D2D2D] leading-relaxed whitespace-pre-wrap">
+          <p className="font-['Inter'] text-[14px] text-ink leading-relaxed whitespace-pre-wrap">
             {message.message}
           </p>
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-[#E8E4DF] flex justify-end flex-shrink-0">
+        <div className="px-6 py-4 border-t border-line flex justify-end flex-shrink-0">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-lg text-[14px] font-medium text-[#6B6B6B] hover:bg-[#F9F6F0] transition-colors"
+            className="px-4 py-2 rounded-lg text-[14px] font-medium text-ink-soft hover:bg-surface transition-colors"
           >
             {t('common.cancel')}
           </button>
@@ -226,7 +226,7 @@ export default function AdminContact() {
       render: (m) => (
         <span
           className={[
-            "font-['Inter'] text-[14px] text-[#2D2D2D]",
+            "font-['Inter'] text-[14px] text-ink",
             m.isRead ? 'font-normal' : 'font-semibold',
           ].join(' ')}
         >
@@ -240,7 +240,7 @@ export default function AdminContact() {
       render: (m) => (
         <a
           href={`mailto:${m.email}`}
-          className="font-['Inter'] text-[13px] text-[#6B6B6B] hover:text-[#B8963E] transition-colors break-all"
+          className="font-['Inter'] text-[13px] text-ink-soft hover:text-brand transition-colors break-all"
         >
           {m.email}
         </a>
@@ -250,7 +250,7 @@ export default function AdminContact() {
       key: 'phone',
       header: t('admin.contact.table.phone'),
       render: (m) => (
-        <span className="font-['Inter'] text-[13px] text-[#6B6B6B]">
+        <span className="font-['Inter'] text-[13px] text-ink-soft">
           {m.phone ?? '—'}
         </span>
       ),
@@ -260,7 +260,7 @@ export default function AdminContact() {
       header: t('admin.contact.table.message'),
       render: (m) => (
         <span
-          className="font-['Inter'] text-[13px] text-[#6B6B6B] cursor-pointer hover:text-[#2D2D2D] transition-colors"
+          className="font-['Inter'] text-[13px] text-ink-soft cursor-pointer hover:text-ink transition-colors"
           title={m.message}
           onClick={() => setViewingMessage(m)}
         >
@@ -272,7 +272,7 @@ export default function AdminContact() {
       key: 'date',
       header: t('admin.contact.table.date'),
       render: (m) => (
-        <span className="font-['Inter'] text-[12px] text-[#8A8A8A] whitespace-nowrap">
+        <span className="font-['Inter'] text-[12px] text-ink-muted whitespace-nowrap">
           {formatDate(m.createdAt)}
         </span>
       ),
@@ -306,7 +306,7 @@ export default function AdminContact() {
               onClick={() => setViewingMessage(m)}
               title={t('admin.contact.actions.viewMessage')}
               aria-label={t('admin.contact.actions.viewMessage')}
-              className="p-1.5 rounded text-[#8A8A8A] hover:text-[#B8963E] hover:bg-[#F9F6F0] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
+              className="p-1.5 rounded text-ink-muted hover:text-brand hover:bg-surface transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             >
               <Eye size={15} />
             </button>
@@ -326,12 +326,12 @@ export default function AdminContact() {
                   ? t('admin.contact.actions.markUnread')
                   : t('admin.contact.actions.markRead')
               }
-              className="p-1.5 rounded text-[#8A8A8A] hover:text-[#B8963E] hover:bg-[#F9F6F0] transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
+              className="p-1.5 rounded text-ink-muted hover:text-brand hover:bg-surface transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             >
               {m.isRead ? (
                 <Mail size={15} />
               ) : (
-                <MailOpen size={15} className="text-[#B8963E]" />
+                <MailOpen size={15} className="text-brand" />
               )}
             </button>
 
@@ -341,7 +341,7 @@ export default function AdminContact() {
               onClick={() => setDeletingMessage(m)}
               title={t('admin.contact.actions.delete')}
               aria-label={t('admin.contact.actions.deleteMessage')}
-              className="p-1.5 rounded text-[#8A8A8A] hover:text-red-500 hover:bg-red-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
+              className="p-1.5 rounded text-ink-muted hover:text-red-500 hover:bg-red-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
             >
               <Trash2 size={15} />
             </button>

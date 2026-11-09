@@ -12,15 +12,18 @@ import { RouteTracker } from '@/components/shared/RouteTracker';
 
 // Eagerly loaded pages
 import Home from '@/pages/Home';
+import HomeNow from '@/pages/HomeNow';
 import NotFound from '@/pages/NotFound';
 
 // Lazy-loaded pages (code-split per route)
 const About = lazy(() => import('@/pages/About'));
+const AboutNow = lazy(() => import('@/pages/AboutNow'));
 const HowIWork = lazy(() => import('@/pages/HowIWork'));
 const Services = lazy(() => import('@/pages/Services'));
 const Blog = lazy(() => import('@/pages/Blog'));
 const BlogPost = lazy(() => import('@/pages/BlogPost'));
 const Contact = lazy(() => import('@/pages/Contact'));
+const Events = lazy(() => import('@/pages/Events'));
 const WebDesignOffer = lazy(() => import('@/pages/WebDesignOffer'));
 const MamyNastolatkowCoaching = lazy(
   () => import('@/pages/MamyNastolatkowCoaching'),
@@ -78,6 +81,7 @@ const AdminSEO = lazy(() => import('@/pages/admin/SEO'));
 const AdminCategories = lazy(() => import('@/pages/admin/Categories'));
 const AdminLanguages = lazy(() => import('@/pages/admin/Languages'));
 const AdminContact = lazy(() => import('@/pages/admin/Contact'));
+const AdminEvents = lazy(() => import('@/pages/admin/Events'));
 const AdminCoaches = lazy(() => import('@/pages/admin/Coaches'));
 
 const queryClient = new QueryClient({
@@ -101,8 +105,8 @@ function PublicLayout() {
 function LoadingFallback() {
   const { t } = useTranslation();
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F9F6F0]">
-      <p className="text-[#B8963E] text-lg">{t('common.loading')}</p>
+    <div className="min-h-screen flex items-center justify-center bg-surface">
+      <p className="text-brand text-lg">{t('common.loading')}</p>
     </div>
   );
 }
@@ -113,6 +117,8 @@ function AppRoutes() {
   const showEbooks = useFeatureFlag('ebooks');
   const showPurchaseFlow = useFeatureFlag('purchaseFlow');
   const showYouTube = useFeatureFlag('youtubeContent');
+  const showClassicHome = useFeatureFlag('classicHome');
+  const showClassicAbout = useFeatureFlag('classicAbout');
 
   return (
     <Routes>
@@ -329,6 +335,14 @@ function AppRoutes() {
           }
         />
         <Route
+          path="events"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <AdminEvents />
+            </Suspense>
+          }
+        />
+        <Route
           path="coaches"
           element={
             <Suspense fallback={<LoadingFallback />}>
@@ -367,12 +381,12 @@ function AppRoutes() {
 
       {/* Public routes — wrapped in the public Layout (Navbar, Footer, CMS toolbar) */}
       <Route element={<PublicLayout />}>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={showClassicHome ? <Home /> : <HomeNow />} />
         <Route
           path="/o-mnie"
           element={
             <Suspense fallback={<LoadingFallback />}>
-              <About />
+              {showClassicAbout ? <About /> : <AboutNow />}
             </Suspense>
           }
         />
@@ -413,6 +427,14 @@ function AppRoutes() {
           element={
             <Suspense fallback={<LoadingFallback />}>
               <Contact />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/wydarzenia"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <Events />
             </Suspense>
           }
         />

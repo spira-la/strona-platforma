@@ -80,7 +80,7 @@ export function EditableBackgroundColor({
             type="button"
             onClick={() => setShowControls((s) => !s)}
             className={`absolute bottom-3 right-3 z-30 flex items-center justify-center w-7 h-7 rounded-md text-white transition-colors backdrop-blur-sm shadow-lg border border-white/20 ${
-              showControls ? 'bg-[#B8963E]' : 'bg-black/70 hover:bg-[#B8963E]'
+              showControls ? 'bg-brand' : 'bg-black/70 hover:bg-brand'
             }`}
             title={t('cms.backgroundColor', { defaultValue: 'Kolor tła' })}
             aria-label={t('cms.backgroundColor', { defaultValue: 'Kolor tła' })}
@@ -90,11 +90,11 @@ export function EditableBackgroundColor({
 
           {showControls && (
             <div
-              className="absolute bottom-12 right-3 z-40 bg-white rounded-xl shadow-2xl p-3 flex flex-col gap-3 border border-[#E8E4DF] min-w-[180px]"
+              className="absolute bottom-12 right-3 z-40 bg-white rounded-xl shadow-2xl p-3 flex flex-col gap-3 border border-line min-w-[180px]"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between">
-                <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter']">
+                <p className="text-[10px] font-semibold text-ink-soft uppercase tracking-wider font-['Inter']">
                   {t('cms.backgroundColor', { defaultValue: 'Kolor tła' })}
                 </p>
                 <div className="flex items-center gap-1.5">
@@ -102,18 +102,18 @@ export function EditableBackgroundColor({
                     type="color"
                     value={isValidHexColor(color) ? color : defaultColor}
                     onChange={(e) => void handleChange(e.target.value)}
-                    className="w-7 h-7 rounded border border-[#E8E4DF] cursor-pointer bg-white p-0"
+                    className="w-7 h-7 rounded border border-line cursor-pointer bg-white p-0"
                     title={t('cms.pickColor', {
                       defaultValue: 'Wybierz kolor',
                     })}
                   />
-                  <span className="text-[10px] text-[#8A8A8A] font-['Inter'] font-medium uppercase">
+                  <span className="text-[10px] text-ink-muted font-['Inter'] font-medium uppercase">
                     {color}
                   </span>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-[#F0EDE8]">
+              <div className="flex items-center justify-between pt-2 border-t border-line-soft">
                 <span
                   className={`flex items-center gap-1 text-[10px] font-medium font-['Inter'] transition-opacity duration-300 ${saved ? 'opacity-100 text-green-600' : 'opacity-0'}`}
                 >
@@ -123,7 +123,7 @@ export function EditableBackgroundColor({
                 <button
                   type="button"
                   onClick={() => void handleReset()}
-                  className="px-2 py-1 rounded-md text-[10px] font-medium text-[#6B6B6B] hover:text-[#B8963E] transition-colors font-['Inter']"
+                  className="px-2 py-1 rounded-md text-[10px] font-medium text-ink-soft hover:text-brand transition-colors font-['Inter']"
                 >
                   ✕ {t('cms.resetDefault')}
                 </button>

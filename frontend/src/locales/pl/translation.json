@@ -24,7 +24,9 @@
     "readMore": "Czytaj więcej",
     "saved": "Zapisano",
     "done": "Gotowe",
-    "video": "Wideo"
+    "video": "Wideo",
+    "start": "Start",
+    "events": "Wydarzenia"
   },
   "cms": {
     "changeImage": "Zmień",
@@ -382,7 +384,8 @@
         "business": "Biznes",
         "system": "System",
         "catalog": "Katalog"
-      }
+      },
+      "events": "Wydarzenia"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -905,6 +908,101 @@
         "updateFailed": "Błąd podczas aktualizacji kuponu:",
         "deleteFailed": "Błąd podczas usuwania kuponu:",
         "unknown": "Nieznany błąd"
+      }
+    },
+    "events": {
+      "title": "Wydarzenia",
+      "description": "Dodawaj warsztaty i spotkania — pojawią się na stronie /wydarzenia, a chętni zapiszą się przez formularz e-mail.",
+      "newEvent": "Nowe wydarzenie",
+      "editEvent": "Edytuj wydarzenie",
+      "online": "Online",
+      "searchPlaceholder": "Szukaj po tytule…",
+      "searchLabel": "Szukaj wydarzeń",
+      "stats": {
+        "upcoming": "Nadchodzące",
+        "registrations": "Zapisy na nadchodzące",
+        "drafts": "Szkice"
+      },
+      "filter": {
+        "upcoming": "Nadchodzące",
+        "drafts": "Szkice",
+        "past": "Minione"
+      },
+      "table": {
+        "label": "Lista wydarzeń",
+        "date": "Data",
+        "title": "Tytuł",
+        "place": "Miejsce",
+        "registrations": "Zapisy",
+        "status": "Status",
+        "actions": "Akcje"
+      },
+      "status": {
+        "published": "Opublikowane",
+        "draft": "Szkic",
+        "closed": "Zapisy zamknięte"
+      },
+      "actions": {
+        "edit": "Edytuj",
+        "registrations": "Zobacz zapisy",
+        "publish": "Opublikuj",
+        "unpublish": "Ukryj ze strony",
+        "delete": "Usuń wydarzenie"
+      },
+      "confirm": {
+        "delete": "Na pewno usunąć wydarzenie",
+        "deleteWithRegistrations": "Usunie to też zapisy ({{count}}) i nie da się tego cofnąć."
+      },
+      "empty": {
+        "noEvents": "Nie ma tu jeszcze wydarzeń. Dodaj pierwsze!",
+        "noResults": "Brak wyników dla tego wyszukiwania."
+      },
+      "errors": {
+        "loadFailed": "Nie udało się wczytać wydarzeń."
+      },
+      "validation": {
+        "titleRequired": "Wpisz tytuł (min. 2 znaki)",
+        "startRequired": "Podaj datę i godzinę rozpoczęcia",
+        "endBeforeStart": "Koniec musi być po rozpoczęciu",
+        "capacityPositive": "Liczba miejsc musi być większa od zera"
+      },
+      "form": {
+        "title": "Tytuł",
+        "titlePlaceholder": "np. Warsztat „Życie w teraz”",
+        "startsAt": "Początek",
+        "endsAt": "Koniec (opcjonalnie)",
+        "isOnline": "Wydarzenie online",
+        "location": "Miejsce",
+        "locationPlaceholder": "np. Kraków, ul. Słoneczna 5",
+        "locationOnline": "Platforma (opcjonalnie)",
+        "locationOnlinePlaceholder": "np. Zoom — link wyślę mailem",
+        "price": "Cena (opcjonalnie)",
+        "pricePlaceholder": "np. 150 zł albo Bezpłatne",
+        "capacity": "Liczba miejsc (opcjonalnie)",
+        "capacityPlaceholder": "bez limitu",
+        "description": "Opis",
+        "descriptionPlaceholder": "Opowiedz, czego dotyczy spotkanie, dla kogo jest i co warto zabrać…",
+        "image": "Zdjęcie (opcjonalnie)",
+        "addImage": "Dodaj zdjęcie",
+        "uploading": "Wysyłanie…",
+        "removeImage": "Usuń zdjęcie",
+        "imageHint": "Bez zdjęcia pokaże się akwarelowa grafika.",
+        "isPublished": "Widoczne na stronie",
+        "isPublishedHint": "Wyłącz, żeby zapisać jako szkic.",
+        "registrationOpen": "Zapisy otwarte",
+        "registrationOpenHint": "Wyłącz, gdy nie chcesz już przyjmować zgłoszeń.",
+        "save": "Zapisz zmiany",
+        "create": "Dodaj wydarzenie"
+      },
+      "registrations": {
+        "title": "Zapisy",
+        "count": "Zapisanych: {{count}} / {{capacity}}",
+        "empty": "Nikt się jeszcze nie zapisał.",
+        "copyEmails": "Kopiuj adresy e-mail",
+        "copied": "Skopiowano adresy — wklej je w pole UDW (BCC) w swojej poczcie.",
+        "close": "Zamknij",
+        "remove": "Usuń zapis",
+        "confirmRemove": "Na pewno usunąć zapis osoby"
       }
     }
   }

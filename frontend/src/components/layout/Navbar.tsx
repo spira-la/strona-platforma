@@ -15,7 +15,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRoles } from '@/hooks/useRoles';
 import { useAuthStore } from '@/stores/auth.store';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag';
-import spiralaIcon from '@/assets/spirala-icon.png';
+import spiralaLogo from '@/assets/spirala-logo.png';
 
 // ---------------------------------------------------------------------------
 // Nav structure types
@@ -75,6 +75,40 @@ const DIRECT_NAV_LINKS: NavLink[] = [
   },
 ];
 
+// Simple menu used when the `extendedNav` flag is off. New fieldPaths
+// (navHome, navEvents, navContact) so labels saved in the CMS for the old
+// link2/link3 slots don't leak into the new tabs.
+const SIMPLE_NAV_LINKS: NavLink[] = [
+  {
+    type: 'link',
+    href: '/',
+    labelKey: 'common.start',
+    fieldPath: 'navHome',
+    editable: 'Start',
+  },
+  {
+    type: 'link',
+    href: '/o-mnie',
+    labelKey: 'common.about',
+    fieldPath: 'link1',
+    editable: 'O Mnie',
+  },
+  {
+    type: 'link',
+    href: '/wydarzenia',
+    labelKey: 'common.events',
+    fieldPath: 'navEvents',
+    editable: 'Wydarzenia',
+  },
+  {
+    type: 'link',
+    href: '/kontakt',
+    labelKey: 'common.contact',
+    fieldPath: 'navContact',
+    editable: 'Kontakt',
+  },
+];
+
 const SPEC_GROUP: NavGroup = {
   type: 'group',
   id: 'specializations',
@@ -131,6 +165,8 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
   const { isAdmin, isCoach } = useRoles();
   const { openLogin } = useAuthStore();
   const showYouTube = useFeatureFlag('youtubeNavLink');
+  const showBlog = useFeatureFlag('blog');
+  const showExtendedNav = useFeatureFlag('extendedNav');
   const { activeId } = useCMSFocus();
 
   const contentGroup: NavGroup = {
@@ -140,21 +176,27 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
     fieldPath: 'groupTresci',
     editable: 'Treści',
     items: [
-      {
-        href: '/blog',
-        labelKey: 'common.blog',
-        fieldPath: 'link4',
-        editable: 'Blog',
-      },
+      ...(showBlog
+        ? [
+            {
+              href: '/blog',
+              labelKey: 'common.blog',
+              fieldPath: 'link4',
+              editable: 'Blog',
+            },
+          ]
+        : []),
       ...(showYouTube ? [YOUTUBE_ITEM] : []),
     ],
   };
 
-  const NAV_ENTRIES: NavEntry[] = [
-    ...DIRECT_NAV_LINKS,
-    SPEC_GROUP,
-    contentGroup,
-  ];
+  const NAV_ENTRIES: NavEntry[] = showExtendedNav
+    ? [
+        ...DIRECT_NAV_LINKS,
+        SPEC_GROUP,
+        ...(contentGroup.items.length > 0 ? [contentGroup] : []),
+      ]
+    : SIMPLE_NAV_LINKS;
 
   const [scrolled, setScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -253,14 +295,14 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
   // Shared text colour helpers
   const linkClass = (active: boolean) =>
     [
-      "font-['Lato'] text-[14px] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded",
+      "font-['Lato'] text-[14px] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded",
       useWhiteText
         ? active
           ? 'text-white font-medium'
           : 'text-white/70 hover:text-white'
         : active
-          ? 'text-[#B8944A] font-medium'
-          : 'text-[#8A8A8A] hover:text-[#2D2D2D]',
+          ? 'text-brand font-medium'
+          : 'text-ink-muted hover:text-ink',
     ].join(' ');
 
   return (
@@ -270,10 +312,14 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
         className={[
           'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
           transparent && !scrolled
-            ? 'bg-transparent'
+            ? darkHero
+              ? 'bg-transparent'
+              : // light hero (watercolor painting): soft frosted strip so the
+                // dark menu text stays readable over the colorful paint
+                'bg-white/70 backdrop-blur-md'
             : scrolled
               ? 'bg-white shadow-[0_1px_12px_0_rgba(0,0,0,0.08)]'
-              : 'bg-white border-b border-[#F0EDE8]',
+              : 'bg-white border-b border-line-soft',
         ].join(' ')}
         role="banner"
       >
@@ -284,20 +330,19 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
           {/* Logo */}
           <Link
             to="/"
-            className="flex items-center gap-2 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded"
+            className="flex items-center transition-opacity duration-200 hover:opacity-85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded"
             aria-label="Spirala — strona główna"
           >
+            {/* Watercolor wordmark + spiral (2026-11 logo). The image already
+                contains the name, so no separate text label. */}
             <img
-              src={spiralaIcon}
+              src={spiralaLogo}
               alt=""
-              className="h-9 w-auto"
+              width={126}
+              height={44}
+              className="h-10 md:h-11 w-auto"
               aria-hidden="true"
             />
-            <span
-              className={`font-['Cormorant_Garamond'] text-[22px] font-bold tracking-[-0.5px] ${useWhiteText ? 'text-white hover:text-white/80' : 'text-[#B8944A] hover:text-[#8A6F2E]'}`}
-            >
-              Spirala
-            </span>
           </Link>
 
           {/* Desktop nav */}
@@ -362,17 +407,17 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                         role="menu"
                         aria-label={t(entry.labelKey)}
                       >
-                        <ul className="w-[220px] bg-white border border-[#F0EDE8] rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.10)] py-2">
+                        <ul className="w-[220px] bg-white border border-line-soft rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.10)] py-2">
                           {entry.items.map((item) => (
                             <li key={item.href} role="none">
                               <Link
                                 to={item.href}
                                 role="menuitem"
                                 className={[
-                                  "block px-4 py-2.5 font-['Lato'] text-[13px] transition-colors duration-150 hover:bg-[#FAF8F5] focus-visible:outline-none focus-visible:bg-[#FAF8F5]",
+                                  "block px-4 py-2.5 font-['Lato'] text-[13px] transition-colors duration-150 hover:bg-surface focus-visible:outline-none focus-visible:bg-surface",
                                   isActive(item.href)
-                                    ? 'text-[#B8944A] font-medium'
-                                    : 'text-[#4A4A4A] hover:text-[#B8944A]',
+                                    ? 'text-brand font-medium'
+                                    : 'text-ink hover:text-brand',
                                 ].join(' ')}
                                 aria-current={
                                   isActive(item.href) ? 'page' : undefined
@@ -403,7 +448,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
               <button
                 type="button"
                 onClick={() => setLangOpen((v) => !v)}
-                className={`flex items-center gap-1 font-['Lato'] text-[13px] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded px-1 ${useWhiteText ? 'text-white/70 hover:text-white' : 'text-[#8A8A8A] hover:text-[#2D2D2D]'}`}
+                className={`flex items-center gap-1 font-['Lato'] text-[13px] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded px-1 ${useWhiteText ? 'text-white/70 hover:text-white' : 'text-ink-muted hover:text-ink'}`}
                 aria-haspopup="listbox"
                 aria-expanded={langOpen}
                 aria-label="Zmień język"
@@ -421,7 +466,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                 <ul
                   role="listbox"
                   aria-label="Wybierz język"
-                  className="absolute right-0 top-full mt-2 w-[72px] bg-white border border-[#F0EDE8] rounded-lg shadow-lg py-1 z-10"
+                  className="absolute right-0 top-full mt-2 w-[72px] bg-white border border-line-soft rounded-lg shadow-lg py-1 z-10"
                 >
                   {LANGUAGES.map((lang) => (
                     <li
@@ -433,10 +478,10 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                         type="button"
                         onClick={() => handleLangChange(lang.code)}
                         className={[
-                          "w-full text-left px-3 py-1.5 font-['Lato'] text-[13px] transition-colors duration-150 hover:bg-[#FAF8F5]",
+                          "w-full text-left px-3 py-1.5 font-['Lato'] text-[13px] transition-colors duration-150 hover:bg-surface",
                           lang.code === i18n.language
-                            ? 'text-[#B8944A] font-medium'
-                            : 'text-[#6B6B6B]',
+                            ? 'text-brand font-medium'
+                            : 'text-ink-soft',
                         ].join(' ')}
                       >
                         {lang.label}
@@ -453,40 +498,40 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                 <button
                   type="button"
                   onClick={() => setUserMenuOpen((v) => !v)}
-                  className="flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded-full"
+                  className="flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded-full"
                   aria-haspopup="menu"
                   aria-expanded={userMenuOpen}
                   aria-label="Menu użytkownika"
                 >
                   <span
-                    className={`w-8 h-8 rounded-full flex items-center justify-center font-['Lato'] text-[13px] font-bold ${useWhiteText ? 'bg-white/20 text-white' : 'bg-[#B8944A]/15 text-[#B8944A]'}`}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center font-['Lato'] text-[13px] font-bold ${useWhiteText ? 'bg-white/20 text-white' : 'bg-brand/15 text-brand'}`}
                   >
                     {userInitial}
                   </span>
                   <ChevronDown
                     size={12}
-                    className={`transition-transform duration-200 ${userMenuOpen ? 'rotate-180' : ''} ${useWhiteText ? 'text-white/70' : 'text-[#8A8A8A]'}`}
+                    className={`transition-transform duration-200 ${userMenuOpen ? 'rotate-180' : ''} ${useWhiteText ? 'text-white/70' : 'text-ink-muted'}`}
                     aria-hidden="true"
                   />
                 </button>
 
                 {userMenuOpen && (
                   <div
-                    className="absolute right-0 top-full mt-2 w-[200px] bg-white border border-[#F0EDE8] rounded-lg shadow-lg py-2 z-10"
+                    className="absolute right-0 top-full mt-2 w-[200px] bg-white border border-line-soft rounded-lg shadow-lg py-2 z-10"
                     role="menu"
                   >
-                    <div className="px-3 py-2 border-b border-[#F0EDE8]">
-                      <p className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D] truncate">
+                    <div className="px-3 py-2 border-b border-line-soft">
+                      <p className="font-['Lato'] text-[13px] font-medium text-ink truncate">
                         {userName}
                       </p>
-                      <p className="font-['Lato'] text-[11px] text-[#8A8A8A] truncate">
+                      <p className="font-['Lato'] text-[11px] text-ink-muted truncate">
                         {user?.email}
                       </p>
                     </div>
                     {isCoach && (
                       <Link
                         to="/coach"
-                        className="w-full flex items-center gap-2 px-3 py-2 font-['Lato'] text-[13px] text-[#B8944A] hover:bg-[#FAF8F5] hover:text-[#8A6F2E] transition-colors"
+                        className="w-full flex items-center gap-2 px-3 py-2 font-['Lato'] text-[13px] text-brand hover:bg-surface hover:text-brand-dark transition-colors"
                         role="menuitem"
                         onClick={() => setUserMenuOpen(false)}
                       >
@@ -499,7 +544,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                     {isAdmin && (
                       <Link
                         to="/admin"
-                        className="w-full flex items-center gap-2 px-3 py-2 font-['Lato'] text-[13px] text-[#B8944A] hover:bg-[#FAF8F5] hover:text-[#8A6F2E] transition-colors"
+                        className="w-full flex items-center gap-2 px-3 py-2 font-['Lato'] text-[13px] text-brand hover:bg-surface hover:text-brand-dark transition-colors"
                         role="menuitem"
                         onClick={() => setUserMenuOpen(false)}
                       >
@@ -512,7 +557,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                     <button
                       type="button"
                       onClick={handleSignOut}
-                      className="w-full flex items-center gap-2 px-3 py-2 font-['Lato'] text-[13px] text-[#6B6B6B] hover:bg-[#FAF8F5] hover:text-[#2D2D2D] transition-colors"
+                      className="w-full flex items-center gap-2 px-3 py-2 font-['Lato'] text-[13px] text-ink-soft hover:bg-surface hover:text-ink transition-colors"
                       role="menuitem"
                     >
                       <LogOut size={14} aria-hidden="true" />
@@ -527,7 +572,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
               <button
                 type="button"
                 onClick={openLogin}
-                className="font-['Lato'] text-[13px] font-medium text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-full px-6 py-[10px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
+                className="font-['Lato'] text-[13px] font-medium text-white bg-action hover:bg-action-hover active:bg-action-hover transition-colors duration-200 rounded-full px-6 py-[10px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
               >
                 <User
                   size={14}
@@ -544,7 +589,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
           {/* Mobile: hamburger */}
           <button
             type="button"
-            className={`md:hidden flex items-center justify-center w-10 h-10 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded ${useWhiteText ? 'text-white hover:text-white/80' : 'text-[#2D2D2D] hover:text-[#B8944A]'}`}
+            className={`md:hidden flex items-center justify-center w-10 h-10 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded ${useWhiteText ? 'text-white hover:text-white/80' : 'text-ink hover:text-brand'}`}
             onClick={() => setDrawerOpen((v) => !v)}
             aria-expanded={drawerOpen}
             aria-controls="mobile-drawer"
@@ -575,7 +620,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
         aria-label="Menu nawigacyjne"
         aria-modal="true"
         className={[
-          'fixed top-[72px] left-0 right-0 z-40 bg-white border-b border-[#F0EDE8] shadow-lg md:hidden',
+          'fixed top-[72px] left-0 right-0 z-40 bg-white border-b border-line-soft shadow-lg md:hidden',
           'transition-all duration-300 ease-in-out overflow-hidden',
           drawerOpen
             ? 'max-h-[600px] opacity-100'
@@ -590,10 +635,10 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                   <Link
                     to={entry.href}
                     className={[
-                      "block py-3 px-2 font-['Lato'] text-[15px] border-b border-[#F0EDE8] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded",
+                      "block py-3 px-2 font-['Lato'] text-[15px] border-b border-line-soft transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded",
                       isActive(entry.href)
-                        ? 'text-[#B8944A] font-medium'
-                        : 'text-[#2D2D2D] hover:text-[#B8944A]',
+                        ? 'text-brand font-medium'
+                        : 'text-ink hover:text-brand',
                     ].join(' ')}
                     aria-current={isActive(entry.href) ? 'page' : undefined}
                   >
@@ -614,8 +659,8 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                   type="button"
                   onClick={() => toggleMobileGroup(entry.id)}
                   className={[
-                    "w-full flex items-center justify-between py-3 px-2 font-['Lato'] text-[15px] border-b border-[#F0EDE8] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded",
-                    active ? 'text-[#B8944A] font-medium' : 'text-[#2D2D2D]',
+                    "w-full flex items-center justify-between py-3 px-2 font-['Lato'] text-[15px] border-b border-line-soft transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded",
+                    active ? 'text-brand font-medium' : 'text-ink',
                   ].join(' ')}
                   aria-expanded={expanded}
                 >
@@ -624,21 +669,21 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                   </EditableText>
                   <ChevronDown
                     size={15}
-                    className={`transition-transform duration-200 text-[#8A8A8A] ${expanded ? 'rotate-180' : ''}`}
+                    className={`transition-transform duration-200 text-ink-muted ${expanded ? 'rotate-180' : ''}`}
                     aria-hidden="true"
                   />
                 </button>
                 {expanded && (
-                  <ul className="flex flex-col border-b border-[#F0EDE8]">
+                  <ul className="flex flex-col border-b border-line-soft">
                     {entry.items.map((item) => (
                       <li key={item.href}>
                         <Link
                           to={item.href}
                           className={[
-                            "block py-2.5 pl-6 pr-2 font-['Lato'] text-[14px] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded",
+                            "block py-2.5 pl-6 pr-2 font-['Lato'] text-[14px] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded",
                             isActive(item.href)
-                              ? 'text-[#B8944A] font-medium'
-                              : 'text-[#6B6B6B] hover:text-[#B8944A]',
+                              ? 'text-brand font-medium'
+                              : 'text-ink-soft hover:text-brand',
                           ].join(' ')}
                           aria-current={
                             isActive(item.href) ? 'page' : undefined
@@ -661,7 +706,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
 
           {/* Language row */}
           <li className="flex items-center gap-2 pt-4 pb-2 px-2">
-            <Globe size={14} className="text-[#8A8A8A]" aria-hidden="true" />
+            <Globe size={14} className="text-ink-muted" aria-hidden="true" />
             {LANGUAGES.map((lang) => (
               <button
                 key={lang.code}
@@ -670,8 +715,8 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                 className={[
                   "font-['Lato'] text-[13px] px-2 py-1 rounded transition-colors duration-150",
                   lang.code === i18n.language
-                    ? 'text-[#B8944A] font-semibold'
-                    : 'text-[#8A8A8A] hover:text-[#2D2D2D]',
+                    ? 'text-brand font-semibold'
+                    : 'text-ink-muted hover:text-ink',
                 ].join(' ')}
                 aria-pressed={lang.code === i18n.language}
               >
@@ -686,17 +731,17 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
               <div className="flex flex-col gap-2 px-2 py-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="w-8 h-8 rounded-full bg-[#B8944A]/15 text-[#B8944A] flex items-center justify-center font-['Lato'] text-[13px] font-bold">
+                    <span className="w-8 h-8 rounded-full bg-brand/15 text-brand flex items-center justify-center font-['Lato'] text-[13px] font-bold">
                       {userInitial}
                     </span>
-                    <span className="font-['Lato'] text-[14px] text-[#2D2D2D] truncate max-w-[180px]">
+                    <span className="font-['Lato'] text-[14px] text-ink truncate max-w-[180px]">
                       {userName}
                     </span>
                   </div>
                   <button
                     type="button"
                     onClick={handleSignOut}
-                    className="flex items-center gap-1 font-['Lato'] text-[13px] text-[#8A8A8A] hover:text-[#2D2D2D] transition-colors"
+                    className="flex items-center gap-1 font-['Lato'] text-[13px] text-ink-muted hover:text-ink transition-colors"
                   >
                     <LogOut size={14} aria-hidden="true" />
                     <EditableText section="navbar" fieldPath="logoutShort">
@@ -707,7 +752,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                 {isCoach && (
                   <Link
                     to="/coach"
-                    className="flex items-center gap-2 font-['Lato'] text-[13px] font-semibold text-[#B8944A] hover:text-[#8A6F2E] transition-colors px-1 py-1"
+                    className="flex items-center gap-2 font-['Lato'] text-[13px] font-semibold text-brand hover:text-brand-dark transition-colors px-1 py-1"
                   >
                     <LayoutDashboard size={14} aria-hidden="true" />
                     <EditableText section="navbar" fieldPath="coachPanel">
@@ -718,7 +763,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                 {isAdmin && (
                   <Link
                     to="/admin"
-                    className="flex items-center gap-2 font-['Lato'] text-[13px] font-semibold text-[#B8944A] hover:text-[#8A6F2E] transition-colors px-1 py-1"
+                    className="flex items-center gap-2 font-['Lato'] text-[13px] font-semibold text-brand hover:text-brand-dark transition-colors px-1 py-1"
                   >
                     <LayoutDashboard size={14} aria-hidden="true" />
                     <EditableText section="navbar" fieldPath="adminPanel">
@@ -734,7 +779,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                   setDrawerOpen(false);
                   openLogin();
                 }}
-                className="flex items-center justify-center w-full font-['Lato'] text-[14px] font-medium text-white bg-[#B8944A] hover:bg-[#8A6F2E] transition-colors duration-200 rounded-full px-6 py-[11px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
+                className="flex items-center justify-center w-full font-['Lato'] text-[14px] font-medium text-white bg-action hover:bg-action-hover transition-colors duration-200 rounded-full px-6 py-[11px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
               >
                 <User size={14} className="mr-1.5" aria-hidden="true" />
                 <EditableText section="navbar" fieldPath="login">

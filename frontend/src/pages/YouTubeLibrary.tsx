@@ -19,7 +19,7 @@ const LIBRARY_LIMIT = 50;
 
 function SectionBadge({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-block font-['Lato'] text-[12px] font-semibold tracking-[0.08em] uppercase text-[#B8963E] bg-[#B8963E]/[0.125] rounded-full px-4 py-1.5">
+    <span className="inline-block font-['Lato'] text-[12px] font-semibold tracking-[0.08em] uppercase text-brand bg-brand/[0.125] rounded-full px-4 py-1.5">
       {children}
     </span>
   );
@@ -31,13 +31,13 @@ function SectionBadge({ children }: { children: React.ReactNode }) {
 
 function VideoCardSkeleton() {
   return (
-    <div className="flex flex-col bg-white border border-[#E8E4DF] rounded-[12px] overflow-hidden animate-pulse">
-      <div className="aspect-video w-full bg-[#F0EDE8]" />
+    <div className="flex flex-col bg-white border border-line rounded-[12px] overflow-hidden animate-pulse">
+      <div className="aspect-video w-full bg-line-soft" />
       <div className="flex flex-col gap-2.5 p-5">
-        <div className="h-4 w-full bg-[#F0EDE8] rounded" />
-        <div className="h-3 w-5/6 bg-[#F0EDE8] rounded" />
-        <div className="h-3 w-4/6 bg-[#F0EDE8] rounded" />
-        <div className="h-8 w-24 bg-[#F0EDE8] rounded-full mt-auto" />
+        <div className="h-4 w-full bg-line-soft rounded" />
+        <div className="h-3 w-5/6 bg-line-soft rounded" />
+        <div className="h-3 w-4/6 bg-line-soft rounded" />
+        <div className="h-8 w-24 bg-line-soft rounded-full mt-auto" />
       </div>
     </div>
   );
@@ -52,18 +52,18 @@ function ErrorState({ onRetry }: { onRetry: () => void }) {
   return (
     <div className="flex flex-col items-center gap-4 py-20 text-center">
       <div className="w-16 h-16 rounded-full bg-[#EDE8DC] flex items-center justify-center">
-        <RefreshCw size={24} className="text-[#B8963E]" aria-hidden="true" />
+        <RefreshCw size={24} className="text-brand" aria-hidden="true" />
       </div>
-      <h2 className="font-['Cormorant_Garamond'] text-[22px] font-bold text-[#2D2D2D]">
+      <h2 className="font-['Cormorant_Garamond'] text-[22px] font-bold text-ink">
         {t('youtube.errorTitle')}
       </h2>
-      <p className="font-['Lato'] text-[14px] text-[#6B6B6B] max-w-[400px]">
+      <p className="font-['Lato'] text-[14px] text-ink-soft max-w-[400px]">
         {t('youtube.errorBody')}
       </p>
       <button
         type="button"
         onClick={onRetry}
-        className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-white bg-[#B8963E] hover:bg-[#8A6F2E] transition-colors rounded-full px-8 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E] focus-visible:ring-offset-2"
+        className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-white bg-action hover:bg-action-hover transition-colors rounded-full px-8 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
       >
         <RefreshCw size={14} aria-hidden="true" />
         {t('common.loading')}
@@ -84,17 +84,17 @@ function EmptyState() {
       <div className="text-[48px] leading-none select-none" aria-hidden="true">
         🌿
       </div>
-      <h2 className="font-['Cormorant_Garamond'] text-[22px] font-bold text-[#2D2D2D]">
+      <h2 className="font-['Cormorant_Garamond'] text-[22px] font-bold text-ink">
         {t('youtube.emptyTitle')}
       </h2>
-      <p className="font-['Lato'] text-[14px] text-[#6B6B6B] max-w-[400px]">
+      <p className="font-['Lato'] text-[14px] text-ink-soft max-w-[400px]">
         {t('youtube.emptyBody')}
       </p>
       <a
         href="https://www.youtube.com/@Ane-Spirala"
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-[#B8963E] border border-[#B8963E] hover:bg-[#B8963E] hover:text-white transition-colors rounded-full px-8 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E] focus-visible:ring-offset-2"
+        className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-brand border border-brand hover:bg-brand hover:text-white transition-colors rounded-full px-8 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
       >
         {t('youtube.watchOnYouTube')}
       </a>
@@ -152,7 +152,7 @@ export default function YouTubeLibrary() {
   }, [handleIntersect]);
 
   return (
-    <main className="min-h-screen bg-white text-[#2D2D2D]">
+    <main className="min-h-screen bg-white text-ink">
       <SEO
         title="Wideo"
         description="Oglądaj filmy Spirali o coachingu, terapii i wewnętrznym rozwoju. Inspirujące treści wideo od Anety."
@@ -209,7 +209,7 @@ export default function YouTubeLibrary() {
       {/* LIBRARY GRID                                                         */}
       {/* ------------------------------------------------------------------ */}
       <section
-        className="bg-[#F9F6F0] py-16 md:py-20 px-6 md:px-[120px]"
+        className="bg-surface py-16 md:py-20 px-6 md:px-[120px]"
         aria-labelledby="youtube-library-heading"
       >
         <div className="max-w-[1200px] mx-auto flex flex-col items-center gap-10">
@@ -232,7 +232,7 @@ export default function YouTubeLibrary() {
               as="h2"
               id="youtube-library-heading"
               placeholder="WSZYSTKIE FILMY"
-              className="font-['Cormorant_Garamond'] text-[2rem] md:text-[2.25rem] font-bold text-[#2D2D2D] leading-[1.15] tracking-[-0.5px]"
+              className="font-['Cormorant_Garamond'] text-[2rem] md:text-[2.25rem] font-bold text-ink leading-[1.15] tracking-[-0.5px]"
             />
 
             <EditableText
@@ -240,7 +240,7 @@ export default function YouTubeLibrary() {
               fieldPath="libraryDesc"
               as="p"
               placeholder="Przeglądaj całą naszą bibliotekę filmów. Nowe treści pojawiają się regularnie — zostań z nami."
-              className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7] max-w-[600px]"
+              className="font-['Lato'] text-[15px] text-ink-soft leading-[1.7] max-w-[600px]"
             />
           </ScrollReveal>
 
@@ -280,9 +280,9 @@ export default function YouTubeLibrary() {
 
           {/* Loading more spinner */}
           {isLoadingMore && (
-            <p className="font-['Lato'] text-[14px] text-[#8A8A8A] flex items-center gap-2">
+            <p className="font-['Lato'] text-[14px] text-ink-muted flex items-center gap-2">
               <span
-                className="w-4 h-4 rounded-full border-2 border-[#B8963E] border-t-transparent animate-spin"
+                className="w-4 h-4 rounded-full border-2 border-brand border-t-transparent animate-spin"
                 aria-hidden="true"
               />
               {t('youtube.loadingMore')}

@@ -148,7 +148,7 @@ export default function Checkout() {
   }
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] text-[#2D2D2D] pb-24">
+    <main className="min-h-screen bg-surface text-ink pb-24">
       <SEO title="Platnosc" canonical="/checkout" noindex />
 
       <section className="px-6 pt-10 pb-6">
@@ -156,7 +156,7 @@ export default function Checkout() {
           <button
             type="button"
             onClick={() => navigate('/rezerwacja')}
-            className="inline-flex items-center gap-1 text-sm text-[#6B6B6B] hover:text-[#B8944A] mb-4"
+            className="inline-flex items-center gap-1 text-sm text-ink-soft hover:text-brand mb-4"
             style={{ fontFamily: "'Lato', sans-serif" }}
           >
             <ChevronLeft size={14} /> Zmien terminy
@@ -195,13 +195,13 @@ export default function Checkout() {
                 />
               </div>
               <label
-                className="block mt-4 text-xs font-semibold uppercase tracking-wider text-[#8A8A8A]"
+                className="block mt-4 text-xs font-semibold uppercase tracking-wider text-ink-muted"
                 style={{ fontFamily: "'Lato', sans-serif" }}
               >
                 Notatka dla prowadzacego (opcjonalnie)
               </label>
               <textarea
-                className="w-full mt-1 rounded-lg border border-[#E8E4DF] p-3 text-sm focus:border-[#B8944A] focus:outline-none"
+                className="w-full mt-1 rounded-lg border border-line p-3 text-sm focus:border-brand focus:outline-none"
                 rows={3}
                 value={cart.notes}
                 onChange={(e) => cart.setNotes(e.target.value)}
@@ -217,14 +217,14 @@ export default function Checkout() {
                   value={couponInput}
                   onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
                   placeholder="SPIRALA10"
-                  className="flex-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm uppercase tracking-widest focus:border-[#B8944A] focus:outline-none"
+                  className="flex-1 rounded-lg border border-line px-3 py-2 text-sm uppercase tracking-widest focus:border-brand focus:outline-none"
                   style={{ fontFamily: "'Lato', sans-serif" }}
                 />
                 <button
                   type="button"
                   onClick={validateCoupon}
                   disabled={couponChecking || !couponInput.trim()}
-                  className="rounded-lg border border-[#B8944A] px-4 text-sm font-semibold text-[#B8944A] hover:bg-[rgba(184,148,74,0.08)] disabled:opacity-50"
+                  className="rounded-lg border border-brand px-4 text-sm font-semibold text-brand hover:bg-brand/8 disabled:opacity-50"
                   style={{ fontFamily: "'Lato', sans-serif" }}
                 >
                   {couponChecking ? '…' : 'Zastosuj'}
@@ -327,7 +327,7 @@ export default function Checkout() {
                 {cart.service.name}
               </p>
               <p
-                className="text-xs text-[#8A8A8A] mt-1 mb-4"
+                className="text-xs text-ink-muted mt-1 mb-4"
                 style={{ fontFamily: "'Lato', sans-serif" }}
               >
                 {cart.service.sessionCount > 1
@@ -337,7 +337,7 @@ export default function Checkout() {
               </p>
 
               <ul
-                className="flex flex-col gap-1 mb-4 text-xs text-[#2D2D2D]"
+                className="flex flex-col gap-1 mb-4 text-xs text-ink"
                 style={{ fontFamily: "'Lato', sans-serif" }}
               >
                 {cart.slots.map((s) => (
@@ -349,7 +349,7 @@ export default function Checkout() {
               </ul>
 
               <div
-                className="border-t border-[#F0EDE8] pt-3 text-sm"
+                className="border-t border-line-soft pt-3 text-sm"
                 style={{ fontFamily: "'Lato', sans-serif" }}
               >
                 <Row label="Suma">{formatPrice(subtotal, currency)}</Row>
@@ -361,7 +361,7 @@ export default function Checkout() {
                   </Row>
                 )}
                 <Row bold label="Do zaplaty">
-                  <span className="text-lg text-[#B8944A]">
+                  <span className="text-lg text-brand">
                     {formatPrice(total, currency)}
                   </span>
                 </Row>
@@ -369,7 +369,7 @@ export default function Checkout() {
 
               {stripeConfig?.mockMode && (
                 <p
-                  className="text-[11px] text-[#8A8A8A] mt-3 px-3 py-2 rounded bg-[#FFF8E1] border border-[#E8C469]"
+                  className="text-[11px] text-ink-muted mt-3 px-3 py-2 rounded bg-[#FFF8E1] border border-[#E8C469]"
                   style={{ fontFamily: "'Lato', sans-serif" }}
                 >
                   Tryb testowy — kliknij „Zaplac”, aby potwierdzic platnosc bez
@@ -384,7 +384,7 @@ export default function Checkout() {
                 className="mt-5 w-full py-3 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
                 style={{
                   background:
-                    'linear-gradient(135deg, #B8944A 0%, #D4B97A 100%)',
+                    'linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-light) 100%)',
                   fontFamily: "'Lato', sans-serif",
                 }}
               >
@@ -419,7 +419,7 @@ export default function Checkout() {
 
 function Card({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl p-5 border border-[#E8E4DF] bg-white">
+    <div className="rounded-2xl p-5 border border-line bg-white">
       {children}
     </div>
   );
@@ -450,7 +450,7 @@ function Field({
   return (
     <label className="block">
       <span
-        className="block text-xs font-semibold uppercase tracking-wider text-[#8A8A8A] mb-1"
+        className="block text-xs font-semibold uppercase tracking-wider text-ink-muted mb-1"
         style={{ fontFamily: "'Lato', sans-serif" }}
       >
         {label}
@@ -459,7 +459,7 @@ function Field({
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#B8944A] focus:outline-none"
+        className="w-full rounded-lg border border-line px-3 py-2 text-sm focus:border-brand focus:outline-none"
         style={{ fontFamily: "'Lato', sans-serif" }}
       />
     </label>
@@ -479,7 +479,7 @@ function Row({
     <div
       className={
         'flex justify-between py-1 ' +
-        (bold ? 'font-bold pt-3 border-t border-[#F0EDE8] mt-2' : '')
+        (bold ? 'font-bold pt-3 border-t border-line-soft mt-2' : '')
       }
     >
       <span>{label}</span>

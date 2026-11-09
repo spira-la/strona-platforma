@@ -1,25 +1,200 @@
 @import 'tailwindcss';
 
 @theme {
-  /* Brand Colors */
-  --color-brand-gold: #b8944a;
-  --color-brand-gold-light: #d4b97a;
-  --color-brand-gold-dark: #8a6f2e;
+  /* ─────────────────────────────────────────────────────────────
+     SPIRALA PALETTE — single source of truth for site colors.
+     Use these as Tailwind classes (text-brand, bg-surface,
+     border-line, hover:bg-brand-dark, bg-brand/10 …) or as
+     var(--color-brand) in style props. Never hardcode hex in pages:
+     changing the palette = editing only this block.
+
+     Current: "Z logo" (2026-11) — accents taken from the watercolor
+     logo: coral-orange of the "spirala" wordmark, rainbow spiral tones
+     for icons (spiral-* below), plum text/buttons, cream/butter
+     backgrounds. Before that: "Słoneczna" (honey accents: brand
+     #c8861a · brand-light #f2c55c · brand-soft #fff0c2 · brand-dark
+     #8f5a0c). The client rejected "Pudrowy róż"; "Lawenda i niebo"
+     was her first pick. Paste any value set below to switch.
+
+     Pudrowy róż:  brand #b88275 · brand-light #ddb8ae ·
+       brand-soft #f5e4df · brand-dark #8c5a50 · sky #efe4d6 ·
+       sky-soft #f7f0e8 · ink #5a3f3a · ink-soft #7d5f59 ·
+       ink-muted #9a7f79 · surface #fbf5f2 · surface-alt #f6ece8 ·
+       line #eedfd9 · line-soft #f5eae6
+     Lawenda i niebo:  brand #8c80bc · brand-light #b9b0db ·
+       brand-soft #e6e1f4 · brand-dark #6f64a3 · sky #d6e6f2 ·
+       sky-soft #eaf2f9 · ink #3f3a5a · ink-soft #625c7e ·
+       ink-muted #8c87a3 · surface #f7f6fb · surface-alt #efedf7 ·
+       line #e4e0ee · line-soft #eeebf5
+     Original gold/earth: brand #b8944a · brand-light #d4b97a ·
+       brand-dark #8a6f2e · ink #2d2d2d · ink-soft #6b6b6b ·
+       ink-muted #8a8a8a · surface #faf8f5 · surface-alt #f5f3ef ·
+       line #e8e4df · line-soft #f0ede8
+     ───────────────────────────────────────────────────────────── */
+  --color-brand: #f06a2e; /* logo orange — links, accents, decorative lines */
+  --color-brand-light: #ffb088; /* peach */
+  --color-brand-soft: #ffeadb; /* light peach — fills */
+  --color-brand-dark: #c2461a; /* hover states, small accent text (AA) */
+  --color-sky: #dcebf5; /* sky blue — complementary pastel */
+  --color-sky-soft: #edf5fb;
+
+  /* Rainbow spiral tones (sampled from the logo) — vivid icon colors.
+     Each pair: icon color + soft circle behind it (≥3:1 contrast).
+     Used through lib/iconTones.ts so icons cycle through the spiral. */
+  --color-spiral-coral: #ec4a32;
+  --color-spiral-coral-soft: #ffe4df;
+  --color-spiral-orange: #e2561a;
+  --color-spiral-orange-soft: #ffeadc;
+  --color-spiral-gold: #b98000;
+  --color-spiral-gold-soft: #fff2c7;
+  --color-spiral-teal: #0796b5;
+  --color-spiral-teal-soft: #d9f4f9;
+  --color-spiral-blue: #3e6cc6;
+  --color-spiral-blue-soft: #e2eafc;
+  --color-spiral-violet: #a23bb6;
+  --color-spiral-violet-soft: #f4e4f8;
+
+  /* Gentle hover for the painted bee / butterflies (WatercolorFriend) */
+  --animate-float: spirala-float 7s ease-in-out infinite;
+  @keyframes spirala-float {
+    0%,
+    100% {
+      transform: translate(0, 0) rotate(-3deg);
+    }
+    50% {
+      transform: translate(6px, -12px) rotate(3deg);
+    }
+  }
+
+  /* Horizontal flight for the bee and the pink butterfly (client: "niech
+     latają horyzontalnie"). They fly ~1.6× their own width, bob a little and
+     turn around at each end. The art faces left, so scaleX(-1) = facing
+     right. fly-left starts by heading left, fly-right by heading right. */
+  /* Footer logo spiral rolling right and back like a wheel: 120px of travel
+     on a 44px spiral = 120 / (π·44) turns ≈ 312deg. */
+  --animate-roll: spirala-roll 9s ease-in-out infinite;
+  @keyframes spirala-roll {
+    0%,
+    12% {
+      transform: translateX(0) rotate(0deg);
+    }
+    44%,
+    56% {
+      transform: translateX(120px) rotate(312deg);
+    }
+    88%,
+    100% {
+      transform: translateX(0) rotate(0deg);
+    }
+  }
+
+  --animate-fly-left: spirala-fly-left 11s ease-in-out infinite;
+  --animate-fly-right: spirala-fly-right 11s ease-in-out infinite;
+  @keyframes spirala-fly-left {
+    0% {
+      transform: translate(0, 0) scaleX(1);
+    }
+    12% {
+      transform: translate(-40%, -10px) scaleX(1);
+    }
+    24% {
+      transform: translate(-80%, 4px) scaleX(1);
+    }
+    36% {
+      transform: translate(-120%, -8px) scaleX(1);
+    }
+    46% {
+      transform: translate(-160%, 0) scaleX(1);
+    }
+    50% {
+      transform: translate(-160%, 0) scaleX(-1);
+    }
+    62% {
+      transform: translate(-120%, -10px) scaleX(-1);
+    }
+    74% {
+      transform: translate(-80%, 4px) scaleX(-1);
+    }
+    86% {
+      transform: translate(-40%, -8px) scaleX(-1);
+    }
+    96% {
+      transform: translate(0, 0) scaleX(-1);
+    }
+    100% {
+      transform: translate(0, 0) scaleX(1);
+    }
+  }
+  @keyframes spirala-fly-right {
+    0% {
+      transform: translate(0, 0) scaleX(-1);
+    }
+    12% {
+      transform: translate(40%, -10px) scaleX(-1);
+    }
+    24% {
+      transform: translate(80%, 4px) scaleX(-1);
+    }
+    36% {
+      transform: translate(120%, -8px) scaleX(-1);
+    }
+    46% {
+      transform: translate(160%, 0) scaleX(-1);
+    }
+    50% {
+      transform: translate(160%, 0) scaleX(1);
+    }
+    62% {
+      transform: translate(120%, -10px) scaleX(1);
+    }
+    74% {
+      transform: translate(80%, 4px) scaleX(1);
+    }
+    86% {
+      transform: translate(40%, -8px) scaleX(1);
+    }
+    96% {
+      transform: translate(0, 0) scaleX(1);
+    }
+    100% {
+      transform: translate(0, 0) scaleX(-1);
+    }
+  }
+
+  /* Buttons (solid fill with white text, outline buttons) — client's
+     pick "śliwka" #3F3044. Set back to the brand values to get honey
+     buttons again. */
+  --color-action: #3f3044;
+  --color-action-hover: #2e2232;
+
+  --color-ink: #3f3044; /* headings + body text (plum "śliwka") */
+  --color-ink-soft: #5e4d63; /* secondary text */
+  --color-ink-muted: #7a6a7f; /* captions, inactive links */
+
+  --color-surface: #fffbef; /* page sections background (warm cream) */
+  --color-surface-alt: #fff5da; /* alternate sections (butter) */
+  --color-line: #f2e6c4; /* borders */
+  --color-line-soft: #f8f0d9; /* subtle dividers */
+
+  /* Legacy names — kept as aliases of the palette above */
+  --color-brand-gold: var(--color-brand);
+  --color-brand-gold-light: var(--color-brand-light);
+  --color-brand-gold-dark: var(--color-brand-dark);
   --color-brand-navy: #173a5e;
 
   /* Background Colors */
-  --color-bg-cream: #faf8f5;
-  --color-bg-warm: #f5f3ef;
+  --color-bg-cream: var(--color-surface);
+  --color-bg-warm: var(--color-surface-alt);
   --color-bg-white: #ffffff;
 
   /* Border Colors */
-  --color-border-subtle: #f0ede8;
-  --color-border-warm: #e8e4df;
+  --color-border-subtle: var(--color-line-soft);
+  --color-border-warm: var(--color-line);
 
   /* Text Colors */
-  --color-text-primary: #2d2d2d;
-  --color-text-secondary: #6b6b6b;
-  --color-text-muted: #8a8a8a;
+  --color-text-primary: var(--color-ink);
+  --color-text-secondary: var(--color-ink-soft);
+  --color-text-muted: var(--color-ink-muted);
   --color-text-on-dark: #ffffff;
   --color-text-on-dark-muted: #c8d6e5;
 
@@ -45,16 +220,16 @@
      Each maps to a Spirala equivalent so migrated components
      render with our palette without rewriting className strings.
      ───────────────────────────────────────────────────────────── */
-  --color-bwm-primary: #2d2d2d;
-  --color-bwm-secondary: #6b6b6b;
-  --color-bwm-muted: #8a8a8a;
-  --color-bwm-section: #faf8f5;
+  --color-bwm-primary: var(--color-ink);
+  --color-bwm-secondary: var(--color-ink-soft);
+  --color-bwm-muted: var(--color-ink-muted);
+  --color-bwm-section: var(--color-surface);
   --color-bwm-card: #ffffff;
-  --color-bwm-card-alt: #f5f3ef;
-  --color-bwm-border: #e8e4df;
-  --color-bwm-accent: #b8944a;
-  --color-bwm-accent-light: #d4b97a;
-  --color-bwm-accent-dark: #8a6f2e;
+  --color-bwm-card-alt: var(--color-surface-alt);
+  --color-bwm-border: var(--color-line);
+  --color-bwm-accent: var(--color-brand);
+  --color-bwm-accent-light: var(--color-brand-light);
+  --color-bwm-accent-dark: var(--color-brand-dark);
   --color-bwm-success: #4caf50;
   --color-bwm-danger: #c62828;
   --color-bwm-warning: #f59e0b;
@@ -62,24 +237,24 @@
 
   /* shadcn-style semantic tokens (used by ported ui/ primitives) */
   --color-background: #ffffff;
-  --color-foreground: #2d2d2d;
+  --color-foreground: var(--color-ink);
   --color-card: #ffffff;
-  --color-card-foreground: #2d2d2d;
+  --color-card-foreground: var(--color-ink);
   --color-popover: #ffffff;
-  --color-popover-foreground: #2d2d2d;
-  --color-primary: #b8944a;
+  --color-popover-foreground: var(--color-ink);
+  --color-primary: var(--color-action);
   --color-primary-foreground: #ffffff;
-  --color-secondary: #f5f3ef;
-  --color-secondary-foreground: #2d2d2d;
-  --color-muted: #f5f3ef;
-  --color-muted-foreground: #8a8a8a;
-  --color-accent: #f5f3ef;
-  --color-accent-foreground: #2d2d2d;
+  --color-secondary: var(--color-surface-alt);
+  --color-secondary-foreground: var(--color-ink);
+  --color-muted: var(--color-surface-alt);
+  --color-muted-foreground: var(--color-ink-muted);
+  --color-accent: var(--color-surface-alt);
+  --color-accent-foreground: var(--color-ink);
   --color-destructive: #c62828;
   --color-destructive-foreground: #ffffff;
-  --color-border: #e8e4df;
-  --color-input: #e8e4df;
-  --color-ring: #b8944a;
+  --color-border: var(--color-line);
+  --color-input: var(--color-line);
+  --color-ring: var(--color-brand);
 
   --radius: 0.5rem;
 }
@@ -103,7 +278,7 @@ h6 {
 }
 
 /* ──────────────────────────────────────────────
-   Custom Scrollbar — elegant gold on cream
+   Custom Scrollbar — soft lavender
    ────────────────────────────────────────────── */
 
 /* Thin scrollbar for Firefox */
@@ -257,7 +432,7 @@ html.lenis body {
 .prose table {
   width: 100%;
   border-collapse: collapse;
-  border: 2px solid #b8944a;
+  border: 2px solid var(--color-brand);
   font-family: 'Lato', sans-serif;
   font-size: 14px;
   min-width: 400px;
@@ -266,20 +441,20 @@ html.lenis body {
 .prose table th,
 .tiptap-table td,
 .prose table td {
-  border: 1px solid #b8944a;
+  border: 1px solid var(--color-brand);
   padding: 0.5rem 0.75rem;
   vertical-align: top;
   text-align: left;
 }
 .tiptap-table th,
 .prose table th {
-  background: rgba(184, 148, 74, 0.12);
+  background: color-mix(in srgb, var(--color-brand) 12%, transparent);
   font-weight: 600;
-  color: #2d2d2d;
+  color: var(--color-ink);
 }
 /* Selected cell highlight */
 .tiptap-table .selectedCell {
-  background: rgba(184, 148, 74, 0.15);
+  background: color-mix(in srgb, var(--color-brand) 15%, transparent);
 }
 
 /* ---------------------------------------------------------------------------
@@ -318,7 +493,7 @@ html.lenis body {
   list-style: square;
 }
 .prose li::marker {
-  color: #b8944a;
+  color: var(--color-brand);
 }
 
 .prose ul[data-type='taskList'] {
@@ -347,7 +522,7 @@ html.lenis body {
 }
 .tiptap-editor-content ul[data-type='taskList'] input[type='checkbox'],
 .prose ul[data-type='taskList'] input[type='checkbox'] {
-  accent-color: #b8944a;
+  accent-color: var(--color-brand);
   cursor: pointer;
   width: 16px;
   height: 16px;

@@ -113,7 +113,7 @@ function NavItemLink({ item, collapsed, onNavigate }: NavItemLinkProps) {
           collapsed ? 'px-[18px] py-2.5 justify-center' : 'px-3 py-2.5',
           isActive
             ? 'bg-[#0D9488]/10 text-[#0D9488] font-semibold border-l-[3px] border-[#0D9488]'
-            : 'text-[#6B6B6B] hover:bg-[#F0FDFA] hover:text-[#2D2D2D]',
+            : 'text-ink-soft hover:bg-[#F0FDFA] hover:text-ink',
         ].join(' ')
       }
     >
@@ -187,14 +187,14 @@ function SidebarFooter({
   const footerBtnClass = (extraClass = '') =>
     [
       'flex items-center gap-3 w-full rounded-lg text-sm font-medium',
-      'transition-colors duration-150 text-[#6B6B6B]',
-      'hover:bg-[#F0FDFA] hover:text-[#2D2D2D]',
+      'transition-colors duration-150 text-ink-soft',
+      'hover:bg-[#F0FDFA] hover:text-ink',
       collapsed ? 'px-[18px] py-2.5 justify-center' : 'px-3 py-2.5',
       extraClass,
     ].join(' ');
 
   return (
-    <div className="px-3 py-3 border-t border-[#E8E4DF] space-y-0.5 flex-shrink-0">
+    <div className="px-3 py-3 border-t border-line space-y-0.5 flex-shrink-0">
       {/* Language switcher */}
       <div
         className={[
@@ -224,7 +224,7 @@ function SidebarFooter({
               "font-['Inter'] text-[11px] font-medium px-2 py-1 rounded transition-colors duration-150",
               lang.code === i18n.language
                 ? 'bg-[#0D9488]/10 text-[#0D9488]'
-                : 'text-[#AAAAAA] hover:text-[#6B6B6B] hover:bg-[#F9F6F0]',
+                : 'text-[#AAAAAA] hover:text-ink-soft hover:bg-surface',
             ].join(' ')}
           >
             {lang.label}
@@ -280,7 +280,7 @@ function SidebarBranding({ collapsed }: SidebarBrandingProps) {
   return (
     <div
       className={[
-        'flex items-center gap-3 py-4 border-b border-[#E8E4DF] flex-shrink-0',
+        'flex items-center gap-3 py-4 border-b border-line flex-shrink-0',
         collapsed ? 'justify-center px-[18px]' : 'px-4',
       ].join(' ')}
     >
@@ -352,11 +352,11 @@ export function CoachLayout() {
   }, [isMobileOpen]);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#F9F6F0]">
+    <div className="flex h-screen overflow-hidden bg-surface">
       {/* ── Desktop Sidebar ─────────────────────────────────────────────────── */}
       <aside
         className={[
-          'hidden md:flex flex-col flex-shrink-0 bg-white border-r border-[#E8E4DF]',
+          'hidden md:flex flex-col flex-shrink-0 bg-white border-r border-line',
           'transition-all duration-200 overflow-hidden',
           isCollapsed ? 'w-[72px]' : 'w-[260px]',
         ].join(' ')}
@@ -381,8 +381,8 @@ export function CoachLayout() {
         className={[
           'md:hidden fixed top-4 left-4 z-40',
           'flex items-center justify-center w-9 h-9 rounded-lg',
-          'bg-white border border-[#E8E4DF] shadow-sm',
-          'text-[#6B6B6B] hover:text-[#2D2D2D] hover:bg-[#F9F6F0]',
+          'bg-white border border-line shadow-sm',
+          'text-ink-soft hover:text-ink hover:bg-surface',
           'transition-colors duration-150',
         ].join(' ')}
       >
@@ -406,13 +406,13 @@ export function CoachLayout() {
         aria-label={t('coach.nav.sidebarLabel')}
         className={[
           'md:hidden fixed inset-y-0 left-0 z-50',
-          'flex flex-col w-72 bg-white border-r border-[#E8E4DF] shadow-xl',
+          'flex flex-col w-72 bg-white border-r border-line shadow-xl',
           'transition-transform duration-200',
           isMobileOpen ? 'translate-x-0' : '-translate-x-full',
         ].join(' ')}
       >
         {/* Mobile sidebar header */}
-        <div className="flex items-center justify-between px-4 py-4 border-b border-[#E8E4DF] flex-shrink-0">
+        <div className="flex items-center justify-between px-4 py-4 border-b border-line flex-shrink-0">
           <div className="flex items-center gap-3 min-w-0">
             <img
               src={spiralaIcon}
@@ -434,7 +434,7 @@ export function CoachLayout() {
             onClick={handleCloseMobile}
             className={[
               'flex items-center justify-center w-8 h-8 rounded-lg flex-shrink-0',
-              'text-[#6B6B6B] hover:text-[#2D2D2D] hover:bg-[#F9F6F0]',
+              'text-ink-soft hover:text-ink hover:bg-surface',
               'transition-colors duration-150',
             ].join(' ')}
           >
@@ -445,7 +445,7 @@ export function CoachLayout() {
         <SidebarNav collapsed={false} onNavigate={handleCloseMobile} />
 
         {/* Mobile footer: language switcher + back link */}
-        <div className="px-3 py-3 border-t border-[#E8E4DF] flex-shrink-0 space-y-1">
+        <div className="px-3 py-3 border-t border-line flex-shrink-0 space-y-1">
           {/* Language switcher (mobile) */}
           <div className="flex items-center gap-1 px-3 py-2 rounded-lg">
             <Globe
@@ -464,7 +464,7 @@ export function CoachLayout() {
                   "font-['Inter'] text-[11px] font-medium px-2 py-1 rounded transition-colors duration-150",
                   lang.code === i18n.language
                     ? 'bg-[#0D9488]/10 text-[#0D9488]'
-                    : 'text-[#AAAAAA] hover:text-[#6B6B6B] hover:bg-[#F9F6F0]',
+                    : 'text-[#AAAAAA] hover:text-ink-soft hover:bg-surface',
                 ].join(' ')}
               >
                 {lang.label}
@@ -480,8 +480,8 @@ export function CoachLayout() {
             }}
             className={[
               'flex items-center gap-3 w-full px-3 py-2.5 rounded-lg',
-              'text-sm font-medium text-[#6B6B6B]',
-              'hover:bg-[#F0FDFA] hover:text-[#2D2D2D]',
+              'text-sm font-medium text-ink-soft',
+              'hover:bg-[#F0FDFA] hover:text-ink',
               'transition-colors duration-150',
             ].join(' ')}
           >

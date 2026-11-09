@@ -17,8 +17,15 @@ import { EditableText } from '@/components/cms/EditableText';
 import { ScrollReveal } from '@/components/shared/ScrollReveal';
 import { contactClient } from '@/clients/contact.client';
 import { useCMS } from '@/contexts/CMSContext';
+import { useFeatureFlag } from '@/hooks/useFeatureFlag';
+import { iconTone } from '@/lib/iconTones';
+import {
+  RainbowStroke,
+  WatercolorFriend,
+} from '@/components/shared/Watercolor';
+import contactArt from '@/assets/watercolor/contact-joy.webp';
 
-const PHONE_FALLBACK = '+48 000 000 000';
+const PHONE_FALLBACK = '+48 666 692 990';
 const EMAIL_FALLBACK = 'contact@spira-la.com';
 const CALENDLY_URL_FALLBACK = 'https://calendly.com/twoja-nazwa';
 
@@ -73,7 +80,7 @@ type ContactFormData = z.infer<typeof contactSchema>;
 
 function SectionBadge({ label }: { label: string }) {
   return (
-    <span className="inline-block font-['Lato'] text-[11px] font-semibold tracking-[0.1em] uppercase text-[#B8944A] bg-[#B8944A]/[0.1] rounded-full px-4 py-1.5">
+    <span className="inline-block font-['Lato'] text-[11px] font-semibold tracking-[0.1em] uppercase text-brand bg-brand/[0.1] rounded-full px-4 py-1.5">
       {label}
     </span>
   );
@@ -96,6 +103,7 @@ function ContactInfoColumn() {
     'info.calendlyUrl',
     CALENDLY_URL_FALLBACK,
   );
+  const showCalendly = useFeatureFlag('contactCalendly');
 
   return (
     <div className="flex flex-col gap-8">
@@ -104,14 +112,14 @@ function ContactInfoColumn() {
           section="contact"
           fieldPath="info.greeting"
           as="h3"
-          className="font-['Cormorant_Garamond'] text-[22px] font-bold text-[#2D2D2D] mb-2"
+          className="font-['Cormorant_Garamond'] text-[22px] font-bold text-ink mb-2"
           placeholder="Porozmawiajmy"
         />
         <EditableText
           section="contact"
           fieldPath="info.description"
           as="p"
-          className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7]"
+          className="font-['Lato'] text-[15px] text-ink-soft leading-[1.7]"
           placeholder="Jestem tu dla Ciebie. Napisz, zadzwon lub wyslij wiadomosc przez formularz — odpowiem w ciagu 24 godzin."
         />
       </div>
@@ -122,11 +130,13 @@ function ContactInfoColumn() {
           className="flex items-center gap-3 group"
           aria-label="Napisz e-mail"
         >
-          <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#B8944A]/[0.1] text-[#B8944A] flex-shrink-0">
+          <div
+            className={`flex items-center justify-center w-10 h-10 rounded-full flex-shrink-0 ${iconTone(0)}`}
+          >
             <Mail size={18} aria-hidden="true" />
           </div>
           <div>
-            <p className="font-['Lato'] text-[12px] text-[#8A8A8A] uppercase tracking-wide">
+            <p className="font-['Lato'] text-[12px] text-ink-muted uppercase tracking-wide">
               <EditableText
                 section="contact"
                 fieldPath="infoEmailLabel"
@@ -138,7 +148,7 @@ function ContactInfoColumn() {
               section="contact"
               fieldPath="info.email"
               as="span"
-              className="font-['Lato'] text-[15px] text-[#2D2D2D] group-hover:text-[#B8944A] transition-colors"
+              className="font-['Lato'] text-[15px] text-ink group-hover:text-brand transition-colors"
               placeholder="contact@spira-la.com"
             />
           </div>
@@ -149,11 +159,13 @@ function ContactInfoColumn() {
           className="flex items-center gap-3 group"
           aria-label="Zadzwon"
         >
-          <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#B8944A]/[0.1] text-[#B8944A] flex-shrink-0">
+          <div
+            className={`flex items-center justify-center w-10 h-10 rounded-full flex-shrink-0 ${iconTone(2)}`}
+          >
             <Phone size={18} aria-hidden="true" />
           </div>
           <div>
-            <p className="font-['Lato'] text-[12px] text-[#8A8A8A] uppercase tracking-wide">
+            <p className="font-['Lato'] text-[12px] text-ink-muted uppercase tracking-wide">
               <EditableText
                 section="contact"
                 fieldPath="infoPhoneLabel"
@@ -165,47 +177,53 @@ function ContactInfoColumn() {
               section="contact"
               fieldPath="info.phone"
               as="span"
-              className="font-['Lato'] text-[15px] text-[#2D2D2D] group-hover:text-[#B8944A] transition-colors"
-              placeholder="+48 000 000 000"
+              className="font-['Lato'] text-[15px] text-ink group-hover:text-brand transition-colors"
+              placeholder="+48 666 692 990"
             />
           </div>
         </a>
 
-        <a
-          href={calendlyUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-3 group"
-          aria-label="Zarezerwuj termin w Calendly"
-        >
-          <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#B8944A]/[0.1] text-[#B8944A] flex-shrink-0">
-            <Calendar size={18} aria-hidden="true" />
-          </div>
-          <div>
-            <p className="font-['Lato'] text-[12px] text-[#8A8A8A] uppercase tracking-wide">
+        {showCalendly && (
+          <a
+            href={calendlyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 group"
+            aria-label="Zarezerwuj termin w Calendly"
+          >
+            <div
+              className={`flex items-center justify-center w-10 h-10 rounded-full flex-shrink-0 ${iconTone(3)}`}
+            >
+              <Calendar size={18} aria-hidden="true" />
+            </div>
+            <div>
+              <p className="font-['Lato'] text-[12px] text-ink-muted uppercase tracking-wide">
+                <EditableText
+                  section="contact"
+                  fieldPath="infoCalendlyLabel"
+                  as="span"
+                  placeholder="Rezerwacja"
+                />
+              </p>
               <EditableText
                 section="contact"
-                fieldPath="infoCalendlyLabel"
+                fieldPath="info.calendlyUrl"
                 as="span"
-                placeholder="Rezerwacja"
+                className="font-['Lato'] text-[15px] text-ink group-hover:text-brand transition-colors"
+                placeholder="https://calendly.com/twoja-nazwa"
               />
-            </p>
-            <EditableText
-              section="contact"
-              fieldPath="info.calendlyUrl"
-              as="span"
-              className="font-['Lato'] text-[15px] text-[#2D2D2D] group-hover:text-[#B8944A] transition-colors"
-              placeholder="https://calendly.com/twoja-nazwa"
-            />
-          </div>
-        </a>
+            </div>
+          </a>
+        )}
 
         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#B8944A]/[0.1] text-[#B8944A] flex-shrink-0">
+          <div
+            className={`flex items-center justify-center w-10 h-10 rounded-full flex-shrink-0 ${iconTone(1)}`}
+          >
             <Clock size={18} aria-hidden="true" />
           </div>
           <div>
-            <p className="font-['Lato'] text-[12px] text-[#8A8A8A] uppercase tracking-wide">
+            <p className="font-['Lato'] text-[12px] text-ink-muted uppercase tracking-wide">
               <EditableText
                 section="contact"
                 fieldPath="infoHoursLabel"
@@ -217,7 +235,7 @@ function ContactInfoColumn() {
               section="contact"
               fieldPath="info.hours"
               as="span"
-              className="font-['Lato'] text-[15px] text-[#2D2D2D]"
+              className="font-['Lato'] text-[15px] text-ink"
               placeholder="Pn–Pt: 9:00–18:00"
             />
           </div>
@@ -225,7 +243,7 @@ function ContactInfoColumn() {
       </div>
 
       <div className="flex flex-col gap-2">
-        <p className="font-['Lato'] text-[12px] text-[#8A8A8A] uppercase tracking-wide">
+        <p className="font-['Lato'] text-[12px] text-ink-muted uppercase tracking-wide">
           <EditableText
             section="contact"
             fieldPath="infoSocialLabel"
@@ -239,7 +257,7 @@ function ContactInfoColumn() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
-            className="flex items-center justify-center w-9 h-9 rounded-full border border-[#E8E4DF] text-[#6B6B6B] hover:text-[#B8944A] hover:border-[#B8944A] transition-colors"
+            className="flex items-center justify-center w-9 h-9 rounded-full border border-line text-ink-soft hover:text-brand hover:border-brand transition-colors"
           >
             <svg
               width={16}
@@ -262,7 +280,7 @@ function ContactInfoColumn() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="WhatsApp"
-            className="flex items-center justify-center w-9 h-9 rounded-full border border-[#E8E4DF] text-[#6B6B6B] hover:text-[#B8944A] hover:border-[#B8944A] transition-colors"
+            className="flex items-center justify-center w-9 h-9 rounded-full border border-line text-ink-soft hover:text-brand hover:border-brand transition-colors"
           >
             <svg
               width={16}
@@ -279,7 +297,7 @@ function ContactInfoColumn() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Facebook"
-            className="flex items-center justify-center w-9 h-9 rounded-full border border-[#E8E4DF] text-[#6B6B6B] hover:text-[#B8944A] hover:border-[#B8944A] transition-colors"
+            className="flex items-center justify-center w-9 h-9 rounded-full border border-line text-ink-soft hover:text-brand hover:border-brand transition-colors"
           >
             <svg
               width={16}
@@ -333,19 +351,19 @@ function ContactFormColumn() {
   }
 
   const inputClass =
-    "w-full font-['Lato'] text-[14px] text-[#2D2D2D] placeholder:text-[#8A8A8A] bg-white border border-[#E8E4DF] rounded-lg px-4 py-3 outline-none focus:border-[#B8944A] focus:ring-2 focus:ring-[#B8944A]/20 transition";
+    "w-full font-['Lato'] text-[14px] text-ink placeholder:text-ink-muted bg-white border border-line rounded-lg px-4 py-3 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition";
   const errorClass = "font-['Lato'] text-[12px] text-red-500 mt-1";
 
   return (
     <div
       id="kontakt-formularz"
-      className="bg-white rounded-lg border border-[#E8E4DF] shadow-sm p-7 md:p-9"
+      className="bg-white rounded-lg border border-line shadow-sm p-7 md:p-9"
     >
       <EditableText
         section="contact"
         fieldPath="form.title"
         as="h3"
-        className="font-['Cormorant_Garamond'] text-[22px] font-bold text-[#2D2D2D] mb-6"
+        className="font-['Cormorant_Garamond'] text-[22px] font-bold text-ink mb-6"
         placeholder="Wyslij wiadomosc"
       />
 
@@ -394,7 +412,7 @@ function ContactFormColumn() {
         <div>
           <label
             htmlFor="contact-name"
-            className="block font-['Lato'] text-[13px] font-semibold text-[#2D2D2D] mb-1.5"
+            className="block font-['Lato'] text-[13px] font-semibold text-ink mb-1.5"
           >
             <EditableText
               section="contact"
@@ -402,7 +420,7 @@ function ContactFormColumn() {
               as="span"
               placeholder="Imię i nazwisko"
             />
-            <span className="text-[#B8944A] ml-0.5" aria-hidden="true">
+            <span className="text-brand ml-0.5" aria-hidden="true">
               *
             </span>
           </label>
@@ -427,7 +445,7 @@ function ContactFormColumn() {
         <div>
           <label
             htmlFor="contact-email"
-            className="block font-['Lato'] text-[13px] font-semibold text-[#2D2D2D] mb-1.5"
+            className="block font-['Lato'] text-[13px] font-semibold text-ink mb-1.5"
           >
             <EditableText
               section="contact"
@@ -435,7 +453,7 @@ function ContactFormColumn() {
               as="span"
               placeholder="E-mail"
             />
-            <span className="text-[#B8944A] ml-0.5" aria-hidden="true">
+            <span className="text-brand ml-0.5" aria-hidden="true">
               *
             </span>
           </label>
@@ -460,7 +478,7 @@ function ContactFormColumn() {
         <div>
           <label
             htmlFor="contact-phone"
-            className="block font-['Lato'] text-[13px] font-semibold text-[#2D2D2D] mb-1.5"
+            className="block font-['Lato'] text-[13px] font-semibold text-ink mb-1.5"
           >
             <EditableText
               section="contact"
@@ -468,7 +486,7 @@ function ContactFormColumn() {
               as="span"
               placeholder="Telefon"
             />
-            <span className="font-['Lato'] text-[12px] font-normal text-[#8A8A8A] ml-1.5">
+            <span className="font-['Lato'] text-[12px] font-normal text-ink-muted ml-1.5">
               <EditableText
                 section="contact"
                 fieldPath="formPhoneOptional"
@@ -491,7 +509,7 @@ function ContactFormColumn() {
         <div>
           <label
             htmlFor="contact-subject"
-            className="block font-['Lato'] text-[13px] font-semibold text-[#2D2D2D] mb-1.5"
+            className="block font-['Lato'] text-[13px] font-semibold text-ink mb-1.5"
           >
             <EditableText
               section="contact"
@@ -499,7 +517,7 @@ function ContactFormColumn() {
               as="span"
               placeholder="Temat"
             />
-            <span className="text-[#B8944A] ml-0.5" aria-hidden="true">
+            <span className="text-brand ml-0.5" aria-hidden="true">
               *
             </span>
           </label>
@@ -530,7 +548,7 @@ function ContactFormColumn() {
         <div>
           <label
             htmlFor="contact-message"
-            className="block font-['Lato'] text-[13px] font-semibold text-[#2D2D2D] mb-1.5"
+            className="block font-['Lato'] text-[13px] font-semibold text-ink mb-1.5"
           >
             <EditableText
               section="contact"
@@ -538,7 +556,7 @@ function ContactFormColumn() {
               as="span"
               placeholder="Wiadomość"
             />
-            <span className="text-[#B8944A] ml-0.5" aria-hidden="true">
+            <span className="text-brand ml-0.5" aria-hidden="true">
               *
             </span>
           </label>
@@ -561,7 +579,7 @@ function ContactFormColumn() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="font-['Lato'] text-[15px] font-semibold text-white bg-[#B8944A] hover:bg-[#D4B97A] disabled:opacity-60 disabled:cursor-not-allowed rounded-lg px-6 py-3.5 transition-colors"
+          className="font-['Lato'] text-[15px] font-semibold text-white bg-action hover:bg-action-hover disabled:opacity-60 disabled:cursor-not-allowed rounded-lg px-6 py-3.5 transition-colors"
         >
           {isSubmitting ? (
             'Wysyłanie...'
@@ -624,12 +642,95 @@ function HeroSection() {
   );
 }
 
+/**
+ * Light hero (2026-11 redesign) — sunny photo with a white wash and dark text.
+ * Reuses the client's saved heroTitle / heroSubtitle; the photo lives in its
+ * own field (heroLightBg) so the old dark image saved under heroBg never shows.
+ */
+function LightHeroSection() {
+  return (
+    <section
+      className="relative flex flex-col items-center justify-center text-center px-6 overflow-hidden min-h-[420px] md:min-h-[520px]"
+      aria-label="Kontakt — nagłówek"
+    >
+      <EditableBackground
+        section="contact"
+        fieldPath="heroArtBg"
+        // Watercolor painting in the logo colors (2026-11). Previous chamomile
+        // photo: https://images.unsplash.com/photo-1786469801203-830477b17ef6
+        fallbackSrc={contactArt}
+        className="absolute inset-0"
+        aria-hidden={true}
+      />
+      <EditableOverlay
+        section="contact"
+        fieldPath="heroArtBg"
+        color="255,255,255"
+        defaultTop={0}
+        defaultBottom={0}
+      />
+
+      <WatercolorFriend
+        kind="butterfly"
+        fly="right"
+        className="left-[5%] top-[24%] z-[5] w-[56px] md:w-[76px] lg:left-[14%] lg:top-[34%] lg:w-[100px]"
+      />
+      <WatercolorFriend
+        kind="bee"
+        fly="left"
+        delay={2.5}
+        className="bottom-[14%] right-[5%] z-[5] w-[56px] md:bottom-[22%] md:right-[14%] md:w-[90px]"
+      />
+
+      <ScrollReveal
+        animation="fade"
+        delay={150}
+        className="relative z-10 flex flex-col items-center gap-5 max-w-[720px] pt-[90px] pb-12"
+      >
+        <EditableText
+          section="contact"
+          fieldPath="heroLightEyebrow"
+          as="p"
+          className="font-['Lato'] text-[13px] uppercase tracking-[0.2em] text-brand-dark"
+        >
+          Kontakt
+        </EditableText>
+        <EditableText
+          section="contact"
+          fieldPath="heroTitle"
+          as="h1"
+          className="font-['Cormorant_Garamond'] text-[44px] md:text-[64px] leading-[1.08] text-ink"
+          placeholder="Porozmawiajmy"
+        />
+        <EditableText
+          section="contact"
+          fieldPath="heroSubtitle"
+          as="p"
+          className="font-['Lato'] text-[17px] md:text-[19px] text-ink-soft leading-[1.7] max-w-[560px]"
+          placeholder="Napisz, zadzwoń lub wyślij wiadomość przez formularz — odpowiem w ciągu 24 godzin."
+        />
+      </ScrollReveal>
+    </section>
+  );
+}
+
 function ContactSection() {
   return (
     <section
-      className="bg-white py-14 md:py-20"
+      className="relative isolate overflow-hidden bg-white py-14 md:py-20"
       aria-label="Formularz kontaktowy"
     >
+      <WatercolorFriend
+        kind="dragonflyBlue"
+        float
+        delay={2}
+        className="right-[3%] top-10 hidden w-[110px] lg:block xl:right-[6%] xl:w-[130px]"
+      />
+      {/* painted forget-me-nots in the corner (wide screens only) */}
+      <WatercolorFriend
+        kind="bouquet"
+        className="-bottom-6 -left-10 -z-10 hidden w-[220px] opacity-90 lg:block xl:left-0 xl:w-[260px]"
+      />
       <div className="max-w-[1100px] mx-auto px-6">
         <ScrollReveal animation="fade-up">
           <div className="flex flex-col items-center text-center gap-3 mb-12">
@@ -638,10 +739,10 @@ function ContactSection() {
               section="contact"
               fieldPath="section.title"
               as="h2"
-              className="font-['Cormorant_Garamond'] text-[26px] md:text-[34px] font-bold text-[#2D2D2D]"
+              className="font-['Cormorant_Garamond'] text-[26px] md:text-[34px] font-bold text-ink"
               placeholder="Porozmawiajmy"
             />
-            <div className="w-10 h-0.5 bg-[#B8944A] mt-1" aria-hidden="true" />
+            <RainbowStroke className="mx-auto w-[160px]" />
           </div>
         </ScrollReveal>
 
@@ -663,6 +764,8 @@ function ContactSection() {
 // ---------------------------------------------------------------------------
 
 export default function Contact() {
+  const showClassicHero = useFeatureFlag('classicContact');
+
   return (
     <main>
       <SEO
@@ -671,7 +774,7 @@ export default function Contact() {
         canonical="/kontakt"
         pathname="/kontakt"
       />
-      <HeroSection />
+      {showClassicHero ? <HeroSection /> : <LightHeroSection />}
       <ContactSection />
     </main>
   );

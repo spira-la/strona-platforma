@@ -106,7 +106,7 @@ function Toggle({ id, checked, onChange, label }: ToggleProps) {
           ].join(' ')}
         />
       </div>
-      <span className="font-['Inter'] text-[14px] text-[#2D2D2D]">{label}</span>
+      <span className="font-['Inter'] text-[14px] text-ink">{label}</span>
     </label>
   );
 }
@@ -204,7 +204,7 @@ export default function CoachProfile() {
         />
         <div className="flex justify-center py-16">
           <div
-            className="w-8 h-8 rounded-full border-4 border-[#E8E4DF] border-t-[#0D9488] animate-spin"
+            className="w-8 h-8 rounded-full border-4 border-line border-t-[#0D9488] animate-spin"
             role="status"
             aria-label={t('common.loading')}
           />
@@ -227,8 +227,8 @@ export default function CoachProfile() {
       <form onSubmit={handleSubmit} className="space-y-6" noValidate>
         <div className="max-w-5xl mx-auto space-y-6">
           {/* Personal info card */}
-          <div className="bg-white border border-[#E8E4DF] rounded-xl p-5 sm:p-6 lg:p-8 space-y-6">
-            <h2 className="font-['Cormorant_Garamond',serif] text-xl font-bold text-[#2D2D2D]">
+          <div className="bg-white border border-line rounded-xl p-5 sm:p-6 lg:p-8 space-y-6">
+            <h2 className="font-['Cormorant_Garamond',serif] text-xl font-bold text-ink">
               {t('coach.profile.fullName')}
             </h2>
 
@@ -328,8 +328,8 @@ export default function CoachProfile() {
           </div>
 
           {/* Professional info card */}
-          <div className="bg-white border border-[#E8E4DF] rounded-xl p-5 sm:p-6 lg:p-8 space-y-6">
-            <h2 className="font-['Cormorant_Garamond',serif] text-xl font-bold text-[#2D2D2D]">
+          <div className="bg-white border border-line rounded-xl p-5 sm:p-6 lg:p-8 space-y-6">
+            <h2 className="font-['Cormorant_Garamond',serif] text-xl font-bold text-ink">
               {t('coach.profile.expertise')}
             </h2>
 
@@ -436,7 +436,7 @@ export default function CoachProfile() {
           </div>
 
           {/* Accepting clients toggle */}
-          <div className="bg-white border border-[#E8E4DF] rounded-xl p-6">
+          <div className="bg-white border border-line rounded-xl p-6">
             <Toggle
               id="profile-accepting"
               checked={acceptingClients}
@@ -447,7 +447,7 @@ export default function CoachProfile() {
         </div>
 
         {/* Sticky save bar — spans full main content width */}
-        <div className="sticky bottom-0 -mx-6 md:-mx-8 -mb-6 md:-mb-8 bg-white/95 backdrop-blur-sm border-t border-[#E8E4DF]">
+        <div className="sticky bottom-0 -mx-6 md:-mx-8 -mb-6 md:-mb-8 bg-white/95 backdrop-blur-sm border-t border-line">
           <div className="max-w-5xl mx-auto px-6 md:px-8 py-4 flex justify-end">
             <button
               type="submit"

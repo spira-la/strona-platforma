@@ -145,7 +145,7 @@ function CoachServiceEditDialog({
               className={`${ADMIN_INPUT_CLASS} pr-10`}
               autoFocus
             />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 font-['Inter'] text-[13px] text-[#8A8A8A] pointer-events-none select-none">
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 font-['Inter'] text-[13px] text-ink-muted pointer-events-none select-none">
               {t('coach.services.durationUnit')}
             </span>
           </div>
@@ -166,7 +166,7 @@ function CoachServiceEditDialog({
               onChange={(e) => setField('priceCents', e.target.value)}
               className={`${ADMIN_INPUT_CLASS} pr-8`}
             />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 font-['Inter'] text-[13px] text-[#8A8A8A] pointer-events-none select-none">
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 font-['Inter'] text-[13px] text-ink-muted pointer-events-none select-none">
               zł
             </span>
           </div>
@@ -249,7 +249,7 @@ function AddServiceDialog({
     >
       {/* Catalog list */}
       <div className="mb-4">
-        <p className="font-['Inter'] text-[13px] text-[#6B6B6B] mb-2">
+        <p className="font-['Inter'] text-[13px] text-ink-soft mb-2">
           {t('coach.services.selectFromCatalog')}
         </p>
         <div className="flex flex-col gap-1 max-h-48 overflow-y-auto">
@@ -267,17 +267,17 @@ function AddServiceDialog({
                 'flex items-center justify-between px-3 py-2 rounded-lg border text-left transition-colors',
                 selected?.id === s.id
                   ? `border-[${TEAL}] bg-[${TEAL_LIGHT}]`
-                  : 'border-[#E8E4DF] hover:border-[#0D9488]/40 hover:bg-[#F0FDFA]',
+                  : 'border-line hover:border-[#0D9488]/40 hover:bg-[#F0FDFA]',
               ].join(' ')}
               style={{
                 borderColor: selected?.id === s.id ? TEAL : undefined,
                 backgroundColor: selected?.id === s.id ? TEAL_LIGHT : undefined,
               }}
             >
-              <span className="font-['Inter'] text-[14px] font-medium text-[#2D2D2D]">
+              <span className="font-['Inter'] text-[14px] font-medium text-ink">
                 {s.name}
               </span>
-              <span className="font-['Inter'] text-[12px] text-[#6B6B6B]">
+              <span className="font-['Inter'] text-[12px] text-ink-soft">
                 {s.durationMinutes} {t('coach.services.durationUnit')} ·{' '}
                 {formatPrice(s.priceCents)}
               </span>
@@ -307,7 +307,7 @@ function AddServiceDialog({
                 }}
                 className={`${ADMIN_INPUT_CLASS} pr-10`}
               />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 font-['Inter'] text-[13px] text-[#8A8A8A] pointer-events-none select-none">
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 font-['Inter'] text-[13px] text-ink-muted pointer-events-none select-none">
                 {t('coach.services.durationUnit')}
               </span>
             </div>
@@ -331,7 +331,7 @@ function AddServiceDialog({
                 }}
                 className={`${ADMIN_INPUT_CLASS} pr-8`}
               />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 font-['Inter'] text-[13px] text-[#8A8A8A] pointer-events-none select-none">
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 font-['Inter'] text-[13px] text-ink-muted pointer-events-none select-none">
                 zł
               </span>
             </div>
@@ -494,7 +494,7 @@ export default function CoachServices() {
       key: 'name',
       header: t('coach.services.table.name'),
       render: (s) => (
-        <span className="font-['Inter'] text-[14px] font-medium text-[#2D2D2D]">
+        <span className="font-['Inter'] text-[14px] font-medium text-ink">
           {s.name}
         </span>
       ),
@@ -503,7 +503,7 @@ export default function CoachServices() {
       key: 'duration',
       header: t('coach.services.table.duration'),
       render: (s) => (
-        <span className="font-['Inter'] text-[13px] text-[#6B6B6B]">
+        <span className="font-['Inter'] text-[13px] text-ink-soft">
           {s.durationMinutes} {t('coach.services.durationUnit')}
         </span>
       ),
@@ -512,7 +512,7 @@ export default function CoachServices() {
       key: 'price',
       header: t('coach.services.table.price'),
       render: (s) => (
-        <span className="font-['Inter'] text-[14px] font-semibold text-[#2D2D2D]">
+        <span className="font-['Inter'] text-[14px] font-semibold text-ink">
           {formatPrice(s.priceCents)}
         </span>
       ),
@@ -526,7 +526,7 @@ export default function CoachServices() {
             'inline-flex items-center px-2 py-0.5 rounded-full text-[12px] font-medium font-["Inter"]',
             s.isActive
               ? 'text-[#0D9488] bg-[#F0FDFA] border border-[#0D9488]/20'
-              : 'text-[#6B6B6B] bg-[#F5F5F5] border border-[#E8E4DF]',
+              : 'text-ink-soft bg-[#F5F5F5] border border-line',
           ].join(' ')}
         >
           {s.isActive
@@ -545,7 +545,7 @@ export default function CoachServices() {
             onClick={() => setEditingService(s)}
             title={t('coach.services.actions.edit')}
             aria-label={t('coach.services.actions.editService')}
-            className="p-1.5 rounded text-[#8A8A8A] hover:text-[#0D9488] hover:bg-[#F0FDFA] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]"
+            className="p-1.5 rounded text-ink-muted hover:text-[#0D9488] hover:bg-[#F0FDFA] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]"
           >
             <Pencil size={15} />
           </button>
@@ -564,7 +564,7 @@ export default function CoachServices() {
                 ? t('coach.services.actions.archiveService')
                 : t('coach.services.actions.restoreService')
             }
-            className="p-1.5 rounded text-[#8A8A8A] hover:text-[#0D9488] hover:bg-[#F0FDFA] transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]"
+            className="p-1.5 rounded text-ink-muted hover:text-[#0D9488] hover:bg-[#F0FDFA] transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]"
           >
             {s.isActive ? (
               <ToggleRight size={17} style={{ color: TEAL }} />

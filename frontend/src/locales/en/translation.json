@@ -24,7 +24,9 @@
     "readMore": "Read more",
     "saved": "Saved",
     "done": "Done",
-    "video": "Video"
+    "video": "Video",
+    "start": "Home",
+    "events": "Events"
   },
   "cms": {
     "changeImage": "Change",
@@ -375,7 +377,8 @@
         "business": "Business",
         "system": "System",
         "catalog": "Catalog"
-      }
+      },
+      "events": "Events"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -957,6 +960,101 @@
         "updateFailed": "Error updating coupon:",
         "deleteFailed": "Error deleting coupon:",
         "unknown": "Unknown error"
+      }
+    },
+    "events": {
+      "title": "Events",
+      "description": "Add workshops and meetings — they appear on the /wydarzenia page and people sign up with an e-mail form.",
+      "newEvent": "New event",
+      "editEvent": "Edit event",
+      "online": "Online",
+      "searchPlaceholder": "Search by title…",
+      "searchLabel": "Search events",
+      "stats": {
+        "upcoming": "Upcoming",
+        "registrations": "Sign-ups for upcoming",
+        "drafts": "Drafts"
+      },
+      "filter": {
+        "upcoming": "Upcoming",
+        "drafts": "Drafts",
+        "past": "Past"
+      },
+      "table": {
+        "label": "Events list",
+        "date": "Date",
+        "title": "Title",
+        "place": "Place",
+        "registrations": "Sign-ups",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "status": {
+        "published": "Published",
+        "draft": "Draft",
+        "closed": "Sign-ups closed"
+      },
+      "actions": {
+        "edit": "Edit",
+        "registrations": "View sign-ups",
+        "publish": "Publish",
+        "unpublish": "Hide from site",
+        "delete": "Delete event"
+      },
+      "confirm": {
+        "delete": "Are you sure you want to delete the event",
+        "deleteWithRegistrations": "This also deletes its sign-ups ({{count}}) and cannot be undone."
+      },
+      "empty": {
+        "noEvents": "No events yet. Add the first one!",
+        "noResults": "No results for this search."
+      },
+      "errors": {
+        "loadFailed": "Could not load events."
+      },
+      "validation": {
+        "titleRequired": "Enter a title (min. 2 characters)",
+        "startRequired": "Enter the start date and time",
+        "endBeforeStart": "The end must be after the start",
+        "capacityPositive": "Number of places must be greater than zero"
+      },
+      "form": {
+        "title": "Title",
+        "titlePlaceholder": "e.g. \"Living in the now\" workshop",
+        "startsAt": "Start",
+        "endsAt": "End (optional)",
+        "isOnline": "Online event",
+        "location": "Place",
+        "locationPlaceholder": "e.g. Kraków, 5 Słoneczna St.",
+        "locationOnline": "Platform (optional)",
+        "locationOnlinePlaceholder": "e.g. Zoom — link sent by e-mail",
+        "price": "Price (optional)",
+        "pricePlaceholder": "e.g. 150 zł or Free",
+        "capacity": "Number of places (optional)",
+        "capacityPlaceholder": "no limit",
+        "description": "Description",
+        "descriptionPlaceholder": "Tell people what the meeting is about, who it is for and what to bring…",
+        "image": "Picture (optional)",
+        "addImage": "Add picture",
+        "uploading": "Uploading…",
+        "removeImage": "Remove picture",
+        "imageHint": "Without a picture a watercolor illustration is shown.",
+        "isPublished": "Visible on the site",
+        "isPublishedHint": "Turn off to keep it as a draft.",
+        "registrationOpen": "Sign-ups open",
+        "registrationOpenHint": "Turn off when you no longer accept sign-ups.",
+        "save": "Save changes",
+        "create": "Add event"
+      },
+      "registrations": {
+        "title": "Sign-ups",
+        "count": "Signed up: {{count}} / {{capacity}}",
+        "empty": "Nobody has signed up yet.",
+        "copyEmails": "Copy e-mail addresses",
+        "copied": "Addresses copied — paste them into the BCC field in your mail.",
+        "close": "Close",
+        "remove": "Remove sign-up",
+        "confirmRemove": "Are you sure you want to remove the sign-up of"
       }
     }
   }

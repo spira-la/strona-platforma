@@ -97,7 +97,7 @@ function LanguageMultiSelect({ selected, onChange }: LanguageMultiSelectProps) {
 
   if (isLoading) {
     return (
-      <div className="font-['Inter'] text-[12px] text-[#8A8A8A] py-1">
+      <div className="font-['Inter'] text-[12px] text-ink-muted py-1">
         {t('common.loading')}
       </div>
     );
@@ -105,7 +105,7 @@ function LanguageMultiSelect({ selected, onChange }: LanguageMultiSelectProps) {
 
   if (options.length === 0) {
     return (
-      <div className="font-['Inter'] text-[12px] text-[#8A8A8A] py-1">
+      <div className="font-['Inter'] text-[12px] text-ink-muted py-1">
         {t('admin.coaches.form.noLanguages')}
       </div>
     );
@@ -123,10 +123,10 @@ function LanguageMultiSelect({ selected, onChange }: LanguageMultiSelectProps) {
             aria-pressed={active}
             className={[
               'px-3 py-1.5 rounded-full font-["Inter"] text-[13px] transition-colors',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand',
               active
-                ? 'bg-[#B8963E] text-white border border-[#B8963E]'
-                : 'bg-white text-[#6B6B6B] border border-[#E8E4DF] hover:border-[#B8963E] hover:text-[#B8963E]',
+                ? 'bg-action text-white border border-brand'
+                : 'bg-white text-ink-soft border border-line hover:border-brand hover:text-brand',
             ].join(' ')}
           >
             {lang.flag ? `${lang.flag} ` : ''}
@@ -291,10 +291,10 @@ function CoachCreateDialog({
               className={[
                 'w-6 h-6 rounded-full flex items-center justify-center font-["Inter"] text-[12px] font-semibold transition-colors',
                 s === step
-                  ? 'bg-[#B8963E] text-white'
+                  ? 'bg-action text-white'
                   : s < step
-                    ? 'bg-[#8A6F2E] text-white'
-                    : 'bg-[#E8E4DF] text-[#8A8A8A]',
+                    ? 'bg-brand-dark text-white'
+                    : 'bg-line text-ink-muted',
               ].join(' ')}
             >
               {s}
@@ -303,13 +303,13 @@ function CoachCreateDialog({
               <div
                 className={[
                   'h-px w-8 transition-colors',
-                  step > s ? 'bg-[#B8963E]' : 'bg-[#E8E4DF]',
+                  step > s ? 'bg-brand' : 'bg-line',
                 ].join(' ')}
               />
             )}
           </div>
         ))}
-        <span className="ml-1 font-['Inter'] text-[12px] text-[#8A8A8A]">
+        <span className="ml-1 font-['Inter'] text-[12px] text-ink-muted">
           {stepLabel}
         </span>
       </div>
@@ -483,9 +483,9 @@ function CoachCreateDialog({
           </AdminFormField>
 
           {/* Accepting clients toggle */}
-          <div className="py-2 px-3 bg-[#F9F6F0] rounded-lg">
+          <div className="py-2 px-3 bg-surface rounded-lg">
             <div className="flex items-center justify-between">
-              <span className="font-['Inter'] text-[14px] text-[#444444]">
+              <span className="font-['Inter'] text-[14px] text-ink">
                 {t('admin.coaches.form.acceptingClients')}
               </span>
               <button
@@ -497,8 +497,8 @@ function CoachCreateDialog({
                 }
                 className={[
                   'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]',
-                  step2.acceptingClients ? 'bg-[#B8963E]' : 'bg-[#DDDDDD]',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand',
+                  step2.acceptingClients ? 'bg-brand' : 'bg-[#DDDDDD]',
                 ].join(' ')}
               >
                 <span
@@ -509,7 +509,7 @@ function CoachCreateDialog({
                 />
               </button>
             </div>
-            <p className="mt-1.5 font-['Inter'] text-[12px] text-[#8A8A8A] leading-snug">
+            <p className="mt-1.5 font-['Inter'] text-[12px] text-ink-muted leading-snug">
               {t('admin.coaches.form.acceptingClientsHelp')}
             </p>
           </div>
@@ -769,9 +769,9 @@ function CoachEditDialog({
       </AdminFormField>
 
       {/* Accepting clients toggle */}
-      <div className="py-2 px-3 bg-[#F9F6F0] rounded-lg">
+      <div className="py-2 px-3 bg-surface rounded-lg">
         <div className="flex items-center justify-between">
-          <span className="font-['Inter'] text-[14px] text-[#444444]">
+          <span className="font-['Inter'] text-[14px] text-ink">
             {t('admin.coaches.form.acceptingClients')}
           </span>
           <button
@@ -781,8 +781,8 @@ function CoachEditDialog({
             onClick={() => setField('acceptingClients', !form.acceptingClients)}
             className={[
               'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]',
-              form.acceptingClients ? 'bg-[#B8963E]' : 'bg-[#DDDDDD]',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand',
+              form.acceptingClients ? 'bg-brand' : 'bg-[#DDDDDD]',
             ].join(' ')}
           >
             <span
@@ -793,7 +793,7 @@ function CoachEditDialog({
             />
           </button>
         </div>
-        <p className="mt-1.5 font-['Inter'] text-[12px] text-[#8A8A8A] leading-snug">
+        <p className="mt-1.5 font-['Inter'] text-[12px] text-ink-muted leading-snug">
           {t('admin.coaches.form.acceptingClientsHelp')}
         </p>
       </div>
@@ -954,10 +954,10 @@ export default function AdminCoaches() {
       header: t('admin.coaches.table.name'),
       render: (c) => (
         <div>
-          <div className="font-['Inter'] text-[14px] font-medium text-[#2D2D2D]">
+          <div className="font-['Inter'] text-[14px] font-medium text-ink">
             {c.fullName}
           </div>
-          <div className="font-['Inter'] text-[12px] text-[#8A8A8A]">
+          <div className="font-['Inter'] text-[12px] text-ink-muted">
             {c.email}
           </div>
         </div>
@@ -967,7 +967,7 @@ export default function AdminCoaches() {
       key: 'phone',
       header: t('admin.coaches.table.phone'),
       render: (c) => (
-        <span className="font-['Inter'] text-[13px] text-[#6B6B6B]">
+        <span className="font-['Inter'] text-[13px] text-ink-soft">
           {c.phone ?? '—'}
         </span>
       ),
@@ -976,7 +976,7 @@ export default function AdminCoaches() {
       key: 'location',
       header: t('admin.coaches.table.location'),
       render: (c) => (
-        <span className="font-['Inter'] text-[13px] text-[#6B6B6B]">
+        <span className="font-['Inter'] text-[13px] text-ink-soft">
           {c.location ?? '—'}
         </span>
       ),
@@ -985,7 +985,7 @@ export default function AdminCoaches() {
       key: 'expertise',
       header: t('admin.coaches.table.expertise'),
       render: (c) => (
-        <span className="font-['Inter'] text-[13px] text-[#6B6B6B]">
+        <span className="font-['Inter'] text-[13px] text-ink-soft">
           {tagsDisplay(c.expertise)}
         </span>
       ),
@@ -1014,7 +1014,7 @@ export default function AdminCoaches() {
             onClick={() => handleOpenEdit(c)}
             title={t('admin.coaches.actions.edit')}
             aria-label={t('admin.coaches.actions.editCoach')}
-            className="p-1.5 rounded text-[#8A8A8A] hover:text-[#B8963E] hover:bg-[#F9F6F0] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
+            className="p-1.5 rounded text-ink-muted hover:text-brand hover:bg-surface transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           >
             <Pencil size={15} />
           </button>
@@ -1033,10 +1033,10 @@ export default function AdminCoaches() {
                 ? t('admin.coaches.actions.archiveCoach')
                 : t('admin.coaches.actions.restoreCoach')
             }
-            className="p-1.5 rounded text-[#8A8A8A] hover:text-[#B8963E] hover:bg-[#F9F6F0] transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
+            className="p-1.5 rounded text-ink-muted hover:text-brand hover:bg-surface transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           >
             {c.isActive ? (
-              <ToggleRight size={17} className="text-[#B8963E]" />
+              <ToggleRight size={17} className="text-brand" />
             ) : (
               <ToggleLeft size={17} />
             )}

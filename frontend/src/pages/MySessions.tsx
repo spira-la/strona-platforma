@@ -32,8 +32,8 @@ export default function MySessions() {
 
   if (isLoading) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-[#FAF8F5]">
-        <p className="text-sm text-[#8A8A8A]">Ladowanie…</p>
+      <main className="min-h-screen flex items-center justify-center bg-surface">
+        <p className="text-sm text-ink-muted">Ladowanie…</p>
       </main>
     );
   }
@@ -69,7 +69,7 @@ function AuthenticatedMySessions({ userId }: { userId: string }) {
   const [rescheduling, setRescheduling] = useState<Booking | null>(null);
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] text-[#2D2D2D] pb-24">
+    <main className="min-h-screen bg-surface text-ink pb-24">
       <SEO title="Moje sesje" canonical="/moje-sesje" noindex />
 
       <section className="px-6 pt-10 pb-6">
@@ -81,7 +81,7 @@ function AuthenticatedMySessions({ userId }: { userId: string }) {
             MOJE SESJE
           </h1>
           <p
-            className="text-sm text-[#6B6B6B]"
+            className="text-sm text-ink-soft"
             style={{ fontFamily: "'Lato', sans-serif" }}
           >
             Twoje nadchodzace i zakonczone sesje.
@@ -93,7 +93,7 @@ function AuthenticatedMySessions({ userId }: { userId: string }) {
         <div className="max-w-[900px] mx-auto flex flex-col gap-6">
           {isLoading && (
             <p
-              className="text-sm text-[#8A8A8A]"
+              className="text-sm text-ink-muted"
               style={{ fontFamily: "'Lato', sans-serif" }}
             >
               Ladowanie…
@@ -166,15 +166,15 @@ function AuthenticatedMySessions({ userId }: { userId: string }) {
 
 function EmptyState() {
   return (
-    <div className="rounded-2xl p-10 text-center border border-[#E8E4DF] bg-white">
+    <div className="rounded-2xl p-10 text-center border border-line bg-white">
       <div
-        className="flex items-center justify-center w-12 h-12 mx-auto rounded-full bg-[rgba(184,148,74,0.1)] text-[#B8944A] mb-3"
+        className="flex items-center justify-center w-12 h-12 mx-auto rounded-full bg-brand/10 text-brand mb-3"
         aria-hidden
       >
         <Calendar size={20} />
       </div>
       <p
-        className="text-sm text-[#6B6B6B] mb-4"
+        className="text-sm text-ink-soft mb-4"
         style={{ fontFamily: "'Lato', sans-serif" }}
       >
         Nie masz jeszcze zadnych sesji.
@@ -183,7 +183,7 @@ function EmptyState() {
         to="/rezerwacja"
         className="inline-block px-6 py-2.5 rounded-lg text-sm font-semibold text-white hover:opacity-90"
         style={{
-          background: 'linear-gradient(135deg, #B8944A 0%, #D4B97A 100%)',
+          background: 'linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-light) 100%)',
           fontFamily: "'Lato', sans-serif",
         }}
       >
@@ -231,16 +231,16 @@ function BookingRow({
         Anulowana
       </span>
     ) : booking.status === 'completed' ? (
-      <span className="text-[11px] font-semibold text-[#8A8A8A] uppercase tracking-wider">
+      <span className="text-[11px] font-semibold text-ink-muted uppercase tracking-wider">
         Zakonczona
       </span>
     ) : null;
 
   return (
-    <article className="rounded-2xl p-5 border border-[#E8E4DF] bg-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <article className="rounded-2xl p-5 border border-line bg-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div className="flex items-start gap-3">
         <div
-          className="flex items-center justify-center w-10 h-10 rounded-full bg-[rgba(184,148,74,0.1)] text-[#B8944A] flex-shrink-0"
+          className="flex items-center justify-center w-10 h-10 rounded-full bg-brand/10 text-brand flex-shrink-0"
           aria-hidden
         >
           <Calendar size={18} />
@@ -255,7 +255,7 @@ function BookingRow({
           </p>
           {booking.rescheduledFrom && (
             <p
-              className="text-xs text-[#8A8A8A] mt-0.5"
+              className="text-xs text-ink-muted mt-0.5"
               style={{ fontFamily: "'Lato', sans-serif" }}
             >
               Przeniesiono z: {formatDateTime(booking.rescheduledFrom)}
@@ -271,7 +271,7 @@ function BookingRow({
               to={`/session/${booking.id}`}
               className="inline-flex items-center gap-1 px-4 py-2 rounded-lg text-xs font-semibold text-white hover:opacity-90"
               style={{
-                background: 'linear-gradient(135deg, #B8944A 0%, #D4B97A 100%)',
+                background: 'linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-light) 100%)',
                 fontFamily: "'Lato', sans-serif",
               }}
             >
@@ -283,7 +283,7 @@ function BookingRow({
             onClick={onReschedule}
             disabled={!canReschedule.data?.canReschedule}
             title={canReschedule.data?.reason}
-            className="inline-flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-semibold border border-[#E8E4DF] text-[#6B6B6B] hover:border-[#B8944A] hover:text-[#B8944A] disabled:opacity-40 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-semibold border border-line text-ink-soft hover:border-brand hover:text-brand disabled:opacity-40 disabled:cursor-not-allowed"
             style={{ fontFamily: "'Lato', sans-serif" }}
           >
             <RotateCcw size={12} /> Przenies
@@ -294,7 +294,7 @@ function BookingRow({
               if (confirm('Anulowac te sesje?')) cancelMutation.mutate();
             }}
             disabled={cancelMutation.isPending}
-            className="inline-flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-semibold border border-[#E8E4DF] text-[#6B6B6B] hover:border-[#C62828] hover:text-[#C62828] disabled:opacity-40"
+            className="inline-flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-semibold border border-line text-ink-soft hover:border-[#C62828] hover:text-[#C62828] disabled:opacity-40"
             style={{ fontFamily: "'Lato', sans-serif" }}
           >
             <X size={12} /> Anuluj
@@ -307,7 +307,7 @@ function BookingRow({
         canReschedule.data &&
         !canReschedule.data.canReschedule && (
           <p
-            className="text-[11px] text-[#8A8A8A] flex items-center gap-1"
+            className="text-[11px] text-ink-muted flex items-center gap-1"
             style={{ fontFamily: "'Lato', sans-serif" }}
           >
             <AlertCircle size={12} />
@@ -361,7 +361,7 @@ function RescheduleDialog({
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl bg-[#FAF8F5] p-6">
+      <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl bg-surface p-6">
         <div className="flex items-center justify-between mb-4">
           <h2
             className="text-xl font-black uppercase tracking-tight"
@@ -380,7 +380,7 @@ function RescheduleDialog({
         </div>
 
         <p
-          className="text-xs text-[#6B6B6B] mb-4"
+          className="text-xs text-ink-soft mb-4"
           style={{ fontFamily: "'Lato', sans-serif" }}
         >
           Obecny termin: {formatDateTime(booking.startTime)}
@@ -399,7 +399,7 @@ function RescheduleDialog({
 
         <div className="mt-4">
           <label
-            className="block text-xs font-semibold uppercase tracking-wider text-[#8A8A8A] mb-1"
+            className="block text-xs font-semibold uppercase tracking-wider text-ink-muted mb-1"
             style={{ fontFamily: "'Lato', sans-serif" }}
           >
             Powod zmiany (opcjonalnie)
@@ -408,7 +408,7 @@ function RescheduleDialog({
             rows={2}
             value={reason}
             onChange={(e) => setReason(e.target.value)}
-            className="w-full rounded-lg border border-[#E8E4DF] p-3 text-sm focus:border-[#B8944A] focus:outline-none"
+            className="w-full rounded-lg border border-line p-3 text-sm focus:border-brand focus:outline-none"
             style={{ fontFamily: "'Lato', sans-serif" }}
           />
         </div>
@@ -426,7 +426,7 @@ function RescheduleDialog({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-lg text-sm font-semibold border border-[#E8E4DF] text-[#6B6B6B] hover:bg-[#F0EDE8]"
+            className="px-4 py-2 rounded-lg text-sm font-semibold border border-line text-ink-soft hover:bg-line-soft"
             style={{ fontFamily: "'Lato', sans-serif" }}
           >
             Anuluj
@@ -437,7 +437,7 @@ function RescheduleDialog({
             disabled={selected.length === 0 || mutation.isPending}
             className="inline-flex items-center gap-1 px-5 py-2 rounded-lg text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
             style={{
-              background: 'linear-gradient(135deg, #B8944A 0%, #D4B97A 100%)',
+              background: 'linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-light) 100%)',
               fontFamily: "'Lato', sans-serif",
             }}
           >

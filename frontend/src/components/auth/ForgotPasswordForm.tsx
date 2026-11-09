@@ -40,13 +40,13 @@ export function ForgotPasswordForm() {
   if (success) {
     return (
       <div className="flex flex-col items-center gap-4 py-4 text-center">
-        <div className="w-14 h-14 rounded-full bg-[#B8944A]/10 flex items-center justify-center">
+        <div className="w-14 h-14 rounded-full bg-brand/10 flex items-center justify-center">
           <svg
             width="28"
             height="28"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#B8944A"
+            stroke="var(--color-brand)"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -55,17 +55,17 @@ export function ForgotPasswordForm() {
             <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
           </svg>
         </div>
-        <h2 className="font-['Cormorant_Garamond'] text-[24px] font-bold text-[#2D2D2D]">
+        <h2 className="font-['Cormorant_Garamond'] text-[24px] font-bold text-ink">
           Sprawdź swoją skrzynkę
         </h2>
-        <p className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-relaxed max-w-[320px]">
+        <p className="font-['Lato'] text-[14px] text-ink-soft leading-relaxed max-w-[320px]">
           Jeśli konto z tym adresem istnieje, wysłaliśmy link do zresetowania
           hasła.
         </p>
         <button
           type="button"
           onClick={openLogin}
-          className="font-['Lato'] text-[14px] font-semibold text-[#B8944A] hover:underline mt-2"
+          className="font-['Lato'] text-[14px] font-semibold text-brand hover:underline mt-2"
         >
           Wróć do logowania
         </button>
@@ -76,10 +76,10 @@ export function ForgotPasswordForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
       <div className="text-center mb-2">
-        <h2 className="font-['Cormorant_Garamond'] text-[28px] font-bold text-[#2D2D2D]">
+        <h2 className="font-['Cormorant_Garamond'] text-[28px] font-bold text-ink">
           Resetuj hasło
         </h2>
-        <p className="font-['Lato'] text-[14px] text-[#8A8A8A] mt-1">
+        <p className="font-['Lato'] text-[14px] text-ink-muted mt-1">
           Podaj swój adres e-mail, a wyślemy Ci link do zresetowania hasła
         </p>
       </div>
@@ -93,7 +93,7 @@ export function ForgotPasswordForm() {
       <div className="flex flex-col gap-1.5">
         <label
           htmlFor="forgot-email"
-          className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D]"
+          className="font-['Lato'] text-[13px] font-medium text-ink"
         >
           Adres e-mail
         </label>
@@ -102,7 +102,7 @@ export function ForgotPasswordForm() {
           type="email"
           autoComplete="email"
           {...register('email')}
-          className="font-['Lato'] text-[14px] text-[#2D2D2D] bg-white border border-[#E8E4DF] rounded-lg px-4 py-3 outline-none transition-colors focus:border-[#B8944A] focus:ring-2 focus:ring-[#B8944A]/20 placeholder:text-[#AAAAAA]"
+          className="font-['Lato'] text-[14px] text-ink bg-white border border-line rounded-lg px-4 py-3 outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20 placeholder:text-[#AAAAAA]"
           placeholder="twoj@email.com"
         />
         {errors.email && (
@@ -115,17 +115,17 @@ export function ForgotPasswordForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="font-['Lato'] text-[15px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] disabled:opacity-60 disabled:cursor-not-allowed transition-colors duration-200 rounded-lg px-6 py-3 mt-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
+        className="font-['Lato'] text-[15px] font-semibold text-white bg-action hover:bg-action-hover disabled:opacity-60 disabled:cursor-not-allowed transition-colors duration-200 rounded-lg px-6 py-3 mt-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
       >
         {isSubmitting ? 'Wysyłanie...' : 'Wyślij link'}
       </button>
 
-      <p className="text-center font-['Lato'] text-[13px] text-[#8A8A8A]">
+      <p className="text-center font-['Lato'] text-[13px] text-ink-muted">
         Pamiętasz hasło?{' '}
         <button
           type="button"
           onClick={openLogin}
-          className="text-[#B8944A] font-semibold hover:underline focus-visible:outline-none focus-visible:underline"
+          className="text-brand font-semibold hover:underline focus-visible:outline-none focus-visible:underline"
         >
           Zaloguj się
         </button>

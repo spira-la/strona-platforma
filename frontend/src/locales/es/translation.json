@@ -24,7 +24,9 @@
     "readMore": "Leer más",
     "saved": "Guardado",
     "done": "Listo",
-    "video": "Vídeo"
+    "video": "Vídeo",
+    "start": "Inicio",
+    "events": "Eventos"
   },
   "cms": {
     "changeImage": "Cambiar",
@@ -382,7 +384,8 @@
         "business": "Negocio",
         "system": "Sistema",
         "catalog": "Catálogo"
-      }
+      },
+      "events": "Eventos"
     },
     "dashboard": {
       "title": "Panel",
@@ -905,6 +908,101 @@
         "updateFailed": "Error al actualizar el cupón:",
         "deleteFailed": "Error al eliminar el cupón:",
         "unknown": "Error desconocido"
+      }
+    },
+    "events": {
+      "title": "Eventos",
+      "description": "Añade talleres y encuentros: aparecen en la página /wydarzenia y la gente se inscribe con un formulario de e-mail.",
+      "newEvent": "Nuevo evento",
+      "editEvent": "Editar evento",
+      "online": "Online",
+      "searchPlaceholder": "Buscar por título…",
+      "searchLabel": "Buscar eventos",
+      "stats": {
+        "upcoming": "Próximos",
+        "registrations": "Inscripciones a próximos",
+        "drafts": "Borradores"
+      },
+      "filter": {
+        "upcoming": "Próximos",
+        "drafts": "Borradores",
+        "past": "Pasados"
+      },
+      "table": {
+        "label": "Lista de eventos",
+        "date": "Fecha",
+        "title": "Título",
+        "place": "Lugar",
+        "registrations": "Inscripciones",
+        "status": "Estado",
+        "actions": "Acciones"
+      },
+      "status": {
+        "published": "Publicado",
+        "draft": "Borrador",
+        "closed": "Inscripciones cerradas"
+      },
+      "actions": {
+        "edit": "Editar",
+        "registrations": "Ver inscripciones",
+        "publish": "Publicar",
+        "unpublish": "Ocultar del sitio",
+        "delete": "Eliminar evento"
+      },
+      "confirm": {
+        "delete": "¿Seguro que quieres eliminar el evento",
+        "deleteWithRegistrations": "También se eliminarán sus inscripciones ({{count}}) y no se puede deshacer."
+      },
+      "empty": {
+        "noEvents": "Aún no hay eventos. ¡Añade el primero!",
+        "noResults": "No hay resultados para esta búsqueda."
+      },
+      "errors": {
+        "loadFailed": "No se pudieron cargar los eventos."
+      },
+      "validation": {
+        "titleRequired": "Escribe un título (mín. 2 caracteres)",
+        "startRequired": "Indica la fecha y hora de inicio",
+        "endBeforeStart": "El final debe ser posterior al inicio",
+        "capacityPositive": "El número de plazas debe ser mayor que cero"
+      },
+      "form": {
+        "title": "Título",
+        "titlePlaceholder": "p. ej. Taller «Vivir en el ahora»",
+        "startsAt": "Inicio",
+        "endsAt": "Fin (opcional)",
+        "isOnline": "Evento online",
+        "location": "Lugar",
+        "locationPlaceholder": "p. ej. Cracovia, calle Słoneczna 5",
+        "locationOnline": "Plataforma (opcional)",
+        "locationOnlinePlaceholder": "p. ej. Zoom — enlace por e-mail",
+        "price": "Precio (opcional)",
+        "pricePlaceholder": "p. ej. 150 zł o Gratis",
+        "capacity": "Número de plazas (opcional)",
+        "capacityPlaceholder": "sin límite",
+        "description": "Descripción",
+        "descriptionPlaceholder": "Cuenta de qué trata el encuentro, para quién es y qué traer…",
+        "image": "Foto (opcional)",
+        "addImage": "Añadir foto",
+        "uploading": "Subiendo…",
+        "removeImage": "Quitar foto",
+        "imageHint": "Sin foto se muestra una ilustración en acuarela.",
+        "isPublished": "Visible en el sitio",
+        "isPublishedHint": "Desactívalo para guardarlo como borrador.",
+        "registrationOpen": "Inscripciones abiertas",
+        "registrationOpenHint": "Desactívalo cuando ya no aceptes inscripciones.",
+        "save": "Guardar cambios",
+        "create": "Añadir evento"
+      },
+      "registrations": {
+        "title": "Inscripciones",
+        "count": "Inscritos: {{count}} / {{capacity}}",
+        "empty": "Todavía no se ha inscrito nadie.",
+        "copyEmails": "Copiar direcciones de e-mail",
+        "copied": "Direcciones copiadas: pégalas en el campo CCO de tu correo.",
+        "close": "Cerrar",
+        "remove": "Eliminar inscripción",
+        "confirmRemove": "¿Seguro que quieres eliminar la inscripción de"
       }
     }
   }

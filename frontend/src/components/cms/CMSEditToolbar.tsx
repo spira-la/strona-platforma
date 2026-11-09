@@ -21,11 +21,11 @@ export function CMSEditToolbar() {
         onClick={() => setEditMode(!isEditMode)}
         className={`
           flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium shadow-lg
-          transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]/60
+          transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60
           ${
             isEditMode
-              ? 'bg-[#B8963E] text-white hover:bg-[#8A6F2E]'
-              : 'bg-white text-[#B8963E] border border-[#B8963E] hover:bg-[#F9F6F0]'
+              ? 'bg-action text-white hover:bg-action-hover'
+              : 'bg-white text-brand border border-brand hover:bg-surface'
           }
         `}
         aria-pressed={isEditMode}

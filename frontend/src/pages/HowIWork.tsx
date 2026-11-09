@@ -22,7 +22,7 @@ import ane3Photo from '@/assets/Ane3.jpg';
 function SectionBadge({ label }: { label: string }) {
   return (
     <span
-      className="inline-block px-4 py-1 text-xs font-semibold uppercase tracking-widest rounded-full border border-[#D4B97A] text-[#B8944A] bg-[rgba(184,148,74,0.08)]"
+      className="inline-block px-4 py-1 text-xs font-semibold uppercase tracking-widest rounded-full border border-brand-light text-brand bg-brand/8"
       style={{ fontFamily: "'Lato', sans-serif" }}
     >
       {label}
@@ -48,9 +48,9 @@ function PrincipleCard({
   descPlaceholder,
 }: PrincipleCardProps) {
   return (
-    <div className="h-full flex flex-col gap-4 p-6 rounded-lg bg-[#FAF8F5] border border-[#F0EDE8]">
+    <div className="h-full flex flex-col gap-4 p-6 rounded-lg bg-surface border border-line-soft">
       <div
-        className="flex items-center justify-center w-12 h-12 rounded-xl bg-[rgba(184,148,74,0.1)] text-[#B8944A]"
+        className="flex items-center justify-center w-12 h-12 rounded-xl bg-brand/10 text-brand"
         aria-hidden="true"
       >
         {icon}
@@ -60,14 +60,14 @@ function PrincipleCard({
         fieldPath={titleField}
         as="h3"
         placeholder={titlePlaceholder}
-        className="text-base font-bold uppercase tracking-wide text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
+        className="text-base font-bold uppercase tracking-wide text-ink [font-family:'Cormorant_Garamond',serif]"
       />
       <EditableText
         section={section}
         fieldPath={descField}
         as="p"
         placeholder={descPlaceholder}
-        className="text-sm leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+        className="text-sm leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
       />
     </div>
   );
@@ -95,12 +95,12 @@ function ProcessStep({
   return (
     <li className="flex gap-5">
       <div className="flex flex-col items-center flex-shrink-0">
-        <div className="flex items-center justify-center w-10 h-10 rounded-full text-sm font-bold z-10 bg-[#B8944A] text-white [font-family:'Lato',sans-serif]">
+        <div className="flex items-center justify-center w-10 h-10 rounded-full text-sm font-bold z-10 bg-action text-white [font-family:'Lato',sans-serif]">
           {number}
         </div>
         {!isLast && (
           <div
-            className="w-px flex-1 mt-1 bg-[#E8E4DF]"
+            className="w-px flex-1 mt-1 bg-line"
             style={{ minHeight: '40px' }}
             aria-hidden="true"
           />
@@ -113,14 +113,14 @@ function ProcessStep({
           fieldPath={titleField}
           as="h3"
           placeholder={titlePlaceholder}
-          className="text-base font-bold uppercase tracking-wide pt-1.5 text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
+          className="text-base font-bold uppercase tracking-wide pt-1.5 text-ink [font-family:'Cormorant_Garamond',serif]"
         />
         <EditableText
           section={section}
           fieldPath={descField}
           as="p"
           placeholder={descPlaceholder}
-          className="text-sm leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+          className="text-sm leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
         />
       </div>
     </li>
@@ -145,10 +145,10 @@ function FaqItem({
   const [open, setOpen] = useState(false);
 
   return (
-    <li className="rounded-xl overflow-hidden border border-[#E8E4DF]">
+    <li className="rounded-xl overflow-hidden border border-line">
       <button
         type="button"
-        className={`w-full flex items-center justify-between gap-4 px-6 py-4 text-left transition-colors hover:bg-[#FAF8F5] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A]/50 ${open ? 'bg-[#FAF8F5]' : 'bg-white'}`}
+        className={`w-full flex items-center justify-between gap-4 px-6 py-4 text-left transition-colors hover:bg-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-brand/50 ${open ? 'bg-surface' : 'bg-white'}`}
         aria-expanded={open}
         onClick={() => setOpen((prev) => !prev)}
       >
@@ -157,24 +157,24 @@ function FaqItem({
           fieldPath={questionField}
           as="span"
           placeholder={questionPlaceholder}
-          className="text-sm font-semibold text-[#2D2D2D] [font-family:'Lato',sans-serif]"
+          className="text-sm font-semibold text-ink [font-family:'Lato',sans-serif]"
         />
         <ChevronDown
           size={18}
           aria-hidden="true"
-          className="flex-shrink-0 text-[#B8944A] transition-transform duration-200"
+          className="flex-shrink-0 text-brand transition-transform duration-200"
           style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}
         />
       </button>
 
       {open && (
-        <div className="px-6 py-4 bg-[#FAF8F5]">
+        <div className="px-6 py-4 bg-surface">
           <EditableText
             section={section}
             fieldPath={answerField}
             as="p"
             placeholder={answerPlaceholder}
-            className="text-sm leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+            className="text-sm leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
           />
         </div>
       )}
@@ -188,7 +188,7 @@ function FaqItem({
 
 export default function HowIWork() {
   return (
-    <main className="min-h-screen bg-white text-[#2D2D2D]">
+    <main className="min-h-screen bg-white text-ink">
       <SEO
         title="Jak pracuję"
         description="Jak przebiega coaching z Anetą? Poznaj moje podejście — od pierwszej rozmowy do trwałej zmiany. Praca oparta na uważności, sile wewnętrznej i sprawdzonych metodach."
@@ -245,7 +245,7 @@ export default function HowIWork() {
       {/* METHODOLOGY — 2 cards with nature images                            */}
       {/* ------------------------------------------------------------------ */}
       <section
-        className="px-6 py-16 sm:py-24 bg-[#FAF8F5]"
+        className="px-6 py-16 sm:py-24 bg-surface"
         aria-label="Metodologia"
       >
         <div className="max-w-[1024px] mx-auto">
@@ -257,14 +257,14 @@ export default function HowIWork() {
                 fieldPath="methodHeading"
                 as="h2"
                 placeholder="MOJA METODOLOGIA"
-                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
+                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-ink [font-family:'Cormorant_Garamond',serif]"
               />
               <EditableText
                 section="howIWork"
                 fieldPath="methodSubtitle"
                 as="p"
                 placeholder="Łączę podejście somatyczne z psychobiologią i coachingiem transformacyjnym — by dotrzeć do źródeł wzorców, które kierują Twoim życiem."
-                className="text-sm sm:text-base leading-relaxed max-w-[576px] text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                className="text-sm sm:text-base leading-relaxed max-w-[576px] text-ink-soft [font-family:'Lato',sans-serif]"
               />
             </div>
           </ScrollReveal>
@@ -274,7 +274,7 @@ export default function HowIWork() {
             <ScrollReveal
               animation="fade-up"
               delay={stagger(0)}
-              className="rounded-lg overflow-hidden flex flex-col border border-[#E8E4DF] bg-white"
+              className="rounded-lg overflow-hidden flex flex-col border border-line bg-white"
             >
               <div className="relative h-52 overflow-hidden">
                 <EditableImage
@@ -299,14 +299,14 @@ export default function HowIWork() {
                   fieldPath="method1Title"
                   as="h3"
                   placeholder="PODEJŚCIE SOMATYCZNE"
-                  className="text-base font-bold uppercase tracking-wide text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
+                  className="text-base font-bold uppercase tracking-wide text-ink [font-family:'Cormorant_Garamond',serif]"
                 />
                 <EditableText
                   section="howIWork"
                   fieldPath="method1Desc"
                   as="p"
                   placeholder="Pracuję z sygnałami płynącymi z ciała jako kluczem do rozumienia emocji i wzorców zachowań. Układ nerwowy jest pierwszym miejscem, gdzie zapisuje się każde przeżycie — i pierwszym miejscem prawdziwej zmiany."
-                  className="text-sm leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                  className="text-sm leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
                 />
               </div>
             </ScrollReveal>
@@ -315,7 +315,7 @@ export default function HowIWork() {
             <ScrollReveal
               animation="fade-up"
               delay={stagger(1)}
-              className="rounded-lg overflow-hidden flex flex-col border border-[#E8E4DF] bg-white"
+              className="rounded-lg overflow-hidden flex flex-col border border-line bg-white"
             >
               <div className="relative h-52 overflow-hidden">
                 <EditableImage
@@ -340,14 +340,14 @@ export default function HowIWork() {
                   fieldPath="method2Title"
                   as="h3"
                   placeholder="COACHING TRANSFORMACYJNY"
-                  className="text-base font-bold uppercase tracking-wide text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
+                  className="text-base font-bold uppercase tracking-wide text-ink [font-family:'Cormorant_Garamond',serif]"
                 />
                 <EditableText
                   section="howIWork"
                   fieldPath="method2Desc"
                   as="p"
                   placeholder="Zamiast dawać gotowe odpowiedzi, towarzyszę Ci w odkrywaniu własnych. Razem badamy przekonania, wartości i ograniczające wzorce — i budujemy nowy sposób bycia w świecie."
-                  className="text-sm leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                  className="text-sm leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
                 />
               </div>
             </ScrollReveal>
@@ -371,7 +371,7 @@ export default function HowIWork() {
                 fieldPath="processHeading"
                 as="h2"
                 placeholder="TWOJA DROGA — OD PIERWSZEGO KONTAKTU DO TRANSFORMACJI"
-                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
+                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-ink [font-family:'Cormorant_Garamond',serif]"
               />
             </div>
           </ScrollReveal>
@@ -423,7 +423,7 @@ export default function HowIWork() {
       {/* PRINCIPLES — grid of value cards                                    */}
       {/* ------------------------------------------------------------------ */}
       <section
-        className="px-6 py-16 sm:py-24 bg-[#F5F3EF]"
+        className="px-6 py-16 sm:py-24 bg-surface-alt"
         aria-label="Zasady pracy"
       >
         <div className="max-w-[1024px] mx-auto">
@@ -435,7 +435,7 @@ export default function HowIWork() {
                 fieldPath="principlesHeading"
                 as="h2"
                 placeholder="CO JEST DLA MNIE WAŻNE W PRACY"
-                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
+                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-ink [font-family:'Cormorant_Garamond',serif]"
               />
             </div>
           </ScrollReveal>
@@ -501,14 +501,14 @@ export default function HowIWork() {
                 fieldPath="faqHeading"
                 as="h2"
                 placeholder="CZEGO SPODZIEWAĆ SIĘ NA SESJI?"
-                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
+                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-ink [font-family:'Cormorant_Garamond',serif]"
               />
               <EditableText
                 section="howIWork"
                 fieldPath="faqSubtitle"
                 as="p"
                 placeholder="Kilka pytań, które najczęściej pojawiają się przed pierwszą sesją."
-                className="text-sm sm:text-base leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                className="text-sm sm:text-base leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
               />
             </div>
           </ScrollReveal>
@@ -604,7 +604,7 @@ export default function HowIWork() {
               section="howIWork"
               fieldPath="ctaBtn1"
               defaultAction="calendly"
-              className="items-center justify-center px-8 py-3 rounded-lg text-sm font-semibold bg-[#B8944A] text-white transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A] [font-family:'Lato',sans-serif]"
+              className="items-center justify-center px-8 py-3 rounded-lg text-sm font-semibold bg-action text-white transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand [font-family:'Lato',sans-serif]"
             >
               <EditableText
                 section="howIWork"

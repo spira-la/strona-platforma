@@ -43,14 +43,14 @@ function slugify(text: string): string {
 // ─── Shared input class ───────────────────────────────────────────────────────
 
 const INPUT_CLASS = [
-  'w-full px-3 py-2 rounded-lg border border-[#E8E4DF] bg-white',
-  "font-['Inter'] text-[14px] text-[#2D2D2D] placeholder:text-[#AAAAAA]",
+  'w-full px-3 py-2 rounded-lg border border-line bg-white',
+  "font-['Inter'] text-[14px] text-ink placeholder:text-[#AAAAAA]",
   'focus:outline-none focus:ring-2 focus:ring-[#0D9488]/30 focus:border-[#0D9488]',
   'transition-colors',
 ].join(' ');
 
 const LABEL_CLASS =
-  "block font-['Inter'] text-[13px] font-medium text-[#444444] mb-1.5";
+  "block font-['Inter'] text-[13px] font-medium text-ink mb-1.5";
 
 // ─── BlogEditor ───────────────────────────────────────────────────────────────
 
@@ -274,11 +274,11 @@ export default function CoachBlogEditor() {
             type="button"
             onClick={() => navigate('/coach/blog')}
             aria-label={t('coach.blogEditor.back')}
-            className="flex items-center justify-center w-8 h-8 rounded-lg border border-[#E8E4DF] text-[#6B6B6B] hover:text-[#0D9488] hover:border-[#0D9488]/30 hover:bg-[#F0FDFA] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488] shrink-0"
+            className="flex items-center justify-center w-8 h-8 rounded-lg border border-line text-ink-soft hover:text-[#0D9488] hover:border-[#0D9488]/30 hover:bg-[#F0FDFA] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488] shrink-0"
           >
             <ArrowLeft size={16} />
           </button>
-          <h1 className="font-['Cormorant_Garamond',serif] font-bold text-2xl text-[#2D2D2D] leading-tight truncate">
+          <h1 className="font-['Cormorant_Garamond',serif] font-bold text-2xl text-ink leading-tight truncate">
             {isEditMode
               ? t('coach.blogEditor.editTitle')
               : t('coach.blogEditor.newTitle')}
@@ -291,7 +291,7 @@ export default function CoachBlogEditor() {
           <div
             role="group"
             aria-label={t('coach.blogEditor.statusLabel')}
-            className="inline-flex rounded-lg border border-[#E8E4DF] bg-[#FAF8F5] p-0.5 gap-0.5"
+            className="inline-flex rounded-lg border border-line bg-surface p-0.5 gap-0.5"
           >
             {(
               [
@@ -313,14 +313,14 @@ export default function CoachBlogEditor() {
                 aria-pressed={status === value}
                 className={[
                   "px-3 py-1 rounded-md font-['Inter'] text-[13px] font-medium transition-colors duration-150",
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E] focus-visible:ring-offset-1',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-1',
                   status === value && value === 'published'
-                    ? 'bg-[#B8963E] text-white shadow-sm'
+                    ? 'bg-action text-white shadow-sm'
                     : status === value && value === 'draft'
-                      ? 'bg-white text-[#B8963E] shadow-sm border border-[#E8E4DF]'
+                      ? 'bg-white text-brand shadow-sm border border-line'
                       : status === value && value === 'archived'
-                        ? 'bg-[#6B6B6B] text-white shadow-sm'
-                        : 'text-[#6B6B6B] hover:text-[#2D2D2D]',
+                        ? 'bg-ink-soft text-white shadow-sm'
+                        : 'text-ink-soft hover:text-ink',
                 ].join(' ')}
               >
                 {t(labelKey)}
@@ -369,7 +369,7 @@ export default function CoachBlogEditor() {
         <div className="flex-1 min-w-0">
           {/* Language tabs */}
           {isEditMode && (
-            <div className="flex items-center gap-1 mb-4 border-b border-[#E8E4DF]">
+            <div className="flex items-center gap-1 mb-4 border-b border-line">
               {(
                 [
                   { code: 'pl', label: '🇵🇱 Polski', isOriginal: true },
@@ -389,12 +389,12 @@ export default function CoachBlogEditor() {
                       "px-4 py-2 font-['Inter'] text-[13px] font-medium transition-colors -mb-px border-b-2",
                       activeLangTab === code
                         ? 'border-[#0D9488] text-[#0D9488]'
-                        : 'border-transparent text-[#8A8A8A] hover:text-[#2D2D2D]',
+                        : 'border-transparent text-ink-muted hover:text-ink',
                     ].join(' ')}
                   >
                     {label}
                     {isOriginal && (
-                      <span className="ml-1.5 text-[10px] font-semibold text-[#B8963E]">
+                      <span className="ml-1.5 text-[10px] font-semibold text-brand">
                         ORG
                       </span>
                     )}
@@ -402,7 +402,7 @@ export default function CoachBlogEditor() {
                       <span className="ml-1.5 inline-block w-1.5 h-1.5 rounded-full bg-green-500" />
                     )}
                     {!isOriginal && !hasTranslation && (
-                      <span className="ml-1.5 inline-block w-1.5 h-1.5 rounded-full bg-[#E8E4DF]" />
+                      <span className="ml-1.5 inline-block w-1.5 h-1.5 rounded-full bg-line" />
                     )}
                   </button>
                 );
@@ -419,8 +419,8 @@ export default function CoachBlogEditor() {
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder={t('coach.blogEditor.titlePlaceholder')}
                 className={[
-                  'w-full mb-4 px-0 py-2 bg-transparent border-0 border-b-2 border-[#E8E4DF]',
-                  "font-['Cormorant_Garamond',serif] text-[28px] font-bold text-[#2D2D2D] placeholder:text-[#CCCCCC]",
+                  'w-full mb-4 px-0 py-2 bg-transparent border-0 border-b-2 border-line',
+                  "font-['Cormorant_Garamond',serif] text-[28px] font-bold text-ink placeholder:text-[#CCCCCC]",
                   'focus:outline-none focus:border-[#0D9488]',
                   'transition-colors duration-150',
                 ].join(' ')}
@@ -440,7 +440,7 @@ export default function CoachBlogEditor() {
               {activeTranslation ? (
                 <div className="flex flex-col gap-4">
                   <div className="flex items-center justify-between">
-                    <span className="font-['Inter'] text-[11px] text-[#8A8A8A]">
+                    <span className="font-['Inter'] text-[11px] text-ink-muted">
                       {activeTranslation.isAutoTranslated
                         ? t('coach.blogEditor.autoTranslated', {
                             defaultValue: 'Tłumaczenie automatyczne',
@@ -472,7 +472,7 @@ export default function CoachBlogEditor() {
                         })
                       }
                       disabled={translateMutation.isPending}
-                      className="px-3 py-1 rounded-md font-['Inter'] text-[11px] font-medium text-[#6B6B6B] bg-gray-100 hover:bg-gray-200 transition-colors disabled:opacity-50"
+                      className="px-3 py-1 rounded-md font-['Inter'] text-[11px] font-medium text-ink-soft bg-gray-100 hover:bg-gray-200 transition-colors disabled:opacity-50"
                     >
                       {translateMutation.isPending ? (
                         <Loader2 size={12} className="animate-spin inline" />
@@ -483,7 +483,7 @@ export default function CoachBlogEditor() {
                       )}
                     </button>
                   </div>
-                  <h2 className="font-['Cormorant_Garamond',serif] text-[28px] font-bold text-[#2D2D2D] border-b-2 border-[#E8E4DF] pb-2">
+                  <h2 className="font-['Cormorant_Garamond',serif] text-[28px] font-bold text-ink border-b-2 border-line pb-2">
                     {activeTranslation.title ?? '—'}
                   </h2>
                   <div
@@ -497,8 +497,8 @@ export default function CoachBlogEditor() {
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
-                  <Languages size={32} className="text-[#E8E4DF]" />
-                  <p className="font-['Inter'] text-[14px] text-[#8A8A8A]">
+                  <Languages size={32} className="text-line" />
+                  <p className="font-['Inter'] text-[14px] text-ink-muted">
                     {t('coach.blogEditor.noTranslation', {
                       defaultValue:
                         'Brak tłumaczenia. Zostanie utworzone automatycznie po zapisaniu posta w języku polskim.',
@@ -533,8 +533,8 @@ export default function CoachBlogEditor() {
         {/* Sidebar */}
         <aside className="w-full lg:w-72 xl:w-80 shrink-0 flex flex-col gap-5">
           {/* Cover image */}
-          <div className="bg-white border border-[#E8E4DF] rounded-xl p-4">
-            <h2 className="font-['Inter'] text-[13px] font-semibold text-[#444444] mb-3">
+          <div className="bg-white border border-line rounded-xl p-4">
+            <h2 className="font-['Inter'] text-[13px] font-semibold text-ink mb-3">
               {t('coach.blogEditor.coverImage')}
             </h2>
 
@@ -543,7 +543,7 @@ export default function CoachBlogEditor() {
                 <img
                   src={coverImageUrl}
                   alt={t('coach.blogEditor.coverImage')}
-                  className="w-full aspect-video object-cover rounded-lg border border-[#E8E4DF]"
+                  className="w-full aspect-video object-cover rounded-lg border border-line"
                 />
                 <button
                   type="button"
@@ -561,7 +561,7 @@ export default function CoachBlogEditor() {
                 disabled={isUploadingCover}
                 className={[
                   'w-full aspect-video flex flex-col items-center justify-center gap-2',
-                  'rounded-lg border-2 border-dashed border-[#E8E4DF]',
+                  'rounded-lg border-2 border-dashed border-line',
                   'text-[#AAAAAA] hover:text-[#0D9488] hover:border-[#0D9488]/40 hover:bg-[#F0FDFA]',
                   'transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]',
                   'disabled:opacity-50 disabled:cursor-not-allowed',
@@ -591,7 +591,7 @@ export default function CoachBlogEditor() {
           </div>
 
           {/* Excerpt */}
-          <div className="bg-white border border-[#E8E4DF] rounded-xl p-4">
+          <div className="bg-white border border-line rounded-xl p-4">
             <label htmlFor="blog-excerpt" className={LABEL_CLASS}>
               {t('coach.blogEditor.excerpt')}
             </label>
@@ -611,7 +611,7 @@ export default function CoachBlogEditor() {
           </div>
 
           {/* Categories */}
-          <div className="bg-white border border-[#E8E4DF] rounded-xl p-4">
+          <div className="bg-white border border-line rounded-xl p-4">
             <h2 className={LABEL_CLASS}>
               {t('coach.blogEditor.categories', { defaultValue: 'Kategorie' })}
             </h2>
@@ -635,7 +635,7 @@ export default function CoachBlogEditor() {
                         "font-['Inter'] text-[13px] transition-colors",
                         isSelected
                           ? 'bg-[#F0FDFA] text-[#0D9488] border border-[#0D9488]/20'
-                          : 'text-[#6B6B6B] hover:bg-[#FAF8F5] border border-transparent',
+                          : 'text-ink-soft hover:bg-surface border border-transparent',
                       ].join(' ')}
                     >
                       <span
@@ -658,8 +658,8 @@ export default function CoachBlogEditor() {
 
           {/* Translations */}
           {isEditMode && (
-            <div className="bg-white border border-[#E8E4DF] rounded-xl p-4">
-              <h2 className="font-['Inter'] text-[13px] font-semibold text-[#444444] mb-3 flex items-center gap-2">
+            <div className="bg-white border border-line rounded-xl p-4">
+              <h2 className="font-['Inter'] text-[13px] font-semibold text-ink mb-3 flex items-center gap-2">
                 <Languages size={14} />
                 {t('coach.blogEditor.translations', {
                   defaultValue: 'Tłumaczenia',
@@ -677,16 +677,16 @@ export default function CoachBlogEditor() {
                   return (
                     <div
                       key={code}
-                      className="flex items-center justify-between gap-2 px-3 py-2 rounded-lg border border-[#E8E4DF] bg-[#FAF8F5]"
+                      className="flex items-center justify-between gap-2 px-3 py-2 rounded-lg border border-line bg-surface"
                     >
                       <div className="flex items-center gap-2 min-w-0">
                         <span className="text-[16px]">{flag}</span>
                         <div className="flex flex-col min-w-0">
-                          <span className="font-['Inter'] text-[13px] font-medium text-[#2D2D2D]">
+                          <span className="font-['Inter'] text-[13px] font-medium text-ink">
                             {label}
                           </span>
                           {existing && (
-                            <span className="font-['Inter'] text-[10px] text-[#8A8A8A] truncate">
+                            <span className="font-['Inter'] text-[10px] text-ink-muted truncate">
                               {new Date(
                                 existing.translatedAt,
                               ).toLocaleDateString('pl-PL', {
@@ -721,7 +721,7 @@ export default function CoachBlogEditor() {
                             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]',
                             'disabled:opacity-50 disabled:cursor-not-allowed',
                             existing
-                              ? 'text-[#6B6B6B] bg-gray-100 hover:bg-gray-200'
+                              ? 'text-ink-soft bg-gray-100 hover:bg-gray-200'
                               : 'text-white bg-[#0D9488] hover:bg-[#0F766E]',
                           ].join(' ')}
                         >
@@ -755,7 +755,7 @@ export default function CoachBlogEditor() {
           )}
 
           {/* Slug */}
-          <div className="bg-white border border-[#E8E4DF] rounded-xl p-4">
+          <div className="bg-white border border-line rounded-xl p-4">
             <label htmlFor="blog-slug" className={LABEL_CLASS}>
               {t('coach.blogEditor.slug')}
             </label>

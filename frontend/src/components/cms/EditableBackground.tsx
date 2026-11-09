@@ -180,7 +180,7 @@ export function EditableBackground({
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={isUploading}
-          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-black/70 text-white text-[11px] font-medium hover:bg-[#B8963E] transition-colors disabled:cursor-not-allowed backdrop-blur-sm shadow-lg border border-white/20"
+          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-black/70 text-white text-[11px] font-medium hover:bg-brand transition-colors disabled:cursor-not-allowed backdrop-blur-sm shadow-lg border border-white/20"
         >
           <Camera size={12} />
           {t('cms.changeBackground')}
@@ -191,7 +191,7 @@ export function EditableBackground({
           type="button"
           onClick={() => setShowControls(!showControls)}
           className={`flex items-center justify-center w-7 h-7 rounded-md text-white transition-colors backdrop-blur-sm shadow-lg border border-white/20 ${
-            showControls ? 'bg-[#B8963E]' : 'bg-black/70 hover:bg-[#B8963E]'
+            showControls ? 'bg-brand' : 'bg-black/70 hover:bg-brand'
           }`}
           title={t('cms.positionAndSize')}
         >
@@ -224,7 +224,7 @@ export function EditableBackground({
       {/* Position & Fit panel */}
       {showControls && (
         <div
-          className="absolute bottom-12 right-3 z-40 bg-white rounded-xl shadow-2xl p-3 pb-2 flex flex-col gap-3 border border-[#E8E4DF]"
+          className="absolute bottom-12 right-3 z-40 bg-white rounded-xl shadow-2xl p-3 pb-2 flex flex-col gap-3 border border-line"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex items-start gap-4">
@@ -233,10 +233,10 @@ export function EditableBackground({
               {/* Horizontal */}
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter']">
+                  <p className="text-[10px] font-semibold text-ink-soft uppercase tracking-wider font-['Inter']">
                     {t('cms.horizontal')}
                   </p>
-                  <span className="text-[10px] text-[#8A8A8A] font-['Inter'] font-medium">
+                  <span className="text-[10px] text-ink-muted font-['Inter'] font-medium">
                     {parsePosition(bgPosition).x}%
                   </span>
                 </div>
@@ -251,8 +251,8 @@ export function EditableBackground({
                     const y = parsePosition(bgPosition).y;
                     void handlePositionChange(`${x}% ${y}%`);
                   }}
-                  className="w-full h-1.5 rounded-full appearance-none bg-gray-200 accent-[#B8963E] cursor-pointer"
-                  style={{ accentColor: '#B8963E' }}
+                  className="w-full h-1.5 rounded-full appearance-none bg-gray-200 accent-brand cursor-pointer"
+                  style={{ accentColor: 'var(--color-brand)' }}
                 />
                 <div className="flex justify-between text-[9px] text-[#AAAAAA] font-['Inter'] mt-0.5">
                   <span>←</span>
@@ -262,10 +262,10 @@ export function EditableBackground({
               {/* Vertical */}
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter']">
+                  <p className="text-[10px] font-semibold text-ink-soft uppercase tracking-wider font-['Inter']">
                     {t('cms.vertical')}
                   </p>
-                  <span className="text-[10px] text-[#8A8A8A] font-['Inter'] font-medium">
+                  <span className="text-[10px] text-ink-muted font-['Inter'] font-medium">
                     {parsePosition(bgPosition).y}%
                   </span>
                 </div>
@@ -280,8 +280,8 @@ export function EditableBackground({
                     const x = parsePosition(bgPosition).x;
                     void handlePositionChange(`${x}% ${y}%`);
                   }}
-                  className="w-full h-1.5 rounded-full appearance-none bg-gray-200 accent-[#B8963E] cursor-pointer"
-                  style={{ accentColor: '#B8963E' }}
+                  className="w-full h-1.5 rounded-full appearance-none bg-gray-200 accent-brand cursor-pointer"
+                  style={{ accentColor: 'var(--color-brand)' }}
                 />
                 <div className="flex justify-between text-[9px] text-[#AAAAAA] font-['Inter'] mt-0.5">
                   <span>↑</span>
@@ -292,7 +292,7 @@ export function EditableBackground({
 
             {/* Fit options */}
             <div>
-              <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider mb-1.5 text-center font-['Inter']">
+              <p className="text-[10px] font-semibold text-ink-soft uppercase tracking-wider mb-1.5 text-center font-['Inter']">
                 {t('cms.size')}
               </p>
               <div className="flex flex-col gap-0.5">
@@ -303,7 +303,7 @@ export function EditableBackground({
                     onClick={() => void handleFitChange(opt.value)}
                     className={`px-3 py-1 rounded text-[11px] font-medium transition-colors font-['Inter'] ${
                       bgSize === opt.value
-                        ? 'bg-[#B8963E] text-white'
+                        ? 'bg-action text-white'
                         : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
                     }`}
                   >
@@ -315,7 +315,7 @@ export function EditableBackground({
           </div>
 
           {/* Footer inside panel */}
-          <div className="flex items-center justify-between pt-2 border-t border-[#F0EDE8]">
+          <div className="flex items-center justify-between pt-2 border-t border-line-soft">
             <span
               className={`flex items-center gap-1 text-[10px] font-medium font-['Inter'] transition-opacity duration-300 ${saved ? 'opacity-100 text-green-600' : 'opacity-0'}`}
             >
@@ -325,7 +325,7 @@ export function EditableBackground({
             <button
               type="button"
               onClick={() => setShowControls(false)}
-              className="px-3 py-1 rounded-md text-[11px] font-medium text-white bg-[#B8963E] hover:bg-[#8A6F2E] transition-colors font-['Inter']"
+              className="px-3 py-1 rounded-md text-[11px] font-medium text-white bg-action hover:bg-action-hover transition-colors font-['Inter']"
             >
               {t('common.done')}
             </button>
@@ -336,7 +336,7 @@ export function EditableBackground({
       {/* Upload spinner */}
       {isUploading && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-30">
-          <span className="block h-8 w-8 rounded-full border-2 border-[#B8963E]/30 border-t-[#B8963E] animate-spin" />
+          <span className="block h-8 w-8 rounded-full border-2 border-brand/30 border-t-brand animate-spin" />
         </div>
       )}
     </div>

@@ -32,10 +32,10 @@ const TOAST_VISUALS: Record<ToastType, ToastVisuals> = {
     iconColor: 'text-amber-500',
   },
   info: {
-    barColor: 'bg-[#B8963E]',
-    bgColor: 'bg-[#F9F6F0]',
+    barColor: 'bg-brand',
+    bgColor: 'bg-surface',
     Icon: Info,
-    iconColor: 'text-[#B8963E]',
+    iconColor: 'text-brand',
   },
 };
 
@@ -76,7 +76,7 @@ function ToastItem({ toast, onRemove }: ToastItemProps) {
       aria-atomic="true"
       className={[
         'flex items-start overflow-hidden',
-        'rounded-xl shadow-lg border border-[#E8E4DF]',
+        'rounded-xl shadow-lg border border-line',
         'min-w-[300px] max-w-[400px] w-full',
         bgColor,
       ].join(' ')}
@@ -96,7 +96,7 @@ function ToastItem({ toast, onRemove }: ToastItemProps) {
       </div>
 
       {/* Message */}
-      <p className="flex-1 py-3 pr-2 text-sm leading-snug text-[#2D2D2D] font-['Inter',sans-serif] break-words">
+      <p className="flex-1 py-3 pr-2 text-sm leading-snug text-ink font-['Inter',sans-serif] break-words">
         {toast.message}
       </p>
 
@@ -107,7 +107,7 @@ function ToastItem({ toast, onRemove }: ToastItemProps) {
         onClick={() => onRemove(toast.id)}
         className={[
           'flex-shrink-0 p-3 text-[#AAAAAA]',
-          'hover:text-[#2D2D2D] transition-colors duration-150',
+          'hover:text-ink transition-colors duration-150',
         ].join(' ')}
       >
         <X className="h-4 w-4" aria-hidden="true" />

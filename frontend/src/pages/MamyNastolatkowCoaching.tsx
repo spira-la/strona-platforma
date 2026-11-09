@@ -34,14 +34,14 @@ function SectionBadge({
 }) {
   return gold ? (
     <span
-      className="inline-block px-4 py-1 text-xs font-bold uppercase tracking-widest rounded-full bg-[#B8944A] text-white"
+      className="inline-block px-4 py-1 text-xs font-bold uppercase tracking-widest rounded-full bg-action text-white"
       style={{ fontFamily: "'Lato', sans-serif" }}
     >
       {label}
     </span>
   ) : (
     <span
-      className="inline-block px-4 py-1 text-xs font-semibold uppercase tracking-widest rounded-full border border-[#D4B97A] text-[#B8944A] bg-[rgba(184,148,74,0.08)]"
+      className="inline-block px-4 py-1 text-xs font-semibold uppercase tracking-widest rounded-full border border-brand-light text-brand bg-brand/8"
       style={{ fontFamily: "'Lato', sans-serif" }}
     >
       {label}
@@ -67,9 +67,9 @@ function PainCard({
   descPlaceholder,
 }: PainCardProps) {
   return (
-    <div className="flex flex-col gap-4 p-8 rounded-xl bg-[#F9F6F0] border border-[#F0EDE8] h-full">
+    <div className="flex flex-col gap-4 p-8 rounded-xl bg-surface border border-line-soft h-full">
       <div
-        className="flex items-center justify-center w-10 h-10 rounded-2xl bg-[rgba(184,148,74,0.1)] text-[#B8944A] flex-shrink-0"
+        className="flex items-center justify-center w-10 h-10 rounded-2xl bg-brand/10 text-brand flex-shrink-0"
         aria-hidden="true"
       >
         {icon}
@@ -79,14 +79,14 @@ function PainCard({
         fieldPath={titleField}
         as="h3"
         placeholder={titlePlaceholder}
-        className="text-xl text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+        className="text-xl text-ink [font-family:'Playfair_Display',serif]"
       />
       <EditableText
         section={section}
         fieldPath={descField}
         as="p"
         placeholder={descPlaceholder}
-        className="text-sm leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+        className="text-sm leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
       />
     </div>
   );
@@ -112,7 +112,7 @@ function InsightCard({
   return (
     <div className="flex gap-4 p-6 rounded-xl bg-white">
       <div
-        className="flex items-center justify-center w-10 h-10 rounded-2xl bg-[rgba(184,148,74,0.1)] text-[#B8944A] flex-shrink-0"
+        className="flex items-center justify-center w-10 h-10 rounded-2xl bg-brand/10 text-brand flex-shrink-0"
         aria-hidden="true"
       >
         {icon}
@@ -123,14 +123,14 @@ function InsightCard({
           fieldPath={titleField}
           as="h4"
           placeholder={titlePlaceholder}
-          className="text-base text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+          className="text-base text-ink [font-family:'Playfair_Display',serif]"
         />
         <EditableText
           section={section}
           fieldPath={descField}
           as="p"
           placeholder={descPlaceholder}
-          className="text-xs leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+          className="text-xs leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
         />
       </div>
     </div>
@@ -157,7 +157,7 @@ function ReasonCard({
   return (
     <div className="flex flex-col gap-4 p-8 rounded-xl bg-white h-full">
       <div
-        className="flex items-center justify-center w-12 h-12 rounded-2xl bg-[#B8944A] text-white flex-shrink-0"
+        className="flex items-center justify-center w-12 h-12 rounded-2xl bg-action text-white flex-shrink-0"
         aria-hidden="true"
       >
         {icon}
@@ -167,14 +167,14 @@ function ReasonCard({
         fieldPath={titleField}
         as="h3"
         placeholder={titlePlaceholder}
-        className="text-xl font-semibold text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+        className="text-xl font-semibold text-ink [font-family:'Playfair_Display',serif]"
       />
       <EditableText
         section={section}
         fieldPath={descField}
         as="p"
         placeholder={descPlaceholder}
-        className="text-sm leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+        className="text-sm leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
       />
     </div>
   );
@@ -204,7 +204,7 @@ function TestimonialCard({
   return (
     <div className="flex flex-col gap-5 p-8 rounded-xl bg-white">
       <span
-        className="text-[#B8944A] leading-none text-6xl font-bold [font-family:'Playfair_Display',serif]"
+        className="text-brand leading-none text-6xl font-bold [font-family:'Playfair_Display',serif]"
         aria-hidden="true"
       >
         "
@@ -214,10 +214,10 @@ function TestimonialCard({
         fieldPath={quoteField}
         as="p"
         placeholder={quotePlaceholder}
-        className="text-sm leading-relaxed text-[#6B6B6B] flex-1 [font-family:'Lato',sans-serif]"
+        className="text-sm leading-relaxed text-ink-soft flex-1 [font-family:'Lato',sans-serif]"
       />
       <div className="flex items-center gap-3">
-        <div className="flex items-center justify-center w-9 h-9 rounded-full bg-[#B8944A] text-white text-sm font-bold flex-shrink-0 [font-family:'Playfair_Display',serif]">
+        <div className="flex items-center justify-center w-9 h-9 rounded-full bg-action text-white text-sm font-bold flex-shrink-0 [font-family:'Playfair_Display',serif]">
           {initial}
         </div>
         <div className="flex flex-col gap-0.5">
@@ -226,7 +226,7 @@ function TestimonialCard({
             fieldPath={nameField}
             as="span"
             placeholder={namePlaceholder}
-            className="text-sm font-bold text-[#2D2D2D] [font-family:'Lato',sans-serif]"
+            className="text-sm font-bold text-ink [font-family:'Lato',sans-serif]"
           />
           <EditableText
             section={section}
@@ -247,7 +247,7 @@ function TestimonialCard({
 
 export default function MamyNastolatkowCoaching() {
   return (
-    <main className="min-h-screen bg-[#F9F6F0] text-[#2D2D2D]">
+    <main className="min-h-screen bg-surface text-ink">
       <SEO
         title="Mama nastolatka"
         description="Twój nastolatek stał się obcą osobą we własnym domu? Pomogę Ci odbudować relację, zanim oddalicie się na dobre. Coaching dla mam nastolatków – Aneta Spirala."
@@ -302,7 +302,7 @@ export default function MamyNastolatkowCoaching() {
             section="mamyNastolatkow"
             fieldPath="heroCTA"
             defaultAction="calendly"
-            className="mt-2 inline-flex items-center justify-center px-8 py-4 rounded-lg bg-[#B8944A] text-white text-sm font-normal transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A] [font-family:'Lato',sans-serif]"
+            className="mt-2 inline-flex items-center justify-center px-8 py-4 rounded-lg bg-action text-white text-sm font-normal transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand [font-family:'Lato',sans-serif]"
           >
             <EditableText
               section="mamyNastolatkow"
@@ -330,14 +330,14 @@ export default function MamyNastolatkowCoaching() {
                 fieldPath="dkTitle"
                 as="h2"
                 placeholder="CZY TO BRZMI ZNAJOMO?"
-                className="text-3xl sm:text-4xl font-normal tracking-[-0.5px] text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                className="text-3xl sm:text-4xl font-normal tracking-[-0.5px] text-ink [font-family:'Playfair_Display',serif]"
               />
               <EditableText
                 section="mamyNastolatkow"
                 fieldPath="dkSub"
                 as="p"
                 placeholder="Jeśli rozpoznajesz się w tych sytuacjach — nie jesteś sama. I nie musisz przez to przechodzić bez wsparcia."
-                className="text-base leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                className="text-base leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
               />
             </div>
           </ScrollReveal>
@@ -415,7 +415,7 @@ export default function MamyNastolatkowCoaching() {
               fieldPath="dkClosing"
               as="p"
               placeholder="Jeśli choć jeden z tych punktów trafia w Twoje doświadczenie — coaching może być pierwszym krokiem do odbudowania tego, co wydaje się stracone."
-              className="text-base leading-relaxed italic text-[#6B6B6B] text-center max-w-[700px] [font-family:'Lato',sans-serif]"
+              className="text-base leading-relaxed italic text-ink-soft text-center max-w-[700px] [font-family:'Lato',sans-serif]"
             />
           </ScrollReveal>
         </div>
@@ -435,7 +435,7 @@ export default function MamyNastolatkowCoaching() {
               fieldPath="perspectiveTitle"
               as="h2"
               placeholder="Nie musisz przez to przechodzić sama"
-              className="text-3xl sm:text-4xl font-normal tracking-[-0.5px] text-[#2D2D2D] text-center [font-family:'Playfair_Display',serif]"
+              className="text-3xl sm:text-4xl font-normal tracking-[-0.5px] text-ink text-center [font-family:'Playfair_Display',serif]"
             />
           </ScrollReveal>
 
@@ -449,7 +449,7 @@ export default function MamyNastolatkowCoaching() {
                 placeholder={
                   'Kiedy nastolatek się zmienia, naturalnym odruchem jest szukanie pomocy dla niego. Psycholog, terapeuta, ktoś, kto „naprawi” dziecko. Ale prawda jest inna — i trudniejsza do przyjęcia.'
                 }
-                className="text-base leading-[1.8] text-[#2D2D2D] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.8] text-ink [font-family:'Lato',sans-serif]"
               />
               <EditableText
                 section="mamyNastolatkow"
@@ -458,21 +458,21 @@ export default function MamyNastolatkowCoaching() {
                 placeholder={
                   'Nastolatek nie buntuje się bez powodu. Jego zachowanie — milczenie, agresja, wycofanie — to komunikat. Mówi: „Nie czuję się tu bezpiecznie. Nie czuję, że mnie rozumiecie. Nie wiem, czy mogę wam zaufać."'
                 }
-                className="text-base leading-[1.8] italic text-[#2D2D2D] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.8] italic text-ink [font-family:'Lato',sans-serif]"
               />
               <EditableText
                 section="mamyNastolatkow"
                 fieldPath="perspP3"
                 as="p"
                 placeholder="Często to nie dziecko potrzebuje naprawy — to atmosfera w domu, nieświadome wzorce reagowania, odziedziczone przekonania o wychowaniu i dyscyplinie. Wzorce, które powtarzamy za własnymi rodzicami, nie zdając sobie z tego sprawy."
-                className="text-base leading-[1.8] text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.8] text-ink-soft [font-family:'Lato',sans-serif]"
               />
               <EditableText
                 section="mamyNastolatkow"
                 fieldPath="perspP4"
                 as="p"
                 placeholder="Kiedy mama zaczyna pracować nad sobą — nad swoimi reakcjami, lękami, potrzebą kontroli — coś się zmienia w całym systemie rodzinnym. Dziecko to czuje. Nie musisz go do niczego zmuszać. Wystarczy, że Ty się zmienisz, a ono podąży."
-                className="text-base leading-[1.8] text-[#2D2D2D] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.8] text-ink [font-family:'Lato',sans-serif]"
               />
             </ScrollReveal>
 
@@ -522,13 +522,13 @@ export default function MamyNastolatkowCoaching() {
             animation="fade-up"
             className="flex flex-col items-center gap-5 w-full sm:px-20"
           >
-            <div className="w-12 h-0.5 bg-[#B8944A]" aria-hidden="true" />
+            <div className="w-12 h-0.5 bg-brand" aria-hidden="true" />
             <EditableText
               section="mamyNastolatkow"
               fieldPath="perspClosing"
               as="p"
               placeholder="To nie jest porażka rodzicielska. To moment, w którym możesz wybrać inną drogę — świadomą, odważną, pełną miłości. Pracując nad sobą, dajesz swojemu dziecku najcenniejszy prezent: mamę, która rozumie siebie."
-              className="text-base sm:text-[17px] leading-[1.7] text-[#2D2D2D] text-center max-w-[700px] [font-family:'Lato',sans-serif]"
+              className="text-base sm:text-[17px] leading-[1.7] text-ink text-center max-w-[700px] [font-family:'Lato',sans-serif]"
             />
           </ScrollReveal>
 
@@ -537,7 +537,7 @@ export default function MamyNastolatkowCoaching() {
               section="mamyNastolatkow"
               fieldPath="perspCTA"
               defaultAction="calendly"
-              className="inline-flex items-center justify-center px-10 py-4 rounded-lg bg-[#B8944A] text-white text-sm font-normal transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A] [font-family:'Lato',sans-serif]"
+              className="inline-flex items-center justify-center px-10 py-4 rounded-lg bg-action text-white text-sm font-normal transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand [font-family:'Lato',sans-serif]"
             >
               <EditableText
                 section="mamyNastolatkow"
@@ -554,7 +554,7 @@ export default function MamyNastolatkowCoaching() {
       {/* DLACZEGO WARTO — story + reasons                                 */}
       {/* ---------------------------------------------------------------- */}
       <section
-        className="px-6 py-16 sm:py-20 bg-[#F9F6F0]"
+        className="px-6 py-16 sm:py-20 bg-surface"
         aria-label="Dlaczego warto"
       >
         <div className="max-w-[1200px] mx-auto flex flex-col gap-12">
@@ -566,7 +566,7 @@ export default function MamyNastolatkowCoaching() {
                 fieldPath="storyTitle"
                 as="h2"
                 placeholder="Moja historia jako mamy"
-                className="text-3xl sm:text-4xl font-bold text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                className="text-3xl sm:text-4xl font-bold text-ink [font-family:'Playfair_Display',serif]"
               />
             </div>
           </ScrollReveal>
@@ -590,7 +590,7 @@ export default function MamyNastolatkowCoaching() {
                 fieldPath="storyP1"
                 as="p"
                 placeholder="Wiem, jak to jest – stać przed zamkniętymi drzwiami pokoju i czuć, że tracisz kontakt z osobą, którą kochasz najbardziej na świecie."
-                className="text-base leading-[1.85] text-[#5A5550] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-ink-soft [font-family:'Lato',sans-serif]"
               />
             </ScrollReveal>
           </div>
@@ -598,7 +598,7 @@ export default function MamyNastolatkowCoaching() {
           {/* Story bottom: full-width text */}
           <ScrollReveal
             animation="fade-up"
-            className="flex flex-col divide-y divide-[#E8E3DB]"
+            className="flex flex-col divide-y divide-line"
           >
             <div className="pb-7">
               <EditableText
@@ -606,7 +606,7 @@ export default function MamyNastolatkowCoaching() {
                 fieldPath="storyP2"
                 as="p"
                 placeholder="Przeszłam tę drogę sama. Moja relacja z córką przeszła przez najtrudniejszy okres i wyszła z niego silniejsza. To doświadczenie zmieniło nie tylko nasze życie, ale i moje podejście do pracy z innymi mamami."
-                className="text-base leading-[1.85] text-[#5A5550] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-ink-soft [font-family:'Lato',sans-serif]"
               />
             </div>
             <div className="pt-7">
@@ -615,7 +615,7 @@ export default function MamyNastolatkowCoaching() {
                 fieldPath="storyP3"
                 as="p"
                 placeholder="Dziś pomagam mamom nastolatków odbudować bliskość – bo wiem, że nawet najtrudniejsza relacja może się zmienić, gdy zaczynamy od siebie."
-                className="text-base leading-[1.85] text-[#5A5550] italic [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-ink-soft italic [font-family:'Lato',sans-serif]"
               />
             </div>
           </ScrollReveal>
@@ -672,7 +672,7 @@ export default function MamyNastolatkowCoaching() {
                 fieldPath="practiceHeading"
                 as="h2"
                 placeholder="Jak to wygląda w praktyce"
-                className="text-3xl sm:text-4xl font-bold text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                className="text-3xl sm:text-4xl font-bold text-ink [font-family:'Playfair_Display',serif]"
               />
             </div>
           </ScrollReveal>
@@ -712,10 +712,10 @@ export default function MamyNastolatkowCoaching() {
                 arr,
               ) => (
                 <ScrollReveal key={n} animation="fade-up" delay={stagger(i)}>
-                  <div className="flex gap-8 py-8 border-t border-[#E8E3DB] items-start">
+                  <div className="flex gap-8 py-8 border-t border-line items-start">
                     {/* Large decorative number */}
                     <span
-                      className="text-[72px] leading-none font-bold text-[#B8944A]/20 select-none flex-shrink-0 w-16 text-right [font-family:'Playfair_Display',serif]"
+                      className="text-[72px] leading-none font-bold text-brand/20 select-none flex-shrink-0 w-16 text-right [font-family:'Playfair_Display',serif]"
                       aria-hidden="true"
                     >
                       {n}
@@ -724,7 +724,7 @@ export default function MamyNastolatkowCoaching() {
                     {/* Content */}
                     <div className="flex flex-col gap-2 pt-2">
                       <div className="flex items-center gap-3">
-                        <span className="flex items-center justify-center w-6 h-6 rounded-full bg-[#B8944A] text-white text-[11px] font-bold flex-shrink-0 [font-family:'Lato',sans-serif]">
+                        <span className="flex items-center justify-center w-6 h-6 rounded-full bg-action text-white text-[11px] font-bold flex-shrink-0 [font-family:'Lato',sans-serif]">
                           {n}
                         </span>
                         <EditableText
@@ -732,7 +732,7 @@ export default function MamyNastolatkowCoaching() {
                           fieldPath={titleField}
                           as="h3"
                           placeholder={titlePlaceholder}
-                          className="text-lg font-semibold text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                          className="text-lg font-semibold text-ink [font-family:'Playfair_Display',serif]"
                         />
                       </div>
                       <EditableText
@@ -740,12 +740,12 @@ export default function MamyNastolatkowCoaching() {
                         fieldPath={descField}
                         as="p"
                         placeholder={descPlaceholder}
-                        className="text-[15px] leading-relaxed text-[#6B6B6B] pl-9 [font-family:'Lato',sans-serif]"
+                        className="text-[15px] leading-relaxed text-ink-soft pl-9 [font-family:'Lato',sans-serif]"
                       />
                     </div>
                   </div>
                   {i === arr.length - 1 && (
-                    <div className="border-t border-[#E8E3DB]" />
+                    <div className="border-t border-line" />
                   )}
                 </ScrollReveal>
               ),
@@ -758,7 +758,7 @@ export default function MamyNastolatkowCoaching() {
       {/* TESTIMONIALS                                                      */}
       {/* ---------------------------------------------------------------- */}
       <section
-        className="px-6 py-16 sm:py-20 bg-[#F9F6F0]"
+        className="px-6 py-16 sm:py-20 bg-surface"
         aria-label="Opinie mam"
       >
         <div className="max-w-[1200px] mx-auto flex flex-col items-center gap-12">
@@ -770,7 +770,7 @@ export default function MamyNastolatkowCoaching() {
                 fieldPath="testimonialsTitle"
                 as="h2"
                 placeholder="Co mówią mamy, z którymi pracowałam"
-                className="text-3xl sm:text-4xl font-bold text-[#2D2D2D] text-center [font-family:'Playfair_Display',serif]"
+                className="text-3xl sm:text-4xl font-bold text-ink text-center [font-family:'Playfair_Display',serif]"
               />
             </div>
           </ScrollReveal>
@@ -862,7 +862,7 @@ export default function MamyNastolatkowCoaching() {
             section="mamyNastolatkow"
             fieldPath="ctaBtn"
             defaultAction="calendly"
-            className="mt-2 inline-flex items-center justify-center px-10 py-4 rounded-full bg-[#B8944A] text-white text-base font-bold transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A] [font-family:'Lato',sans-serif]"
+            className="mt-2 inline-flex items-center justify-center px-10 py-4 rounded-full bg-action text-white text-base font-bold transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand [font-family:'Lato',sans-serif]"
           >
             <EditableText
               section="mamyNastolatkow"

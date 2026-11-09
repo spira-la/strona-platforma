@@ -236,8 +236,8 @@ function LanguageFormDialog({
       </AdminFormField>
 
       {/* Active toggle */}
-      <div className="flex items-center justify-between py-2 px-3 bg-[#F9F6F0] rounded-lg">
-        <span className="font-['Inter'] text-[14px] text-[#444444]">
+      <div className="flex items-center justify-between py-2 px-3 bg-surface rounded-lg">
+        <span className="font-['Inter'] text-[14px] text-ink">
           {t('admin.languages.form.activeToggle')}
         </span>
         <button
@@ -247,8 +247,8 @@ function LanguageFormDialog({
           onClick={() => setField('isActive', !form.isActive)}
           className={[
             'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]',
-            form.isActive ? 'bg-[#B8963E]' : 'bg-[#DDDDDD]',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand',
+            form.isActive ? 'bg-brand' : 'bg-[#DDDDDD]',
           ].join(' ')}
         >
           <span
@@ -498,7 +498,7 @@ export default function AdminLanguages() {
       key: 'name',
       header: t('admin.languages.table.name'),
       render: (l) => (
-        <span className="font-['Inter'] text-[14px] font-medium text-[#2D2D2D] flex items-center gap-2">
+        <span className="font-['Inter'] text-[14px] font-medium text-ink flex items-center gap-2">
           {l.flag && <span aria-hidden="true">{l.flag}</span>}
           {l.name}
         </span>
@@ -508,7 +508,7 @@ export default function AdminLanguages() {
       key: 'code',
       header: t('admin.languages.table.code'),
       render: (l) => (
-        <span className="font-['Inter'] text-[13px] text-[#6B6B6B] font-mono uppercase">
+        <span className="font-['Inter'] text-[13px] text-ink-soft font-mono uppercase">
           {l.code}
         </span>
       ),
@@ -517,7 +517,7 @@ export default function AdminLanguages() {
       key: 'nativeName',
       header: t('admin.languages.table.nativeName'),
       render: (l) => (
-        <span className="font-['Inter'] text-[13px] text-[#6B6B6B]">
+        <span className="font-['Inter'] text-[13px] text-ink-soft">
           {l.nativeName ?? '—'}
         </span>
       ),
@@ -526,7 +526,7 @@ export default function AdminLanguages() {
       key: 'sortOrder',
       header: t('admin.languages.table.sortOrder'),
       render: (l) => (
-        <span className="font-['Inter'] text-[13px] text-[#6B6B6B]">
+        <span className="font-['Inter'] text-[13px] text-ink-soft">
           {l.sortOrder ?? 0}
         </span>
       ),
@@ -555,7 +555,7 @@ export default function AdminLanguages() {
             onClick={() => handleOpenEdit(l)}
             title={t('admin.languages.actions.edit')}
             aria-label={t('admin.languages.actions.editLanguage')}
-            className="p-1.5 rounded text-[#8A8A8A] hover:text-[#B8963E] hover:bg-[#F9F6F0] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
+            className="p-1.5 rounded text-ink-muted hover:text-brand hover:bg-surface transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           >
             <Pencil size={15} />
           </button>
@@ -574,12 +574,12 @@ export default function AdminLanguages() {
                 ? t('admin.languages.actions.restoreLanguage')
                 : t('admin.languages.actions.archiveLanguage')
             }
-            className="p-1.5 rounded text-[#8A8A8A] hover:text-[#B8963E] hover:bg-[#F9F6F0] transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
+            className="p-1.5 rounded text-ink-muted hover:text-brand hover:bg-surface transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           >
             {l.isActive === false ? (
               <ToggleLeft size={17} />
             ) : (
-              <ToggleRight size={17} className="text-[#B8963E]" />
+              <ToggleRight size={17} className="text-brand" />
             )}
           </button>
         </div>
@@ -616,17 +616,17 @@ export default function AdminLanguages() {
       </div>
 
       {/* CMS re-translation panel */}
-      <div className="mb-6 rounded-xl border border-[#EDE8DC] bg-[#F9F6F0] overflow-hidden">
+      <div className="mb-6 rounded-xl border border-[#EDE8DC] bg-surface overflow-hidden">
         <div className="p-4 flex flex-col sm:flex-row sm:items-center gap-3">
           <div className="flex items-center gap-3 flex-1 min-w-0">
-            <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-[#B8963E]/10 flex items-center justify-center">
-              <LanguagesIcon size={18} className="text-[#B8963E]" />
+            <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-brand/10 flex items-center justify-center">
+              <LanguagesIcon size={18} className="text-brand" />
             </div>
             <div className="min-w-0">
-              <p className="font-['Inter'] text-[13px] font-semibold text-[#2D2D2D]">
+              <p className="font-['Inter'] text-[13px] font-semibold text-ink">
                 {t('admin.languages.retranslate.title')}
               </p>
-              <p className="font-['Inter'] text-[12px] text-[#6B6B6B] leading-snug mt-0.5">
+              <p className="font-['Inter'] text-[12px] text-ink-soft leading-snug mt-0.5">
                 {isTranslating && translationStatus
                   ? `${translationStatus.completed} / ${translationStatus.total} ${t('admin.languages.retranslate.fieldsTranslated')}`
                   : t('admin.languages.retranslate.description')}
@@ -637,7 +637,7 @@ export default function AdminLanguages() {
             type="button"
             onClick={() => retranslateMutation.mutate()}
             disabled={retranslateMutation.isPending || isTranslating}
-            className="flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg bg-[#B8963E] text-white font-['Inter'] text-[13px] font-medium hover:bg-[#8A6F2E] transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
+            className="flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg bg-action text-white font-['Inter'] text-[13px] font-medium hover:bg-action-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           >
             {retranslateMutation.isPending || isTranslating ? (
               <>
@@ -658,11 +658,11 @@ export default function AdminLanguages() {
           <div className="px-4 pb-4">
             <div className="w-full h-1.5 bg-[#EDE8DC] rounded-full overflow-hidden">
               <div
-                className="h-full bg-[#B8963E] rounded-full transition-all duration-500"
+                className="h-full bg-brand rounded-full transition-all duration-500"
                 style={{ width: `${translationProgress}%` }}
               />
             </div>
-            <p className="mt-1.5 font-['Inter'] text-[11px] text-[#8A8A8A] text-right">
+            <p className="mt-1.5 font-['Inter'] text-[11px] text-ink-muted text-right">
               {translationProgress}%
             </p>
           </div>
@@ -670,17 +670,17 @@ export default function AdminLanguages() {
       </div>
 
       {/* Seed static defaults panel */}
-      <div className="mb-6 rounded-xl border border-[#EDE8DC] bg-[#F9F6F0] overflow-hidden">
+      <div className="mb-6 rounded-xl border border-[#EDE8DC] bg-surface overflow-hidden">
         <div className="p-4 flex flex-col sm:flex-row sm:items-center gap-3">
           <div className="flex items-center gap-3 flex-1 min-w-0">
-            <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-[#B8963E]/10 flex items-center justify-center">
-              <Sparkles size={18} className="text-[#B8963E]" />
+            <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-brand/10 flex items-center justify-center">
+              <Sparkles size={18} className="text-brand" />
             </div>
             <div className="min-w-0">
-              <p className="font-['Inter'] text-[13px] font-semibold text-[#2D2D2D]">
+              <p className="font-['Inter'] text-[13px] font-semibold text-ink">
                 {t('admin.languages.seed.title')}
               </p>
-              <p className="font-['Inter'] text-[12px] text-[#6B6B6B] leading-snug mt-0.5">
+              <p className="font-['Inter'] text-[12px] text-ink-soft leading-snug mt-0.5">
                 {unsetDefaults.length > 0
                   ? t('admin.languages.seed.description', {
                       count: unsetDefaults.length,
@@ -697,7 +697,7 @@ export default function AdminLanguages() {
               isTranslating ||
               unsetDefaults.length === 0
             }
-            className="flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg bg-[#B8963E] text-white font-['Inter'] text-[13px] font-medium hover:bg-[#8A6F2E] transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
+            className="flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg bg-action text-white font-['Inter'] text-[13px] font-medium hover:bg-action-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           >
             {seedAndTranslateMutation.isPending || isTranslating ? (
               <>

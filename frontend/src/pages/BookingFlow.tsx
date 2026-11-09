@@ -90,7 +90,7 @@ export default function BookingFlow() {
   }
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] text-[#2D2D2D] pb-24">
+    <main className="min-h-screen bg-surface text-ink pb-24">
       <SEO
         title="Rezerwacja"
         description="Wybierz usluge i zarezerwuj termin sesji."
@@ -102,14 +102,14 @@ export default function BookingFlow() {
           <button
             type="button"
             onClick={() => navigate('/uslugi')}
-            className="inline-flex items-center gap-1 text-sm text-[#6B6B6B] hover:text-[#B8944A] w-fit"
+            className="inline-flex items-center gap-1 text-sm text-ink-soft hover:text-brand w-fit"
             style={{ fontFamily: "'Lato', sans-serif" }}
           >
             <ChevronLeft size={14} /> Wroc do uslug
           </button>
 
           <h1
-            className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D]"
+            className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-ink"
             style={{ fontFamily: "'Cormorant Garamond', serif" }}
           >
             REZERWACJA
@@ -123,7 +123,7 @@ export default function BookingFlow() {
         <div className="max-w-[1024px] mx-auto">
           {isLoading && (
             <p
-              className="text-sm text-[#8A8A8A]"
+              className="text-sm text-ink-muted"
               style={{ fontFamily: "'Lato', sans-serif" }}
             >
               Ladowanie uslug…
@@ -141,7 +141,7 @@ export default function BookingFlow() {
               ))}
               {activeServices.length === 0 && (
                 <p
-                  className="text-sm text-[#8A8A8A]"
+                  className="text-sm text-ink-muted"
                   style={{ fontFamily: "'Lato', sans-serif" }}
                 >
                   Brak aktywnych uslug.
@@ -193,9 +193,9 @@ function Stepper({ step }: { step: 1 | 2 }) {
       style={{ fontFamily: "'Lato', sans-serif" }}
     >
       <StepItem active={step >= 1} done={step > 1} label="Usluga" num={1} />
-      <span className="w-6 h-px bg-[#E8E4DF]" />
+      <span className="w-6 h-px bg-line" />
       <StepItem active={step >= 2} done={false} label="Terminy" num={2} />
-      <span className="w-6 h-px bg-[#E8E4DF]" />
+      <span className="w-6 h-px bg-line" />
       <StepItem active={false} done={false} label="Platnosc" num={3} />
     </ol>
   );
@@ -220,14 +220,14 @@ function StepItem({
           (done
             ? 'bg-[#4CAF50] text-white'
             : active
-              ? 'bg-[#B8944A] text-white'
-              : 'bg-[#E8E4DF] text-[#8A8A8A]')
+              ? 'bg-action text-white'
+              : 'bg-line text-ink-muted')
         }
       >
         {done ? <Check size={12} /> : num}
       </span>
       <span
-        className={active ? 'text-[#2D2D2D] font-semibold' : 'text-[#8A8A8A]'}
+        className={active ? 'text-ink font-semibold' : 'text-ink-muted'}
       >
         {label}
       </span>
@@ -247,37 +247,37 @@ function ServicePickCard({
     <button
       type="button"
       onClick={onPick}
-      className="text-left rounded-2xl p-6 border border-[#E8E4DF] bg-white hover:border-[#B8944A] hover:shadow-[0_4px_24px_rgba(184,148,74,0.12)] transition-all"
+      className="text-left rounded-2xl p-6 border border-line bg-white hover:border-brand hover:shadow-[0_4px_24px_color-mix(in_srgb,var(--color-brand)_12%,transparent)] transition-all"
     >
       <p
-        className="text-xs font-semibold uppercase tracking-widest text-[#B8944A] mb-2"
+        className="text-xs font-semibold uppercase tracking-widest text-brand mb-2"
         style={{ fontFamily: "'Lato', sans-serif" }}
       >
         {count > 1 ? `Pakiet ${count} sesji` : 'Sesja indywidualna'}
       </p>
       <h3
-        className="text-2xl font-black uppercase tracking-tight text-[#2D2D2D] mb-3"
+        className="text-2xl font-black uppercase tracking-tight text-ink mb-3"
         style={{ fontFamily: "'Cormorant Garamond', serif" }}
       >
         {service.name}
       </h3>
       {service.description && (
         <p
-          className="text-sm leading-relaxed text-[#6B6B6B] mb-4"
+          className="text-sm leading-relaxed text-ink-soft mb-4"
           style={{ fontFamily: "'Lato', sans-serif" }}
         >
           {service.description}
         </p>
       )}
-      <div className="flex items-center justify-between pt-3 border-t border-[#F0EDE8]">
+      <div className="flex items-center justify-between pt-3 border-t border-line-soft">
         <div
-          className="text-[13px] text-[#8A8A8A]"
+          className="text-[13px] text-ink-muted"
           style={{ fontFamily: "'Lato', sans-serif" }}
         >
           {service.durationMinutes} min / sesja
         </div>
         <div
-          className="text-lg font-bold text-[#B8944A]"
+          className="text-lg font-bold text-brand"
           style={{ fontFamily: "'Lato', sans-serif" }}
         >
           {formatPrice(service.priceCents, service.currency)}
@@ -296,27 +296,27 @@ function SelectedServiceSummary({
 }) {
   const count = service.sessionCount ?? 1;
   return (
-    <div className="rounded-2xl p-5 border border-[#B8944A] bg-white shadow-[0_2px_12px_rgba(184,148,74,0.08)] flex items-center justify-between gap-4">
+    <div className="rounded-2xl p-5 border border-brand bg-white shadow-[0_2px_12px_color-mix(in_srgb,var(--color-brand)_8%,transparent)] flex items-center justify-between gap-4">
       <div>
         <p
-          className="text-[11px] font-semibold uppercase tracking-widest text-[#B8944A] mb-1"
+          className="text-[11px] font-semibold uppercase tracking-widest text-brand mb-1"
           style={{ fontFamily: "'Lato', sans-serif" }}
         >
           Wybrana usluga
         </p>
         <h3
-          className="text-lg font-black uppercase tracking-tight text-[#2D2D2D]"
+          className="text-lg font-black uppercase tracking-tight text-ink"
           style={{ fontFamily: "'Cormorant Garamond', serif" }}
         >
           {service.name}
         </h3>
         <p
-          className="text-xs text-[#6B6B6B] mt-1"
+          className="text-xs text-ink-soft mt-1"
           style={{ fontFamily: "'Lato', sans-serif" }}
         >
           {count > 1 ? `${count} sesji × ` : ''}
           {service.durationMinutes} min &middot;{' '}
-          <span className="font-semibold text-[#B8944A]">
+          <span className="font-semibold text-brand">
             {formatPrice(service.priceCents, service.currency)}
           </span>
         </p>
@@ -324,7 +324,7 @@ function SelectedServiceSummary({
       <button
         type="button"
         onClick={onChange}
-        className="text-xs font-semibold uppercase tracking-wider text-[#6B6B6B] hover:text-[#B8944A]"
+        className="text-xs font-semibold uppercase tracking-wider text-ink-soft hover:text-brand"
         style={{ fontFamily: "'Lato', sans-serif" }}
       >
         Zmien

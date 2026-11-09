@@ -23,22 +23,22 @@ function NextStepCard({
   descPlaceholder,
 }: NextStepCardProps) {
   return (
-    <div className="flex flex-col items-center text-center gap-4 px-6 py-8 bg-white rounded-lg border border-[#E8E4DF] shadow-sm">
-      <div className="flex items-center justify-center w-14 h-14 rounded-full bg-[#B8944A]/[0.1] text-[#B8944A]">
+    <div className="flex flex-col items-center text-center gap-4 px-6 py-8 bg-white rounded-lg border border-line shadow-sm">
+      <div className="flex items-center justify-center w-14 h-14 rounded-full bg-brand/[0.1] text-brand">
         {icon}
       </div>
       <EditableText
         section="confirmation"
         fieldPath={titleField}
         as="h3"
-        className="font-['Cormorant_Garamond'] text-[18px] font-bold text-[#2D2D2D]"
+        className="font-['Cormorant_Garamond'] text-[18px] font-bold text-ink"
         placeholder={titlePlaceholder}
       />
       <EditableText
         section="confirmation"
         fieldPath={descField}
         as="p"
-        className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-relaxed"
+        className="font-['Lato'] text-[14px] text-ink-soft leading-relaxed"
         placeholder={descPlaceholder}
       />
     </div>
@@ -52,7 +52,7 @@ function NextStepCard({
 function ThankYouSection() {
   return (
     <section
-      className="bg-[#FAF8F5] pt-16 pb-10 md:pt-24 md:pb-14"
+      className="bg-surface pt-16 pb-10 md:pt-24 md:pb-14"
       aria-label="Podziekowanie za zakup"
     >
       <ScrollReveal
@@ -67,14 +67,14 @@ function ThankYouSection() {
           section="confirmation"
           fieldPath="hero.title"
           as="h1"
-          className="font-['Cormorant_Garamond'] text-[32px] md:text-[40px] font-bold text-[#2D2D2D] leading-snug"
+          className="font-['Cormorant_Garamond'] text-[32px] md:text-[40px] font-bold text-ink leading-snug"
           placeholder="Dziekujemy za zakup pakietu!"
         />
         <EditableText
           section="confirmation"
           fieldPath="hero.subtitle"
           as="p"
-          className="font-['Lato'] text-[16px] text-[#6B6B6B] leading-[1.7] max-w-[560px]"
+          className="font-['Lato'] text-[16px] text-ink-soft leading-[1.7] max-w-[560px]"
           placeholder="Twoja platnosc zostala potwierdzona. Za chwile otrzymasz e-mail z potwierdzeniem i dalszymi instrukcjami."
         />
       </ScrollReveal>
@@ -84,13 +84,13 @@ function ThankYouSection() {
 
 function OrderSummarySection() {
   return (
-    <section className="bg-[#FAF8F5] py-8" aria-label="Podsumowanie zamowienia">
+    <section className="bg-surface py-8" aria-label="Podsumowanie zamowienia">
       <ScrollReveal animation="fade-up" delay={300}>
         <div className="max-w-[600px] mx-auto px-6">
           <div
             className="rounded-lg overflow-hidden"
             style={{
-              background: 'linear-gradient(135deg, #B8944A 0%, #D4B97A 100%)',
+              background: 'linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-light) 100%)',
             }}
           >
             <div className="px-8 py-7 flex flex-col gap-5">
@@ -177,10 +177,10 @@ function NextStepsSection() {
               section="confirmation"
               fieldPath="steps.title"
               as="h2"
-              className="font-['Cormorant_Garamond'] text-[26px] md:text-[34px] font-bold text-[#2D2D2D]"
+              className="font-['Cormorant_Garamond'] text-[26px] md:text-[34px] font-bold text-ink"
               placeholder="Co dalej?"
             />
-            <div className="w-10 h-0.5 bg-[#B8944A] mt-1" aria-hidden="true" />
+            <div className="w-10 h-0.5 bg-brand mt-1" aria-hidden="true" />
           </div>
         </ScrollReveal>
 
@@ -221,7 +221,7 @@ function NextStepsSection() {
 function MotivationalCTASection() {
   return (
     <section
-      className="bg-[#FAF8F5] py-14 md:py-20"
+      className="bg-surface py-14 md:py-20"
       aria-label="Zacheta do dzialania"
     >
       <ScrollReveal animation="fade">
@@ -230,19 +230,19 @@ function MotivationalCTASection() {
             section="confirmation"
             fieldPath="cta.title"
             as="h2"
-            className="font-['Cormorant_Garamond'] text-[26px] md:text-[32px] font-bold text-[#2D2D2D] leading-snug"
+            className="font-['Cormorant_Garamond'] text-[26px] md:text-[32px] font-bold text-ink leading-snug"
             placeholder="Zaczyna sie Twoja piekna podroz do siebie"
           />
           <EditableText
             section="confirmation"
             fieldPath="cta.description"
             as="p"
-            className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7]"
+            className="font-['Lato'] text-[15px] text-ink-soft leading-[1.7]"
             placeholder="Dzieki za zaufanie. Jestesmy tu, by towarzyszyc Ci w kazdym kroku tej drogi. Razem odkryjemy, co jest w Tobie mozliwe."
           />
           <Link
             to="/o-mnie"
-            className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-[#B8944A] hover:text-[#D4B97A] transition-colors group"
+            className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-brand hover:text-brand-light transition-colors group"
           >
             <EditableText
               section="confirmation"
@@ -267,22 +267,22 @@ function QuoteSection() {
     <section className="bg-white py-12 md:py-16" aria-label="Cytat">
       <ScrollReveal animation="fade" duration={900}>
         <div className="max-w-[600px] mx-auto px-6 flex flex-col items-center text-center gap-4">
-          <div className="w-10 h-0.5 bg-[#B8944A]" aria-hidden="true" />
+          <div className="w-10 h-0.5 bg-brand" aria-hidden="true" />
           <EditableText
             section="confirmation"
             fieldPath="quote.text"
             as="blockquote"
-            className="font-['Cormorant_Garamond'] text-[20px] md:text-[22px] italic text-[#2D2D2D] leading-[1.6]"
+            className="font-['Cormorant_Garamond'] text-[20px] md:text-[22px] italic text-ink leading-[1.6]"
             placeholder="Kazdy krok, z glebokosci siebie, jest krokiem ku wolnosci."
           />
           <EditableText
             section="confirmation"
             fieldPath="quote.author"
             as="cite"
-            className="font-['Lato'] text-[13px] text-[#8A8A8A] not-italic"
+            className="font-['Lato'] text-[13px] text-ink-muted not-italic"
             placeholder="Spirala"
           />
-          <div className="w-10 h-0.5 bg-[#B8944A]" aria-hidden="true" />
+          <div className="w-10 h-0.5 bg-brand" aria-hidden="true" />
         </div>
       </ScrollReveal>
     </section>

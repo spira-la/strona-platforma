@@ -108,7 +108,7 @@ export function EditableOverlay({
             type="button"
             onClick={() => setShowControls((s) => !s)}
             className={`absolute bottom-[52px] right-3 z-30 flex items-center justify-center w-7 h-7 rounded-md text-white transition-colors backdrop-blur-sm shadow-lg border border-white/20 ${
-              showControls ? 'bg-[#B8963E]' : 'bg-black/70 hover:bg-[#B8963E]'
+              showControls ? 'bg-brand' : 'bg-black/70 hover:bg-brand'
             }`}
             title={t('cms.overlay')}
             aria-label={t('cms.overlay')}
@@ -118,16 +118,16 @@ export function EditableOverlay({
 
           {showControls && (
             <div
-              className="absolute bottom-[92px] right-3 z-40 bg-white rounded-xl shadow-2xl p-3 pb-2 flex flex-col gap-3 border border-[#E8E4DF] min-w-[200px]"
+              className="absolute bottom-[92px] right-3 z-40 bg-white rounded-xl shadow-2xl p-3 pb-2 flex flex-col gap-3 border border-line min-w-[200px]"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex flex-col gap-3">
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter']">
+                    <p className="text-[10px] font-semibold text-ink-soft uppercase tracking-wider font-['Inter']">
                       {t('cms.overlayTop')}
                     </p>
-                    <span className="text-[10px] text-[#8A8A8A] font-['Inter'] font-medium">
+                    <span className="text-[10px] text-ink-muted font-['Inter'] font-medium">
                       {top}%
                     </span>
                   </div>
@@ -141,15 +141,15 @@ export function EditableOverlay({
                       void persist(topField, Number(e.target.value))
                     }
                     className="w-full h-1.5 rounded-full appearance-none bg-gray-200 cursor-pointer"
-                    style={{ accentColor: '#B8963E' }}
+                    style={{ accentColor: 'var(--color-brand)' }}
                   />
                 </div>
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter']">
+                    <p className="text-[10px] font-semibold text-ink-soft uppercase tracking-wider font-['Inter']">
                       {t('cms.overlayBottom')}
                     </p>
-                    <span className="text-[10px] text-[#8A8A8A] font-['Inter'] font-medium">
+                    <span className="text-[10px] text-ink-muted font-['Inter'] font-medium">
                       {bottom}%
                     </span>
                   </div>
@@ -163,7 +163,7 @@ export function EditableOverlay({
                       void persist(bottomField, Number(e.target.value))
                     }
                     className="w-full h-1.5 rounded-full appearance-none bg-gray-200 cursor-pointer"
-                    style={{ accentColor: '#B8963E' }}
+                    style={{ accentColor: 'var(--color-brand)' }}
                   />
                 </div>
               </div>
@@ -171,11 +171,11 @@ export function EditableOverlay({
               {/* Angle control */}
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter'] flex items-center gap-1">
+                  <p className="text-[10px] font-semibold text-ink-soft uppercase tracking-wider font-['Inter'] flex items-center gap-1">
                     <RotateCw size={9} />
                     {t('cms.overlayAngle', { defaultValue: 'Angle' })}
                   </p>
-                  <span className="text-[10px] text-[#8A8A8A] font-['Inter'] font-medium">
+                  <span className="text-[10px] text-ink-muted font-['Inter'] font-medium">
                     {angle >= 0 ? `${angle}°` : 'auto'}
                   </span>
                 </div>
@@ -189,7 +189,7 @@ export function EditableOverlay({
                     void persist(angleField, Number(e.target.value))
                   }
                   className="w-full h-1.5 rounded-full appearance-none bg-gray-200 cursor-pointer"
-                  style={{ accentColor: '#B8963E' }}
+                  style={{ accentColor: 'var(--color-brand)' }}
                 />
                 {/* Preset buttons */}
                 <div className="flex items-center gap-1 mt-1.5">
@@ -210,8 +210,8 @@ export function EditableOverlay({
                       title={title}
                       className={`w-6 h-6 flex items-center justify-center rounded text-[11px] transition-colors ${
                         angle === value
-                          ? 'bg-[#B8963E] text-white'
-                          : 'bg-gray-100 text-[#6B6B6B] hover:bg-gray-200'
+                          ? 'bg-action text-white'
+                          : 'bg-gray-100 text-ink-soft hover:bg-gray-200'
                       }`}
                     >
                       {label}
@@ -225,8 +225,8 @@ export function EditableOverlay({
                     title="Auto"
                     className={`px-1.5 h-6 flex items-center justify-center rounded text-[9px] font-semibold tracking-wider transition-colors ${
                       angle < 0
-                        ? 'bg-[#B8963E] text-white'
-                        : 'bg-gray-100 text-[#6B6B6B] hover:bg-gray-200'
+                        ? 'bg-action text-white'
+                        : 'bg-gray-100 text-ink-soft hover:bg-gray-200'
                     }`}
                   >
                     AUTO
@@ -234,7 +234,7 @@ export function EditableOverlay({
                 </div>
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-[#F0EDE8]">
+              <div className="flex items-center justify-between pt-2 border-t border-line-soft">
                 <span
                   className={`flex items-center gap-1 text-[10px] font-medium font-['Inter'] transition-opacity duration-300 ${saved ? 'opacity-100 text-green-600' : 'opacity-0'}`}
                 >
@@ -248,14 +248,14 @@ export function EditableOverlay({
                     void persist(bottomField, defaultBottom);
                     void updateField(section, angleField, '').then(flashSaved);
                   }}
-                  className="px-2 py-1 rounded-md text-[10px] font-medium text-[#6B6B6B] hover:text-[#B8963E] transition-colors font-['Inter']"
+                  className="px-2 py-1 rounded-md text-[10px] font-medium text-ink-soft hover:text-brand transition-colors font-['Inter']"
                 >
                   {t('cms.resetDefault')}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowControls(false)}
-                  className="px-3 py-1 rounded-md text-[11px] font-medium text-white bg-[#B8963E] hover:bg-[#8A6F2E] transition-colors font-['Inter']"
+                  className="px-3 py-1 rounded-md text-[11px] font-medium text-white bg-action hover:bg-action-hover transition-colors font-['Inter']"
                 >
                   {t('common.done')}
                 </button>

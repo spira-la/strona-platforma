@@ -236,8 +236,8 @@ function CategoryFormDialog({
       </AdminFormField>
 
       {/* Active toggle */}
-      <div className="flex items-center justify-between py-2 px-3 bg-[#F9F6F0] rounded-lg">
-        <span className="font-['Inter'] text-[14px] text-[#444444]">
+      <div className="flex items-center justify-between py-2 px-3 bg-surface rounded-lg">
+        <span className="font-['Inter'] text-[14px] text-ink">
           {t('admin.categories.form.activeToggle')}
         </span>
         <button
@@ -247,8 +247,8 @@ function CategoryFormDialog({
           onClick={() => setField('isActive', !form.isActive)}
           className={[
             'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]',
-            form.isActive ? 'bg-[#B8963E]' : 'bg-[#DDDDDD]',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand',
+            form.isActive ? 'bg-brand' : 'bg-[#DDDDDD]',
           ].join(' ')}
         >
           <span
@@ -412,7 +412,7 @@ export default function AdminCategories() {
       key: 'name',
       header: t('admin.categories.table.name'),
       render: (c) => (
-        <span className="font-['Inter'] text-[14px] font-medium text-[#2D2D2D]">
+        <span className="font-['Inter'] text-[14px] font-medium text-ink">
           {c.name}
         </span>
       ),
@@ -421,7 +421,7 @@ export default function AdminCategories() {
       key: 'slug',
       header: t('admin.categories.table.slug'),
       render: (c) => (
-        <span className="font-['Inter'] text-[13px] text-[#6B6B6B] font-mono">
+        <span className="font-['Inter'] text-[13px] text-ink-soft font-mono">
           {c.slug}
         </span>
       ),
@@ -431,7 +431,7 @@ export default function AdminCategories() {
       header: t('admin.categories.table.description'),
       render: (c) => (
         <span
-          className="font-['Inter'] text-[13px] text-[#6B6B6B]"
+          className="font-['Inter'] text-[13px] text-ink-soft"
           title={c.description ?? ''}
         >
           {c.description
@@ -446,7 +446,7 @@ export default function AdminCategories() {
       key: 'sortOrder',
       header: t('admin.categories.table.sortOrder'),
       render: (c) => (
-        <span className="font-['Inter'] text-[13px] text-[#6B6B6B]">
+        <span className="font-['Inter'] text-[13px] text-ink-soft">
           {c.sortOrder ?? 0}
         </span>
       ),
@@ -475,7 +475,7 @@ export default function AdminCategories() {
             onClick={() => handleOpenEdit(c)}
             title={t('admin.categories.actions.edit')}
             aria-label={t('admin.categories.actions.editCategory')}
-            className="p-1.5 rounded text-[#8A8A8A] hover:text-[#B8963E] hover:bg-[#F9F6F0] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
+            className="p-1.5 rounded text-ink-muted hover:text-brand hover:bg-surface transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           >
             <Pencil size={15} />
           </button>
@@ -494,12 +494,12 @@ export default function AdminCategories() {
                 ? t('admin.categories.actions.restoreCategory')
                 : t('admin.categories.actions.archiveCategory')
             }
-            className="p-1.5 rounded text-[#8A8A8A] hover:text-[#B8963E] hover:bg-[#F9F6F0] transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
+            className="p-1.5 rounded text-ink-muted hover:text-brand hover:bg-surface transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           >
             {c.isActive === false ? (
               <ToggleLeft size={17} />
             ) : (
-              <ToggleRight size={17} className="text-[#B8963E]" />
+              <ToggleRight size={17} className="text-brand" />
             )}
           </button>
         </div>

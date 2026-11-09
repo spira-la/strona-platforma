@@ -15,7 +15,7 @@ import ane2Photo from '@/assets/Ane2.jpg';
 function SectionBadge({ label }: { label: string }) {
   return (
     <span
-      className="inline-block px-4 py-1 text-xs font-semibold uppercase tracking-widest rounded-full border border-[#D4B97A] text-[#B8944A] bg-[rgba(184,148,74,0.08)]"
+      className="inline-block px-4 py-1 text-xs font-semibold uppercase tracking-widest rounded-full border border-brand-light text-brand bg-brand/8"
       style={{ fontFamily: "'Lato', sans-serif" }}
     >
       {label}
@@ -41,8 +41,8 @@ function ValueCard({
   descPlaceholder,
 }: ValueCardProps) {
   return (
-    <div className="h-full flex flex-col items-center text-center px-6 py-8 rounded-lg bg-[#FAF8F5] border border-[#F0EDE8]">
-      <div className="flex items-center justify-center w-14 h-14 rounded-full mb-5 bg-[rgba(184,148,74,0.1)] text-[#B8944A]">
+    <div className="h-full flex flex-col items-center text-center px-6 py-8 rounded-lg bg-surface border border-line-soft">
+      <div className="flex items-center justify-center w-14 h-14 rounded-full mb-5 bg-brand/10 text-brand">
         {icon}
       </div>
       <EditableText
@@ -50,14 +50,14 @@ function ValueCard({
         fieldPath={titleField}
         as="h3"
         placeholder={titlePlaceholder}
-        className="text-base font-bold uppercase tracking-wide mb-3 text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
+        className="text-base font-bold uppercase tracking-wide mb-3 text-ink [font-family:'Cormorant_Garamond',serif]"
       />
       <EditableText
         section={section}
         fieldPath={descField}
         as="p"
         placeholder={descPlaceholder}
-        className="text-sm leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+        className="text-sm leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
       />
     </div>
   );
@@ -81,8 +81,8 @@ function QualificationCard({
   descPlaceholder,
 }: QualificationCardProps) {
   return (
-    <div className="h-full flex gap-5 p-6 rounded-lg bg-white border border-[#E8E4DF]">
-      <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold bg-[#B8944A] text-white [font-family:'Lato',sans-serif]">
+    <div className="h-full flex gap-5 p-6 rounded-lg bg-white border border-line">
+      <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold bg-action text-white [font-family:'Lato',sans-serif]">
         {number}
       </div>
       <div className="flex flex-col gap-1">
@@ -91,14 +91,14 @@ function QualificationCard({
           fieldPath={titleField}
           as="h4"
           placeholder={titlePlaceholder}
-          className="text-sm font-bold uppercase tracking-wide text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
+          className="text-sm font-bold uppercase tracking-wide text-ink [font-family:'Cormorant_Garamond',serif]"
         />
         <EditableText
           section={section}
           fieldPath={descField}
           as="p"
           placeholder={descPlaceholder}
-          className="text-sm leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+          className="text-sm leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
         />
       </div>
     </div>
@@ -121,9 +121,9 @@ function CertificationItem({
   yearPlaceholder,
 }: CertificationItemProps) {
   return (
-    <li className="flex items-start gap-4 py-4 border-b border-[#F0EDE8]">
+    <li className="flex items-start gap-4 py-4 border-b border-line-soft">
       <span
-        className="flex-shrink-0 w-2 h-2 rounded-full mt-2 bg-[#B8944A]"
+        className="flex-shrink-0 w-2 h-2 rounded-full mt-2 bg-brand"
         aria-hidden="true"
       />
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-1">
@@ -132,14 +132,14 @@ function CertificationItem({
           fieldPath={labelField}
           as="span"
           placeholder={labelPlaceholder}
-          className="text-sm font-medium text-[#2D2D2D] [font-family:'Lato',sans-serif]"
+          className="text-sm font-medium text-ink [font-family:'Lato',sans-serif]"
         />
         <EditableText
           section={section}
           fieldPath={yearField}
           as="span"
           placeholder={yearPlaceholder}
-          className="text-xs flex-shrink-0 text-[#8A8A8A] [font-family:'Lato',sans-serif]"
+          className="text-xs flex-shrink-0 text-ink-muted [font-family:'Lato',sans-serif]"
         />
       </div>
     </li>
@@ -152,7 +152,7 @@ function CertificationItem({
 
 export default function About() {
   return (
-    <main className="min-h-screen bg-white text-[#2D2D2D]">
+    <main className="min-h-screen bg-white text-ink">
       <SEO
         title="O mnie"
         description="Poznaj Anetę — coach mindsetu i wellbeing online. Pomagam osobom w przełomowych momentach odnaleźć klarowność, energię i kierunek. Moja historia i podejście do coachingu."
@@ -245,7 +245,7 @@ export default function About() {
             >
               <div
                 className="relative rounded-[20px] overflow-hidden aspect-[4/5] w-full"
-                style={{ boxShadow: '0 20px 60px rgba(184,148,74,0.15)' }}
+                style={{ boxShadow: '0 20px 60px color-mix(in srgb, var(--color-brand) 15%, transparent)' }}
               >
                 <EditableImage
                   section="about"
@@ -256,7 +256,7 @@ export default function About() {
                 />
                 <div
                   className="absolute inset-0 rounded-[20px] pointer-events-none"
-                  style={{ boxShadow: 'inset 0 0 0 2px rgba(184,148,74,0.3)' }}
+                  style={{ boxShadow: 'inset 0 0 0 2px color-mix(in srgb, var(--color-brand) 30%, transparent)' }}
                   aria-hidden="true"
                 />
               </div>
@@ -275,7 +275,7 @@ export default function About() {
                 fieldPath="bioHeading"
                 as="h2"
                 placeholder="CZEŚĆ, JESTEM ANETA"
-                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
+                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-ink [font-family:'Cormorant_Garamond',serif]"
               />
 
               <EditableText
@@ -283,10 +283,10 @@ export default function About() {
                 fieldPath="bioParagraph1"
                 as="p"
                 placeholder="Jestem psychologiem klinicznym z wieloletnim doświadczeniem w pracy z osobami poszukującymi głębszej zmiany. Ukończyłam psychologię kliniczną oraz liczne szkolenia z zakresu terapii somatycznej i psychobiologii stresu."
-                className="text-sm sm:text-base leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                className="text-sm sm:text-base leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
               />
 
-              <blockquote className="pl-5 border-l-2 border-[#B8944A] mt-2">
+              <blockquote className="pl-5 border-l-2 border-brand mt-2">
                 <EditableText
                   section="about"
                   fieldPath="bioQuote"
@@ -294,7 +294,7 @@ export default function About() {
                   placeholder={
                     '„Zmiana nie zaczyna się w głowie — zaczyna się w ciele i w odważnej decyzji, by siebie wysłuchać."'
                   }
-                  className="text-base sm:text-lg italic leading-relaxed text-[#B8944A] [font-family:'Cormorant_Garamond',serif]"
+                  className="text-base sm:text-lg italic leading-relaxed text-brand [font-family:'Cormorant_Garamond',serif]"
                 />
               </blockquote>
             </ScrollReveal>
@@ -311,7 +311,7 @@ export default function About() {
               fieldPath="bioParagraph2"
               as="p"
               placeholder="Specjalizuję się w pracy z ciałem — wierzę, że trwała zmiana zaczyna się od nawiązania głębokiego kontaktu z własnym organizmem. Łączę techniki terapii somatycznej z coachingiem transformacyjnym, by wspierać Cię w budowaniu autentycznego życia."
-              className="text-sm sm:text-base leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+              className="text-sm sm:text-base leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
             />
 
             <EditableText
@@ -319,7 +319,7 @@ export default function About() {
               fieldPath="bioParagraph3"
               as="p"
               placeholder="Pracuję z dorosłymi — indywidualnie — online i stacjonarnie. Moją misją jest towarzyszenie Ci w odkrywaniu własnych zasobów i potencjału."
-              className="text-sm sm:text-base leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+              className="text-sm sm:text-base leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
             />
           </ScrollReveal>
         </div>
@@ -329,7 +329,7 @@ export default function About() {
       {/* VALUES — JAK PATRZĘ NA CZŁOWIEKA                                   */}
       {/* ------------------------------------------------------------------ */}
       <section
-        className="px-6 py-16 sm:py-24 bg-[#F5F3EF]"
+        className="px-6 py-16 sm:py-24 bg-surface-alt"
         aria-label="Wartości"
       >
         <div className="max-w-[1024px] mx-auto">
@@ -343,14 +343,14 @@ export default function About() {
               fieldPath="valuesHeading"
               as="h2"
               placeholder="JAK PATRZĘ NA CZŁOWIEKA"
-              className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
+              className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-ink [font-family:'Cormorant_Garamond',serif]"
             />
             <EditableText
               section="about"
               fieldPath="valuesSubtitle"
               as="p"
               placeholder="Moja praca opiera się na trzech filarach, które tworzą spójne i skuteczne podejście do zmiany."
-              className="text-sm sm:text-base leading-relaxed max-w-[576px] text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+              className="text-sm sm:text-base leading-relaxed max-w-[576px] text-ink-soft [font-family:'Lato',sans-serif]"
             />
           </ScrollReveal>
 
@@ -407,7 +407,7 @@ export default function About() {
               fieldPath="qualHeading"
               as="h2"
               placeholder="CZYM SIĘ ZAJMUJĘ"
-              className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
+              className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-ink [font-family:'Cormorant_Garamond',serif]"
             />
           </ScrollReveal>
 
@@ -460,7 +460,7 @@ export default function About() {
       {/* CERTIFICATIONS                                                       */}
       {/* ------------------------------------------------------------------ */}
       <section
-        className="px-6 py-16 sm:py-24 bg-[#FAF8F5]"
+        className="px-6 py-16 sm:py-24 bg-surface"
         aria-label="Wykształcenie i certyfikaty"
       >
         <div className="max-w-[768px] mx-auto">
@@ -474,7 +474,7 @@ export default function About() {
               fieldPath="certHeading"
               as="h2"
               placeholder="MOJE WYKSZTAŁCENIE I CERTYFIKATY"
-              className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
+              className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-ink [font-family:'Cormorant_Garamond',serif]"
             />
           </ScrollReveal>
 
@@ -576,7 +576,7 @@ export default function About() {
               section="about"
               fieldPath="ctaBtn1"
               defaultAction="calendly"
-              className="items-center justify-center px-8 py-3 rounded-lg text-sm font-semibold bg-[#B8944A] text-white transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A] [font-family:'Lato',sans-serif]"
+              className="items-center justify-center px-8 py-3 rounded-lg text-sm font-semibold bg-action text-white transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand [font-family:'Lato',sans-serif]"
             >
               <EditableText
                 section="about"

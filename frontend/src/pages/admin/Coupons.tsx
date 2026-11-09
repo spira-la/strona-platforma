@@ -114,7 +114,7 @@ function CopyButton({ text }: { text: string }) {
       type="button"
       onClick={handleCopy}
       title={t('admin.coupons.actions.copyCode')}
-      className="ml-1.5 p-0.5 rounded text-[#AAAAAA] hover:text-[#B8963E] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
+      className="ml-1.5 p-0.5 rounded text-[#AAAAAA] hover:text-brand transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
       aria-label={
         copied
           ? t('admin.coupons.actions.copied')
@@ -276,9 +276,9 @@ function CouponDialog({
   };
 
   const labelClass =
-    "block font-['Inter'] text-[13px] font-medium text-[#444444] mb-1";
+    "block font-['Inter'] text-[13px] font-medium text-ink mb-1";
   const inputClass =
-    "w-full border border-[#E8E4DF] rounded-lg px-3 py-2 font-['Inter'] text-[14px] text-[#2D2D2D] placeholder-[#BBBBBB] focus:outline-none focus:ring-2 focus:ring-[#B8963E] focus:border-transparent transition-shadow";
+    "w-full border border-line rounded-lg px-3 py-2 font-['Inter'] text-[14px] text-ink placeholder-[#BBBBBB] focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-shadow";
   const errorClass = "mt-1 font-['Inter'] text-[12px] text-red-500";
 
   return (
@@ -296,8 +296,8 @@ function CouponDialog({
     >
       <div className="relative bg-white rounded-xl shadow-2xl w-full max-w-[500px] mx-4 max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#F0EDE8] shrink-0">
-          <h2 className="font-['Cormorant_Garamond'] font-bold text-[20px] text-[#2D2D2D]">
+        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-line-soft shrink-0">
+          <h2 className="font-['Cormorant_Garamond'] font-bold text-[20px] text-ink">
             {editingCoupon
               ? t('admin.coupons.editCoupon')
               : t('admin.coupons.newCoupon')}
@@ -305,7 +305,7 @@ function CouponDialog({
           <button
             type="button"
             onClick={onClose}
-            className="text-[#8A8A8A] hover:text-[#2D2D2D] transition-colors rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
+            className="text-ink-muted hover:text-ink transition-colors rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             aria-label={t('admin.coupons.close')}
           >
             <X size={20} />
@@ -339,7 +339,7 @@ function CouponDialog({
                 type="button"
                 onClick={() => setField('code', generateCode())}
                 title={t('admin.coupons.form.generateTooltip')}
-                className="flex items-center gap-1.5 px-3 py-2 border border-[#E8E4DF] rounded-lg font-['Inter'] text-[13px] text-[#6B6B6B] hover:bg-[#F9F6F0] hover:text-[#B8963E] hover:border-[#B8963E] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E] whitespace-nowrap"
+                className="flex items-center gap-1.5 px-3 py-2 border border-line rounded-lg font-['Inter'] text-[13px] text-ink-soft hover:bg-surface hover:text-brand hover:border-brand transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand whitespace-nowrap"
               >
                 <RefreshCw size={13} />
                 {t('admin.coupons.form.generate')}
@@ -366,8 +366,8 @@ function CouponDialog({
                   key={value}
                   className={`flex items-center gap-2 cursor-pointer px-4 py-2 rounded-lg border transition-colors font-['Inter'] text-[14px] ${
                     form.discountType === value
-                      ? 'border-[#B8963E] bg-[#B8963E]/5 text-[#B8963E] font-medium'
-                      : 'border-[#E8E4DF] text-[#444444] hover:bg-[#F9F6F0]'
+                      ? 'border-brand bg-brand/5 text-brand font-medium'
+                      : 'border-line text-ink hover:bg-surface'
                   }`}
                 >
                   <input
@@ -401,7 +401,7 @@ function CouponDialog({
                 placeholder={t('admin.coupons.form.valuePlaceholder')}
                 className={`${inputClass} pr-10`}
               />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 font-['Inter'] text-[13px] text-[#8A8A8A] pointer-events-none select-none">
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 font-['Inter'] text-[13px] text-ink-muted pointer-events-none select-none">
                 {form.discountType === 'percentage' ? '%' : 'zł'}
               </span>
             </div>
@@ -416,12 +416,12 @@ function CouponDialog({
               {t('admin.coupons.form.maxUses')}
             </label>
             <div className="flex items-center gap-3 mb-2">
-              <label className="flex items-center gap-1.5 cursor-pointer font-['Inter'] text-[13px] text-[#6B6B6B]">
+              <label className="flex items-center gap-1.5 cursor-pointer font-['Inter'] text-[13px] text-ink-soft">
                 <input
                   type="checkbox"
                   checked={form.noLimit}
                   onChange={(e) => setField('noLimit', e.target.checked)}
-                  className="rounded border-[#E8E4DF] text-[#B8963E] focus:ring-[#B8963E] w-4 h-4"
+                  className="rounded border-line text-brand focus:ring-brand w-4 h-4"
                 />
                 {t('admin.coupons.form.noLimit')}
               </label>
@@ -451,12 +451,12 @@ function CouponDialog({
               {t('admin.coupons.form.expiryDate')}
             </label>
             <div className="flex items-center gap-3 mb-2">
-              <label className="flex items-center gap-1.5 cursor-pointer font-['Inter'] text-[13px] text-[#6B6B6B]">
+              <label className="flex items-center gap-1.5 cursor-pointer font-['Inter'] text-[13px] text-ink-soft">
                 <input
                   type="checkbox"
                   checked={form.noExpiry}
                   onChange={(e) => setField('noExpiry', e.target.checked)}
-                  className="rounded border-[#E8E4DF] text-[#B8963E] focus:ring-[#B8963E] w-4 h-4"
+                  className="rounded border-line text-brand focus:ring-brand w-4 h-4"
                 />
                 {t('admin.coupons.form.noExpiry')}
               </label>
@@ -479,8 +479,8 @@ function CouponDialog({
           </div>
 
           {/* Active toggle */}
-          <div className="flex items-center justify-between py-2 px-3 bg-[#F9F6F0] rounded-lg">
-            <span className="font-['Inter'] text-[14px] text-[#444444]">
+          <div className="flex items-center justify-between py-2 px-3 bg-surface rounded-lg">
+            <span className="font-['Inter'] text-[14px] text-ink">
               {t('admin.coupons.form.activeToggle')}
             </span>
             <button
@@ -488,8 +488,8 @@ function CouponDialog({
               role="switch"
               aria-checked={form.isActive}
               onClick={() => setField('isActive', !form.isActive)}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E] ${
-                form.isActive ? 'bg-[#B8963E]' : 'bg-[#DDDDDD]'
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
+                form.isActive ? 'bg-brand' : 'bg-[#DDDDDD]'
               }`}
             >
               <span
@@ -506,14 +506,14 @@ function CouponDialog({
               type="button"
               onClick={onClose}
               disabled={isSaving}
-              className="px-4 py-2 rounded-lg border border-[#E8E4DF] font-['Inter'] text-[14px] text-[#444444] hover:bg-[#F9F6F0] transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
+              className="px-4 py-2 rounded-lg border border-line font-['Inter'] text-[14px] text-ink hover:bg-surface transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             >
               {t('common.cancel')}
             </button>
             <button
               type="submit"
               disabled={isSaving}
-              className="flex items-center gap-2 px-5 py-2 rounded-lg bg-[#B8963E] hover:bg-[#8A6F2E] text-white font-['Inter'] text-[14px] font-medium transition-colors disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E] focus-visible:ring-offset-2"
+              className="flex items-center gap-2 px-5 py-2 rounded-lg bg-action hover:bg-action-hover text-white font-['Inter'] text-[14px] font-medium transition-colors disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
             >
               {isSaving && <Loader2 size={15} className="animate-spin" />}
               {editingCoupon
@@ -543,11 +543,11 @@ function CouponRow({ coupon, onEdit, onToggle, isToggling }: CouponRowProps) {
   const expired = isExpired(coupon);
 
   return (
-    <tr className="hover:bg-[#FDFCFA] transition-colors border-b border-[#F0EDE8] last:border-b-0">
+    <tr className="hover:bg-[#FDFCFA] transition-colors border-b border-line-soft last:border-b-0">
       {/* Code */}
       <td className="px-4 py-3.5">
         <div className="flex items-center">
-          <span className="font-mono text-[13px] font-semibold text-[#2D2D2D] tracking-widest">
+          <span className="font-mono text-[13px] font-semibold text-ink tracking-widest">
             {coupon.code}
           </span>
           <CopyButton text={coupon.code} />
@@ -556,7 +556,7 @@ function CouponRow({ coupon, onEdit, onToggle, isToggling }: CouponRowProps) {
 
       {/* Type */}
       <td className="px-4 py-3.5">
-        <span className="font-['Inter'] text-[13px] text-[#6B6B6B]">
+        <span className="font-['Inter'] text-[13px] text-ink-soft">
           {coupon.discountType === 'percentage'
             ? t('admin.coupons.discountType.percentage')
             : t('admin.coupons.discountType.fixed')}
@@ -565,14 +565,14 @@ function CouponRow({ coupon, onEdit, onToggle, isToggling }: CouponRowProps) {
 
       {/* Value */}
       <td className="px-4 py-3.5">
-        <span className="font-['Inter'] text-[14px] font-semibold text-[#2D2D2D]">
+        <span className="font-['Inter'] text-[14px] font-semibold text-ink">
           {formatDiscount(coupon)}
         </span>
       </td>
 
       {/* Uses */}
       <td className="px-4 py-3.5">
-        <span className="font-['Inter'] text-[13px] text-[#6B6B6B]">
+        <span className="font-['Inter'] text-[13px] text-ink-soft">
           {formatUses(coupon)}
         </span>
       </td>
@@ -580,7 +580,7 @@ function CouponRow({ coupon, onEdit, onToggle, isToggling }: CouponRowProps) {
       {/* Expiry */}
       <td className="px-4 py-3.5">
         <span
-          className={`font-['Inter'] text-[13px] ${expired ? 'text-red-500' : 'text-[#6B6B6B]'}`}
+          className={`font-['Inter'] text-[13px] ${expired ? 'text-red-500' : 'text-ink-soft'}`}
         >
           {formatExpiry(coupon.expiresAt)}
         </span>
@@ -614,7 +614,7 @@ function CouponRow({ coupon, onEdit, onToggle, isToggling }: CouponRowProps) {
             type="button"
             onClick={() => onEdit(coupon)}
             title={t('admin.coupons.actions.edit')}
-            className="p-1.5 rounded text-[#8A8A8A] hover:text-[#B8963E] hover:bg-[#F9F6F0] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
+            className="p-1.5 rounded text-ink-muted hover:text-brand hover:bg-surface transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             aria-label={t('admin.coupons.actions.editCoupon')}
           >
             <Pencil size={15} />
@@ -630,7 +630,7 @@ function CouponRow({ coupon, onEdit, onToggle, isToggling }: CouponRowProps) {
                 ? t('admin.coupons.actions.archive')
                 : t('admin.coupons.actions.restore')
             }
-            className="p-1.5 rounded text-[#8A8A8A] hover:text-[#B8963E] hover:bg-[#F9F6F0] transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
+            className="p-1.5 rounded text-ink-muted hover:text-brand hover:bg-surface transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             aria-label={
               coupon.isActive
                 ? t('admin.coupons.actions.archiveCoupon')
@@ -638,7 +638,7 @@ function CouponRow({ coupon, onEdit, onToggle, isToggling }: CouponRowProps) {
             }
           >
             {coupon.isActive ? (
-              <ToggleRight size={17} className="text-[#B8963E]" />
+              <ToggleRight size={17} className="text-brand" />
             ) : (
               <ToggleLeft size={17} />
             )}
@@ -842,7 +842,7 @@ export default function AdminCoupons() {
       </div>
 
       {/* Table card */}
-      <div className="bg-white border border-[#E8E4DF] rounded-xl overflow-hidden">
+      <div className="bg-white border border-line rounded-xl overflow-hidden">
         {isError && (
           <div className="p-8 text-center">
             <p className="font-['Inter'] text-[14px] text-red-500">
@@ -853,7 +853,7 @@ export default function AdminCoupons() {
 
         {isLoading && (
           <div className="p-12 flex justify-center">
-            <Loader2 size={24} className="animate-spin text-[#B8963E]" />
+            <Loader2 size={24} className="animate-spin text-brand" />
           </div>
         )}
 
@@ -864,7 +864,7 @@ export default function AdminCoupons() {
               className="mx-auto mb-3 text-[#DDDDDD]"
               strokeWidth={1.5}
             />
-            <p className="font-['Inter'] text-[14px] text-[#8A8A8A]">
+            <p className="font-['Inter'] text-[14px] text-ink-muted">
               {search
                 ? t('admin.coupons.empty.noResults')
                 : t('admin.coupons.empty.noCoupons')}
@@ -879,7 +879,7 @@ export default function AdminCoupons() {
               aria-label={t('admin.coupons.table.label')}
             >
               <thead>
-                <tr className="bg-[#F9F6F0]">
+                <tr className="bg-surface">
                   {[
                     t('admin.coupons.table.code'),
                     t('admin.coupons.table.type'),
@@ -892,7 +892,7 @@ export default function AdminCoupons() {
                     <th
                       key={col}
                       scope="col"
-                      className="px-4 py-3 text-left font-['Inter'] text-[11px] uppercase tracking-wider text-[#8A8A8A] font-semibold"
+                      className="px-4 py-3 text-left font-['Inter'] text-[11px] uppercase tracking-wider text-ink-muted font-semibold"
                     >
                       {col}
                     </th>

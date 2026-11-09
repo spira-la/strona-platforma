@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { EditableText } from '@/components/cms/EditableText';
-import spiralaIcon from '@/assets/spirala-icon.png';
+import spiralaWordmark from '@/assets/spirala-wordmark.webp';
+import spiralaSpiral from '@/assets/spirala-spiral.webp';
+import { featureFlags } from '@/config/features';
 
 function InstagramIcon({ size = 18 }: { size?: number }) {
   return (
@@ -68,6 +70,24 @@ interface FooterColumn {
   }>;
 }
 
+const CONTACT_COLUMN: FooterColumn = {
+  titleField: 'col3Title',
+  titleDefault: 'Kontakt',
+  links: [
+    {
+      href: '/kontakt',
+      fieldPath: 'col3Link1',
+      labelDefault: 'Formularz kontaktowy',
+    },
+    {
+      href: 'mailto:contact@spira-la.com',
+      fieldPath: 'col3Link2',
+      labelDefault: 'contact@spira-la.com',
+      isEmail: true,
+    },
+  ],
+};
+
 const FOOTER_COLUMNS: FooterColumn[] = [
   {
     titleField: 'col1Title',
@@ -92,7 +112,9 @@ const FOOTER_COLUMNS: FooterColumn[] = [
         fieldPath: 'col2Link2',
         labelDefault: 'Pakiety sesji',
       },
-      { href: '/blog', fieldPath: 'col2Link3', labelDefault: 'Blog' },
+      ...(featureFlags.blog
+        ? [{ href: '/blog', fieldPath: 'col2Link3', labelDefault: 'Blog' }]
+        : []),
       {
         href: '/tworzenie-stron',
         fieldPath: 'col2Link4',
@@ -100,23 +122,27 @@ const FOOTER_COLUMNS: FooterColumn[] = [
       },
     ],
   },
+  CONTACT_COLUMN,
+];
+
+// Simple footer used when the `extendedNav` flag is off — mirrors the 4-tab
+// menu. New fieldPaths so CMS labels saved for the old columns don't leak in.
+const SIMPLE_FOOTER_COLUMNS: FooterColumn[] = [
   {
-    titleField: 'col3Title',
-    titleDefault: 'Kontakt',
+    titleField: 'col1Title',
+    titleDefault: 'Nawigacja',
     links: [
+      { href: '/', fieldPath: 'navHome', labelDefault: 'Start' },
+      { href: '/o-mnie', fieldPath: 'col1Link1', labelDefault: 'O Mnie' },
       {
-        href: '/kontakt',
-        fieldPath: 'col3Link1',
-        labelDefault: 'Formularz kontaktowy',
+        href: '/wydarzenia',
+        fieldPath: 'navEvents',
+        labelDefault: 'Wydarzenia',
       },
-      {
-        href: 'mailto:contact@spira-la.com',
-        fieldPath: 'col3Link2',
-        labelDefault: 'contact@spira-la.com',
-        isEmail: true,
-      },
+      { href: '/kontakt', fieldPath: 'navContact', labelDefault: 'Kontakt' },
     ],
   },
+  CONTACT_COLUMN,
 ];
 
 const SOCIAL_LINKS = [
@@ -142,7 +168,7 @@ export function Footer() {
 
   return (
     <footer
-      className="bg-[#FAF8F5]"
+      className="bg-surface"
       role="contentinfo"
       aria-label="Stopka strony"
     >
@@ -153,21 +179,30 @@ export function Footer() {
           <div className="flex flex-col gap-4 lg:max-w-[280px]">
             <Link
               to="/"
-              className="flex items-center gap-2 self-start transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded"
+              className="flex items-center self-start transition-opacity duration-200 hover:opacity-85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded"
               aria-label="Spirala — strona główna"
             >
+              {/* Logo split in two so the spiral can roll along the footer
+                  (client: "niech ślimak się turla poziomo"). */}
               <img
-                src={spiralaIcon}
+                src={spiralaWordmark}
                 alt=""
-                className="h-8 w-auto"
+                width={79}
+                height={25}
+                className="h-[25px] w-auto"
                 aria-hidden="true"
               />
-              <span className="font-['Cormorant_Garamond'] text-[20px] font-bold tracking-[-0.5px] text-[#B8944A] hover:text-[#8A6F2E]">
-                Spirala
-              </span>
+              <img
+                src={spiralaSpiral}
+                alt=""
+                width={42}
+                height={44}
+                className="ml-[7px] h-11 w-auto animate-roll motion-reduce:animate-none"
+                aria-hidden="true"
+              />
             </Link>
 
-            <p className="font-['Lato'] text-[14px] leading-relaxed text-[#6B6B6B]">
+            <p className="font-['Lato'] text-[14px] leading-relaxed text-ink-soft">
               <EditableText section="footer" fieldPath="description">
                 Coaching i terapia wspierające Twój osobisty rozwój i dobrostan.
               </EditableText>
@@ -185,7 +220,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="text-[#8A8A8A] hover:text-[#B8944A] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded"
+                  className="text-ink-muted hover:text-brand transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded"
                 >
                   <Icon size={18} aria-hidden="true" />
                 </a>
@@ -194,10 +229,15 @@ export function Footer() {
           </div>
 
           {/* Right: navigation columns */}
-          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:gap-20">
-            {FOOTER_COLUMNS.map((col) => (
+          <div
+            className={`grid grid-cols-2 gap-8 lg:gap-20 ${featureFlags.extendedNav ? 'sm:grid-cols-3' : ''}`}
+          >
+            {(featureFlags.extendedNav
+              ? FOOTER_COLUMNS
+              : SIMPLE_FOOTER_COLUMNS
+            ).map((col) => (
               <div key={col.titleField} className="flex flex-col gap-3">
-                <h3 className="font-['Lato'] text-[14px] font-bold text-[#2D2D2D] uppercase tracking-wide">
+                <h3 className="font-['Lato'] text-[14px] font-bold text-ink uppercase tracking-wide">
                   <EditableText section="footer" fieldPath={col.titleField}>
                     {col.titleDefault}
                   </EditableText>
@@ -208,7 +248,7 @@ export function Footer() {
                       {link.isEmail ? (
                         <a
                           href={link.href}
-                          className="font-['Lato'] text-[14px] text-[#6B6B6B] hover:text-[#B8944A] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded"
+                          className="font-['Lato'] text-[14px] text-ink-soft hover:text-brand transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded"
                         >
                           <EditableText
                             section="footer"
@@ -220,7 +260,7 @@ export function Footer() {
                       ) : (
                         <Link
                           to={link.href}
-                          className="font-['Lato'] text-[14px] text-[#6B6B6B] hover:text-[#B8944A] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded"
+                          className="font-['Lato'] text-[14px] text-ink-soft hover:text-brand transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded"
                         >
                           <EditableText
                             section="footer"
@@ -241,13 +281,13 @@ export function Footer() {
 
       {/* Divider */}
       <div
-        className="mx-6 md:mx-[120px] h-px bg-[#D4B97A]/50"
+        className="mx-6 md:mx-[120px] h-px bg-brand-light/50"
         aria-hidden="true"
       />
 
       {/* Bottom bar */}
       <div className="mx-auto px-6 md:px-[120px] py-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="font-['Lato'] text-[13px] text-[#8A8A8A]">
+        <p className="font-['Lato'] text-[13px] text-ink-muted">
           <EditableText section="footer" fieldPath="copyright">
             {t('footer.copyright')}
           </EditableText>
@@ -256,7 +296,7 @@ export function Footer() {
         <nav aria-label="Linki prawne" className="flex items-center gap-6">
           <Link
             to="/polityka-prywatnosci"
-            className="font-['Lato'] text-[13px] text-[#8A8A8A] hover:text-[#B8944A] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded"
+            className="font-['Lato'] text-[13px] text-ink-muted hover:text-brand transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded"
           >
             <EditableText section="footer" fieldPath="privacy">
               {t('footer.privacy')}
@@ -264,7 +304,7 @@ export function Footer() {
           </Link>
           <Link
             to="/regulamin"
-            className="font-['Lato'] text-[13px] text-[#8A8A8A] hover:text-[#B8944A] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded"
+            className="font-['Lato'] text-[13px] text-ink-muted hover:text-brand transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded"
           >
             <EditableText section="footer" fieldPath="terms">
               {t('footer.terms')}

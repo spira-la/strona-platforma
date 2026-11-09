@@ -112,13 +112,13 @@ export function BookingCalendar({
   }
 
   return (
-    <div className="w-full rounded-lg overflow-hidden border border-[#E8E4DF] bg-white shadow-sm">
+    <div className="w-full rounded-lg overflow-hidden border border-line bg-white shadow-sm">
       {/* Header */}
       <div
         className="px-6 py-5"
         style={{
           background:
-            'linear-gradient(135deg, #B8944A 0%, #D4B97A 50%, #8A6F2E 100%)',
+            'linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-light) 50%, var(--color-brand-dark) 100%)',
         }}
       >
         <p
@@ -140,14 +140,14 @@ export function BookingCalendar({
         <div className="flex items-center justify-between mb-4">
           <button
             onClick={prevMonth}
-            className="flex items-center justify-center w-8 h-8 rounded-full text-[#6B6B6B] hover:bg-[#FAF8F5] hover:text-[#B8944A] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A]"
+            className="flex items-center justify-center w-8 h-8 rounded-full text-ink-soft hover:bg-surface hover:text-brand transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             aria-label="Poprzedni miesiac"
           >
             <ChevronLeft size={18} />
           </button>
 
           <span
-            className="text-sm font-bold uppercase tracking-wide text-[#2D2D2D]"
+            className="text-sm font-bold uppercase tracking-wide text-ink"
             style={{ fontFamily: "'Cormorant Garamond', serif" }}
             aria-live="polite"
           >
@@ -156,7 +156,7 @@ export function BookingCalendar({
 
           <button
             onClick={nextMonth}
-            className="flex items-center justify-center w-8 h-8 rounded-full text-[#6B6B6B] hover:bg-[#FAF8F5] hover:text-[#B8944A] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A]"
+            className="flex items-center justify-center w-8 h-8 rounded-full text-ink-soft hover:bg-surface hover:text-brand transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             aria-label="Nastepny miesiac"
           >
             <ChevronRight size={18} />
@@ -168,7 +168,7 @@ export function BookingCalendar({
           {WEEKDAY_LABELS.map((label) => (
             <div
               key={label}
-              className="text-center text-[10px] font-bold uppercase tracking-wider text-[#8A8A8A] py-1"
+              className="text-center text-[10px] font-bold uppercase tracking-wider text-ink-muted py-1"
               style={{ fontFamily: "'Lato', sans-serif" }}
             >
               {label}
@@ -196,18 +196,18 @@ export function BookingCalendar({
             const unavailableFlag = isUnavailable(date);
 
             let cellClasses =
-              'relative flex items-center justify-center w-8 h-8 mx-auto rounded-full text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] ';
+              'relative flex items-center justify-center w-8 h-8 mx-auto rounded-full text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand ';
 
             if (selectedFlag) {
-              cellClasses += 'bg-[#B8944A] text-white font-bold';
+              cellClasses += 'bg-action text-white font-bold';
             } else if (unavailableFlag) {
               cellClasses += 'text-[#C0BDB9] cursor-not-allowed';
             } else if (todayFlag) {
               cellClasses +=
-                'ring-2 ring-[#B8944A] text-[#B8944A] font-semibold hover:bg-[#B8944A] hover:text-white cursor-pointer';
+                'ring-2 ring-brand text-brand font-semibold hover:bg-brand hover:text-white cursor-pointer';
             } else {
               cellClasses +=
-                'text-[#2D2D2D] hover:bg-[#FAF8F5] hover:text-[#B8944A] cursor-pointer';
+                'text-ink hover:bg-surface hover:text-brand cursor-pointer';
             }
 
             return (
@@ -235,10 +235,10 @@ export function BookingCalendar({
         </div>
 
         {/* Legend */}
-        <div className="flex items-center justify-center gap-5 mt-4 pt-4 border-t border-[#F0EDE8]">
+        <div className="flex items-center justify-center gap-5 mt-4 pt-4 border-t border-line-soft">
           <LegendItem color="bg-[#4CAF50]" label="Dostepny" />
           <LegendItem color="bg-[#C0BDB9]" label="Niedostepny" />
-          <LegendItem color="bg-[#B8944A]" label="Dzis" />
+          <LegendItem color="bg-brand" label="Dzis" />
         </div>
       </div>
     </div>
@@ -253,7 +253,7 @@ function LegendItem({ color, label }: { color: string; label: string }) {
         aria-hidden="true"
       />
       <span
-        className="text-[11px] text-[#8A8A8A]"
+        className="text-[11px] text-ink-muted"
         style={{ fontFamily: "'Lato', sans-serif" }}
       >
         {label}

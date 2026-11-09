@@ -63,16 +63,16 @@ const UPCOMING_SESSIONS: Session[] = [
 
 function StatCardItem({ icon: Icon, label, value, subtitle }: StatCard) {
   return (
-    <div className="bg-white border border-[#E8E4DF] rounded-xl p-6">
+    <div className="bg-white border border-line rounded-xl p-6">
       <div className="flex items-center gap-4">
-        <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#B8963E]/10 shrink-0">
-          <Icon className="w-5 h-5 text-[#B8963E]" strokeWidth={1.75} />
+        <div className="flex items-center justify-center w-10 h-10 rounded-full bg-brand/10 shrink-0">
+          <Icon className="w-5 h-5 text-brand" strokeWidth={1.75} />
         </div>
         <div className="min-w-0">
-          <p className="font-['Inter'] text-[13px] text-[#6B6B6B] leading-tight truncate">
+          <p className="font-['Inter'] text-[13px] text-ink-soft leading-tight truncate">
             {label}
           </p>
-          <p className="font-['Cormorant_Garamond'] font-bold text-[28px] text-[#2D2D2D] leading-tight">
+          <p className="font-['Cormorant_Garamond'] font-bold text-[28px] text-ink leading-tight">
             {value}
           </p>
           <p className="font-['Inter'] text-[12px] text-[#AAAAAA] leading-tight">
@@ -86,16 +86,16 @@ function StatCardItem({ icon: Icon, label, value, subtitle }: StatCard) {
 
 function SessionItem({ client, service, datetime }: Session) {
   return (
-    <li className="flex items-center gap-3 py-3 border-b border-[#E8E4DF] last:border-b-0">
+    <li className="flex items-center gap-3 py-3 border-b border-line last:border-b-0">
       <span
-        className="w-2 h-2 rounded-full bg-[#B8963E] shrink-0"
+        className="w-2 h-2 rounded-full bg-brand shrink-0"
         aria-hidden="true"
       />
       <div className="flex-1 min-w-0">
-        <p className="font-['Inter'] text-[14px] font-medium text-[#2D2D2D] leading-tight truncate">
+        <p className="font-['Inter'] text-[14px] font-medium text-ink leading-tight truncate">
           {client}
         </p>
-        <p className="font-['Inter'] text-[12px] text-[#8A8A8A] leading-tight truncate">
+        <p className="font-['Inter'] text-[12px] text-ink-muted leading-tight truncate">
           {service}
         </p>
       </div>
@@ -110,9 +110,9 @@ function QuickActionButton({ icon: Icon, label, to }: QuickAction) {
   return (
     <Link
       to={to}
-      className="flex items-center gap-3 w-full border border-[#E8E4DF] rounded-lg py-3 px-4 font-['Inter'] text-[14px] font-medium text-[#444444] hover:bg-[#F9F6F0] hover:text-[#B8963E] transition-colors duration-150"
+      className="flex items-center gap-3 w-full border border-line rounded-lg py-3 px-4 font-['Inter'] text-[14px] font-medium text-ink hover:bg-surface hover:text-brand transition-colors duration-150"
     >
-      <Icon className="w-4 h-4 shrink-0 text-[#B8963E]" strokeWidth={1.75} />
+      <Icon className="w-4 h-4 shrink-0 text-brand" strokeWidth={1.75} />
       {label}
     </Link>
   );
@@ -192,14 +192,14 @@ export default function Dashboard() {
       {/* Two-column section — stacked on mobile, side-by-side from md */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Upcoming sessions */}
-        <div className="bg-white border border-[#E8E4DF] rounded-xl p-6">
+        <div className="bg-white border border-line rounded-xl p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-['Cormorant_Garamond'] font-bold text-[18px] text-[#1A1A1A]">
               {t('admin.dashboard.upcomingSessions')}
             </h2>
             <Link
               to="/admin/sessions"
-              className="font-['Inter'] text-[13px] text-[#B8963E] hover:text-[#8A6F2E] transition-colors duration-150"
+              className="font-['Inter'] text-[13px] text-brand hover:text-brand-dark transition-colors duration-150"
             >
               {t('admin.dashboard.viewAll')}
             </Link>
@@ -213,7 +213,7 @@ export default function Dashboard() {
         </div>
 
         {/* Quick actions */}
-        <div className="bg-white border border-[#E8E4DF] rounded-xl p-6">
+        <div className="bg-white border border-line rounded-xl p-6">
           <h2 className="font-['Cormorant_Garamond'] font-bold text-[18px] text-[#1A1A1A] mb-4">
             {t('admin.dashboard.quickActions')}
           </h2>

@@ -58,10 +58,10 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
       <div className="text-center mb-2">
-        <h2 className="font-['Cormorant_Garamond'] text-[28px] font-bold text-[#2D2D2D]">
+        <h2 className="font-['Cormorant_Garamond'] text-[28px] font-bold text-ink">
           Zaloguj się
         </h2>
-        <p className="font-['Lato'] text-[14px] text-[#8A8A8A] mt-1">
+        <p className="font-['Lato'] text-[14px] text-ink-muted mt-1">
           Witaj ponownie w Spirala
         </p>
       </div>
@@ -76,7 +76,7 @@ export function LoginForm() {
         type="button"
         onClick={handleGoogleSignIn}
         disabled={isGoogleLoading || isSubmitting}
-        className="font-['Lato'] text-[14px] font-medium text-[#2D2D2D] bg-white border border-[#E8E4DF] hover:bg-[#FAF8F4] hover:border-[#D4C9B8] disabled:opacity-60 disabled:cursor-not-allowed transition-colors duration-200 rounded-lg px-6 py-3 flex items-center justify-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
+        className="font-['Lato'] text-[14px] font-medium text-ink bg-white border border-line hover:bg-[#FAF8F4] hover:border-[#D4C9B8] disabled:opacity-60 disabled:cursor-not-allowed transition-colors duration-200 rounded-lg px-6 py-3 flex items-center justify-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
       >
         <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
           <path
@@ -100,17 +100,17 @@ export function LoginForm() {
       </button>
 
       <div className="flex items-center gap-3">
-        <div className="flex-1 h-px bg-[#E8E4DF]" />
-        <span className="font-['Lato'] text-[12px] text-[#8A8A8A] uppercase tracking-wider">
+        <div className="flex-1 h-px bg-line" />
+        <span className="font-['Lato'] text-[12px] text-ink-muted uppercase tracking-wider">
           lub
         </span>
-        <div className="flex-1 h-px bg-[#E8E4DF]" />
+        <div className="flex-1 h-px bg-line" />
       </div>
 
       <div className="flex flex-col gap-1.5">
         <label
           htmlFor="login-email"
-          className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D]"
+          className="font-['Lato'] text-[13px] font-medium text-ink"
         >
           Adres e-mail
         </label>
@@ -119,7 +119,7 @@ export function LoginForm() {
           type="email"
           autoComplete="email"
           {...register('email')}
-          className="font-['Lato'] text-[14px] text-[#2D2D2D] bg-white border border-[#E8E4DF] rounded-lg px-4 py-3 outline-none transition-colors focus:border-[#B8944A] focus:ring-2 focus:ring-[#B8944A]/20 placeholder:text-[#AAAAAA]"
+          className="font-['Lato'] text-[14px] text-ink bg-white border border-line rounded-lg px-4 py-3 outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20 placeholder:text-[#AAAAAA]"
           placeholder="twoj@email.com"
         />
         {errors.email && (
@@ -132,7 +132,7 @@ export function LoginForm() {
       <div className="flex flex-col gap-1.5">
         <label
           htmlFor="login-password"
-          className="font-['Lato'] text-[13px] font-medium text-[#2D2D2D]"
+          className="font-['Lato'] text-[13px] font-medium text-ink"
         >
           Hasło
         </label>
@@ -141,7 +141,7 @@ export function LoginForm() {
           type="password"
           autoComplete="current-password"
           {...register('password')}
-          className="font-['Lato'] text-[14px] text-[#2D2D2D] bg-white border border-[#E8E4DF] rounded-lg px-4 py-3 outline-none transition-colors focus:border-[#B8944A] focus:ring-2 focus:ring-[#B8944A]/20 placeholder:text-[#AAAAAA]"
+          className="font-['Lato'] text-[14px] text-ink bg-white border border-line rounded-lg px-4 py-3 outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20 placeholder:text-[#AAAAAA]"
           placeholder="••••••••"
         />
         {errors.password && (
@@ -154,7 +154,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="font-['Lato'] text-[15px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] disabled:opacity-60 disabled:cursor-not-allowed transition-colors duration-200 rounded-lg px-6 py-3 mt-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
+        className="font-['Lato'] text-[15px] font-semibold text-white bg-action hover:bg-action-hover disabled:opacity-60 disabled:cursor-not-allowed transition-colors duration-200 rounded-lg px-6 py-3 mt-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
       >
         {isSubmitting ? 'Logowanie...' : 'Zaloguj się'}
       </button>
@@ -163,18 +163,18 @@ export function LoginForm() {
         <button
           type="button"
           onClick={openForgotPassword}
-          className="font-['Lato'] text-[13px] text-[#B8944A] font-semibold hover:underline focus-visible:outline-none focus-visible:underline"
+          className="font-['Lato'] text-[13px] text-brand font-semibold hover:underline focus-visible:outline-none focus-visible:underline"
         >
           Nie pamiętasz hasła?
         </button>
       </div>
 
-      <p className="text-center font-['Lato'] text-[13px] text-[#8A8A8A]">
+      <p className="text-center font-['Lato'] text-[13px] text-ink-muted">
         Nie masz konta?{' '}
         <button
           type="button"
           onClick={openRegister}
-          className="text-[#B8944A] font-semibold hover:underline focus-visible:outline-none focus-visible:underline"
+          className="text-brand font-semibold hover:underline focus-visible:outline-none focus-visible:underline"
         >
           Zarejestruj się
         </button>

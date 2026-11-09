@@ -26,7 +26,7 @@ const CONFIRM_VARIANTS: Record<
   warning:
     'bg-amber-500 hover:bg-amber-600 text-white focus-visible:ring-amber-400',
   default:
-    'bg-[#B8963E] hover:bg-[#8A6F2E] text-white focus-visible:ring-[#B8963E]',
+    'bg-action hover:bg-action-hover text-white focus-visible:ring-brand',
 };
 
 // ─── ConfirmDialog ────────────────────────────────────────────────────────────
@@ -99,7 +99,7 @@ export function ConfirmDialog({
         {/* Title */}
         <h2
           id="confirm-dialog-title"
-          className="font-['Cormorant_Garamond',serif] font-bold text-[18px] text-[#2D2D2D] leading-snug mb-3"
+          className="font-['Cormorant_Garamond',serif] font-bold text-[18px] text-ink leading-snug mb-3"
         >
           {title}
         </h2>
@@ -107,7 +107,7 @@ export function ConfirmDialog({
         {/* Message */}
         <p
           id="confirm-dialog-message"
-          className="font-['Inter',sans-serif] text-[14px] text-[#6B6B6B] leading-relaxed mb-6"
+          className="font-['Inter',sans-serif] text-[14px] text-ink-soft leading-relaxed mb-6"
         >
           {message}
         </p>
@@ -120,10 +120,10 @@ export function ConfirmDialog({
             disabled={isLoading}
             onClick={onCancel}
             className={[
-              'px-4 py-2 rounded-lg border border-[#E8E4DF]',
-              "font-['Inter',sans-serif] text-[14px] font-medium text-[#444444]",
-              'hover:bg-[#F9F6F0] transition-colors duration-150',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-[#E8E4DF]',
+              'px-4 py-2 rounded-lg border border-line',
+              "font-['Inter',sans-serif] text-[14px] font-medium text-ink",
+              'hover:bg-surface transition-colors duration-150',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-line',
               'disabled:opacity-50 disabled:cursor-not-allowed',
             ].join(' ')}
           >
