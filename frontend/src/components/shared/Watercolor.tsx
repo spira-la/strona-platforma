@@ -7,6 +7,10 @@ import butterflyRainbow from '@/assets/watercolor/butterfly-rainbow.webp';
 import bouquet from '@/assets/watercolor/bouquet.webp';
 import dragonflyTeal from '@/assets/watercolor/dragonfly-teal.webp';
 import dragonflyBlue from '@/assets/watercolor/dragonfly-blue.webp';
+import dragonflyGreen from '@/assets/watercolor/dragonfly-green.webp';
+import butterflyGreen from '@/assets/watercolor/butterfly-green.webp';
+import butterflyBlue from '@/assets/watercolor/butterfly-blue.webp';
+import butterflyYellow from '@/assets/watercolor/butterfly-yellow.webp';
 import lavenderHeart from '@/assets/watercolor/lavender-heart.webp';
 
 /**
@@ -62,6 +66,10 @@ const FRIENDS = {
   bouquet,
   dragonfly: dragonflyTeal,
   dragonflyBlue,
+  dragonflyGreen,
+  butterflyGreen,
+  butterflyBlue,
+  butterflyYellow,
   lavender: lavenderHeart,
 } as const;
 

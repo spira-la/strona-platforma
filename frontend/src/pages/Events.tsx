@@ -16,7 +16,7 @@ import {
 import lavenderHeart from '@/assets/watercolor/lavender-heart.webp';
 import bouquetArt from '@/assets/watercolor/bouquet.webp';
 import wingsArt from '@/assets/watercolor/butterfly-rainbow.webp';
-import dragonflyArt from '@/assets/watercolor/dragonfly-teal.webp';
+import butterflyYellowArt from '@/assets/watercolor/butterfly-yellow.webp';
 import { SEO } from '@/components/shared/SEO';
 import { EditableText } from '@/components/cms/EditableText';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
@@ -44,7 +44,7 @@ const S = 'events' as const;
 const TIME_ZONE = 'Europe/Warsaw';
 
 /** Watercolor art shown when an event has no picture (cycles per card). */
-const FALLBACK_ART = [lavenderHeart, wingsArt, bouquetArt, dragonflyArt];
+const FALLBACK_ART = [lavenderHeart, wingsArt, bouquetArt, butterflyYellowArt];
 const FALLBACK_BG = [
   'bg-spiral-violet-soft',
   'bg-spiral-gold-soft',

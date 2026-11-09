@@ -258,10 +258,10 @@ function StepsSection() {
   return (
     <section className="relative isolate overflow-hidden bg-surface px-6 py-20 md:px-12 lg:px-[120px] md:py-28">
       <WatercolorFriend
-        kind="dragonfly"
-        float
+        kind="butterflyBlue"
+        fly="left"
         delay={1}
-        className="right-[4%] top-4 w-[72px] md:right-[8%] md:top-12 md:w-[130px]"
+        className="right-[4%] top-3 w-[56px] md:right-[8%] md:top-4 md:w-[88px]"
       />
       <WatercolorAccent
         tone="warm"
@@ -305,7 +305,7 @@ function StepsSection() {
           {STEPS.map(({ key, title, body: text }, i) => (
             <ScrollReveal key={key} animation="fade-up" delay={stagger(i)}>
               <div className="flex h-full flex-col gap-4 rounded-[24px] border border-line bg-white p-8">
-                <WatercolorNumber n={i + 1} size={84} className="-ml-2 -mt-2" />
+                <WatercolorNumber n={i + 1} size={60} className="-ml-1 -mt-1" />
                 <EditableText
                   section={S}
                   fieldPath={`steps.${key}.title`}

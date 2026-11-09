@@ -6,8 +6,13 @@ import { useId } from 'react';
  *
  * The blot flows from one spiral color into the next, bleeds at the edges
  * (SVG turbulence displacement) and has a couple of loose paint drops. The
- * numeral is plain bold Lato in a deep shade of the blot color, so it stays
- * easy to read (≥3:1 on the wash; client asked for readable digits).
+ * numeral is a rounded playful sans in a deep shade of the blot color, so it
+ * stays easy to read (≥3:1 on the wash; client asked for readable digits).
+ *
+ * Font: the client asked for "Pixie Ring" (commercial, Creative Fabrica — not
+ * on Google Fonts). It is first in the stack: add its licensed woff2 with an
+ * @font-face rule and it takes over; until then the similar free Fredoka
+ * (loaded in index.html) is used.
  * Purely decorative: the step order is already given by the card order.
  */
 
@@ -143,9 +148,9 @@ export function WatercolorNumber({
           y="53"
           textAnchor="middle"
           dominantBaseline="central"
-          fontFamily="'Lato', system-ui, sans-serif"
-          fontWeight={700}
-          fontSize="50"
+          fontFamily="'Pixie Ring', 'Fredoka', 'Lato', system-ui, sans-serif"
+          fontWeight={600}
+          fontSize="54"
           style={{ fill: DEEP[a] }}
         >
           {n}

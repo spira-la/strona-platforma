@@ -721,10 +721,10 @@ function ContactSection() {
       aria-label="Formularz kontaktowy"
     >
       <WatercolorFriend
-        kind="dragonflyBlue"
-        float
+        kind="butterflyBlue"
+        fly="left"
         delay={2}
-        className="right-[3%] top-10 hidden w-[110px] lg:block xl:right-[6%] xl:w-[130px]"
+        className="right-[3%] top-8 hidden w-[90px] lg:block xl:right-[6%] xl:w-[100px]"
       />
       {/* painted forget-me-nots in the corner (wide screens only) */}
       <WatercolorFriend

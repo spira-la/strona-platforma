@@ -174,10 +174,10 @@ function JourneySection() {
       className={`relative isolate overflow-hidden bg-sky-soft ${sectionPad} py-20 md:py-28`}
     >
       <WatercolorFriend
-        kind="dragonfly"
-        float
+        kind="butterflyGreen"
+        fly="left"
         delay={1}
-        className="right-[4%] top-4 w-[72px] md:right-[8%] md:top-12 md:w-[130px]"
+        className="right-[4%] top-3 w-[56px] md:right-[8%] md:top-4 md:w-[88px]"
       />
       <div className="mx-auto max-w-[1120px]">
         <ScrollReveal animation="fade-up">
@@ -217,8 +217,8 @@ function JourneySection() {
                 <WatercolorNumber
                   n={i + 1}
                   tone={BLUE_TONES[i % BLUE_TONES.length]}
-                  size={84}
-                  className="-ml-2 -mt-2"
+                  size={60}
+                  className="-ml-1 -mt-1"
                 />
                 <EditableText
                   section={S}
@@ -251,7 +251,16 @@ function JourneySection() {
 
 function QuoteSection() {
   return (
-    <section className={`bg-white ${sectionPad} py-20 md:py-28`}>
+    <section
+      className={`relative isolate overflow-hidden bg-white ${sectionPad} py-20 md:py-28`}
+    >
+      {/* the client's turquoise dragonfly hovering above the quote */}
+      <WatercolorFriend
+        kind="dragonflyGreen"
+        float
+        delay={1.5}
+        className="right-[4%] top-4 w-[80px] md:right-[7%] md:top-10 md:w-[140px]"
+      />
       <div className="mx-auto grid max-w-[1120px] items-center gap-12 lg:grid-cols-2 lg:gap-20">
         <ScrollReveal animation="fade-up">
           <div className="aspect-[4/3] overflow-hidden rounded-[32px]">
@@ -324,10 +333,10 @@ function FactsSection() {
       className={`relative isolate overflow-hidden bg-sky-soft ${sectionPad} py-20 md:py-28`}
     >
       <WatercolorFriend
-        kind="dragonflyBlue"
-        float
+        kind="butterflyYellow"
+        fly="right"
         delay={2.5}
-        className="left-[4%] top-4 w-[68px] md:left-[8%] md:top-12 md:w-[120px]"
+        className="left-[4%] top-3 w-[56px] md:left-[8%] md:top-4 md:w-[88px]"
       />
       <div className="mx-auto max-w-[1000px]">
         <ScrollReveal animation="fade-up">
