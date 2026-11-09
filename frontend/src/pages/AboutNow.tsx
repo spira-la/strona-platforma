@@ -8,7 +8,7 @@ import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
 import portraitPhoto from '@/assets/Ane1.jpg';
 import profilePhoto from '@/assets/Ane3.jpg';
 import joyPhoto from '@/assets/Ane4.jpg';
-import { iconToneText } from '@/lib/iconTones';
+import bouquetArt from '@/assets/watercolor/bouquet.webp';
 import { WatercolorNumber } from '@/components/shared/WatercolorNumber';
 import {
   RainbowStroke,
@@ -38,7 +38,7 @@ const cardTitle =
 const primaryBtn =
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-action px-9 py-4 font-['Lato'] text-[15px] font-semibold text-white transition-colors hover:bg-action-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2";
 const secondaryBtn =
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full border border-action/25 bg-white px-9 py-4 font-['Lato'] text-[15px] font-semibold text-action transition-colors hover:bg-brand-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2";
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full border border-action/25 bg-white px-9 py-4 font-['Lato'] text-[15px] font-semibold text-action transition-colors hover:bg-sky-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2";
 const sectionPad = 'px-6 md:px-12 lg:px-[120px]';
 
 // ---------------------------------------------------------------------------
@@ -48,7 +48,7 @@ const sectionPad = 'px-6 md:px-12 lg:px-[120px]';
 function IntroSection() {
   return (
     <section
-      className={`relative isolate overflow-hidden bg-surface ${sectionPad} py-16 md:py-24`}
+      className={`relative isolate overflow-hidden bg-white ${sectionPad} py-16 md:py-24`}
     >
       <WatercolorAccent
         tone="cool"
@@ -114,13 +114,13 @@ function IntroSection() {
               className="-right-20 -top-20 w-[260px] opacity-40 md:w-[320px]"
             />
             <WatercolorAccent
-              tone="warm"
-              className="-bottom-20 -left-20 w-[240px] opacity-60 md:w-[300px]"
+              tone="cool"
+              className="-bottom-20 -left-20 w-[240px] opacity-30 md:w-[300px]"
             />
             <WatercolorFriend
-              kind="butterfly"
+              kind="bee"
               fly="right"
-              className="-left-6 top-8 z-10 w-[72px] md:-left-12 md:w-[96px]"
+              className="-left-6 top-8 z-10 w-[68px] md:-left-12 md:w-[90px]"
             />
             <div className="relative aspect-[3/4] overflow-hidden rounded-[32px]">
               <EditableImage
@@ -141,6 +141,9 @@ function IntroSection() {
 // ---------------------------------------------------------------------------
 // 2. Moja droga — four steps of her story
 // ---------------------------------------------------------------------------
+
+/** Watercolor number tones in blues (see WatercolorNumber TONE_PAIRS). */
+const BLUE_TONES = [2, 5, 2, 5] as const;
 
 const JOURNEY = [
   {
@@ -168,7 +171,7 @@ const JOURNEY = [
 function JourneySection() {
   return (
     <section
-      className={`relative isolate overflow-hidden bg-white ${sectionPad} py-20 md:py-28`}
+      className={`relative isolate overflow-hidden bg-sky-soft ${sectionPad} py-20 md:py-28`}
     >
       <WatercolorFriend
         kind="dragonfly"
@@ -210,8 +213,13 @@ function JourneySection() {
         <ol className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {JOURNEY.map(({ key, title, body: text }, i) => (
             <ScrollReveal key={key} animation="fade-up" delay={stagger(i)}>
-              <li className="flex h-full flex-col gap-4 rounded-[24px] border border-line bg-surface p-7">
-                <WatercolorNumber n={i + 1} size={84} className="-ml-2 -mt-2" />
+              <li className="flex h-full flex-col gap-4 rounded-[24px] border border-spiral-blue-soft bg-white p-7">
+                <WatercolorNumber
+                  n={i + 1}
+                  tone={BLUE_TONES[i % BLUE_TONES.length]}
+                  size={84}
+                  className="-ml-2 -mt-2"
+                />
                 <EditableText
                   section={S}
                   fieldPath={`journey.${key}.title`}
@@ -243,7 +251,7 @@ function JourneySection() {
 
 function QuoteSection() {
   return (
-    <section className={`bg-surface-alt ${sectionPad} py-20 md:py-28`}>
+    <section className={`bg-white ${sectionPad} py-20 md:py-28`}>
       <div className="mx-auto grid max-w-[1120px] items-center gap-12 lg:grid-cols-2 lg:gap-20">
         <ScrollReveal animation="fade-up">
           <div className="aspect-[4/3] overflow-hidden rounded-[32px]">
@@ -313,7 +321,7 @@ const FACTS = [
 function FactsSection() {
   return (
     <section
-      className={`relative isolate overflow-hidden bg-white ${sectionPad} py-20 md:py-28`}
+      className={`relative isolate overflow-hidden bg-sky-soft ${sectionPad} py-20 md:py-28`}
     >
       <WatercolorFriend
         kind="dragonflyBlue"
@@ -335,9 +343,9 @@ function FactsSection() {
         <div className="grid gap-5 sm:grid-cols-2">
           {FACTS.map(({ key, Icon, body: text }, i) => (
             <ScrollReveal key={key} animation="fade-up" delay={stagger(i, 100)}>
-              <div className="flex h-full items-start gap-4 rounded-[20px] bg-sky-soft p-6">
+              <div className="flex h-full items-start gap-4 rounded-[20px] bg-white p-6 shadow-[0_6px_24px_-16px_rgba(63,48,68,0.25)]">
                 <span
-                  className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-white ${iconToneText(i + 2)}`}
+                  className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-spiral-blue-soft ${i % 2 === 0 ? 'text-spiral-blue' : 'text-spiral-teal'}`}
                 >
                   <Icon size={20} aria-hidden="true" />
                 </span>
@@ -364,7 +372,9 @@ function FactsSection() {
 
 function ClosingSection() {
   return (
-    <section className={`bg-surface ${sectionPad} py-20 md:py-28`}>
+    <section
+      className={`overflow-hidden bg-white ${sectionPad} py-20 md:py-28`}
+    >
       <div className="mx-auto grid max-w-[1000px] items-center gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
         <ScrollReveal animation="fade-up">
           <div className="relative mx-auto w-full max-w-[360px]">
@@ -377,11 +387,6 @@ function ClosingSection() {
                 className="h-full w-full object-cover object-[50%_60%]"
               />
             </div>
-            {/* painted lavender heart tucked at the corner of the photo */}
-            <WatercolorFriend
-              kind="lavender"
-              className="-bottom-10 -right-8 z-10 w-[120px] md:-right-14 md:w-[150px]"
-            />
           </div>
         </ScrollReveal>
         <ScrollReveal animation="fade-up" delay={200}>
@@ -422,6 +427,16 @@ function ClosingSection() {
                 <ArrowRight size={16} aria-hidden="true" />
               </Link>
             </div>
+            {/* the client's painted forget-me-nots, beside the photo on a
+                clean white background (on the photo they got lost) */}
+            <img
+              src={bouquetArt}
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              decoding="async"
+              className="pointer-events-none mt-4 w-[150px] select-none self-center sm:self-end md:w-[190px]"
+            />
           </div>
         </ScrollReveal>
       </div>
