@@ -568,7 +568,7 @@ function EventCard({ event, index }: { event: PublicEvent; index: number }) {
 
 function EmptyState() {
   return (
-    <div className="mx-auto max-w-[640px] rounded-[24px] border border-line bg-white p-10 text-center md:p-12">
+    <div className="mx-auto max-w-[640px] rounded-[24px] border border-line bg-surface p-10 text-center md:p-12">
       {/* the client's painted lavender heart instead of an icon */}
       <img
         src={lavenderHeart}
@@ -607,7 +607,7 @@ export default function Events() {
   const events = data ?? [];
 
   return (
-    <main className="bg-surface">
+    <main className="bg-white">
       <SEO
         title="Wydarzenia"
         description="Warsztaty, spotkania i webinary z Anetą — o życiu w teraz, podświadomości i uwalnianiu się od cierpienia."
@@ -616,7 +616,7 @@ export default function Events() {
       />
 
       {/* Intro */}
-      <section className="relative isolate overflow-hidden px-6 pb-16 pt-[140px] md:px-12 md:pb-20 md:pt-[170px] lg:px-[120px]">
+      <section className="relative isolate overflow-hidden bg-surface px-6 pb-16 pt-[140px] md:px-12 md:pb-20 md:pt-[170px] lg:px-[120px]">
         <WatercolorAccent
           tone="warm"
           className="-left-24 top-10 w-[260px] opacity-45 md:w-[400px]"
@@ -661,7 +661,7 @@ export default function Events() {
       </section>
 
       {/* List */}
-      <section className="px-6 pb-24 md:px-12 lg:px-[120px]">
+      <section className="bg-white px-6 py-16 md:px-12 md:py-20 lg:px-[120px]">
         <div className="mx-auto flex max-w-[1000px] flex-col gap-8">
           {isLoading && (
             <div className="flex justify-center py-16" aria-busy="true">
