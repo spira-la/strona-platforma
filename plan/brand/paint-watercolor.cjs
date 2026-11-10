@@ -112,7 +112,7 @@ const job = (name) => !ONLY || ONLY === name;
   // RAINBOW BRUSH STROKE 1200x140, transparent — spiral colors along a wave.
   if (job('stroke')) {
     const stroke = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="140" viewBox="0 0 1200 140"><defs>
-<linearGradient id="rb" x1="0" x2="1"><stop offset="0" stop-color="${C.coral}"/><stop offset="0.2" stop-color="${C.orange}"/><stop offset="0.4" stop-color="${C.gold}"/><stop offset="0.6" stop-color="${C.teal}"/><stop offset="0.8" stop-color="${C.blue}"/><stop offset="1" stop-color="${C.violet}"/></linearGradient>
+<linearGradient id="rb" x1="0" x2="1"><stop offset="0" stop-color="${C.coral}"/><stop offset="0.25" stop-color="${C.orange}"/><stop offset="0.5" stop-color="${C.gold}"/><stop offset="0.75" stop-color="${C.teal}"/><stop offset="1" stop-color="${C.blue}"/></linearGradient>
 <filter id="br" x="-10%" y="-60%" width="120%" height="220%"><feTurbulence type="fractalNoise" baseFrequency="0.02 0.09" numOctaves="3" seed="5" result="w"/><feDisplacementMap in="SourceGraphic" in2="w" scale="16" xChannelSelector="R" yChannelSelector="G" result="s"/>
 <feTurbulence type="fractalNoise" baseFrequency="0.06 0.4" numOctaves="2" seed="8" result="g"/><feColorMatrix in="g" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.9 0 0 0 0.35" result="ga"/><feComposite in="s" in2="ga" operator="in"/><feGaussianBlur stdDeviation="0.8"/></filter></defs>
 <path d="M40 86 C 240 40, 420 112, 620 74 S 980 46, 1160 70" fill="none" stroke="url(#rb)" stroke-width="30" stroke-linecap="round" opacity="0.85" filter="url(#br)"/></svg>`;

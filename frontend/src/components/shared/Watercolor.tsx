@@ -1,6 +1,6 @@
 import orangeBlot from '@/assets/watercolor/blot-orange.webp';
 import blueBlot from '@/assets/watercolor/blot-blue.webp';
-import rainbowStroke from '@/assets/watercolor/stroke-rainbow.webp';
+import rainbowStrokeTorn from '@/assets/watercolor/stroke-rainbow.webp';
 import bee from '@/assets/watercolor/bee.webp';
 import butterflyPink from '@/assets/watercolor/butterfly-pink.webp';
 import butterflyRainbow from '@/assets/watercolor/butterfly-rainbow.webp';
@@ -117,6 +117,14 @@ export function WatercolorFriend({
     />
   );
 }
+
+/**
+ * Title underline: the watercolor brush stroke (client 2026-11-10 tried a
+ * smooth line — assets/watercolor/stroke-rainbow-smooth.webp — and chose
+ * to keep the brush stroke). Colours: coral → gold → turquoise → blue, no
+ * violet / pink, so it doesn't read as a full-spectrum rainbow.
+ */
+const rainbowStroke = rainbowStrokeTorn;
 
 export function RainbowStroke({ className = '' }: { className?: string }) {
   return (
