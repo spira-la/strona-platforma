@@ -55,21 +55,21 @@ function whatsappHref(phone: string): string {
 const contactSchema = z.object({
   fullName: z
     .string()
-    .min(2, 'Imie i nazwisko musi miec co najmniej 2 znaki')
-    .max(100, 'Imie i nazwisko jest za dlugie'),
+    .min(2, 'Imię i nazwisko musi mieć co najmniej 2 znaki')
+    .max(100, 'Imię i nazwisko jest za długie'),
   email: z.string().email('Podaj poprawny adres e-mail'),
   phone: z
     .string()
-    .max(20, 'Numer telefonu jest za dlugi')
+    .max(20, 'Numer telefonu jest za długi')
     .optional()
     .or(z.literal('')),
   subject: z.enum(['coaching', 'strona', 'wspolpraca', 'inne'], {
-    message: 'Wybierz temat wiadomosci',
+    message: 'Wybierz temat wiadomości',
   }),
   message: z
     .string()
-    .min(10, 'Wiadomosc musi miec co najmniej 10 znakow')
-    .max(2000, 'Wiadomosc jest za dluga'),
+    .min(10, 'Wiadomość musi mieć co najmniej 10 znaków')
+    .max(2000, 'Wiadomość jest za długa'),
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
@@ -120,7 +120,7 @@ function ContactInfoColumn() {
           fieldPath="info.description"
           as="p"
           className="font-['Lato'] text-[15px] text-ink-soft leading-[1.7]"
-          placeholder="Jestem tu dla Ciebie. Napisz, zadzwon lub wyslij wiadomosc przez formularz — odpowiem w ciagu 24 godzin."
+          placeholder="Jestem tu dla Ciebie. Napisz, zadzwoń lub wyślij wiadomość przez formularz — odpowiem w ciągu 24 godzin."
         />
       </div>
 
@@ -157,7 +157,7 @@ function ContactInfoColumn() {
         <a
           href={telHref(phone)}
           className="flex items-center gap-3 group"
-          aria-label="Zadzwon"
+          aria-label="Zadzwoń"
         >
           <div
             className={`flex items-center justify-center w-10 h-10 rounded-full flex-shrink-0 ${iconTone(2)}`}
@@ -364,7 +364,7 @@ function ContactFormColumn() {
         fieldPath="form.title"
         as="h3"
         className="font-['Cormorant_Garamond'] text-[22px] font-bold text-ink mb-6"
-        placeholder="Wyslij wiadomosc"
+        placeholder="Wyślij wiadomość"
       />
 
       {submitStatus === 'success' && (
@@ -460,7 +460,7 @@ function ContactFormColumn() {
           <input
             id="contact-email"
             type="email"
-            placeholder="jan@przykald.pl"
+            placeholder="jan@przyklad.pl"
             autoComplete="email"
             {...register('email')}
             className={inputClass}
@@ -534,7 +534,7 @@ function ContactFormColumn() {
             </option>
             <option value="coaching">Coaching</option>
             <option value="strona">Strona internetowa</option>
-            <option value="wspolpraca">Wspolpraca</option>
+            <option value="wspolpraca">Współpraca</option>
             <option value="inne">Inne</option>
           </select>
           {errors.subject && (
@@ -563,7 +563,7 @@ function ContactFormColumn() {
           <textarea
             id="contact-message"
             rows={5}
-            placeholder="Napisz, w czym moge Ci pomoc..."
+            placeholder="Napisz, w czym mogę Ci pomóc..."
             {...register('message')}
             className={`${inputClass} resize-none`}
             aria-invalid={!!errors.message}

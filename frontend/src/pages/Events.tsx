@@ -627,7 +627,7 @@ export default function Events() {
         />
         <WatercolorFriend
           kind="wings"
-          float
+          fly="left"
           className="right-[8%] top-[110px] w-[64px] md:right-[16%] md:top-[150px] md:w-[96px]"
         />
         <WatercolorFriend

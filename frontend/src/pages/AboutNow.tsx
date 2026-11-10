@@ -3,12 +3,16 @@ import { ArrowRight, HeartHandshake, Dog, Flower2, MapPin } from 'lucide-react';
 import { SEO } from '@/components/shared/SEO';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableImage } from '@/components/cms/EditableImage';
+import { GrowingMeadow } from '@/components/shared/GrowingMeadow';
+import { LandingDragonfly } from '@/components/shared/LandingDragonfly';
+import { useInViewOnce } from '@/hooks/useInViewOnce';
 import { EditableButtonLink } from '@/components/cms/EditableButtonLink';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
 import portraitPhoto from '@/assets/Ane1.jpg';
 import profilePhoto from '@/assets/Ane3.jpg';
 import joyPhoto from '@/assets/Ane4.jpg';
 import bouquetArt from '@/assets/watercolor/bouquet.webp';
+import blueBlot from '@/assets/watercolor/blot-blue.webp';
 import { WatercolorNumber } from '@/components/shared/WatercolorNumber';
 import {
   RainbowStroke,
@@ -45,23 +49,32 @@ const sectionPad = 'px-6 md:px-12 lg:px-[120px]';
 // 1. Intro — portrait + who I am
 // ---------------------------------------------------------------------------
 
+// Lavender hero (client 2026-11-10: the blue blots looked murky — "użyj
+// lawendy i tego serca, zaprojektuj ładne hero z tymi fioletowymi
+// grafikami"). Clean lilac light instead of multiplied blots, a lavender
+// card behind the portrait and her painted lavender heart on its corner.
 function IntroSection() {
   return (
     <section
-      className={`relative isolate overflow-hidden bg-white ${sectionPad} py-16 md:py-24`}
+      className={`relative isolate overflow-hidden bg-gradient-to-b from-lavender-mist via-white to-white ${sectionPad} py-16 md:py-24`}
     >
-      <WatercolorAccent
-        tone="cool"
-        className="-left-28 -top-28 w-[280px] opacity-35 md:w-[380px]"
+      {/* soft lilac light, crisp gradients (no multiply → never muddy) */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-40 -top-40 -z-10 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,var(--color-lavender-soft)_0%,transparent_68%)]"
       />
-      <div className="mx-auto grid max-w-[1120px] items-center gap-12 md:grid-cols-[1.1fr_1fr] lg:gap-20">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-48 -right-40 -z-10 h-[560px] w-[560px] rounded-full bg-[radial-gradient(circle,var(--color-lavender-soft)_0%,transparent_66%)]"
+      />
+      <div className="mx-auto grid max-w-[1120px] items-center gap-14 md:grid-cols-[1.1fr_1fr] lg:gap-20">
         <ScrollReveal animation="fade-up">
           <div className="flex flex-col gap-5">
             <EditableText
               section={S}
               fieldPath="intro.eyebrow"
               as="p"
-              className={eyebrow}
+              className="max-w-fit self-start rounded-full bg-white/80 px-4 py-1.5 font-['Lato'] text-[13px] font-semibold uppercase tracking-[0.2em] text-lavender shadow-[0_6px_20px_-12px_rgba(122,90,166,0.6)]"
             >
               O mnie
             </EditableText>
@@ -69,11 +82,11 @@ function IntroSection() {
               section={S}
               fieldPath="intro.title"
               as="h1"
-              className="font-['Cormorant_Garamond'] text-[44px] md:text-[64px] leading-[1.08] text-ink"
+              className="font-['Cormorant_Garamond'] text-[22px] md:text-[32px] leading-[1.15] text-ink"
             >
               Nazywam się Aneta Mroczko
             </EditableText>
-            <RainbowStroke className="-mt-2 w-[220px] md:w-[320px]" />
+            <RainbowStroke className="-mt-3 w-[150px] md:w-[220px]" />
             <EditableText
               section={S}
               fieldPath="intro.body1"
@@ -107,22 +120,18 @@ function IntroSection() {
           </div>
         </ScrollReveal>
         <ScrollReveal animation="fade-up" delay={200}>
-          <div className="relative isolate mx-auto w-full max-w-[440px]">
-            {/* watercolor blots around the portrait instead of a flat frame */}
-            <WatercolorAccent
-              tone="cool"
-              className="-right-20 -top-20 w-[260px] opacity-40 md:w-[320px]"
-            />
-            <WatercolorAccent
-              tone="cool"
-              className="-bottom-20 -left-20 w-[240px] opacity-30 md:w-[300px]"
+          <div className="relative isolate mx-auto w-full max-w-[400px] md:max-w-[440px]">
+            {/* lavender card peeking out behind the portrait */}
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 -z-10 translate-x-4 translate-y-4 rotate-[4deg] rounded-[36px] bg-lavender-soft md:translate-x-6 md:translate-y-6"
             />
             <WatercolorFriend
               kind="butterflyYellow"
               fly="right"
-              className="-left-6 top-8 z-10 w-[68px] md:-left-12 md:w-[90px]"
+              className="-left-4 top-8 z-10 w-[68px] md:-left-12 md:w-[90px]"
             />
-            <div className="relative aspect-[3/4] overflow-hidden rounded-[32px]">
+            <div className="relative aspect-[3/4] overflow-hidden rounded-[32px] shadow-[0_24px_60px_-30px_rgba(122,90,166,0.55)]">
               <EditableImage
                 section={S}
                 fieldPath="intro.photo"
@@ -131,6 +140,13 @@ function IntroSection() {
                 className="h-full w-full object-cover"
               />
             </div>
+            {/* the client's painted lavender heart on the portrait's corner */}
+            <WatercolorFriend
+              kind="lavender"
+              float
+              delay={1}
+              className="-bottom-12 -left-6 z-10 w-[36%] md:-bottom-14 md:-left-[26%] md:w-[42%]"
+            />
           </div>
         </ScrollReveal>
       </div>
@@ -263,23 +279,26 @@ function QuoteSection() {
     <section
       className={`relative isolate overflow-hidden bg-white ${sectionPad} py-20 md:py-28`}
     >
-      {/* the client's turquoise dragonfly hovering above the quote */}
-      <WatercolorFriend
-        kind="dragonflyGreen"
-        float
-        delay={1.5}
-        className="right-[4%] top-4 w-[80px] md:right-[7%] md:top-10 md:w-[140px]"
-      />
       <div className="mx-auto grid max-w-[1120px] items-center gap-12 lg:grid-cols-2 lg:gap-20">
         <ScrollReveal animation="fade-up">
-          <div className="aspect-[4/3] overflow-hidden rounded-[32px]">
-            <EditableImage
-              section={S}
-              fieldPath="quote.photo"
-              fallbackSrc={profilePhoto}
-              alt="Aneta Mroczko"
-              className="h-full w-full object-cover object-right"
-            />
+          <div className="relative">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[32px]">
+              <EditableImage
+                section={S}
+                fieldPath="quote.photo"
+                fallbackSrc={profilePhoto}
+                alt="Aneta Mroczko"
+                className="h-full w-full object-cover object-right"
+              />
+              {/* the client's wildflowers growing up from the bottom of the
+                photo (2026-11-10); their roots sit below the frame, and the meadow is
+                mirrored so its tall blue delphinium grows beside the face,
+                not over it */}
+              <GrowingMeadow className="inset-x-0 -bottom-[32%] w-full -scale-x-100" />
+            </div>
+            {/* the turquoise dragonfly flies down from above the photo and
+              lands on the yellow flower of the meadow (client 2026-11-10) */}
+            <LandingDragonfly className="left-[23%] top-[52%] w-[26%]" />
           </div>
         </ScrollReveal>
         <ScrollReveal animation="blur" delay={200}>
@@ -397,6 +416,52 @@ function FactsSection() {
 // 5. Closing — who I really am + invitation
 // ---------------------------------------------------------------------------
 
+/**
+ * The client's painted forget-me-nots creeping onto the side of the closing
+ * photo when it scrolls into view, then swaying gently (client 2026-11-10:
+ * "niech nachodzą na zdjęcie, ale może z boku"). Most of the bouquet stays
+ * just outside the photo's left edge, so the flowers don't get lost on it.
+ */
+function CreepingForgetMeNots() {
+  const { ref, inView } = useInViewOnce<HTMLSpanElement>(0.35);
+  return (
+    <span
+      ref={ref}
+      aria-hidden="true"
+      className="pointer-events-none absolute -bottom-[6%] -left-[10%] z-10 block w-[52%] select-none sm:-left-[27%] sm:w-[62%]"
+      style={{
+        transformOrigin: 'bottom left',
+        transform: inView ? 'none' : 'translateX(-38%) rotate(-16deg)',
+        opacity: inView ? 1 : 0,
+        transition:
+          'transform 2.2s cubic-bezier(0.22, 0.8, 0.3, 1) 0.3s, opacity 1.2s ease-out 0.3s',
+      }}
+    >
+      {/* soft blue blot under the flowers, as on Start, so they stand out
+          on the photo (client 2026-11-10: "daj im pod spód niebieskie tło") */}
+      {/* white base first, so the blot reads as the same pale blue as on
+          Start's white background instead of a dark blue patch */}
+      <span className="absolute bottom-[2%] left-[2%] block aspect-square w-[96%] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.95)_0%,rgba(255,255,255,0.8)_45%,transparent_70%)]" />
+      <img
+        src={blueBlot}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        draggable={false}
+        className="absolute bottom-[8%] left-[10%] block h-auto w-[80%] opacity-35"
+      />
+      <img
+        src={bouquetArt}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        draggable={false}
+        className="relative block h-auto w-full origin-bottom-left animate-sway"
+      />
+    </span>
+  );
+}
+
 function ClosingSection() {
   return (
     <section
@@ -414,6 +479,7 @@ function ClosingSection() {
                 className="h-full w-full object-cover object-[50%_60%]"
               />
             </div>
+            <CreepingForgetMeNots />
           </div>
         </ScrollReveal>
         <ScrollReveal animation="fade-up" delay={200}>
@@ -454,16 +520,6 @@ function ClosingSection() {
                 <ArrowRight size={16} aria-hidden="true" />
               </Link>
             </div>
-            {/* the client's painted forget-me-nots, beside the photo on a
-                clean white background (on the photo they got lost) */}
-            <img
-              src={bouquetArt}
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-              decoding="async"
-              className="pointer-events-none mt-4 w-[150px] select-none self-center sm:self-end md:w-[190px]"
-            />
           </div>
         </ScrollReveal>
       </div>

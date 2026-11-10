@@ -12,6 +12,18 @@ import butterflyGreen from '@/assets/watercolor/butterfly-green.webp';
 import butterflyBlue from '@/assets/watercolor/butterfly-blue.webp';
 import butterflyYellow from '@/assets/watercolor/butterfly-yellow.webp';
 import lavenderHeart from '@/assets/watercolor/lavender-heart.webp';
+import flapYellowLeft from '@/assets/watercolor/flap-yellow-left.webp';
+import flapYellowRight from '@/assets/watercolor/flap-yellow-right.webp';
+import flapYellowBody from '@/assets/watercolor/flap-yellow-body.webp';
+import flapRainbowLeft from '@/assets/watercolor/flap-rainbow-left.webp';
+import flapRainbowRight from '@/assets/watercolor/flap-rainbow-right.webp';
+import flapRainbowBody from '@/assets/watercolor/flap-rainbow-body.webp';
+import flapBeeBody from '@/assets/watercolor/flap-bee-body.webp';
+import flapBeeWings from '@/assets/watercolor/flap-bee-wings.webp';
+import flapPinkBody from '@/assets/watercolor/flap-pink-body.webp';
+import flapPinkWings from '@/assets/watercolor/flap-pink-wings.webp';
+import flapGreenBody from '@/assets/watercolor/flap-green-body.webp';
+import flapGreenWings from '@/assets/watercolor/flap-green-wings.webp';
 
 /**
  * Decorative watercolor pieces (2026-11, client: "strona ma wyrażać
@@ -85,25 +97,171 @@ interface WatercolorFriendProps {
    * this side and back, turning around at each end. Overrides `float`.
    */
   fly?: 'left' | 'right';
+  /**
+   * Flutters around its spot (left / right and up / down) without drifting
+   * away — for butterflies centred above content. Overrides `float`.
+   */
+  flutter?: boolean;
   /** Animation delay in seconds, so several friends don't move in sync. */
   delay?: number;
 }
 
+/**
+ * Flights become a gentle float for people who ask their device to reduce
+ * motion (client 2026-11-10: on her phone nothing moved — phones in battery
+ * saving / "remove animations" mode report prefers-reduced-motion), so the
+ * page still feels alive without anything crossing the screen.
+ */
 const FLY_CLASS = {
-  left: 'animate-fly-left',
-  right: 'animate-fly-right',
+  left: 'animate-fly-left motion-reduce:animate-float',
+  right: 'animate-fly-right motion-reduce:animate-float',
 } as const;
+
+/**
+ * Friends whose wings move (client 2026-11-10), drawn as stacked same-size
+ * layers, bottom to top:
+ * - butterflies — split along the body into left wings, right wings and
+ *   the body by plan/brand/split-flapping-butterflies.cjs; the wings fold
+ *   towards the body line (`hinge`, % of the width). `tilt` turns the
+ *   upright cut-out back to the angle it was painted at.
+ * - the bee — body + wings by plan/brand/split-bee-wings.cjs; the wings
+ *   buzz around their roots.
+ * - butterflies painted from the side (pink, green) — wings + body by
+ *   plan/brand/split-side-butterflies.cjs; the wings beat towards the body.
+ * `ratio` is height / width of the layers.
+ */
+interface FlapLayer {
+  src: string;
+  /** Animation class; none = the layer stays still. */
+  animate?: string;
+  /** transform-origin of the animated layer. */
+  origin?: string;
+}
+
+function butterflyLayers(
+  left: string,
+  right: string,
+  body: string,
+  hinge: number,
+): FlapLayer[] {
+  const origin = `${hinge}% 50%`;
+  return [
+    { src: left, animate: 'animate-flap-left', origin },
+    { src: right, animate: 'animate-flap-right', origin },
+    { src: body },
+  ];
+}
+
+const FLAPPERS: Partial<
+  Record<
+    WatercolorFriendKind,
+    { layers: FlapLayer[]; ratio: number; tilt: number }
+  >
+> = {
+  butterflyYellow: {
+    layers: butterflyLayers(
+      flapYellowLeft,
+      flapYellowRight,
+      flapYellowBody,
+      49.69,
+    ),
+    ratio: 514 / 640,
+    tilt: 26,
+  },
+  wings: {
+    layers: butterflyLayers(
+      flapRainbowLeft,
+      flapRainbowRight,
+      flapRainbowBody,
+      49.84,
+    ),
+    ratio: 611 / 640,
+    tilt: 0,
+  },
+  bee: {
+    layers: [
+      { src: flapBeeBody },
+      // wing roots measured on the art (the script's estimate lands on the
+      // long lower edge of the back wing)
+      { src: flapBeeWings, animate: 'animate-buzz', origin: '55% 38%' },
+    ],
+    ratio: 565 / 600,
+    tilt: 0,
+  },
+  // butterflies painted from the side: wings + body by
+  // plan/brand/split-side-butterflies.cjs; the wings beat down towards
+  // their roots on the body (origins measured on the art)
+  butterfly: {
+    layers: [
+      { src: flapPinkWings, animate: 'animate-beat', origin: '36% 72%' },
+      { src: flapPinkBody },
+    ],
+    ratio: 601 / 600,
+    tilt: 0,
+  },
+  butterflyGreen: {
+    layers: [
+      { src: flapGreenWings, animate: 'animate-beat', origin: '25% 71%' },
+      { src: flapGreenBody },
+    ],
+    ratio: 686 / 600,
+    tilt: 0,
+  },
+};
+
+const layerClass =
+  'absolute inset-0 h-full w-full select-none object-contain';
 
 export function WatercolorFriend({
   kind,
   className = '',
   float = false,
   fly,
+  flutter = false,
   delay = 0,
 }: WatercolorFriendProps) {
   let animation = '';
-  if (fly) animation = `${FLY_CLASS[fly]} motion-reduce:animate-none`;
-  else if (float) animation = 'animate-float motion-reduce:animate-none';
+  if (fly) animation = FLY_CLASS[fly];
+  else if (flutter) animation = 'animate-flutter motion-reduce:animate-float';
+  else if (float) animation = 'animate-float';
+
+  const flapper = FLAPPERS[kind];
+  if (flapper) {
+    const wingDelay = `${delay * 0.37}s`;
+    return (
+      <span
+        aria-hidden="true"
+        style={{
+          aspectRatio: `1 / ${flapper.ratio}`,
+          ...(animation && delay ? { animationDelay: `${delay}s` } : {}),
+        }}
+        className={`pointer-events-none absolute block select-none ${animation} ${className}`}
+      >
+        <span
+          className="absolute inset-0 block"
+          style={{ transform: `rotate(${flapper.tilt}deg)` }}
+        >
+          {flapper.layers.map(({ src, animate, origin }) => (
+            <img
+              key={src}
+              src={src}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              draggable={false}
+              style={
+                animate
+                  ? { transformOrigin: origin, animationDelay: wingDelay }
+                  : undefined
+              }
+              className={`${layerClass} ${animate ?? ''}`}
+            />
+          ))}
+        </span>
+      </span>
+    );
+  }
+
   return (
     <img
       src={FRIENDS[kind]}

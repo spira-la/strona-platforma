@@ -54,6 +54,12 @@
   --color-spiral-violet: #a23bb6;
   --color-spiral-violet-soft: #f4e4f8;
 
+  /* Lavender — the client's painted lavender heart, used for the "O mnie"
+     hero (2026-11-10). `lavender` passes AA as text on white. */
+  --color-lavender: #6f4f9c;
+  --color-lavender-soft: #ece2f7;
+  --color-lavender-mist: #f8f4fc;
+
   /* Gentle hover for the painted bee / butterflies (WatercolorFriend) */
   --animate-float: spirala-float 7s ease-in-out infinite;
   @keyframes spirala-float {
@@ -63,6 +69,104 @@
     }
     50% {
       transform: translate(6px, -12px) rotate(3deg);
+    }
+  }
+
+  /* Wing flapping (client 2026-11-10: "niech rusza skrzydłami"). The left /
+     right wing layers fold towards the body line (a flat scaleX squash, not a
+     3D rotateY: Chrome dropped one wing mid-flap in 3D): three quick beats,
+     then a short glide with open wings. */
+  --animate-flap-left: spirala-flap-left 1.9s ease-in-out infinite;
+  --animate-flap-right: spirala-flap-right 1.9s ease-in-out infinite;
+  @keyframes spirala-flap-left {
+    0%,
+    26%,
+    52%,
+    78%,
+    100% {
+      transform: scaleX(1);
+    }
+    13%,
+    39%,
+    65% {
+      transform: scaleX(0.28) skewY(-4deg);
+    }
+  }
+  @keyframes spirala-flap-right {
+    0%,
+    26%,
+    52%,
+    78%,
+    100% {
+      transform: scaleX(1);
+    }
+    13%,
+    39%,
+    65% {
+      transform: scaleX(0.28) skewY(4deg);
+    }
+  }
+
+  /* Bee wings buzzing (client 2026-11-10: "pszczoła niech też rusza
+     skrzydełkami"): quick swing back and forth around the wing roots. */
+  --animate-buzz: spirala-buzz 0.16s ease-in-out infinite alternate;
+  @keyframes spirala-buzz {
+    0% {
+      transform: rotate(4deg) scaleY(1);
+    }
+    100% {
+      transform: rotate(-16deg) scaleY(0.7);
+    }
+  }
+
+  /* Wing beats for butterflies painted from the side (pink, green): the
+     raised wings swing down towards the body and back up — same rhythm as
+     the flap: three beats, then a short glide. */
+  --animate-beat: spirala-beat 1.9s ease-in-out infinite;
+  @keyframes spirala-beat {
+    0%,
+    26%,
+    52%,
+    78%,
+    100% {
+      transform: scale(1) skewX(0deg);
+    }
+    13%,
+    39%,
+    65% {
+      transform: scale(0.96, 0.42) skewX(-10deg);
+    }
+  }
+
+  /* Forget-me-nots swaying gently in the breeze after they come in. */
+  --animate-sway: spirala-sway 6s ease-in-out infinite;
+  @keyframes spirala-sway {
+    0%,
+    100% {
+      transform: rotate(-2deg);
+    }
+    50% {
+      transform: rotate(2.5deg);
+    }
+  }
+
+  /* Fluttering in place for butterflies that sit centred above content
+     (the big rainbow one over the Start quote): wanders left / right and
+     bobs, never drifting off its spot. */
+  --animate-flutter: spirala-flutter 9s ease-in-out infinite;
+  @keyframes spirala-flutter {
+    0%,
+    100% {
+      transform: translate(0, 0) rotate(-2deg);
+    }
+    25% {
+      transform: translate(-22%, -10px) rotate(-6deg);
+    }
+    50% {
+      transform: translate(0, -4px) rotate(2deg);
+    }
+    75% {
+      transform: translate(22%, -12px) rotate(6deg);
     }
   }
 

@@ -9,7 +9,6 @@ import { EditableOverlay } from '@/components/cms/EditableOverlay';
 import { EditableImage } from '@/components/cms/EditableImage';
 import { EditableButtonLink } from '@/components/cms/EditableButtonLink';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
-import { WatercolorNumber } from '@/components/shared/WatercolorNumber';
 import {
   RainbowStroke,
   WatercolorAccent,
@@ -236,19 +235,31 @@ function HumanSection() {
 // 3. Jak zarządzać sobą w teraz — three simple steps
 // ---------------------------------------------------------------------------
 
+// Each step opens with a written label instead of a bare digit (client
+// 2026-11-10: "napisz: pierwszy krok… drugi krok… trzeci krok… zamiast
+// samych cyfr"), on a soft pill in its own spiral colour.
 const STEPS = [
   {
     key: 'step1',
+    label: 'Pierwszy krok',
+    pill: 'bg-spiral-coral-soft',
+    dot: 'bg-spiral-coral',
     title: 'Zauważ',
     body: 'Zauważ, co myślisz, co mówisz i co robisz — wszystko, co nie jest spójne z tym, kim jesteś dziś.',
   },
   {
     key: 'step2',
+    label: 'Drugi krok',
+    pill: 'bg-spiral-gold-soft',
+    dot: 'bg-spiral-gold',
     title: 'Zobacz źródło',
     body: 'Spójrz, skąd pochodzi myśl, która sabotuje Twoje działania. Zobacz ją na linii czasu, oddychaj i powiedz sobie: to przeszłość.',
   },
   {
     key: 'step3',
+    label: 'Trzeci krok',
+    pill: 'bg-spiral-teal-soft',
+    dot: 'bg-spiral-teal',
     title: 'Wymaż',
     body: 'Weź gumkę i zmaż ten obraz — porażkę, oczekiwania, brak wiary. Nie identyfikujesz się z tym. Dziś myślisz inaczej.',
   },
@@ -302,10 +313,25 @@ function StepsSection() {
         </ScrollReveal>
 
         <div className="grid gap-6 md:grid-cols-3">
-          {STEPS.map(({ key, title, body: text }, i) => (
+          {STEPS.map(({ key, label, pill, dot, title, body: text }, i) => (
             <ScrollReveal key={key} animation="fade-up" delay={stagger(i)}>
               <div className="flex h-full flex-col gap-4 rounded-[24px] border border-line bg-white p-8">
-                <WatercolorNumber n={i + 1} size={60} className="-ml-1 -mt-1" />
+                <span
+                  className={`inline-flex items-center gap-2.5 self-start rounded-full px-4 py-2 ${pill}`}
+                >
+                  <span
+                    className={`h-2.5 w-2.5 flex-shrink-0 rounded-full ${dot}`}
+                    aria-hidden="true"
+                  />
+                  <EditableText
+                    section={S}
+                    fieldPath={`steps.${key}.label`}
+                    as="span"
+                    className="font-['Lato'] text-[13px] font-bold uppercase tracking-[0.16em] text-ink"
+                  >
+                    {label}
+                  </EditableText>
+                </span>
                 <EditableText
                   section={S}
                   fieldPath={`steps.${key}.title`}
@@ -349,7 +375,7 @@ function QuoteSection() {
         <figure className="mx-auto flex max-w-[860px] flex-col items-center gap-6 text-center">
           {/* rainbow butterfly — lightness and change */}
           <div className="relative h-[118px] w-[140px] md:h-[170px] md:w-[200px]">
-            <WatercolorFriend kind="wings" float className="inset-0 w-full" />
+            <WatercolorFriend kind="wings" flutter className="inset-0 w-full" />
           </div>
           <EditableText
             section={S}
@@ -371,6 +397,135 @@ function QuoteSection() {
           </EditableText>
         </figure>
       </ScrollReveal>
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 4b. Czym się zajmuję — the client's longer description of her work
+// (2026-11-10). Cream section between the white quote and the white invite,
+// so Home keeps alternating white / pastel yellow. Draft copy is taken from
+// her ebook; every line is CMS-editable (homeNow.offer.*).
+// ---------------------------------------------------------------------------
+
+const OFFER_POINTS = [
+  {
+    key: 'point1',
+    dot: 'bg-spiral-coral',
+    title: 'Psychobiologia',
+    body: 'Pokazuję, jak przeżycia i emocje zapisują się w nas i w ciele — tak, by przestać się bać i zacząć rozumieć siebie.',
+  },
+  {
+    key: 'point2',
+    dot: 'bg-spiral-gold',
+    title: 'Dekodowanie przekonań i programów',
+    body: 'Razem odnajdujemy stare oprogramowanie — przekonania, lęki, wzorce z rodu — które dziś sabotuje Twoje działania.',
+  },
+  {
+    key: 'point3',
+    dot: 'bg-spiral-teal',
+    title: 'Życie w teraz',
+    body: 'Uczysz się zarządzać sobą tu i teraz: zauważać, widzieć źródło i wymazywać to, co już nie jest Tobą.',
+  },
+] as const;
+
+function OfferSection() {
+  return (
+    <section className="relative isolate overflow-hidden bg-surface px-6 py-20 md:px-12 lg:px-[120px] md:py-28">
+      <WatercolorAccent
+        tone="warm"
+        className="-right-24 -top-24 w-[300px] opacity-40 md:w-[400px]"
+      />
+      <WatercolorAccent
+        tone="cool"
+        className="-bottom-28 -left-24 w-[300px] opacity-35 md:w-[420px]"
+      />
+      <div className="mx-auto grid max-w-[1120px] gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
+        <ScrollReveal animation="fade-up">
+          <div className="flex flex-col gap-5">
+            <EditableText
+              section={S}
+              fieldPath="offer.eyebrow"
+              as="p"
+              className={eyebrow}
+            >
+              Czym się zajmuję
+            </EditableText>
+            <EditableText
+              section={S}
+              fieldPath="offer.title"
+              as="h2"
+              className={heading}
+            >
+              Pomagam zobaczyć, co naprawdę kieruje Twoim życiem
+            </EditableText>
+            <RainbowStroke className="-mt-2 w-[200px] md:w-[280px]" />
+            <EditableText
+              section={S}
+              fieldPath="offer.body1"
+              as="p"
+              className={body}
+            >
+              Od 2016 roku zajmuję się psychobiologią i dekodowaniem przekonań
+              oraz programów zapisanych w naszej podświadomości — tego
+              wszystkiego, co sprawia, że jesteśmy zalęknieni, wycofani,
+              zagubieni albo dominujący i kontrolujący.
+            </EditableText>
+            <EditableText
+              section={S}
+              fieldPath="offer.body2"
+              as="p"
+              className={body}
+            >
+              Razem szukamy źródła tego, co dziś powraca w Twoim życiu. Myśli i
+              słowa, które nie mówią już o Tobie z dziś, są starym
+              oprogramowaniem — a kiedy je zobaczysz, możesz je świadomie
+              wymienić.
+            </EditableText>
+            <EditableText
+              section={S}
+              fieldPath="offer.body3"
+              as="p"
+              className={body}
+            >
+              Wierzę, że jest w nas przestrzeń na świadome decyzje i zmiany. I
+              tym zajmuję się niezmiennie od wielu lat — na sesjach
+              indywidualnych, warsztatach i spotkaniach.
+            </EditableText>
+          </div>
+        </ScrollReveal>
+
+        <ul className="flex flex-col gap-5 self-center">
+          {OFFER_POINTS.map(({ key, dot, title, body: text }, i) => (
+            <ScrollReveal key={key} animation="fade-up" delay={stagger(i)}>
+              <li className="flex gap-4 rounded-[24px] bg-white p-6 shadow-[0_10px_34px_-22px_rgba(63,48,68,0.35)] md:p-7">
+                <span
+                  className={`mt-2 h-3 w-3 flex-shrink-0 rounded-full ${dot}`}
+                  aria-hidden="true"
+                />
+                <div className="flex flex-col gap-2">
+                  <EditableText
+                    section={S}
+                    fieldPath={`offer.${key}.title`}
+                    as="h3"
+                    className="font-['Cormorant_Garamond'] text-[24px] leading-tight text-ink md:text-[26px]"
+                  >
+                    {title}
+                  </EditableText>
+                  <EditableText
+                    section={S}
+                    fieldPath={`offer.${key}.body`}
+                    as="p"
+                    className="font-['Lato'] text-[16px] leading-[1.7] text-ink-soft"
+                  >
+                    {text}
+                  </EditableText>
+                </div>
+              </li>
+            </ScrollReveal>
+          ))}
+        </ul>
+      </div>
     </section>
   );
 }
@@ -428,7 +583,7 @@ const inviteTitle =
 
 function InviteSection() {
   return (
-    <section className="relative isolate overflow-hidden bg-surface px-6 py-20 md:px-12 lg:px-[120px] md:py-28">
+    <section className="relative isolate overflow-hidden bg-white px-6 py-20 md:px-12 lg:px-[120px] md:py-28">
       <WatercolorAccent
         tone="warm"
         className="-left-20 -top-24 w-[260px] opacity-20 md:w-[340px]"
@@ -633,6 +788,7 @@ export default function HomeNow() {
       <HumanSection />
       <StepsSection />
       <QuoteSection />
+      <OfferSection />
       <InviteSection />
     </main>
   );
