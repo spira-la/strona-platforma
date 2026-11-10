@@ -25,6 +25,7 @@ import {
 } from '@/components/shared/Watercolor';
 import {
   LandingBee,
+  LandingPinkButterfly,
   LandingButterfly,
 } from '@/components/shared/LandingFriend';
 import contactArt from '@/assets/watercolor/contact-joy.webp';
@@ -677,12 +678,6 @@ function LightHeroSection() {
         defaultBottom={0}
       />
 
-      <WatercolorFriend
-        kind="butterfly"
-        fly="right"
-        className="left-[5%] top-[24%] z-[5] w-[56px] md:w-[76px] lg:left-[14%] lg:top-[34%] lg:w-[100px]"
-      />
-
       <ScrollReveal
         animation="fade"
         delay={150}
@@ -705,6 +700,12 @@ function LightHeroSection() {
             as="h1"
             className="font-['Cormorant_Garamond'] text-[44px] md:text-[64px] leading-[1.08] text-ink"
             placeholder="Porozmawiajmy"
+          />
+          {/* the pink butterfly flies in from the left onto the "P", the bee
+              from the right onto the final "y" — both ends of the word */}
+          <LandingPinkButterfly
+            from="left"
+            className="bottom-[80%] left-[3%] w-[48px] -translate-x-1/2 md:w-[66px]"
           />
           <LandingBee className="bottom-[56%] -right-[10px] w-[46px] md:-right-[14px] md:w-[64px]" />
         </div>

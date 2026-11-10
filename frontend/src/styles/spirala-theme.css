@@ -138,6 +138,89 @@
     }
   }
 
+  /* Ladybug walking horizontally (client 2026-11-10: "zamiast motyla daj
+     biedronkę, niech się porusza horyzontalnie"): ~5× its own width there
+     and back, a little zig-zag of steps, a pause and a turn at each end.
+     The art faces left, so scaleX(-1) = facing right. */
+  --animate-walk-right: spirala-walk-right 16s ease-in-out infinite;
+  --animate-walk-left: spirala-walk-left 16s ease-in-out infinite;
+  @keyframes spirala-walk-right {
+    0%,
+    4% {
+      transform: translateX(0) scaleX(-1) rotate(0deg);
+    }
+    14% {
+      transform: translateX(110%) scaleX(-1) rotate(-3deg);
+    }
+    24% {
+      transform: translateX(230%) scaleX(-1) rotate(3deg);
+    }
+    34% {
+      transform: translateX(360%) scaleX(-1) rotate(-3deg);
+    }
+    44%,
+    52% {
+      transform: translateX(480%) scaleX(-1) rotate(0deg);
+    }
+    55% {
+      transform: translateX(480%) scaleX(1) rotate(0deg);
+    }
+    65% {
+      transform: translateX(360%) scaleX(1) rotate(3deg);
+    }
+    75% {
+      transform: translateX(230%) scaleX(1) rotate(-3deg);
+    }
+    85% {
+      transform: translateX(110%) scaleX(1) rotate(3deg);
+    }
+    95% {
+      transform: translateX(0) scaleX(1) rotate(0deg);
+    }
+    98%,
+    100% {
+      transform: translateX(0) scaleX(-1) rotate(0deg);
+    }
+  }
+  @keyframes spirala-walk-left {
+    0%,
+    4% {
+      transform: translateX(0) scaleX(1) rotate(0deg);
+    }
+    14% {
+      transform: translateX(-110%) scaleX(1) rotate(3deg);
+    }
+    24% {
+      transform: translateX(-230%) scaleX(1) rotate(-3deg);
+    }
+    34% {
+      transform: translateX(-360%) scaleX(1) rotate(3deg);
+    }
+    44%,
+    52% {
+      transform: translateX(-480%) scaleX(1) rotate(0deg);
+    }
+    55% {
+      transform: translateX(-480%) scaleX(-1) rotate(0deg);
+    }
+    65% {
+      transform: translateX(-360%) scaleX(-1) rotate(-3deg);
+    }
+    75% {
+      transform: translateX(-230%) scaleX(-1) rotate(3deg);
+    }
+    85% {
+      transform: translateX(-110%) scaleX(-1) rotate(-3deg);
+    }
+    95% {
+      transform: translateX(0) scaleX(-1) rotate(0deg);
+    }
+    98%,
+    100% {
+      transform: translateX(0) scaleX(1) rotate(0deg);
+    }
+  }
+
   /* Forget-me-nots swaying gently in the breeze after they come in. */
   --animate-sway: spirala-sway 6s ease-in-out infinite;
   @keyframes spirala-sway {

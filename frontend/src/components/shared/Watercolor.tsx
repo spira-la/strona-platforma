@@ -12,6 +12,7 @@ import butterflyGreen from '@/assets/watercolor/butterfly-green.webp';
 import butterflyBlue from '@/assets/watercolor/butterfly-blue.webp';
 import butterflyYellow from '@/assets/watercolor/butterfly-yellow.webp';
 import lavenderHeart from '@/assets/watercolor/lavender-heart.webp';
+import ladybug from '@/assets/watercolor/ladybug.webp';
 import flapYellowLeft from '@/assets/watercolor/flap-yellow-left.webp';
 import flapYellowRight from '@/assets/watercolor/flap-yellow-right.webp';
 import flapYellowBody from '@/assets/watercolor/flap-yellow-body.webp';
@@ -86,6 +87,7 @@ const FRIENDS = {
   butterflyBlue,
   butterflyYellow,
   lavender: lavenderHeart,
+  ladybug,
 } as const;
 
 export type WatercolorFriendKind = keyof typeof FRIENDS;
@@ -101,12 +103,19 @@ interface WatercolorFriendProps {
    */
   fly?: 'left' | 'right';
   /**
+   * Walking along a line (the ladybug): ~5× its width towards this side and
+   * back, turning at each end. Overrides `fly` and `float`.
+   */
+  walk?: 'left' | 'right';
+  /**
    * Flutters around its spot (left / right and up / down) without drifting
    * away — for butterflies centred above content. Overrides `float`.
    */
   flutter?: boolean;
   /** Animation delay in seconds, so several friends don't move in sync. */
   delay?: number;
+  /** Animation length in seconds (e.g. a faster ladybug); default from the theme. */
+  duration?: number;
 }
 
 /**
@@ -118,6 +127,11 @@ interface WatercolorFriendProps {
 const FLY_CLASS = {
   left: 'animate-fly-left motion-reduce:animate-float',
   right: 'animate-fly-right motion-reduce:animate-float',
+} as const;
+
+const WALK_CLASS = {
+  left: 'animate-walk-left',
+  right: 'animate-walk-right',
 } as const;
 
 /**
@@ -231,11 +245,14 @@ export function WatercolorFriend({
   className = '',
   float = false,
   fly,
+  walk,
   flutter = false,
   delay = 0,
+  duration,
 }: WatercolorFriendProps) {
   let animation = '';
-  if (fly) animation = FLY_CLASS[fly];
+  if (walk) animation = WALK_CLASS[walk];
+  else if (fly) animation = FLY_CLASS[fly];
   else if (flutter) animation = 'animate-flutter motion-reduce:animate-float';
   else if (float) animation = 'animate-float';
 
@@ -248,6 +265,9 @@ export function WatercolorFriend({
         style={{
           aspectRatio: `1 / ${flapper.ratio}`,
           ...(animation && delay ? { animationDelay: `${delay}s` } : {}),
+          ...(animation && duration
+            ? { animationDuration: `${duration}s` }
+            : {}),
         }}
         className={`pointer-events-none absolute block select-none ${animation} ${className}`}
       >
@@ -284,7 +304,14 @@ export function WatercolorFriend({
       loading="lazy"
       decoding="async"
       draggable={false}
-      style={animation && delay ? { animationDelay: `${delay}s` } : undefined}
+      style={
+        animation
+          ? {
+              ...(delay ? { animationDelay: `${delay}s` } : {}),
+              ...(duration ? { animationDuration: `${duration}s` } : {}),
+            }
+          : undefined
+      }
       className={`pointer-events-none absolute h-auto select-none ${animation} ${className}`}
     />
   );

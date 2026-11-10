@@ -3,8 +3,13 @@ import { ArrowRight, HeartHandshake, Dog, Flower2, MapPin } from 'lucide-react';
 import { SEO } from '@/components/shared/SEO';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableImage } from '@/components/cms/EditableImage';
+import { EditableBackground } from '@/components/cms/EditableBackground';
+import { EditableOverlay } from '@/components/cms/EditableOverlay';
 import { GrowingMeadow } from '@/components/shared/GrowingMeadow';
-import { LandingDragonfly } from '@/components/shared/LandingFriend';
+import {
+  LandingDragonfly,
+  LandingYellowButterfly,
+} from '@/components/shared/LandingFriend';
 import { useInViewOnce } from '@/hooks/useInViewOnce';
 import { EditableButtonLink } from '@/components/cms/EditableButtonLink';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
@@ -13,6 +18,9 @@ import profilePhoto from '@/assets/Ane3.jpg';
 import joyPhoto from '@/assets/Ane4.jpg';
 import bouquetArt from '@/assets/watercolor/bouquet.webp';
 import blueBlot from '@/assets/watercolor/blot-blue.webp';
+import aboutArt from '@/assets/watercolor/about-joy.webp';
+import aboutWreath from '@/assets/watercolor/about-wreath.webp';
+import lavenderArt from '@/assets/watercolor/lavender-heart.webp';
 import { WatercolorNumber } from '@/components/shared/WatercolorNumber';
 import {
   RainbowStroke,
@@ -56,18 +64,26 @@ const sectionPad = 'px-6 md:px-12 lg:px-[120px]';
 function IntroSection() {
   return (
     <section
-      className={`relative isolate overflow-hidden bg-gradient-to-b from-lavender-mist via-white to-white ${sectionPad} py-16 md:py-24`}
+      className={`relative isolate overflow-hidden bg-surface ${sectionPad} py-16 md:py-24`}
     >
-      {/* soft lilac light, crisp gradients (no multiply → never muddy) */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -left-40 -top-40 -z-10 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,var(--color-lavender-soft)_0%,transparent_68%)]"
+      {/* painted pastel blooms in the four corners (plan/brand/
+          paint-watercolor.cjs "about"); editable like the Start / Kontakt
+          hero art */}
+      <EditableBackground
+        section={S}
+        fieldPath="intro.artBg"
+        fallbackSrc={aboutArt}
+        className="absolute inset-0 -z-10"
+        aria-hidden={true}
       />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-48 -right-40 -z-10 h-[560px] w-[560px] rounded-full bg-[radial-gradient(circle,var(--color-lavender-soft)_0%,transparent_66%)]"
+      <EditableOverlay
+        section={S}
+        fieldPath="intro.artBg"
+        color="255,255,255"
+        defaultTop={0}
+        defaultBottom={0}
       />
-      <div className="mx-auto grid max-w-[1120px] items-center gap-14 md:grid-cols-[1.1fr_1fr] lg:gap-20">
+      <div className="relative z-10 mx-auto grid max-w-[1120px] items-center gap-14 md:grid-cols-[1.1fr_1fr] lg:gap-20">
         <ScrollReveal animation="fade-up">
           <div className="flex flex-col gap-5">
             <EditableText
@@ -120,18 +136,21 @@ function IntroSection() {
           </div>
         </ScrollReveal>
         <ScrollReveal animation="fade-up" delay={200}>
-          <div className="relative isolate mx-auto w-full max-w-[400px] md:max-w-[440px]">
-            {/* lavender card peeking out behind the portrait */}
-            <div
+          <div className="relative isolate mx-auto w-full max-w-[340px] md:max-w-[400px]">
+            {/* a wreath of watercolour blots in the logo spiral's colours
+                around the portrait, turning very slowly like the spiral
+                (client 2026-11-10: "równie kolorowe, inne, niech
+                zaciekawia") */}
+            <img
+              src={aboutWreath}
+              alt=""
               aria-hidden="true"
-              className="absolute inset-0 -z-10 translate-x-4 translate-y-4 rotate-[4deg] rounded-[36px] bg-lavender-soft md:translate-x-6 md:translate-y-6"
+              decoding="async"
+              draggable={false}
+              className="pointer-events-none absolute left-1/2 top-1/2 -z-10 aspect-square w-[150%] max-w-none -translate-x-1/2 -translate-y-1/2 select-none animate-[spin_120s_linear_infinite] md:w-[160%]"
             />
-            <WatercolorFriend
-              kind="butterflyYellow"
-              fly="right"
-              className="-left-4 top-8 z-10 w-[68px] md:-left-12 md:w-[90px]"
-            />
-            <div className="relative aspect-[3/4] overflow-hidden rounded-[32px] shadow-[0_24px_60px_-30px_rgba(122,90,166,0.55)]">
+            {/* arched portrait, like a window in the wreath */}
+            <div className="relative aspect-[3/4] overflow-hidden rounded-b-[32px] rounded-t-[999px] shadow-[0_24px_60px_-30px_rgba(122,90,166,0.55)] ring-[6px] ring-white/90">
               <EditableImage
                 section={S}
                 fieldPath="intro.photo"
@@ -140,13 +159,24 @@ function IntroSection() {
                 className="h-full w-full object-cover"
               />
             </div>
-            {/* the client's painted lavender heart on the portrait's corner */}
-            <WatercolorFriend
-              kind="lavender"
-              float
-              delay={1}
-              className="-bottom-12 -left-6 z-10 w-[36%] md:-bottom-14 md:-left-[26%] md:w-[42%]"
-            />
+            {/* the client's painted lavender heart on the portrait's corner,
+                with the yellow butterfly flying in to land on the lavender
+                (2026-11-10); both float together */}
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute -bottom-12 -left-6 z-10 block w-[36%] select-none animate-float md:-bottom-14 md:-left-[26%] md:w-[42%]"
+              style={{ animationDelay: '1s' }}
+            >
+              <img
+                src={lavenderArt}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                draggable={false}
+                className="block h-auto w-full"
+              />
+              <LandingYellowButterfly className="bottom-[88%] left-[56%] w-[42%] -translate-x-1/2" />
+            </span>
           </div>
         </ScrollReveal>
       </div>
@@ -187,7 +217,7 @@ const JOURNEY = [
 function JourneySection() {
   return (
     <section
-      className={`relative isolate overflow-hidden bg-surface ${sectionPad} py-20 md:py-28`}
+      className={`relative isolate overflow-hidden bg-white ${sectionPad} py-20 md:py-28`}
     >
       {/* same watercolor blots as the cream sections on Start */}
       <WatercolorAccent
@@ -198,8 +228,9 @@ function JourneySection() {
         tone="cool"
         className="-bottom-28 -right-24 w-[300px] opacity-35 md:w-[420px]"
       />
+      {/* the bee instead of the green butterfly (client 2026-11-10) */}
       <WatercolorFriend
-        kind="butterflyGreen"
+        kind="bee"
         fly="left"
         delay={1}
         className="right-[4%] top-3 w-[56px] md:right-[8%] md:top-4 md:w-[88px]"
@@ -238,7 +269,7 @@ function JourneySection() {
         <ol className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {JOURNEY.map(({ key, title, body: text }, i) => (
             <ScrollReveal key={key} animation="fade-up" delay={stagger(i)}>
-              <li className="flex h-full flex-col gap-4 rounded-[24px] border border-spiral-blue-soft bg-white p-7">
+              <li className="flex h-full flex-col gap-4 rounded-[24px] border border-spiral-blue-soft bg-surface p-7">
                 <WatercolorNumber
                   n={i + 1}
                   tone={BLUE_TONES[i % BLUE_TONES.length]}
@@ -277,7 +308,7 @@ function JourneySection() {
 function QuoteSection() {
   return (
     <section
-      className={`relative isolate overflow-hidden bg-white ${sectionPad} py-20 md:py-28`}
+      className={`relative isolate overflow-hidden bg-surface ${sectionPad} py-20 md:py-28`}
     >
       <div className="mx-auto grid max-w-[1120px] items-center gap-12 lg:grid-cols-2 lg:gap-20">
         <ScrollReveal animation="fade-up">
@@ -296,9 +327,10 @@ function QuoteSection() {
                 not over it */}
               <GrowingMeadow className="inset-x-0 -bottom-[32%] w-full -scale-x-100" />
             </div>
-            {/* the turquoise dragonfly flies down from above the photo and
+            {/* the turquoise dragonfly (2026-11-10: a third smaller) flies down
+              from above the photo and
               lands on the yellow flower of the meadow (client 2026-11-10) */}
-            <LandingDragonfly className="left-[23%] top-[52%] w-[26%]" />
+            <LandingDragonfly className="left-[27.3%] top-[55%] w-[17.3%]" />
           </div>
         </ScrollReveal>
         <ScrollReveal animation="blur" delay={200}>
@@ -358,7 +390,7 @@ const FACTS = [
 function FactsSection() {
   return (
     <section
-      className={`relative isolate overflow-hidden bg-surface ${sectionPad} py-20 md:py-28`}
+      className={`relative isolate overflow-hidden bg-white ${sectionPad} py-20 md:py-28`}
     >
       {/* mirrored blots (Start style) so the two cream sections differ */}
       <WatercolorAccent
@@ -369,11 +401,14 @@ function FactsSection() {
         tone="cool"
         className="-bottom-28 -left-24 w-[300px] opacity-35 md:w-[420px]"
       />
+      {/* the client's ladybug walking along the top of the section
+          (2026-11-10: "zamiast motyla daj biedronkę, niech się porusza
+          horyzontalnie") */}
       <WatercolorFriend
-        kind="butterflyBlue"
-        fly="right"
-        delay={2.5}
-        className="left-[4%] top-3 w-[56px] md:left-[8%] md:top-4 md:w-[88px]"
+        kind="ladybug"
+        walk="right"
+        delay={1}
+        className="left-[6%] top-6 w-[36px] md:left-[10%] md:top-8 md:w-[48px]"
       />
       <div className="mx-auto max-w-[1000px]">
         <ScrollReveal animation="fade-up">
@@ -389,7 +424,7 @@ function FactsSection() {
         <div className="grid gap-5 sm:grid-cols-2">
           {FACTS.map(({ key, Icon, body: text }, i) => (
             <ScrollReveal key={key} animation="fade-up" delay={stagger(i, 100)}>
-              <div className="flex h-full items-start gap-4 rounded-[20px] bg-white p-6 shadow-[0_6px_24px_-16px_rgba(63,48,68,0.25)]">
+              <div className="flex h-full items-start gap-4 rounded-[20px] bg-surface p-6 shadow-[0_6px_24px_-16px_rgba(63,48,68,0.25)]">
                 <span
                   className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-spiral-blue-soft ${i % 2 === 0 ? 'text-spiral-blue' : 'text-spiral-teal'}`}
                 >
@@ -441,7 +476,7 @@ function CreepingForgetMeNots() {
           on the photo (client 2026-11-10: "daj im pod spód niebieskie tło") */}
       {/* white base first, so the blot reads as the same pale blue as on
           Start's white background instead of a dark blue patch */}
-      <span className="absolute bottom-[2%] left-[2%] block aspect-square w-[96%] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.95)_0%,rgba(255,255,255,0.8)_45%,transparent_70%)]" />
+      <span className="absolute bottom-[2%] left-[2%] block aspect-square w-[96%] rounded-full bg-[radial-gradient(circle,rgba(255,251,239,0.95)_0%,rgba(255,251,239,0.8)_45%,transparent_70%)]" />
       <img
         src={blueBlot}
         alt=""
@@ -465,7 +500,7 @@ function CreepingForgetMeNots() {
 function ClosingSection() {
   return (
     <section
-      className={`overflow-hidden bg-white ${sectionPad} py-20 md:py-28`}
+      className={`overflow-hidden bg-surface ${sectionPad} py-20 md:py-28`}
     >
       <div className="mx-auto grid max-w-[1000px] items-center gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
         <ScrollReveal animation="fade-up">

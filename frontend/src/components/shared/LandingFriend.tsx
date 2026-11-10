@@ -8,6 +8,14 @@ import flapBeeWings from '@/assets/watercolor/flap-bee-wings.webp';
 import flapBeeBody from '@/assets/watercolor/flap-bee-body.webp';
 import flapSunWings from '@/assets/watercolor/flap-sun-wings.webp';
 import flapSunBody from '@/assets/watercolor/flap-sun-body.webp';
+import flapPinkWings from '@/assets/watercolor/flap-pink-wings.webp';
+import flapPinkBody from '@/assets/watercolor/flap-pink-body.webp';
+import flapYellowLeft from '@/assets/watercolor/flap-yellow-left.webp';
+import flapYellowRight from '@/assets/watercolor/flap-yellow-right.webp';
+import flapYellowBody from '@/assets/watercolor/flap-yellow-body.webp';
+import flapRainbowLeft from '@/assets/watercolor/flap-rainbow-left.webp';
+import flapRainbowRight from '@/assets/watercolor/flap-rainbow-right.webp';
+import flapRainbowBody from '@/assets/watercolor/flap-rainbow-body.webp';
 import { useInViewOnce } from '@/hooks/useInViewOnce';
 
 /**
@@ -20,6 +28,12 @@ import { useInViewOnce } from '@/hooks/useInViewOnce';
  *   it slowly opens and closes its wings, like a resting butterfly.
  * - LandingSunButterfly — the yellow butterfly lands on the word "Życie" in
  *   the Start hero title ("motyl niech usiądzie na wyrazie życie").
+ * - LandingYellowButterfly — the yellow butterfly lands on the lavender of
+ *   the painted heart in the "O mnie" hero.
+ * - LandingRainbowButterfly — the rainbow butterfly lands on the lavender
+ *   heart in the Wydarzenia list section.
+ * - LandingPinkButterfly — the pink butterfly flies in from the left and
+ *   lands on the start of "Porozmawiajmy" (Kontakt hero).
  * - LandingBee — the bee lands on the end of the word "Porozmawiajmy" in
  *   the contact hero ("niech pszczoła usiądzie na wyrazie porozmawiajmy na
  *   jego końcu"); buzzing wings in flight, still while it sits.
@@ -59,6 +73,17 @@ const PATH = `@keyframes spirala-lander-path{
   80%{transform:translate(-15%,-50%) rotate(-10deg)}
   91%{transform:translate(80%,-220%) rotate(-28deg)}
   100%{transform:translate(170%,-330%) rotate(-30deg)}
+}
+@keyframes spirala-lander-path-left{
+  0%{transform:translate(-170%,-330%) rotate(30deg)}
+  2%{transform:translate(-150%,-300%) rotate(22deg)}
+  8%{transform:translate(-70%,-170%) rotate(12deg)}
+  12%{transform:translate(-15%,-55%) rotate(-6deg)}
+  15%{transform:translate(0,-8%) rotate(-2deg)}
+  17%,75%{transform:translate(0,0) rotate(0deg)}
+  80%{transform:translate(15%,-50%) rotate(10deg)}
+  91%{transform:translate(-80%,-220%) rotate(28deg)}
+  100%{transform:translate(-170%,-330%) rotate(30deg)}
 }`;
 
 interface WingRhythm {
@@ -175,6 +200,73 @@ const SUN_BUTTERFLY: LanderConfig = {
   startDelay: 0.5,
 };
 
+// the yellow butterfly painted from above (O mnie hero): lands on the lavender
+// sprigs of the painted heart (client 2026-11-10: "niech motyl w hero
+// ląduje na lawendzie"); layers from split-flapping-butterflies.cjs tilted=26
+const YELLOW_BUTTERFLY: LanderConfig = {
+  wings: [
+    {
+      src: flapYellowLeft,
+      keyframes: 'spirala-yellow-wing-l',
+      origin: '49.69% 50%',
+    },
+    {
+      src: flapYellowRight,
+      keyframes: 'spirala-yellow-wing-r',
+      origin: '49.69% 50%',
+    },
+  ],
+  body: flapYellowBody,
+  ratio: 514 / 640,
+  tilt: 26,
+  // seen from above it sits with its middle on the spot
+  feet: 45,
+  startDelay: 0.5,
+};
+
+// the rainbow fairy-winged butterfly (Wydarzenia): moved out of the hero to
+// land on the lavender heart in the list section (client 2026-11-10:
+// "niech motyl z hero przeniesiony będzie na drugą sekcję, niech leci do
+// lawendy")
+const RAINBOW_BUTTERFLY: LanderConfig = {
+  wings: [
+    {
+      src: flapRainbowLeft,
+      keyframes: 'spirala-rainbow-wing-l',
+      origin: '49.84% 50%',
+    },
+    {
+      src: flapRainbowRight,
+      keyframes: 'spirala-rainbow-wing-r',
+      origin: '49.84% 50%',
+    },
+  ],
+  body: flapRainbowBody,
+  ratio: 611 / 640,
+  tilt: 0,
+  feet: 45,
+  startDelay: 0.5,
+};
+
+// the pink side-view butterfly (Kontakt hero): lands on the start of
+// "Porozmawiajmy" while the bee sits on its end (client 2026-11-10: "niech
+// motyl i pszczoła lecą do wyrazu porozmawiajmy i siadają z obu stron")
+const PINK_BUTTERFLY: LanderConfig = {
+  wings: [
+    {
+      src: flapPinkWings,
+      keyframes: 'spirala-pink-wings',
+      origin: '36% 72%',
+    },
+  ],
+  body: flapPinkBody,
+  ratio: 601 / 600,
+  tilt: 0,
+  // the legs end ~96% down the art
+  feet: 4,
+  startDelay: 0.5,
+};
+
 const BEE: LanderConfig = {
   wings: [
     {
@@ -219,6 +311,41 @@ const KEYFRAMES = [
     restStroke: 1.6,
     restFolded: 'scale(0.98,0.7) skewX(-5deg)',
   }),
+  wingKeyframes('spirala-yellow-wing-l', {
+    open: 'scaleX(1)',
+    folded: 'scaleX(0.3) skewY(-4deg)',
+    stroke: 0.28,
+    restStroke: 1.6,
+    restFolded: 'scaleX(0.7)',
+  }),
+  wingKeyframes('spirala-yellow-wing-r', {
+    open: 'scaleX(1)',
+    folded: 'scaleX(0.3) skewY(4deg)',
+    stroke: 0.28,
+    restStroke: 1.6,
+    restFolded: 'scaleX(0.7)',
+  }),
+  wingKeyframes('spirala-rainbow-wing-l', {
+    open: 'scaleX(1)',
+    folded: 'scaleX(0.3) skewY(-4deg)',
+    stroke: 0.3,
+    restStroke: 1.7,
+    restFolded: 'scaleX(0.7)',
+  }),
+  wingKeyframes('spirala-rainbow-wing-r', {
+    open: 'scaleX(1)',
+    folded: 'scaleX(0.3) skewY(4deg)',
+    stroke: 0.3,
+    restStroke: 1.7,
+    restFolded: 'scaleX(0.7)',
+  }),
+  wingKeyframes('spirala-pink-wings', {
+    open: 'scale(1) skewX(0deg)',
+    folded: 'scale(0.96,0.42) skewX(-10deg)',
+    stroke: 0.3,
+    restStroke: 1.6,
+    restFolded: 'scale(0.98,0.7) skewX(-5deg)',
+  }),
   // bee: a fast buzz in flight, wings still while it sits
   wingKeyframes('spirala-bee-wings', {
     open: 'rotate(4deg) scaleY(1)',
@@ -233,12 +360,19 @@ interface LandingProps {
   className?: string;
   /** Extra inline position (e.g. a measured landing spot). */
   style?: CSSProperties;
+  /**
+   * Side it flies in from. 'left' mirrors the path and the art, so it comes
+   * from above-left and sits facing right (Kontakt: the butterfly on the
+   * start of "Porozmawiajmy", the bee on its end).
+   */
+  from?: 'right' | 'left';
 }
 
 function Lander({
   config,
   className = '',
   style,
+  from = 'right',
 }: LandingProps & { config: LanderConfig }) {
   const { ref, inView } = useInViewOnce<HTMLSpanElement>(0.3);
   const timing = {
@@ -264,14 +398,19 @@ function Lander({
         <span
           className="absolute inset-0 block"
           style={{
-            animationName: 'spirala-lander-path',
+            animationName:
+              from === 'left'
+                ? 'spirala-lander-path-left'
+                : 'spirala-lander-path',
             animationTimingFunction: 'ease-in-out',
             ...timing,
           }}
         >
           <span
             className="absolute inset-0 block"
-            style={{ transform: `rotate(${config.tilt}deg)` }}
+            style={{
+              transform: `rotate(${config.tilt}deg)${from === 'left' ? ' scaleX(-1)' : ''}`,
+            }}
           >
             {config.wings.map((w) => (
               <img
@@ -319,4 +458,16 @@ export function LandingSunButterfly(props: LandingProps) {
 
 export function LandingBee(props: LandingProps) {
   return <Lander config={BEE} {...props} />;
+}
+
+export function LandingYellowButterfly(props: LandingProps) {
+  return <Lander config={YELLOW_BUTTERFLY} {...props} />;
+}
+
+export function LandingRainbowButterfly(props: LandingProps) {
+  return <Lander config={RAINBOW_BUTTERFLY} {...props} />;
+}
+
+export function LandingPinkButterfly(props: LandingProps) {
+  return <Lander config={PINK_BUTTERFLY} {...props} />;
 }

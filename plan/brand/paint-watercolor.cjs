@@ -36,7 +36,7 @@ function blobDefs(id, color, seed, disp) {
 <radialGradient id="g${id}"><stop offset="0" stop-color="${color}" stop-opacity="0.38"/><stop offset="0.7" stop-color="${color}" stop-opacity="0.62"/><stop offset="0.93" stop-color="${darker(color)}" stop-opacity="0.85"/><stop offset="1" stop-color="${darker(color, 0.84)}" stop-opacity="0.95"/></radialGradient>`;
 }
 
-function scene(W, H, blobs, { splats = [], paper = true } = {}) {
+function scene(W, H, blobs, { splats = [], paper = true, paperColor = PAPER } = {}) {
   let defs = '';
   let body = '';
   blobs.forEach(([col, cx, cy, rx, ry, op = 1], i) => {
@@ -54,7 +54,7 @@ function scene(W, H, blobs, { splats = [], paper = true } = {}) {
   });
   defs += `<filter id="sp" x="-80%" y="-80%" width="260%" height="260%"><feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="2" seed="7" result="w"/><feDisplacementMap in="SourceGraphic" in2="w" scale="6" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation="0.6"/></filter>`;
   defs += `<filter id="paper"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3"/><feColorMatrix type="matrix" values="0 0 0 0 0.45  0 0 0 0 0.38  0 0 0 0 0.3  0 0 0 0.05 0"/></filter>`;
-  const bg = paper ? `<rect width="${W}" height="${H}" fill="${PAPER}"/>` : '';
+  const bg = paper ? `<rect width="${W}" height="${H}" fill="${paperColor}"/>` : '';
   const grain = paper ? `<rect width="${W}" height="${H}" filter="url(#paper)"/>` : '';
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><defs>${defs}</defs>${bg}<g style="isolation:isolate">${body}</g>${grain}</svg>`;
 }
@@ -101,6 +101,40 @@ const job = (name) => !ONLY || ONLY === name;
       ['peach', 1250, 60, 360, 190], ['rose', 1520, 180, 300, 210], ['teal', 180, 950, 420, 200],
       ['blue', 600, 1000, 380, 140], ['violet', 1050, 990, 380, 150], ['magenta', 1450, 900, 380, 220],
     ], { splats: [['coral', 480, 250, 130, 12], ['rose', 1220, 280, 130, 10], ['teal', 420, 780, 120, 10], ['violet', 1180, 780, 130, 12]] }));
+  }
+  // ABOUT 1600x1100 (2026-11-10, client: the O mnie hero should be as
+  // colourful as the others but different) — blooms in the four corners,
+  // a light middle for the text and the portrait, which gets its own
+  // spinning colour wreath (below).
+  if (job('about')) {
+    rnd = 61;
+    await out('about-joy.webp', scene(1600, 1100, [
+      ['peach', 90, 120, 330, 230], ['rose', 330, 30, 300, 140, 0.7], ['gold', 40, 420, 200, 230, 0.6],
+      ['violet', 1500, 60, 340, 200, 0.8], ['magenta', 1250, 20, 260, 110, 0.55],
+      ['yellow', 160, 1070, 380, 170], ['teal', 520, 1110, 340, 130, 0.75], ['orange', 20, 860, 200, 220, 0.65],
+      ['blue', 1480, 1020, 380, 220], ['teal', 1600, 760, 200, 240, 0.6],
+    ], {
+      // pastel-yellow paper = the Start cream (#fffbef), so the hero opens
+      // the page's yellow / white rhythm (client 2026-11-10)
+      paperColor: '#fffbef',
+      splats: [['coral', 380, 230, 140, 12], ['gold', 260, 900, 140, 12], ['violet', 1290, 230, 130, 10], ['teal', 1270, 900, 140, 12], ['rose', 780, 120, 220, 6], ['blue', 820, 1000, 220, 6]],
+    }));
+  }
+  // ABOUT WREATH 1000x1000, transparent — a ring of blots in the spiral's
+  // colour order around an empty middle (the portrait sits there); the page
+  // turns it very slowly, like the logo spiral.
+  if (job('wreath')) {
+    rnd = 73;
+    const order = ['coral', 'orange', 'gold', 'yellow', 'teal', 'blue', 'violet', 'magenta', 'rose', 'peach'];
+    const blobs = order.map((col, i) => {
+      const a = (i / order.length) * Math.PI * 2 - Math.PI / 2;
+      const r = 355;
+      return [col, Math.round(500 + Math.cos(a) * r), Math.round(500 + Math.sin(a) * r), 178, 128, 0.78];
+    });
+    await out('about-wreath.webp', scene(1000, 1000, blobs, {
+      paper: false,
+      splats: [['coral', 500, 120, 90, 8], ['teal', 860, 520, 90, 8], ['violet', 160, 600, 90, 8], ['gold', 760, 840, 90, 6]],
+    }), { alpha: true });
   }
   // ACCENTS 800x800, transparent — blots for section corners.
   if (job('accents')) {

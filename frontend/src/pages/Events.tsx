@@ -25,6 +25,9 @@ import {
   WatercolorAccent,
   WatercolorFriend,
 } from '@/components/shared/Watercolor';
+import { LandingBee } from '@/components/shared/LandingFriend';
+import { useWordSpot } from '@/hooks/useWordSpot';
+import { CrawlingLadybug } from '@/components/shared/CrawlingLadybug';
 import {
   eventsClient,
   type PublicEvent,
@@ -566,9 +569,40 @@ function EventCard({ event, index }: { event: PublicEvent; index: number }) {
 // Page
 // ---------------------------------------------------------------------------
 
+/**
+ * Page title with the bee landing on its first letter, the "W" (client
+ * 2026-11-10: "pszczoła niech lata u góry i usiądzie na wyrazie W"). The
+ * title stays CMS-editable; the spot is measured on the rendered text.
+ */
+function EventsTitle() {
+  const { ref, spot } = useWordSpot<HTMLDivElement>('Wydarzenia', 0.07, 0.3);
+  return (
+    <div ref={ref} className="relative">
+      <h1 className="mb-6 font-['Cormorant_Garamond'] text-[44px] leading-[1.1] text-ink md:text-[60px]">
+        <EditableText section={S} fieldPath="hero.title">
+          Wydarzenia
+        </EditableText>
+      </h1>
+      {spot && (
+        <LandingBee
+          className="w-[44px] -translate-x-1/2 md:w-[58px]"
+          style={{ left: spot.left, bottom: spot.bottom }}
+        />
+      )}
+    </div>
+  );
+}
+
 function EmptyState() {
   return (
-    <div className="mx-auto max-w-[640px] rounded-[24px] border border-line bg-surface p-10 text-center md:p-12">
+    <div className="relative mx-auto max-w-[640px] rounded-[24px] border border-line bg-surface p-10 text-center md:p-12">
+      {/* the client's ladybug crawling quickly round the card's border
+          (2026-11-10: "niech szybko sobie pełza… po linii ramki, naokoło") */}
+      <CrawlingLadybug
+        radius={24}
+        speed={85}
+        className="w-[34px] md:w-[40px]"
+      />
       {/* the client's painted lavender heart instead of an icon */}
       <img
         src={lavenderHeart}
@@ -625,17 +659,10 @@ export default function Events() {
           tone="cool"
           className="-right-24 top-24 w-[240px] opacity-40 md:w-[380px]"
         />
-        <WatercolorFriend
-          kind="wings"
-          fly="left"
-          className="right-[8%] top-[110px] w-[64px] md:right-[16%] md:top-[150px] md:w-[96px]"
-        />
-        <WatercolorFriend
-          kind="bee"
-          fly="right"
-          delay={2}
-          className="bottom-6 left-[7%] w-[56px] md:left-[15%] md:w-[84px]"
-        />
+        {/* the rainbow butterfly was removed (client 2026-11-10: it did not
+            fit the list section, a ladybug crawls there); the bee flies in
+            from the top and sits on the
+            "W" of the title (client 2026-11-10) */}
         <div className="mx-auto max-w-[760px] text-center">
           <ScrollReveal>
             <p className="mb-4 font-['Lato'] text-[13px] uppercase tracking-[0.2em] text-brand-dark">
@@ -643,11 +670,7 @@ export default function Events() {
                 Spotkajmy się
               </EditableText>
             </p>
-            <h1 className="mb-6 font-['Cormorant_Garamond'] text-[44px] leading-[1.1] text-ink md:text-[60px]">
-              <EditableText section={S} fieldPath="hero.title">
-                Wydarzenia
-              </EditableText>
-            </h1>
+            <EventsTitle />
             <RainbowStroke className="mx-auto -mt-3 mb-6 w-[220px] md:w-[320px]" />
             <p className="font-['Lato'] text-[17px] leading-relaxed text-ink-soft">
               <EditableText section={S} fieldPath="hero.subtitle">
@@ -661,7 +684,17 @@ export default function Events() {
       </section>
 
       {/* List */}
-      <section className="bg-white px-6 py-16 md:px-12 md:py-20 lg:px-[120px]">
+      <section className="relative isolate bg-white px-6 py-16 md:px-12 md:py-20 lg:px-[120px]">
+        {/* with events listed (no empty-state card) the ladybug crawls along
+            the top of the list instead */}
+        {!isLoading && events.length > 0 && (
+          <WatercolorFriend
+            kind="ladybug"
+            walk="right"
+            duration={8}
+            className="left-[8%] top-5 w-[38px] md:top-7 md:w-[46px]"
+          />
+        )}
         <div className="mx-auto flex max-w-[1000px] flex-col gap-8">
           {isLoading && (
             <div className="flex justify-center py-16" aria-busy="true">
