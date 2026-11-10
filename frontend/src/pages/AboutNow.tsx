@@ -21,6 +21,7 @@ import blueBlot from '@/assets/watercolor/blot-blue.webp';
 import aboutArt from '@/assets/watercolor/about-joy.webp';
 import aboutWreath from '@/assets/watercolor/about-wreath.webp';
 import lavenderArt from '@/assets/watercolor/lavender-heart.webp';
+import ladybugArt from '@/assets/watercolor/ladybug.webp';
 import { WatercolorNumber } from '@/components/shared/WatercolorNumber';
 import {
   RainbowStroke,
@@ -401,15 +402,25 @@ function FactsSection() {
         tone="cool"
         className="-bottom-28 -left-24 w-[300px] opacity-35 md:w-[420px]"
       />
-      {/* the client's ladybug walking along the top of the section
-          (2026-11-10: "zamiast motyla daj biedronkę, niech się porusza
-          horyzontalnie") */}
-      <WatercolorFriend
-        kind="ladybug"
-        walk="right"
-        delay={1}
-        className="left-[6%] top-6 w-[36px] md:left-[10%] md:top-8 md:w-[48px]"
-      />
+      {/* the client's ladybug crossing the whole section along its top,
+          edge to edge and back (2026-11-10: "zamiast motyla daj biedronkę,
+          niech się porusza horyzontalnie… od brzegu do brzegu"); the
+          full-width track is the container the walk is measured on */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-6 block md:top-8"
+        style={{ containerType: 'inline-size' }}
+      >
+        <img
+          src={ladybugArt}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          draggable={false}
+          className="block h-auto w-[36px] select-none animate-cross md:w-[48px]"
+          style={{ animationDelay: '0.5s' }}
+        />
+      </span>
       <div className="mx-auto max-w-[1000px]">
         <ScrollReveal animation="fade-up">
           <EditableText

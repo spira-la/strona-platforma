@@ -221,6 +221,52 @@
     }
   }
 
+  /* Ladybug crossing a whole section, edge to edge (client 2026-11-10, O
+     mnie: "od jednej do drugiej strony, od brzegu do brzegu"). Put the
+     ladybug in a full-width track with `container-type: inline-size`;
+     100cqw - 100% is the track width minus the ladybug. Art faces left. */
+  --animate-cross: spirala-cross 26s ease-in-out infinite;
+  @keyframes spirala-cross {
+    0%,
+    3% {
+      transform: translateX(0) scaleX(-1) rotate(0deg);
+    }
+    14% {
+      transform: translateX(calc((100cqw - 100%) * 0.25)) scaleX(-1)
+        rotate(-3deg);
+    }
+    26% {
+      transform: translateX(calc((100cqw - 100%) * 0.5)) scaleX(-1) rotate(3deg);
+    }
+    37% {
+      transform: translateX(calc((100cqw - 100%) * 0.75)) scaleX(-1)
+        rotate(-3deg);
+    }
+    47%,
+    51% {
+      transform: translateX(calc(100cqw - 100%)) scaleX(-1) rotate(0deg);
+    }
+    53% {
+      transform: translateX(calc(100cqw - 100%)) scaleX(1) rotate(0deg);
+    }
+    64% {
+      transform: translateX(calc((100cqw - 100%) * 0.75)) scaleX(1) rotate(3deg);
+    }
+    76% {
+      transform: translateX(calc((100cqw - 100%) * 0.5)) scaleX(1) rotate(-3deg);
+    }
+    87% {
+      transform: translateX(calc((100cqw - 100%) * 0.25)) scaleX(1) rotate(3deg);
+    }
+    97% {
+      transform: translateX(0) scaleX(1) rotate(0deg);
+    }
+    99%,
+    100% {
+      transform: translateX(0) scaleX(-1) rotate(0deg);
+    }
+  }
+
   /* Forget-me-nots swaying gently in the breeze after they come in. */
   --animate-sway: spirala-sway 6s ease-in-out infinite;
   @keyframes spirala-sway {
@@ -755,4 +801,3 @@ html.lenis body {
   font-size: 0.75em;
   line-height: 0;
 }
-
