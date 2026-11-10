@@ -4,6 +4,7 @@ import { EditableText } from '@/components/cms/EditableText';
 import spiralaWordmark from '@/assets/spirala-wordmark.webp';
 import spiralaSpiral from '@/assets/spirala-spiral.webp';
 import forgetMeNots from '@/assets/watercolor/bouquet.webp';
+import footerBand from '@/assets/watercolor/footer-band.webp';
 import { featureFlags } from '@/config/features';
 
 function InstagramIcon({ size = 18 }: { size?: number }) {
@@ -169,10 +170,22 @@ export function Footer() {
 
   return (
     <footer
-      className="border-t border-line bg-surface"
+      className="relative bg-surface"
       role="contentinfo"
       aria-label="Stopka strony"
     >
+      {/* Rainbow watercolor band laid across the seam (logo spiral colours),
+          so the footer never merges with a cream last section (client:
+          "stopka i ostatnia sekcja są na żółtym tle"). */}
+      <img
+        src={footerBand}
+        alt=""
+        aria-hidden="true"
+        decoding="async"
+        draggable={false}
+        className="pointer-events-none absolute left-0 top-0 z-10 h-[24px] w-full -translate-y-1/2 select-none object-cover md:h-[32px]"
+      />
+
       {/* Top section */}
       <div className="mx-auto px-6 md:px-[120px] pt-12 pb-10">
         <div className="flex flex-col gap-10 lg:flex-row lg:justify-between lg:gap-20">

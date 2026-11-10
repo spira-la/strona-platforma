@@ -118,7 +118,7 @@ function IntroSection() {
               className="-bottom-20 -left-20 w-[240px] opacity-30 md:w-[300px]"
             />
             <WatercolorFriend
-              kind="bee"
+              kind="butterflyYellow"
               fly="right"
               className="-left-6 top-8 z-10 w-[68px] md:-left-12 md:w-[90px]"
             />
