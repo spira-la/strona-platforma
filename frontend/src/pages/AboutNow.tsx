@@ -215,15 +215,18 @@ const JOURNEY = [
     title: 'Ziemia i woda',
     body: 'Fascynował mnie świat i ziemia, więc skończyłam geologię. Ponad 13 lat pracowałam przy wydobyciu wody głębinowej — dostarczałam innym coś, bez czego nie da się żyć.',
   },
-  {
-    key: 'mountains',
-    title: 'Beskidy',
-    body: 'Gdy formalności zaczęły mnie wypalać, „rzuciłam wszystko i pojechałam w Beskidy”. Wreszcie miałam czas i przestrzeń, by zaopiekować się sobą, odpuścić żal, złość i poczucie winy.',
-  },
+  // order per the client (2026-11-10): water & earth, then psychobiology,
+  // then the Beskidy, and guidance last. Keys stay the same, so texts she
+  // already saved move with their stop.
   {
     key: 'psychobiology',
     title: 'Psychobiologia',
     body: 'Największym przełomem było poznanie psychobiologii. Przestałam się bać chorób i śmierci. Od 2016 roku dekoduję przekonania i programy, które sprawiały, że byłam zlękniona i zagubiona.',
+  },
+  {
+    key: 'mountains',
+    title: 'Beskidy',
+    body: 'Gdy formalności zaczęły mnie wypalać, „rzuciłam wszystko i pojechałam w Beskidy”. Wreszcie miałam czas i przestrzeń, by zaopiekować się sobą, odpuścić żal, złość i poczucie winy.',
   },
   {
     key: 'guidance',
