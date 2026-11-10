@@ -41,8 +41,9 @@ import { useInViewOnce } from '@/hooks/useInViewOnce';
  * One 20 s loop each: hover above and to the right, fly down, land, rest,
  * take off, fly back. The wing keyframes are generated on the same clock as
  * the path, so the wing rhythm changes exactly on landing / take-off. Starts
- * when the spot scrolls into view, after `startDelay` (0.5 s; the dragonfly
- * 1.5 s, so the meadow has grown before it lands).
+ * when the spot scrolls into view, after `startDelay` (0 — the page itself
+ * takes ~0.5 s to appear, so they move about half a second after it opens,
+ * client 2026-11-10; the dragonfly waits 1.5 s so the meadow has grown).
  *
  * Position it with `className` at the landing spot: the box keeps the art's
  * aspect ratio and its BOTTOM edge is where the feet touch down (`feet`
@@ -176,7 +177,7 @@ const BUTTERFLY: LanderConfig = {
   tilt: 0,
   // the legs end ~82% down the art
   feet: 18,
-  startDelay: 0.5,
+  startDelay: 0,
 };
 
 // the client's yellow side-view butterfly (2026-11-10, replaced the pink one
@@ -197,7 +198,7 @@ const SUN_BUTTERFLY: LanderConfig = {
   // it sits on its thorax line (~88% down); the wing tips hang a little
   // over the letters
   feet: 12,
-  startDelay: 0.5,
+  startDelay: 0,
 };
 
 // the yellow butterfly painted from above (O mnie hero): lands on the lavender
@@ -221,7 +222,7 @@ const YELLOW_BUTTERFLY: LanderConfig = {
   tilt: 26,
   // seen from above it sits with its middle on the spot
   feet: 45,
-  startDelay: 0.5,
+  startDelay: 0,
 };
 
 // the rainbow fairy-winged butterfly (Wydarzenia): moved out of the hero to
@@ -245,7 +246,7 @@ const RAINBOW_BUTTERFLY: LanderConfig = {
   ratio: 611 / 640,
   tilt: 0,
   feet: 45,
-  startDelay: 0.5,
+  startDelay: 0,
 };
 
 // the pink side-view butterfly (Kontakt hero): lands on the start of
@@ -264,7 +265,7 @@ const PINK_BUTTERFLY: LanderConfig = {
   tilt: 0,
   // the legs end ~96% down the art
   feet: 4,
-  startDelay: 0.5,
+  startDelay: 0,
 };
 
 const BEE: LanderConfig = {
@@ -282,7 +283,7 @@ const BEE: LanderConfig = {
   // the legs hang to the very bottom of the art; sink a touch so they
   // rest on the letter instead of hovering
   feet: 4,
-  startDelay: 0.5,
+  startDelay: 0,
 };
 
 const KEYFRAMES = [

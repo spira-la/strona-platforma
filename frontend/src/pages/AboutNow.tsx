@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, HeartHandshake, Dog, Flower2, MapPin } from 'lucide-react';
 import { SEO } from '@/components/shared/SEO';
@@ -189,8 +190,24 @@ function IntroSection() {
 // 2. Moja droga — four steps of her story
 // ---------------------------------------------------------------------------
 
-/** Watercolor number tones in blues (see WatercolorNumber TONE_PAIRS). */
-const BLUE_TONES = [2, 5, 2, 5] as const;
+// Moja droga as a painted path (client 2026-11-10: the four frames were
+// "nudne" — make it "ciekawe i spójne"). Four stops on a dotted, hand-
+// painted trail that draws itself as you scroll; the colours travel from
+// cool blues (the hard years) to warm coral and gold (the light she found).
+// Texts alternate left / right of the trail on wide screens; on phones the
+// trail runs down the left edge. Same CMS fields as before (journey.*).
+
+/** WatercolorNumber tone per stop (TONE_PAIRS): teal, blue, coral, gold. */
+const STOP_TONES = [2, 5, 0, 1] as const;
+/** Trail colour leaving each stop (bright spiral colours). */
+const TRAIL = ['#22c3df', '#6f8ffa', '#ff5a48', '#ffd23f'] as const;
+/** The client's painted friends beside each stop (wide screens). */
+const STOP_FRIENDS = [
+  'dragonflyBlue',
+  'butterflyGreen',
+  'butterfly',
+  'butterflyYellow',
+] as const;
 
 const JOURNEY = [
   {
@@ -214,6 +231,101 @@ const JOURNEY = [
     body: 'Dziś wiem, że jestem prowadzona. A jednocześnie jest w tym przestrzeń na świadome decyzje i zmiany — i tym zajmuję się niezmiennie od wielu lat.',
   },
 ] as const;
+
+/**
+ * One stop on the painted trail: watercolour number on the trail, the text
+ * on one side, a painted friend on the other (alternating), and the dotted
+ * trail segment down to the next stop, which draws itself when in view.
+ */
+function JourneyStop({
+  index,
+  last,
+  title,
+  body: text,
+}: {
+  index: number;
+  last: boolean;
+  title: ReactNode;
+  body: ReactNode;
+}) {
+  const { ref, inView } = useInViewOnce<HTMLLIElement>(0.35);
+  const left = index % 2 === 0;
+  const from = TRAIL[index];
+  const to = TRAIL[Math.min(index + 1, TRAIL.length - 1)];
+  // the trail swings to the opposite side between stops
+  const swing = left
+    ? 'M24 0 C 46 30, 2 70, 24 100'
+    : 'M24 0 C 2 30, 46 70, 24 100';
+
+  return (
+    <li
+      ref={ref}
+      className="relative grid grid-cols-[72px_1fr] gap-x-5 pb-14 last:pb-0 md:grid-cols-[1fr_112px_1fr] md:gap-x-8 md:pb-16"
+    >
+      {/* the stop: number on the trail + trail down to the next stop */}
+      <div className="relative col-start-1 row-start-1 flex justify-center md:col-start-2">
+        <WatercolorNumber
+          n={index + 1}
+          tone={STOP_TONES[index]}
+          size={72}
+          className="relative z-10"
+        />
+        {!last && (
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 48 100"
+            preserveAspectRatio="none"
+            className="absolute left-1/2 top-[78px] h-[calc(100%-22px)] w-[48px] -translate-x-1/2 md:h-[calc(100%-14px)] md:w-[60px]"
+            style={{
+              clipPath: inView ? 'inset(0 0 0 0)' : 'inset(0 0 100% 0)',
+              transition: 'clip-path 1.8s cubic-bezier(0.22, 0.8, 0.3, 1) 0.3s',
+            }}
+          >
+            <defs>
+              <linearGradient id={`trail-${index}`} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stopColor={from} />
+                <stop offset="1" stopColor={to} />
+              </linearGradient>
+            </defs>
+            <path
+              d={swing}
+              fill="none"
+              stroke={`url(#trail-${index})`}
+              strokeWidth={5}
+              strokeLinecap="round"
+              strokeDasharray="0.1 13"
+              vectorEffect="non-scaling-stroke"
+              opacity={0.85}
+            />
+          </svg>
+        )}
+      </div>
+
+      {/* the text, alternating sides on wide screens */}
+      <div
+        className={`col-start-2 row-start-1 flex flex-col gap-2 pt-3 transition-all duration-700 ${
+          left ? 'md:col-start-1 md:text-right' : 'md:col-start-3'
+        } ${inView ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}
+      >
+        {title}
+        {text}
+      </div>
+
+      {/* a painted friend on the other side (wide screens only) */}
+      <div
+        aria-hidden="true"
+        className={`relative hidden md:row-start-1 md:block ${left ? 'md:col-start-3' : 'md:col-start-1'}`}
+      >
+        <WatercolorFriend
+          kind={STOP_FRIENDS[index]}
+          float
+          delay={index * 0.8}
+          className={`top-2 w-[84px] opacity-90 ${left ? 'left-6' : 'right-6'}`}
+        />
+      </div>
+    </li>
+  );
+}
 
 function JourneySection() {
   return (
@@ -267,16 +379,13 @@ function JourneySection() {
           </div>
         </ScrollReveal>
 
-        <ol className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <ol className="mx-auto max-w-[920px]">
           {JOURNEY.map(({ key, title, body: text }, i) => (
-            <ScrollReveal key={key} animation="fade-up" delay={stagger(i)}>
-              <li className="flex h-full flex-col gap-4 rounded-[24px] border border-spiral-blue-soft bg-surface p-7">
-                <WatercolorNumber
-                  n={i + 1}
-                  tone={BLUE_TONES[i % BLUE_TONES.length]}
-                  size={60}
-                  className="-ml-1 -mt-1"
-                />
+            <JourneyStop
+              key={key}
+              index={i}
+              last={i === JOURNEY.length - 1}
+              title={
                 <EditableText
                   section={S}
                   fieldPath={`journey.${key}.title`}
@@ -285,16 +394,18 @@ function JourneySection() {
                 >
                   {title}
                 </EditableText>
+              }
+              body={
                 <EditableText
                   section={S}
                   fieldPath={`journey.${key}.body`}
                   as="p"
-                  className="font-['Lato'] text-[16px] leading-[1.7] text-ink-soft"
+                  className="font-['Lato'] text-[16px] leading-[1.75] text-ink-soft"
                 >
                   {text}
                 </EditableText>
-              </li>
-            </ScrollReveal>
+              }
+            />
           ))}
         </ol>
       </div>
