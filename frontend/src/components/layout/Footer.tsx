@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { EditableText } from '@/components/cms/EditableText';
 import spiralaWordmark from '@/assets/spirala-wordmark.webp';
 import spiralaSpiral from '@/assets/spirala-spiral.webp';
+import forgetMeNots from '@/assets/watercolor/bouquet.webp';
 import { featureFlags } from '@/config/features';
 
 function InstagramIcon({ size = 18 }: { size?: number }) {
@@ -227,6 +228,18 @@ export function Footer() {
               ))}
             </div>
           </div>
+
+          {/* Middle: the client's painted forget-me-nots (desktop: in the free
+              space between logo and links; phones: below the links) */}
+          <img
+            src={forgetMeNots}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            decoding="async"
+            draggable={false}
+            className="pointer-events-none order-last mx-auto h-auto w-[120px] select-none lg:order-none lg:w-[150px] lg:self-center"
+          />
 
           {/* Right: navigation columns */}
           <div

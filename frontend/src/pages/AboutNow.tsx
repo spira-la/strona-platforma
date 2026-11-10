@@ -171,8 +171,17 @@ const JOURNEY = [
 function JourneySection() {
   return (
     <section
-      className={`relative isolate overflow-hidden bg-sky-soft ${sectionPad} py-20 md:py-28`}
+      className={`relative isolate overflow-hidden bg-surface ${sectionPad} py-20 md:py-28`}
     >
+      {/* same watercolor blots as the cream sections on Start */}
+      <WatercolorAccent
+        tone="warm"
+        className="-left-24 -top-24 w-[300px] opacity-40 md:w-[400px]"
+      />
+      <WatercolorAccent
+        tone="cool"
+        className="-bottom-28 -right-24 w-[300px] opacity-35 md:w-[420px]"
+      />
       <WatercolorFriend
         kind="butterflyGreen"
         fly="left"
@@ -330,10 +339,19 @@ const FACTS = [
 function FactsSection() {
   return (
     <section
-      className={`relative isolate overflow-hidden bg-sky-soft ${sectionPad} py-20 md:py-28`}
+      className={`relative isolate overflow-hidden bg-surface ${sectionPad} py-20 md:py-28`}
     >
+      {/* mirrored blots (Start style) so the two cream sections differ */}
+      <WatercolorAccent
+        tone="warm"
+        className="-right-24 -top-24 w-[300px] opacity-40 md:w-[400px]"
+      />
+      <WatercolorAccent
+        tone="cool"
+        className="-bottom-28 -left-24 w-[300px] opacity-35 md:w-[420px]"
+      />
       <WatercolorFriend
-        kind="butterflyYellow"
+        kind="butterflyBlue"
         fly="right"
         delay={2.5}
         className="left-[4%] top-3 w-[56px] md:left-[8%] md:top-4 md:w-[88px]"
