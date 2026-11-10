@@ -4,7 +4,7 @@ import { SEO } from '@/components/shared/SEO';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableImage } from '@/components/cms/EditableImage';
 import { GrowingMeadow } from '@/components/shared/GrowingMeadow';
-import { LandingDragonfly } from '@/components/shared/LandingDragonfly';
+import { LandingDragonfly } from '@/components/shared/LandingFriend';
 import { useInViewOnce } from '@/hooks/useInViewOnce';
 import { EditableButtonLink } from '@/components/cms/EditableButtonLink';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';

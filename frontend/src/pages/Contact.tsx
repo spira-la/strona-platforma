@@ -23,6 +23,10 @@ import {
   RainbowStroke,
   WatercolorFriend,
 } from '@/components/shared/Watercolor';
+import {
+  LandingBee,
+  LandingButterfly,
+} from '@/components/shared/LandingFriend';
 import contactArt from '@/assets/watercolor/contact-joy.webp';
 
 const PHONE_FALLBACK = '+48 666 692 990';
@@ -357,8 +361,11 @@ function ContactFormColumn() {
   return (
     <div
       id="kontakt-formularz"
-      className="bg-white rounded-lg border border-line shadow-sm p-7 md:p-9"
+      className="relative bg-white rounded-lg border border-line shadow-sm p-7 md:p-9"
     >
+      {/* the client's green butterfly flies in and lands on the top edge of
+          the form card (client 2026-11-10) */}
+      <LandingButterfly className="bottom-full right-[10%] w-[64px] md:w-[80px]" />
       <EditableText
         section="contact"
         fieldPath="form.title"
@@ -675,12 +682,6 @@ function LightHeroSection() {
         fly="right"
         className="left-[5%] top-[24%] z-[5] w-[56px] md:w-[76px] lg:left-[14%] lg:top-[34%] lg:w-[100px]"
       />
-      <WatercolorFriend
-        kind="bee"
-        fly="left"
-        delay={2.5}
-        className="bottom-[14%] right-[5%] z-[5] w-[56px] md:bottom-[22%] md:right-[14%] md:w-[90px]"
-      />
 
       <ScrollReveal
         animation="fade"
@@ -695,13 +696,18 @@ function LightHeroSection() {
         >
           Kontakt
         </EditableText>
-        <EditableText
-          section="contact"
-          fieldPath="heroTitle"
-          as="h1"
-          className="font-['Cormorant_Garamond'] text-[44px] md:text-[64px] leading-[1.08] text-ink"
-          placeholder="Porozmawiajmy"
-        />
+        {/* inline-block wrapper: its right edge is the end of the word, so
+            the bee lands on the last letter (client 2026-11-10) */}
+        <div className="relative inline-block">
+          <EditableText
+            section="contact"
+            fieldPath="heroTitle"
+            as="h1"
+            className="font-['Cormorant_Garamond'] text-[44px] md:text-[64px] leading-[1.08] text-ink"
+            placeholder="Porozmawiajmy"
+          />
+          <LandingBee className="bottom-[56%] -right-[10px] w-[46px] md:-right-[14px] md:w-[64px]" />
+        </div>
         <EditableText
           section="contact"
           fieldPath="heroSubtitle"
@@ -720,12 +726,6 @@ function ContactSection() {
       className="relative isolate overflow-hidden bg-white py-14 md:py-20"
       aria-label="Formularz kontaktowy"
     >
-      <WatercolorFriend
-        kind="butterflyBlue"
-        fly="left"
-        delay={2}
-        className="right-[3%] top-8 hidden w-[90px] lg:block xl:right-[6%] xl:w-[100px]"
-      />
       {/* painted forget-me-nots in the corner (wide screens only) */}
       <WatercolorFriend
         kind="bouquet"

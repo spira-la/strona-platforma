@@ -19,6 +19,9 @@ import flapRainbowLeft from '@/assets/watercolor/flap-rainbow-left.webp';
 import flapRainbowRight from '@/assets/watercolor/flap-rainbow-right.webp';
 import flapRainbowBody from '@/assets/watercolor/flap-rainbow-body.webp';
 import flapBeeBody from '@/assets/watercolor/flap-bee-body.webp';
+import flapDragonflyLeft from '@/assets/watercolor/flap-dragonfly-left.webp';
+import flapDragonflyRight from '@/assets/watercolor/flap-dragonfly-right.webp';
+import flapDragonflyBody from '@/assets/watercolor/flap-dragonfly-body.webp';
 import flapBeeWings from '@/assets/watercolor/flap-bee-wings.webp';
 import flapPinkBody from '@/assets/watercolor/flap-pink-body.webp';
 import flapPinkWings from '@/assets/watercolor/flap-pink-wings.webp';
@@ -178,6 +181,18 @@ const FLAPPERS: Partial<
     ratio: 611 / 640,
     tilt: 0,
   },
+  // the turquoise dragonfly (also LandingDragonfly on "O mnie"), split by
+  // split-flapping-butterflies.cjs tilted=-14
+  dragonflyGreen: {
+    layers: butterflyLayers(
+      flapDragonflyLeft,
+      flapDragonflyRight,
+      flapDragonflyBody,
+      48.91,
+    ),
+    ratio: 339 / 640,
+    tilt: -14,
+  },
   bee: {
     layers: [
       { src: flapBeeBody },
@@ -209,8 +224,7 @@ const FLAPPERS: Partial<
   },
 };
 
-const layerClass =
-  'absolute inset-0 h-full w-full select-none object-contain';
+const layerClass = 'absolute inset-0 h-full w-full select-none object-contain';
 
 export function WatercolorFriend({
   kind,

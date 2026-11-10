@@ -10,14 +10,18 @@ import { EditableImage } from '@/components/cms/EditableImage';
 import { EditableButtonLink } from '@/components/cms/EditableButtonLink';
 import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
 import {
+  LandingBee,
+  LandingSunButterfly,
+} from '@/components/shared/LandingFriend';
+import { useWordSpot } from '@/hooks/useWordSpot';
+import { WalkingLadybug } from '@/components/shared/WalkingLadybug';
+import {
   RainbowStroke,
   WatercolorAccent,
   WatercolorFriend,
 } from '@/components/shared/Watercolor';
 import heroArt from '@/assets/watercolor/hero-joy.webp';
 import bouquetArt from '@/assets/watercolor/bouquet.webp';
-import butterflyArt from '@/assets/watercolor/butterfly-pink.webp';
-import dragonflyArt from '@/assets/watercolor/dragonfly-blue.webp';
 import { eventsClient } from '@/clients/events.client';
 
 // ---------------------------------------------------------------------------
@@ -56,6 +60,33 @@ const secondaryBtn =
 // 1. Hero — Życie dzieje się teraz
 // ---------------------------------------------------------------------------
 
+/**
+ * Hero title with the yellow butterfly landing on the word "teraz" (client
+ * 2026-11-10: first on "Życie", then "niech wyląduje na wyrazie teraz"). The title stays
+ * CMS-editable; the landing spot is measured on the rendered text.
+ */
+function HeroTitle() {
+  const { ref, spot } = useWordSpot<HTMLDivElement>('teraz', 0.55, 0.4);
+  return (
+    <div ref={ref} className="relative">
+      <EditableText
+        section={S}
+        fieldPath="hero.title"
+        as="h1"
+        className="font-['Cormorant_Garamond'] text-[46px] md:text-[76px] leading-[1.05] text-ink"
+      >
+        Życie dzieje się teraz
+      </EditableText>
+      {spot && (
+        <LandingSunButterfly
+          className="-translate-x-1/2 w-[52px] md:w-[76px]"
+          style={{ left: spot.left, bottom: spot.bottom }}
+        />
+      )}
+    </div>
+  );
+}
+
 function HeroSection() {
   return (
     <section
@@ -78,19 +109,6 @@ function HeroSection() {
         defaultTop={0}
         defaultBottom={0}
       />
-      {/* painted butterfly and bee fluttering at the sides of the title */}
-      <WatercolorFriend
-        kind="butterfly"
-        fly="right"
-        // phones: low, under the buttons, so it never covers the first line
-        className="bottom-[3%] left-[4%] z-[5] w-[60px] md:bottom-auto md:top-[15%] md:w-[84px] lg:left-[6%] lg:top-[14%] lg:w-[110px]"
-      />
-      <WatercolorFriend
-        kind="bee"
-        fly="left"
-        delay={2.5}
-        className="bottom-[8%] right-[6%] z-[5] w-[60px] md:bottom-[10%] md:w-[84px] lg:bottom-[20%] lg:right-[10%] lg:w-[110px]"
-      />
 
       <div className="relative z-10 mx-auto flex max-w-[860px] flex-col items-center gap-6 px-6 pt-[120px] pb-20 text-center">
         <ScrollReveal animation="fade-up" duration={900}>
@@ -105,14 +123,7 @@ function HeroSection() {
           </EditableText>
         </ScrollReveal>
         <ScrollReveal animation="blur" delay={150} duration={1000}>
-          <EditableText
-            section={S}
-            fieldPath="hero.title"
-            as="h1"
-            className="font-['Cormorant_Garamond'] text-[46px] md:text-[76px] leading-[1.05] text-ink"
-          >
-            Życie dzieje się teraz
-          </EditableText>
+          <HeroTitle />
           <RainbowStroke className="mx-auto -mt-1 w-[240px] md:mt-1 md:w-[420px]" />
         </ScrollReveal>
         <ScrollReveal animation="fade-up" delay={350} duration={900}>
@@ -217,13 +228,11 @@ function HumanSection() {
                 alt="Bukiet niezapominajek malowany akwarelą"
                 className="h-full w-full object-contain"
               />
+              {/* the bee flies in and sits on the top flowers of the
+                  bouquet (client 2026-11-10: "pszczoła niech usiądzie na
+                  niezapominajkach") */}
+              <LandingBee className="bottom-[79%] left-[60%] w-[24%] -translate-x-1/2" />
             </div>
-            <WatercolorFriend
-              kind="bee"
-              fly="left"
-              delay={1.5}
-              className="-right-2 bottom-[18%] w-[22%] md:-right-6"
-            />
           </div>
         </ScrollReveal>
       </div>
@@ -429,6 +438,28 @@ const OFFER_POINTS = [
   },
 ] as const;
 
+/**
+ * Offer title with the client's ladybug walking from the orange blot at the
+ * top of the section to the word "życiem" (client 2026-11-10). The title
+ * stays CMS-editable; the stop is measured on the rendered text.
+ */
+function OfferTitle() {
+  const { ref, spot } = useWordSpot<HTMLDivElement>('życiem', 0.5, 0.42);
+  return (
+    <div ref={ref} className="relative">
+      <EditableText
+        section={S}
+        fieldPath="offer.title"
+        as="h2"
+        className={heading}
+      >
+        Pomagam zobaczyć, co naprawdę kieruje Twoim życiem
+      </EditableText>
+      {spot && <WalkingLadybug spot={spot} className="w-[34px] md:w-[44px]" />}
+    </div>
+  );
+}
+
 function OfferSection() {
   return (
     <section className="relative isolate overflow-hidden bg-surface px-6 py-20 md:px-12 lg:px-[120px] md:py-28">
@@ -451,14 +482,7 @@ function OfferSection() {
             >
               Czym się zajmuję
             </EditableText>
-            <EditableText
-              section={S}
-              fieldPath="offer.title"
-              as="h2"
-              className={heading}
-            >
-              Pomagam zobaczyć, co naprawdę kieruje Twoim życiem
-            </EditableText>
+            <OfferTitle />
             <RainbowStroke className="-mt-2 w-[200px] md:w-[280px]" />
             <EditableText
               section={S}
@@ -626,12 +650,13 @@ function InviteSection() {
                 tone="warm"
                 className="-bottom-24 -left-24 w-[220px] opacity-15"
               />
-              <img
-                src={butterflyArt}
-                alt=""
-                aria-hidden="true"
-                loading="lazy"
-                className="pointer-events-none absolute right-4 top-4 w-[76px] select-none transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105 md:right-7 md:top-7 md:w-[132px]"
+              {/* the pink butterfly beating its wings and hovering (client
+                  2026-11-10: "użyj owadów, niech też się ruszają, mogą być
+                  trochę mniejsze") */}
+              <WatercolorFriend
+                kind="butterfly"
+                float
+                className="right-5 top-5 w-[60px] transition-[rotate,scale] duration-500 group-hover:-rotate-6 group-hover:scale-105 md:right-8 md:top-8 md:w-[104px]"
               />
               <div className="flex min-h-[96px] flex-col gap-3 pr-16 md:min-h-[136px] md:pr-32">
                 <span
@@ -676,7 +701,7 @@ function InviteSection() {
             </Link>
           </ScrollReveal>
 
-          {/* Talk — painted dragonfly, cool blot */}
+          {/* Talk — painted turquoise dragonfly (moving wings), cool blot */}
           <ScrollReveal animation="fade-up" delay={stagger(1)}>
             <Link
               to="/kontakt"
@@ -690,12 +715,12 @@ function InviteSection() {
                 tone="cool"
                 className="-bottom-24 -left-24 w-[220px] opacity-20"
               />
-              <img
-                src={dragonflyArt}
-                alt=""
-                aria-hidden="true"
-                loading="lazy"
-                className="pointer-events-none absolute right-3 top-5 w-[80px] select-none transition-transform duration-500 group-hover:rotate-6 group-hover:scale-105 md:right-6 md:top-8 md:w-[140px]"
+              {/* the turquoise dragonfly beating its wings and hovering */}
+              <WatercolorFriend
+                kind="dragonflyGreen"
+                float
+                delay={1.2}
+                className="right-4 top-7 w-[70px] transition-[rotate,scale] duration-500 group-hover:rotate-6 group-hover:scale-105 md:right-7 md:top-10 md:w-[116px]"
               />
               <div className="flex min-h-[96px] flex-col gap-3 pr-16 md:min-h-[136px] md:pr-32">
                 <span

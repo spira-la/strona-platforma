@@ -10,13 +10,16 @@
 // `flop` mirrors the art so it faces left like the other friends (the fly-*
 // animations assume left-facing art).
 // Usage (from repo root):
-//   node plan/brand/split-side-butterflies.cjs <svg> <name> <bodyLum> [flop]
+//   node plan/brand/split-side-butterflies.cjs <svg> <name> <bodyLum> [flop] [region]
 const fs = require('fs');
 const path = require('path');
 const sharp = require(path.resolve(__dirname, '../../backend/node_modules/sharp'));
 sharp.cache(false);
 
-const [svgPath, name, bodyLumArg, flopArg] = process.argv.slice(2);
+const [svgPath, name, bodyLumArg, flopArg, regionArg] = process.argv.slice(2);
+// optional body region in % of the (flopped) art: x0,x1,y0,y1 — for art whose
+// wing edges are as dark as the body (the yellow 'sun' butterfly: 0,26,50,100)
+const REGION = regionArg ? regionArg.split(',').map(Number) : [0, 100, 0, 100];
 const BODY_LUM = Number(bodyLumArg);
 const OUT_DIR = path.resolve(__dirname, '../../frontend/src/assets/watercolor');
 const OUT_W = 600;
@@ -50,7 +53,11 @@ const lum = (d, i) => 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
   // lighter edge of the body (and antennae) stays with the body instead of
   // leaving a faint outline on the moving wings
   const dark = new Uint8Array(W * H);
-  for (let p = 0; p < W * H; p++) if (data[p * 4 + 3] > 150 && lum(data, p * 4) < BODY_LUM) dark[p] = 1;
+  for (let p = 0; p < W * H; p++) {
+    const px = ((p % W) / W) * 100, py = (Math.floor(p / W) / H) * 100;
+    const inRegion = px >= REGION[0] && px <= REGION[1] && py >= REGION[2] && py <= REGION[3];
+    if (inRegion && data[p * 4 + 3] > 150 && lum(data, p * 4) < BODY_LUM) dark[p] = 1;
+  }
   const R = 3;
   const bodyMask = new Uint8Array(W * H);
   for (let y = 0; y < H; y++)
