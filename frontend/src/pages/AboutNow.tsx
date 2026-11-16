@@ -34,7 +34,9 @@ import {
 // O mnie — 2026-11 redesign
 //
 // Light, personal page built from the client's own text (chapter "O mnie" of
-// her ebook, see plan/teksty-klientki/swiadomie-zyc-ebook.md). Rendered at
+// her ebook, see plan/teksty-klientki/swiadomie-zyc-ebook.md; intro, journey
+// subtitle, quote and closing rewritten 2026-11-16 from her new text in
+// plan/teksty-klientki/o-mnie-notatki-2026-11-16.md). Rendered at
 // /o-mnie while the `classicAbout` flag is off; pages/About.tsx is kept intact.
 // CMS section `aboutNow` is separate from `about`, so old saved text never
 // leaks in.
@@ -102,7 +104,7 @@ function IntroSection() {
               as="h1"
               className="font-['Cormorant_Garamond'] text-[22px] md:text-[32px] leading-[1.15] text-ink"
             >
-              Nazywam się Aneta Mroczko
+              Cześć, mam na imię Aneta
             </EditableText>
             <RainbowStroke className="-mt-3 w-[150px] md:w-[220px]" />
             <EditableText
@@ -111,8 +113,10 @@ function IntroSection() {
               as="p"
               className={body}
             >
-              Jestem coachką z 13-letnim doświadczeniem. Ale nie chodzi o moje
-              tytuły, kursy, studia i szkolenia.
+              Mam 44 lata i uwielbiam swój wiek. Lubię to, kim dziś jestem.
+              Droga do tego była kręta, czasem z wybojami — ale każdy wybój
+              pokazywał mi, co jest we mnie zapisane: jakie noszę programy i
+              przekonania.
             </EditableText>
             <EditableText
               section={S}
@@ -120,8 +124,9 @@ function IntroSection() {
               as="p"
               className={body}
             >
-              Chodzi o moje bycie sobą i o moje doświadczenie — i tym właśnie
-              się z Tobą dzielę.
+              Zaczęłam w 2013 roku, kiedy zauważyłam, że nie lubię siebie jako
+              mamy dla mojej córki. Wiedziałam, że mogę być lepszą mamą — i tak
+              zaczęła się moja przygoda z poznawaniem siebie.
             </EditableText>
             <div className="mt-3 flex flex-col gap-3 sm:flex-row">
               <EditableButtonLink
@@ -376,8 +381,10 @@ function JourneySection() {
               as="p"
               className={body}
             >
-              Próbowałam technik i metod, jednej po drugiej. Czy działały? Na
-              chwilę tak. A ja szłam dalej i testowałam wszystko na sobie.
+              Stare przekonania sprawiały, że cierpiałam z odrzucenia, czułam
+              się niewystarczająca, nieważna, niewidzialna. Subtelnie — ale
+              bardzo boleśnie. Rok za rokiem poznawałam metody, które wspierały
+              moją zmianę, a spokój coraz częściej gościł w mojej codzienności.
             </EditableText>
           </div>
         </ScrollReveal>
@@ -456,8 +463,7 @@ function QuoteSection() {
               as="blockquote"
               className="font-['Cormorant_Garamond'] text-[30px] md:text-[36px] lg:text-[40px] italic leading-[1.3] text-ink"
             >
-              Przestałam się porównywać i oceniać na tle innych. Uznałam, że
-              taka, jaka jestem, jestem wartością — i lubię siebie.
+              Dziś to ja decyduję, jak się czuję. Nikt inny. Tylko ja.
             </EditableText>
             <EditableText
               section={S}
@@ -465,8 +471,20 @@ function QuoteSection() {
               as="p"
               className={body}
             >
-              Lubię siebie w procesie poznawania swoich darów i jakości, a także
-              ograniczeń — i pracuję z nimi na bieżąco.
+              Gdy życie znów wywraca się do góry nogami, wiem już, że to
+              przejściowe i że na wszystko jest jakieś rozwiązanie. „Nie da
+              się”, „to czyjaś wina”, „koniec świata” — to tylko głos ego. Srata
+              tata, żadnego końca świata nie będzie.
+            </EditableText>
+            <EditableText
+              section={S}
+              fieldPath="quote.body2"
+              as="p"
+              className={body}
+            >
+              Pilnuję tego, o czym myślę. A gdy zbłądzę, zauważam to i uzdrawiam
+              stare przekonania, które mnie umniejszały i sprawiały, że czułam
+              się bezwartościowa.
             </EditableText>
           </figure>
         </ScrollReveal>
@@ -650,7 +668,7 @@ function ClosingSection() {
               as="h2"
               className={heading}
             >
-              Dziś przypominam sobie, kim naprawdę jestem
+              Bo szkoda życia na smutek
             </EditableText>
             <EditableText
               section={S}
@@ -658,9 +676,41 @@ function ClosingSection() {
               as="p"
               className={body}
             >
-              Pozwalam sobie na siebie — bez całej tej reżyserii z zewnątrz, co
-              trzeba, co wypada i co należy. Jeśli i Ty chcesz przestać utykać w
-              miejscu, porozmawiajmy.
+              Uczyłam się wiele, sprawdzałam i testowałam na sobie. To, co
+              naprawdę działa, chcę dziś przekazać Tobie. Bo warto! Szkoda życia
+              na smutek, złość i ciągłe stawianie siebie na końcu. Jeśli Ty o
+              siebie nie zadbasz, nic nie wydarzy się dla Ciebie — tylko dla
+              innych.
+            </EditableText>
+            <EditableText
+              section={S}
+              fieldPath="closing.body2"
+              as="p"
+              className={body}
+            >
+              Zła, smutna, przemęczona, kłębek nerwów… Kto przy takiej Tobie
+              odpoczywa? Kto się Tobą inspiruje? Odpowiedz sobie szczerze. Ja,
+              nieszczęśliwa, byłam fatalną matką, żoną i kochanką, i dołującą
+              przyjaciółką. Co mogłam dać poza całą tą negatywną energią?
+              Niewiele.
+            </EditableText>
+            <EditableText
+              section={S}
+              fieldPath="closing.body3"
+              as="p"
+              className={body}
+            >
+              Dziś jest inaczej. I Ty też masz prawo czuć się ze sobą dobrze —
+              tak, by Twoje dzieci, Twój mąż, przyjaciele, rodzeństwo i ludzie w
+              pracy też czuli się dobrze przy Tobie.
+            </EditableText>
+            <EditableText
+              section={S}
+              fieldPath="closing.signoff"
+              as="p"
+              className="font-['Cormorant_Garamond'] text-[26px] italic leading-[1.3] text-ink md:text-[30px]"
+            >
+              Bądź pięknem takim, jakim jesteś. Bo jesteś.
             </EditableText>
             <div className="mt-2 flex flex-col gap-3 sm:flex-row">
               <EditableButtonLink
@@ -696,7 +746,7 @@ export default function AboutNow() {
     <main>
       <SEO
         title="O mnie"
-        description="Aneta Mroczko — coachka z 13-letnim doświadczeniem. Geologia, Beskidy, psychobiologia i droga do świadomego życia w teraz."
+        description="Cześć, mam na imię Aneta. Od 2013 roku poznaję siebie — od cierpienia do spokoju. Dziś to ja decyduję, jak się czuję, i pokazuję Ci, jak możesz poczuć się ze sobą dobrze."
         canonical="/o-mnie"
         pathname="/o-mnie"
       />
