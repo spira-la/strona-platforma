@@ -31,7 +31,12 @@ import { eventsClient } from '@/clients/events.client';
 // `classicHome` flag is off; the previous Home (pages/Home.tsx) is kept intact.
 // CMS section `homeNow` is separate from `home`/`hero`, so text saved for the
 // old page never leaks in. Copy is taken from the client's own text (her ebook
-// "Świadomie żyć to znaczy jak?", 2026-11) — she can also edit it inline.
+// "Świadomie żyć to znaczy jak?", 2026-11; sections 2–7 rewritten 2026-11-16
+// from her notes in plan/teksty-klientki/start-spokoj-notatki.md) — she can
+// also edit it inline.
+//
+// Order alternates white / pastel yellow: hero paint · Spokój white ·
+// Tajemnica cream · quote white · steps cream · offer white · invite cream.
 // ---------------------------------------------------------------------------
 
 const S = 'homeNow' as const;
@@ -126,6 +131,29 @@ function HeroSection() {
           <HeroTitle />
           <RainbowStroke className="mx-auto -mt-1 w-[240px] md:mt-1 md:w-[420px]" />
         </ScrollReveal>
+        {/* the client's tagline (2026-11-10): the spiral-upward invitation
+            as a handwritten-feeling italic lead, then her promise */}
+        <ScrollReveal animation="fade-up" delay={250} duration={900}>
+          <div className="flex max-w-[640px] flex-col items-center gap-3">
+            <EditableText
+              section={S}
+              fieldPath="hero.lead"
+              as="p"
+              className="text-balance font-['Cormorant_Garamond'] text-[24px] italic leading-[1.3] text-ink md:text-[30px]"
+            >
+              Masz dość kręcenia się w kółko? Czas ruszyć spiralą w górę.
+            </EditableText>
+            <EditableText
+              section={S}
+              fieldPath="hero.promise"
+              as="p"
+              className="text-balance font-['Lato'] text-[17px] font-semibold leading-[1.6] text-ink md:text-[19px]"
+            >
+              Pomagam uwolnić się od starych przekonań, które trzymają Cię w
+              tych samych historiach.
+            </EditableText>
+          </div>
+        </ScrollReveal>
         <ScrollReveal animation="fade-up" delay={350} duration={900}>
           <EditableText
             section={S}
@@ -163,7 +191,7 @@ function HeroSection() {
 }
 
 // ---------------------------------------------------------------------------
-// 2. Skąd bierze się cierpienie — how a human works, subconscious memory
+// 2. A gdyby tak… czuć spokój — the reader's longing, the client's own calm
 // ---------------------------------------------------------------------------
 
 function HumanSection() {
@@ -178,7 +206,7 @@ function HumanSection() {
               as="p"
               className={eyebrow}
             >
-              Czemu tak jest?
+              A gdyby tak…
             </EditableText>
             <EditableText
               section={S}
@@ -186,7 +214,7 @@ function HumanSection() {
               as="h2"
               className={heading}
             >
-              Dlaczego to wciąż powraca?
+              Jak by to było — czuć spokój?
             </EditableText>
             <EditableText
               section={S}
@@ -194,9 +222,9 @@ function HumanSection() {
               as="p"
               className={body}
             >
-              Każdy z nas czegoś pragnie, do czegoś dąży — i jak życie pokazuje,
-              jednym się udaje, a innym nie bardzo. Choć wkładasz tyle wysiłku,
-              cokolwiek zaczniesz, odbija się jak od bandy.
+              Reagować spokojnie na wszystko, co przynosi dzień. Nie dawać się
+              złapać w pułapkę starych programów, które od lat podsuwają Ci te
+              same lęki i te same reakcje.
             </EditableText>
             <EditableText
               section={S}
@@ -204,9 +232,9 @@ function HumanSection() {
               as="p"
               className={body}
             >
-              Tak zostaliśmy zaprogramowani. Każda myśl zapisana w naszej
-              podświadomości trzyma nas w błędnym kręgu — dopóki stare
-              oprogramowanie decyduje o Twoim dziś.
+              Wiem, jak cudownie to smakuje. Wyzwania wciąż mnie testują — ale
+              dziś przyjmuję ich lekcje z pokorą, zamiast z nimi walczyć. I
+              wiem, że Ty też tak możesz.
             </EditableText>
           </div>
         </ScrollReveal>
@@ -241,7 +269,145 @@ function HumanSection() {
 }
 
 // ---------------------------------------------------------------------------
-// 3. Jak zarządzać sobą w teraz — three simple steps
+// 2b. Cała tajemnica — what you think, say and do comes back to you;
+// the abyss of comparisons; the boomerang question. Cream.
+// ---------------------------------------------------------------------------
+
+const COMPARISONS = [
+  { key: 'pair1', text: 'zdrowi i chorzy' },
+  { key: 'pair2', text: 'mądrzy i głupi' },
+  { key: 'pair3', text: 'zaradni i nieporadni' },
+  { key: 'pair4', text: 'szybcy i powolni' },
+] as const;
+
+function SecretSection() {
+  return (
+    <section className="relative isolate overflow-hidden bg-surface px-6 py-20 md:px-12 lg:px-[120px] md:py-28">
+      <WatercolorAccent
+        tone="warm"
+        className="-right-24 -top-24 w-[300px] opacity-40 md:w-[400px]"
+      />
+      <WatercolorAccent
+        tone="cool"
+        className="-bottom-28 -left-24 w-[300px] opacity-35 md:w-[420px]"
+      />
+      <div className="mx-auto max-w-[1120px]">
+        <ScrollReveal animation="fade-up">
+          <div className="mx-auto mb-12 flex max-w-[720px] flex-col items-center gap-4 text-center">
+            <EditableText
+              section={S}
+              fieldPath="secret.eyebrow"
+              as="p"
+              className={eyebrow}
+            >
+              Cała tajemnica
+            </EditableText>
+            <EditableText
+              section={S}
+              fieldPath="secret.title"
+              as="h2"
+              className={`${heading} text-balance`}
+            >
+              Wszystko, o czym myślisz, wraca do Ciebie
+            </EditableText>
+            <RainbowStroke className="-mt-1 w-[200px] md:w-[280px]" />
+          </div>
+        </ScrollReveal>
+
+        <div className="grid items-center gap-10 md:grid-cols-2 lg:gap-16">
+          <ScrollReveal animation="fade-up">
+            <div className="flex flex-col gap-5">
+              <EditableText
+                section={S}
+                fieldPath="secret.body1"
+                as="p"
+                className={body}
+              >
+                Człowiek to wyjątkowa istota — ma zdolność stwarzania swojej
+                rzeczywistości. Tak, dobrze czytasz. To, o czym myślisz, co
+                mówisz i co robisz, wkrótce do Ciebie wraca.
+              </EditableText>
+              <EditableText
+                section={S}
+                fieldPath="secret.body2"
+                as="p"
+                className={body}
+              >
+                Każdą myślą, każdym słowem i czynem tworzysz swoje jutro — i to
+                najbliższe, i to dalsze. I to naprawdę cała tajemnica. Aż trudno
+                uwierzyć, że to takie proste, prawda?
+              </EditableText>
+            </div>
+          </ScrollReveal>
+
+          {/* the abyss of comparisons — a white card with the labels we
+              keep being sorted into */}
+          <ScrollReveal animation="fade-up" delay={200}>
+            <div className="flex flex-col gap-5 rounded-[28px] bg-white p-7 shadow-[0_10px_34px_-22px_rgba(63,48,68,0.35)] md:p-9">
+              <EditableText
+                section={S}
+                fieldPath="secret.compareEyebrow"
+                as="p"
+                className="font-['Lato'] text-[12px] font-semibold uppercase tracking-[0.18em] text-spiral-blue"
+              >
+                Otchłań porównań
+              </EditableText>
+              <EditableText
+                section={S}
+                fieldPath="secret.compareLead"
+                as="p"
+                className="font-['Lato'] text-[16px] leading-[1.7] text-ink-soft"
+              >
+                Wciąż słyszymy, że ludzie dzielą się na:
+              </EditableText>
+              <ul className="flex flex-wrap gap-2">
+                {COMPARISONS.map(({ key, text }) => (
+                  <li
+                    key={key}
+                    className="rounded-full bg-surface px-4 py-1.5 font-['Lato'] text-[14px] text-ink-muted"
+                  >
+                    <EditableText
+                      section={S}
+                      fieldPath={`secret.${key}`}
+                      as="span"
+                    >
+                      {text}
+                    </EditableText>
+                  </li>
+                ))}
+              </ul>
+              <EditableText
+                section={S}
+                fieldPath="secret.compareBody"
+                as="p"
+                className="font-['Lato'] text-[16px] leading-[1.7] text-ink-soft"
+              >
+                A Ty w tej otchłani porównań raz toniesz, raz wypływasz na
+                powierzchnię. Po co tam kierujesz swoją uwagę? Od dziś już tego
+                nie potrzebujesz.
+              </EditableText>
+            </div>
+          </ScrollReveal>
+        </div>
+
+        <ScrollReveal animation="fade-up" delay={150}>
+          <EditableText
+            section={S}
+            fieldPath="secret.question"
+            as="p"
+            className="mx-auto mt-14 max-w-[760px] text-balance text-center font-['Cormorant_Garamond'] text-[26px] italic leading-[1.35] text-ink md:text-[32px]"
+          >
+            Zastanów się: o czym myślisz najczęściej? I czy te myśli nie wracają
+            do Ciebie jak bumerang — w tym, czego dziś doświadczasz?
+          </EditableText>
+        </ScrollReveal>
+      </div>
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 3. Jak zaprowadzić w sobie porządek — three simple steps
 // ---------------------------------------------------------------------------
 
 // Each step opens with a written label instead of a bare digit (client
@@ -254,23 +420,23 @@ const STEPS = [
     pill: 'bg-spiral-coral-soft',
     dot: 'bg-spiral-coral',
     title: 'Zauważ',
-    body: 'Zauważ, co myślisz, co mówisz i co robisz — wszystko, co nie jest spójne z tym, kim jesteś dziś.',
+    body: 'Przyglądaj się temu, co myślisz, mówisz i robisz. Wyłapuj to, co Cię nie wspiera: dołujące przekonania, to, czego nie lubisz w swoim życiu, i oczekiwanie, że ktoś coś zrobi za Ciebie.',
   },
   {
     key: 'step2',
     label: 'Drugi krok',
     pill: 'bg-spiral-gold-soft',
     dot: 'bg-spiral-gold',
-    title: 'Zobacz źródło',
-    body: 'Spójrz, skąd pochodzi myśl, która sabotuje Twoje działania. Zobacz ją na linii czasu, oddychaj i powiedz sobie: to przeszłość.',
+    title: 'Zatrzymaj się',
+    body: 'Kiedy coś boli — smutek, złość, przykrość — nie uciekaj. Choroba, trudna relacja, kłopoty z pieniędzmi, brak sensu: spójrz temu w oczy i zapytaj, co to mówi o Tobie, o Twoich lękach i blokadach.',
   },
   {
     key: 'step3',
     label: 'Trzeci krok',
     pill: 'bg-spiral-teal-soft',
     dot: 'bg-spiral-teal',
-    title: 'Wymaż',
-    body: 'Weź gumkę i zmaż ten obraz — porażkę, oczekiwania, brak wiary. Nie identyfikujesz się z tym. Dziś myślisz inaczej.',
+    title: 'Zmień',
+    body: 'Zobacz, jakie przekonanie to do Ciebie przyciągnęło — i wybierz inaczej. To, co zauważysz i nazwiesz, możesz zmienić. Proszę, zrób to dla siebie.',
   },
 ] as const;
 
@@ -300,7 +466,7 @@ function StepsSection() {
               as="p"
               className={eyebrow}
             >
-              Gotowa droga
+              Od chaosu do spokoju
             </EditableText>
             <EditableText
               section={S}
@@ -308,7 +474,7 @@ function StepsSection() {
               as="h2"
               className={heading}
             >
-              Jak sprawić, by przeszłość przestała wpływać na Twoje dziś?
+              Jak zaprowadzić w sobie porządek?
             </EditableText>
             <EditableText
               section={S}
@@ -316,7 +482,8 @@ function StepsSection() {
               as="p"
               className={body}
             >
-              Ta praca jest prosta — możesz ją wykonać w domowym zaciszu.
+              Życie naturalnie dąży do równowagi, a nie do chaosu. Nawet jeśli
+              dziś czujesz w sobie chaos, możesz to zmienić — krok po kroku.
             </EditableText>
           </div>
         </ScrollReveal>
@@ -392,8 +559,7 @@ function QuoteSection() {
             as="blockquote"
             className="font-['Cormorant_Garamond'] text-[32px] md:text-[46px] italic leading-[1.25] text-ink"
           >
-            Uważaj, co myślisz, co mówisz i co robisz — bo to niebawem stanie
-            się Twoją rzeczywistością.
+            Kieruj uwagę tylko na to, czego chcesz więcej w swoim życiu.
           </EditableText>
           <RainbowStroke className="w-[160px] md:w-[220px]" />
           <EditableText
@@ -411,40 +577,41 @@ function QuoteSection() {
 }
 
 // ---------------------------------------------------------------------------
-// 4b. Czym się zajmuję — the client's longer description of her work
-// (2026-11-10). Cream section between the white quote and the white invite,
-// so Home keeps alternating white / pastel yellow. Draft copy is taken from
-// her ebook; every line is CMS-editable (homeNow.offer.*).
+// 4b. Jak pracujemy razem — how she works with a client (2026-11-16, from her
+// notes: out of the victim role, no digging up every trauma, heal the source,
+// train mindful thinking). White, between the cream steps and cream invite.
+// Every line is CMS-editable (homeNow.offer.*).
 // ---------------------------------------------------------------------------
 
 const OFFER_POINTS = [
   {
     key: 'point1',
     dot: 'bg-spiral-coral',
-    title: 'Psychobiologia',
-    body: 'Pokazuję, jak przeżycia i emocje zapisują się w nas i w ciele — tak, by przestać się bać i zacząć rozumieć siebie.',
+    title: 'Porządki w tym, co boli',
+    body: 'Bierzemy na warsztat Twoją obecną trudność, docieramy do jej źródła i uzdrawiamy je — tak, by przestała się powtarzać.',
   },
   {
     key: 'point2',
     dot: 'bg-spiral-gold',
-    title: 'Dekodowanie przekonań i programów',
-    body: 'Razem odnajdujemy stare oprogramowanie — przekonania, lęki, wzorce z rodu — które dziś sabotuje Twoje działania.',
+    title: 'Trening uważnego myślenia',
+    body: 'Uczysz się myśleć świadomie i panować nad własnym umysłem — żeby to on służył Tobie, a nie Ty jemu.',
   },
   {
     key: 'point3',
     dot: 'bg-spiral-teal',
-    title: 'Życie w teraz',
-    body: 'Uczysz się zarządzać sobą tu i teraz: zauważać, widzieć źródło i wymazywać to, co już nie jest Tobą.',
+    title: 'Nowa płyta zamiast starej',
+    body: 'Zamiast bezmyślnie odtwarzać starą płytę, myślisz o tym, czego chcesz. A to wróci do Ciebie — jutro, za tydzień, za miesiąc.',
   },
 ] as const;
 
 /**
  * Offer title with the client's ladybug walking from the orange blot at the
- * top of the section to the word "życiem" (client 2026-11-10). The title
- * stays CMS-editable; the stop is measured on the rendered text.
+ * top of the section to the word "ręce" (client 2026-11-10, word updated with
+ * the new title 2026-11-16). The title stays CMS-editable; the stop is
+ * measured on the rendered text.
  */
 function OfferTitle() {
-  const { ref, spot } = useWordSpot<HTMLDivElement>('życiem', 0.5, 0.42);
+  const { ref, spot } = useWordSpot<HTMLDivElement>('ręce', 0.5, 0.42);
   return (
     <div ref={ref} className="relative">
       <EditableText
@@ -453,7 +620,7 @@ function OfferTitle() {
         as="h2"
         className={heading}
       >
-        Pomagam zobaczyć, co naprawdę kieruje Twoim życiem
+        Bierzesz życie w swoje ręce
       </EditableText>
       {spot && <WalkingLadybug spot={spot} className="w-[34px] md:w-[44px]" />}
     </div>
@@ -462,14 +629,14 @@ function OfferTitle() {
 
 function OfferSection() {
   return (
-    <section className="relative isolate overflow-hidden bg-surface px-6 py-20 md:px-12 lg:px-[120px] md:py-28">
+    <section className="relative isolate overflow-hidden bg-white px-6 py-20 md:px-12 lg:px-[120px] md:py-28">
       <WatercolorAccent
         tone="warm"
-        className="-right-24 -top-24 w-[300px] opacity-40 md:w-[400px]"
+        className="-right-24 -top-24 w-[300px] opacity-30 md:w-[400px]"
       />
       <WatercolorAccent
         tone="cool"
-        className="-bottom-28 -left-24 w-[300px] opacity-35 md:w-[420px]"
+        className="-bottom-28 -left-24 w-[300px] opacity-25 md:w-[420px]"
       />
       <div className="mx-auto grid max-w-[1120px] gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
         <ScrollReveal animation="fade-up">
@@ -480,7 +647,7 @@ function OfferSection() {
               as="p"
               className={eyebrow}
             >
-              Czym się zajmuję
+              Jak pracujemy razem
             </EditableText>
             <OfferTitle />
             <RainbowStroke className="-mt-2 w-[200px] md:w-[280px]" />
@@ -490,10 +657,9 @@ function OfferSection() {
               as="p"
               className={body}
             >
-              Od 2016 roku zajmuję się psychobiologią i dekodowaniem przekonań
-              oraz programów zapisanych w naszej podświadomości — tego
-              wszystkiego, co sprawia, że jesteśmy zalęknieni, wycofani,
-              zagubieni albo dominujący i kontrolujący.
+              Nikt Ci nic nie zrobił. To Twoje przekonania materializują się w
+              codzienności — a skoro są Twoje, to Ty możesz je zmienić.
+              Wychodzisz z roli ofiary, bo żadną ofiarą już nie jesteś.
             </EditableText>
             <EditableText
               section={S}
@@ -501,10 +667,10 @@ function OfferSection() {
               as="p"
               className={body}
             >
-              Razem szukamy źródła tego, co dziś powraca w Twoim życiu. Myśli i
-              słowa, które nie mówią już o Tobie z dziś, są starym
-              oprogramowaniem — a kiedy je zobaczysz, możesz je świadomie
-              wymienić.
+              Nie musimy wywlekać wszystkich traum z przeszłości. Zajmujemy się
+              tym, co jest teraz na tapecie i Cię męczy. Każde cierpienie ma
+              swój początek w przeszłości — razem go odnajdujemy i uzdrawiamy,
+              żeby to, co tyle razy bolało, przestało wracać.
             </EditableText>
             <EditableText
               section={S}
@@ -512,9 +678,8 @@ function OfferSection() {
               as="p"
               className={body}
             >
-              Wierzę, że jest w nas przestrzeń na świadome decyzje i zmiany. I
-              tym zajmuję się niezmiennie od wielu lat — na sesjach
-              indywidualnych, warsztatach i spotkaniach.
+              Czy to magia? Pewnie, że tak — ale Twoja. Tylko Ty możesz działać
+              cuda dla siebie. Ja pokażę Ci krok po kroku, jak to robić.
             </EditableText>
           </div>
         </ScrollReveal>
@@ -607,10 +772,10 @@ const inviteTitle =
 
 function InviteSection() {
   return (
-    <section className="relative isolate overflow-hidden bg-white px-6 py-20 md:px-12 lg:px-[120px] md:py-28">
+    <section className="relative isolate overflow-hidden bg-surface px-6 py-20 md:px-12 lg:px-[120px] md:py-28">
       <WatercolorAccent
         tone="warm"
-        className="-left-20 -top-24 w-[260px] opacity-20 md:w-[340px]"
+        className="-left-20 -top-24 w-[260px] opacity-30 md:w-[340px]"
       />
       <div className="mx-auto max-w-[1040px]">
         <ScrollReveal animation="fade-up">
@@ -621,7 +786,7 @@ function InviteSection() {
               as="h2"
               className={heading}
             >
-              Gotowa? To startujemy.
+              Proste, prawda? To co, zaczynamy?
             </EditableText>
             <RainbowStroke className="-mt-1 w-[180px] md:w-[240px]" />
             <EditableText
@@ -807,12 +972,13 @@ export default function HomeNow() {
       <SEO
         canonical="/"
         pathname="/"
-        description="Życie dzieje się teraz. Zrozum, jak działa człowiek i pamięć podświadomości, i uwolnij się od cierpienia — Spirala, Aneta Mroczko."
+        description="Jak by to było czuć spokój? To, o czym myślisz, co mówisz i co robisz, wraca do Ciebie. Wyjdź z roli ofiary i weź życie w swoje ręce — Spirala, Aneta Mroczko."
       />
       <HeroSection />
       <HumanSection />
-      <StepsSection />
+      <SecretSection />
       <QuoteSection />
+      <StepsSection />
       <OfferSection />
       <InviteSection />
     </main>
