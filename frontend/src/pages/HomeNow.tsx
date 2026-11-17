@@ -134,39 +134,30 @@ function HeroSection() {
           <HeroTitle />
           <RainbowStroke className="mx-auto -mt-1 w-[240px] md:mt-1 md:w-[420px]" />
         </ScrollReveal>
-        {/* the client's tagline (2026-11-10): the spiral-upward invitation
-            as a handwritten-feeling italic lead, then her promise */}
+        {/* the 3-second hook (client 2026-11-17: "skróć to, zrób z tego coś
+            catchy… mam 3 sekundy"): one emotional beat — "Dość." — the
+            moment she says enough to going in circles, then the way out,
+            up the spiral. Replaces the earlier lead + promise + subtitle
+            (hero.subtitle is no longer rendered). */}
         <ScrollReveal animation="fade-up" delay={250} duration={900}>
-          <div className="flex max-w-[640px] flex-col items-center gap-3">
+          <div className="flex max-w-[640px] flex-col items-center gap-1">
             <EditableText
               section={S}
-              fieldPath="hero.lead"
+              fieldPath="hero.hookLine1"
               as="p"
-              className="text-balance font-['Cormorant_Garamond'] text-[24px] italic leading-[1.3] text-ink md:text-[30px]"
+              className="text-balance font-['Cormorant_Garamond'] text-[28px] italic leading-[1.25] text-ink md:text-[36px]"
             >
-              Masz dość kręcenia się w kółko? Czas ruszyć spiralą w górę.
+              Dość kręcenia się w kółko.
             </EditableText>
             <EditableText
               section={S}
-              fieldPath="hero.promise"
+              fieldPath="hero.hookLine2"
               as="p"
-              className="text-balance font-['Lato'] text-[17px] font-semibold leading-[1.6] text-ink md:text-[19px]"
+              className="text-balance font-['Lato'] text-[18px] font-bold uppercase tracking-[0.14em] text-brand-dark md:text-[20px]"
             >
-              Pomagam uwolnić się od starych przekonań, które trzymają Cię w
-              tych samych historiach.
+              Czas ruszyć spiralą w górę.
             </EditableText>
           </div>
-        </ScrollReveal>
-        <ScrollReveal animation="fade-up" delay={350} duration={900}>
-          <EditableText
-            section={S}
-            fieldPath="hero.subtitle"
-            as="p"
-            className="max-w-[620px] font-['Lato'] text-[17px] md:text-[19px] leading-[1.7] text-ink-soft"
-          >
-            To, co dziś dzieje się w Twoim życiu, jest efektem Twoich przeszłych
-            myśli, słów i działań. Wiele zależy od Ciebie.
-          </EditableText>
         </ScrollReveal>
         <ScrollReveal animation="fade-up" delay={550} duration={900}>
           <div className="mt-2 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:gap-4">
