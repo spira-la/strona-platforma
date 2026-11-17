@@ -31,12 +31,15 @@ import { eventsClient } from '@/clients/events.client';
 // `classicHome` flag is off; the previous Home (pages/Home.tsx) is kept intact.
 // CMS section `homeNow` is separate from `home`/`hero`, so text saved for the
 // old page never leaks in. Copy is taken from the client's own text (her ebook
-// "Świadomie żyć to znaczy jak?", 2026-11; sections 2–7 rewritten 2026-11-16
-// from her notes in plan/teksty-klientki/start-spokoj-notatki.md) — she can
-// also edit it inline.
+// "Świadomie żyć to znaczy jak?", 2026-11). Sections 2–8 hold her full text
+// of 2026-11-17, every word, in her order
+// (plan/teksty-klientki/start-nowy-tekst-2026-11-17.md) — she can also edit
+// it inline.
 //
-// Order alternates white / pastel yellow: hero paint · Spokój white ·
-// Tajemnica cream · quote white · steps cream · offer white · invite cream.
+// Order alternates white / pastel yellow: hero paint · Życie daje Ci w kość
+// white · Zbyt idylliczne cream · Zmiana quote white · Dość odgrywania roli
+// cream · Weź życie w swoje ręce white · Gotowa? cream · Jak mogę Cię
+// wesprzeć + invite cards white.
 // ---------------------------------------------------------------------------
 
 const S = 'homeNow' as const;
@@ -54,7 +57,7 @@ const HUMAN_ART = bouquetArt;
 const eyebrow =
   "font-['Lato'] text-[13px] uppercase tracking-[0.2em] text-brand-dark";
 const heading =
-  "font-['Cormorant_Garamond'] text-[36px] md:text-[48px] leading-[1.15] text-ink";
+  "text-balance font-['Cormorant_Garamond'] text-[36px] md:text-[48px] leading-[1.15] text-ink";
 const body = "font-['Lato'] text-[17px] leading-[1.75] text-ink-soft";
 const primaryBtn =
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-action px-9 py-4 font-['Lato'] text-[15px] font-semibold text-white transition-colors hover:bg-action-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2";
@@ -191,8 +194,12 @@ function HeroSection() {
 }
 
 // ---------------------------------------------------------------------------
-// 2. A gdyby tak… czuć spokój — the reader's longing, the client's own calm
+// 2. Życie daje Ci w kość? — what keeps going wrong, and the women on social
+// media she would like to be like. White, with the painted bouquet.
 // ---------------------------------------------------------------------------
+
+const accentLine =
+  "font-['Cormorant_Garamond'] text-[28px] italic leading-[1.3] text-ink md:text-[34px]";
 
 function HumanSection() {
   return (
@@ -202,29 +209,30 @@ function HumanSection() {
           <div className="flex flex-col gap-5">
             <EditableText
               section={S}
-              fieldPath="human.eyebrow"
-              as="p"
-              className={eyebrow}
-            >
-              A gdyby tak…
-            </EditableText>
-            <EditableText
-              section={S}
               fieldPath="human.title"
               as="h2"
               className={heading}
             >
-              Jak by to było — czuć spokój?
+              Życie daje Ci w kość?
             </EditableText>
+            <RainbowStroke className="-mt-2 w-[200px] md:w-[260px]" />
             <EditableText
               section={S}
               fieldPath="human.body1"
               as="p"
               className={body}
             >
-              Reagować spokojnie na wszystko, co przynosi dzień. Nie dawać się
-              złapać w pułapkę starych programów, które od lat podsuwają Ci te
-              same lęki i te same reakcje.
+              Choroba, niespłacona karta kredytowa, kolejny mężczyzna, który Cię
+              zawiódł, a może trudności z nastolatkiem czy niezadowolenie z
+              własnego wyglądu.
+            </EditableText>
+            <EditableText
+              section={S}
+              fieldPath="human.accent"
+              as="p"
+              className={accentLine}
+            >
+              Jest ciągle jakieś ale!
             </EditableText>
             <EditableText
               section={S}
@@ -232,9 +240,10 @@ function HumanSection() {
               as="p"
               className={body}
             >
-              Wiem, jak cudownie to smakuje. Wyzwania wciąż mnie testują — ale
-              dziś przyjmuję ich lekcje z pokorą, zamiast z nimi walczyć. I
-              wiem, że Ty też tak możesz.
+              Ciągle jest coś, co wywraca Twoje życie do góry nogami. A Ty
+              chciałabyś jak one, te piękne kobiety, które podglądasz w social
+              mediach, być jak one: zawsze uśmiechnięta, bogata, w cudownej
+              relacji, spełniona mama, która w podskokach idzie do pracy.
             </EditableText>
           </div>
         </ScrollReveal>
@@ -269,16 +278,9 @@ function HumanSection() {
 }
 
 // ---------------------------------------------------------------------------
-// 2b. Cała tajemnica — what you think, say and do comes back to you;
-// the abyss of comparisons; the boomerang question. Cream.
+// 3. Zbyt idylliczne? Niemożliwe? — it takes changing how you think; you can
+// choose differently today. Cream.
 // ---------------------------------------------------------------------------
-
-const COMPARISONS = [
-  { key: 'pair1', text: 'zdrowi i chorzy' },
-  { key: 'pair2', text: 'mądrzy i głupi' },
-  { key: 'pair3', text: 'zaradni i nieporadni' },
-  { key: 'pair4', text: 'szybcy i powolni' },
-] as const;
 
 function SecretSection() {
   return (
@@ -293,24 +295,24 @@ function SecretSection() {
       />
       <div className="mx-auto max-w-[1120px]">
         <ScrollReveal animation="fade-up">
-          <div className="mx-auto mb-12 flex max-w-[720px] flex-col items-center gap-4 text-center">
-            <EditableText
-              section={S}
-              fieldPath="secret.eyebrow"
-              as="p"
-              className={eyebrow}
-            >
-              Cała tajemnica
-            </EditableText>
+          <div className="mx-auto mb-12 flex max-w-[720px] flex-col items-center gap-2 text-center">
             <EditableText
               section={S}
               fieldPath="secret.title"
               as="h2"
-              className={`${heading} text-balance`}
+              className={heading}
             >
-              Wszystko, o czym myślisz, wraca do Ciebie
+              Zbyt idylliczne?
             </EditableText>
-            <RainbowStroke className="-mt-1 w-[200px] md:w-[280px]" />
+            <EditableText
+              section={S}
+              fieldPath="secret.title2"
+              as="p"
+              className={`${heading} italic text-brand-dark`}
+            >
+              Niemożliwe?
+            </EditableText>
+            <RainbowStroke className="mt-1 w-[200px] md:w-[280px]" />
           </div>
         </ScrollReveal>
 
@@ -323,9 +325,9 @@ function SecretSection() {
                 as="p"
                 className={body}
               >
-                Człowiek to wyjątkowa istota — ma zdolność stwarzania swojej
-                rzeczywistości. Tak, dobrze czytasz. To, o czym myślisz, co
-                mówisz i co robisz, wkrótce do Ciebie wraca.
+                No nie do końca, ale to wymaga od Ciebie zmiany myślenia, zmiany
+                światopoglądu, zmiany nawyków i przekonań. Bo to one sprawiają,
+                że Ty wciąż masz tak, jak chcesz nie mieć.
               </EditableText>
               <EditableText
                 section={S}
@@ -333,208 +335,42 @@ function SecretSection() {
                 as="p"
                 className={body}
               >
-                Każdą myślą, każdym słowem i czynem tworzysz swoje jutro — i to
-                najbliższe, i to dalsze. I to naprawdę cała tajemnica. Aż trudno
-                uwierzyć, że to takie proste, prawda?
+                I nie myśl, że to nie do wykonania, a raczej poczuj, że jesteś
+                wyjątkową istotą, która ma wpływ na swoje życie.
               </EditableText>
             </div>
           </ScrollReveal>
 
-          {/* the abyss of comparisons — a white card with the labels we
-              keep being sorted into */}
           <ScrollReveal animation="fade-up" delay={200}>
-            <div className="flex flex-col gap-5 rounded-[28px] bg-white p-7 shadow-[0_10px_34px_-22px_rgba(63,48,68,0.35)] md:p-9">
+            <div className="flex flex-col gap-4 rounded-[28px] bg-white p-7 shadow-[0_10px_34px_-22px_rgba(63,48,68,0.35)] md:p-9">
               <EditableText
                 section={S}
-                fieldPath="secret.compareEyebrow"
-                as="p"
-                className="font-['Lato'] text-[12px] font-semibold uppercase tracking-[0.18em] text-spiral-blue"
+                fieldPath="secret.cardTitle"
+                as="h3"
+                className="font-['Cormorant_Garamond'] text-[28px] leading-tight text-ink md:text-[32px]"
               >
-                Otchłań porównań
+                Możesz dziś wybrać inaczej niż dotąd.
               </EditableText>
               <EditableText
                 section={S}
-                fieldPath="secret.compareLead"
+                fieldPath="secret.cardBody"
                 as="p"
                 className="font-['Lato'] text-[16px] leading-[1.7] text-ink-soft"
               >
-                Wciąż słyszymy, że ludzie dzielą się na:
-              </EditableText>
-              <ul className="flex flex-wrap gap-2">
-                {COMPARISONS.map(({ key, text }) => (
-                  <li
-                    key={key}
-                    className="rounded-full bg-surface px-4 py-1.5 font-['Lato'] text-[14px] text-ink-muted"
-                  >
-                    <EditableText
-                      section={S}
-                      fieldPath={`secret.${key}`}
-                      as="span"
-                    >
-                      {text}
-                    </EditableText>
-                  </li>
-                ))}
-              </ul>
-              <EditableText
-                section={S}
-                fieldPath="secret.compareBody"
-                as="p"
-                className="font-['Lato'] text-[16px] leading-[1.7] text-ink-soft"
-              >
-                A Ty w tej otchłani porównań raz toniesz, raz wypływasz na
-                powierzchnię. Po co tam kierujesz swoją uwagę? Od dziś już tego
-                nie potrzebujesz.
+                Zacząć myśleć inaczej, mówić o sobie ciepło, ciepło myśleć o
+                otaczającym Cię świecie i otworzyć się na dobro, które czeka tuż
+                za rogiem, by rozgościć się w Twoim życiu.
               </EditableText>
             </div>
           </ScrollReveal>
         </div>
-
-        <ScrollReveal animation="fade-up" delay={150}>
-          <EditableText
-            section={S}
-            fieldPath="secret.question"
-            as="p"
-            className="mx-auto mt-14 max-w-[760px] text-balance text-center font-['Cormorant_Garamond'] text-[26px] italic leading-[1.35] text-ink md:text-[32px]"
-          >
-            Zastanów się: o czym myślisz najczęściej? I czy te myśli nie wracają
-            do Ciebie jak bumerang — w tym, czego dziś doświadczasz?
-          </EditableText>
-        </ScrollReveal>
       </div>
     </section>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 3. Jak zaprowadzić w sobie porządek — three simple steps
-// ---------------------------------------------------------------------------
-
-// Each step opens with a written label instead of a bare digit (client
-// 2026-11-10: "napisz: pierwszy krok… drugi krok… trzeci krok… zamiast
-// samych cyfr"), on a soft pill in its own spiral colour.
-const STEPS = [
-  {
-    key: 'step1',
-    label: 'Pierwszy krok',
-    pill: 'bg-spiral-coral-soft',
-    dot: 'bg-spiral-coral',
-    title: 'Zauważ',
-    body: 'Przyglądaj się temu, co myślisz, mówisz i robisz. Wyłapuj to, co Cię nie wspiera: dołujące przekonania, to, czego nie lubisz w swoim życiu, i oczekiwanie, że ktoś coś zrobi za Ciebie.',
-  },
-  {
-    key: 'step2',
-    label: 'Drugi krok',
-    pill: 'bg-spiral-gold-soft',
-    dot: 'bg-spiral-gold',
-    title: 'Zatrzymaj się',
-    body: 'Kiedy coś boli — smutek, złość, przykrość — nie uciekaj. Choroba, trudna relacja, kłopoty z pieniędzmi, brak sensu: spójrz temu w oczy i zapytaj, co to mówi o Tobie, o Twoich lękach i blokadach.',
-  },
-  {
-    key: 'step3',
-    label: 'Trzeci krok',
-    pill: 'bg-spiral-teal-soft',
-    dot: 'bg-spiral-teal',
-    title: 'Zmień',
-    body: 'Zobacz, jakie przekonanie to do Ciebie przyciągnęło — i wybierz inaczej. To, co zauważysz i nazwiesz, możesz zmienić. Proszę, zrób to dla siebie.',
-  },
-] as const;
-
-function StepsSection() {
-  return (
-    <section className="relative isolate overflow-hidden bg-surface px-6 py-20 md:px-12 lg:px-[120px] md:py-28">
-      <WatercolorFriend
-        kind="butterflyBlue"
-        fly="left"
-        delay={1}
-        className="right-[4%] top-3 w-[56px] md:right-[8%] md:top-4 md:w-[88px]"
-      />
-      <WatercolorAccent
-        tone="warm"
-        className="-left-24 -top-24 w-[300px] opacity-40 md:w-[400px]"
-      />
-      <WatercolorAccent
-        tone="cool"
-        className="-bottom-28 -right-24 w-[300px] opacity-35 md:w-[420px]"
-      />
-      <div className="mx-auto max-w-[1120px]">
-        <ScrollReveal animation="fade-up">
-          <div className="mx-auto mb-14 flex max-w-[680px] flex-col gap-4 text-center">
-            <EditableText
-              section={S}
-              fieldPath="steps.eyebrow"
-              as="p"
-              className={eyebrow}
-            >
-              Od chaosu do spokoju
-            </EditableText>
-            <EditableText
-              section={S}
-              fieldPath="steps.title"
-              as="h2"
-              className={heading}
-            >
-              Jak zaprowadzić w sobie porządek?
-            </EditableText>
-            <EditableText
-              section={S}
-              fieldPath="steps.subtitle"
-              as="p"
-              className={body}
-            >
-              Życie naturalnie dąży do równowagi, a nie do chaosu. Nawet jeśli
-              dziś czujesz w sobie chaos, możesz to zmienić — krok po kroku.
-            </EditableText>
-          </div>
-        </ScrollReveal>
-
-        <div className="grid gap-6 md:grid-cols-3">
-          {STEPS.map(({ key, label, pill, dot, title, body: text }, i) => (
-            <ScrollReveal key={key} animation="fade-up" delay={stagger(i)}>
-              <div className="flex h-full flex-col gap-4 rounded-[24px] border border-line bg-white p-8">
-                <span
-                  className={`inline-flex items-center gap-2.5 self-start rounded-full px-4 py-2 ${pill}`}
-                >
-                  <span
-                    className={`h-2.5 w-2.5 flex-shrink-0 rounded-full ${dot}`}
-                    aria-hidden="true"
-                  />
-                  <EditableText
-                    section={S}
-                    fieldPath={`steps.${key}.label`}
-                    as="span"
-                    className="font-['Lato'] text-[13px] font-bold uppercase tracking-[0.16em] text-ink"
-                  >
-                    {label}
-                  </EditableText>
-                </span>
-                <EditableText
-                  section={S}
-                  fieldPath={`steps.${key}.title`}
-                  as="h3"
-                  className="font-['Cormorant_Garamond'] text-[30px] leading-tight text-ink"
-                >
-                  {title}
-                </EditableText>
-                <EditableText
-                  section={S}
-                  fieldPath={`steps.${key}.body`}
-                  as="p"
-                  className={body}
-                >
-                  {text}
-                </EditableText>
-              </div>
-            </ScrollReveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 4. Jutro, które wybierasz — quote band on a pastel sky
+// 4. Zmiana to jedyna stała — quote band with the rainbow butterfly. White.
 // ---------------------------------------------------------------------------
 
 function QuoteSection() {
@@ -559,17 +395,29 @@ function QuoteSection() {
             as="blockquote"
             className="font-['Cormorant_Garamond'] text-[32px] md:text-[46px] italic leading-[1.25] text-ink"
           >
-            Kieruj uwagę tylko na to, czego chcesz więcej w swoim życiu.
+            Zmiana to jedyna stała w Twoim życiu.
           </EditableText>
           <RainbowStroke className="w-[160px] md:w-[220px]" />
-          <EditableText
-            section={S}
-            fieldPath="quote.author"
-            as="figcaption"
-            className="font-['Lato'] text-[14px] uppercase tracking-[0.2em] text-brand-dark"
-          >
-            Aneta Mroczko
-          </EditableText>
+          <div className="flex max-w-[680px] flex-col gap-4">
+            <EditableText
+              section={S}
+              fieldPath="quote.body1"
+              as="p"
+              className={body}
+            >
+              I nie przywiązuj się do rzeczy, do innych osób, sytuacji, bo
+              jesteś codziennie kimś innym — i pozwól sobie na to.
+            </EditableText>
+            <EditableText
+              section={S}
+              fieldPath="quote.body2"
+              as="p"
+              className={body}
+            >
+              Tak jak roślina wzrasta ku słońcu, Ty każdego ranka masz w sobie
+              też ruch ku wzrastaniu, by przypomnieć sobie, kim naprawdę jesteś.
+            </EditableText>
+          </div>
         </figure>
       </ScrollReveal>
     </section>
@@ -577,38 +425,63 @@ function QuoteSection() {
 }
 
 // ---------------------------------------------------------------------------
-// 4b. Jak pracujemy razem — how she works with a client (2026-11-16, from her
-// notes: out of the victim role, no digging up every trauma, heal the source,
-// train mindful thinking). White, between the cream steps and cream invite.
-// Every line is CMS-editable (homeNow.offer.*).
+// 5. Dość odgrywania roli małej dziewczynki — and no blaming the ones who
+// taught her. Cream.
 // ---------------------------------------------------------------------------
 
-const OFFER_POINTS = [
-  {
-    key: 'point1',
-    dot: 'bg-spiral-coral',
-    title: 'Porządki w tym, co boli',
-    body: 'Bierzemy na warsztat Twoją obecną trudność, docieramy do jej źródła i uzdrawiamy je — tak, by przestała się powtarzać.',
-  },
-  {
-    key: 'point2',
-    dot: 'bg-spiral-gold',
-    title: 'Trening uważnego myślenia',
-    body: 'Uczysz się myśleć świadomie i panować nad własnym umysłem — żeby to on służył Tobie, a nie Ty jemu.',
-  },
-  {
-    key: 'point3',
-    dot: 'bg-spiral-teal',
-    title: 'Nowa płyta zamiast starej',
-    body: 'Zamiast bezmyślnie odtwarzać starą płytę, myślisz o tym, czego chcesz. A to wróci do Ciebie — jutro, za tydzień, za miesiąc.',
-  },
-] as const;
+function GirlSection() {
+  return (
+    <section className="relative isolate overflow-hidden bg-surface px-6 py-20 md:px-12 lg:px-[120px] md:py-28">
+      <WatercolorFriend
+        kind="butterflyBlue"
+        fly="left"
+        delay={1}
+        className="right-[4%] top-3 w-[56px] md:right-[8%] md:top-4 md:w-[88px]"
+      />
+      <WatercolorAccent
+        tone="warm"
+        className="-left-24 -top-24 w-[300px] opacity-40 md:w-[400px]"
+      />
+      <WatercolorAccent
+        tone="cool"
+        className="-bottom-28 -right-24 w-[300px] opacity-35 md:w-[420px]"
+      />
+      <ScrollReveal animation="fade-up">
+        <div className="mx-auto flex max-w-[820px] flex-col items-center gap-6 text-center">
+          <EditableText
+            section={S}
+            fieldPath="girl.title"
+            as="h2"
+            className="text-balance font-['Cormorant_Garamond'] text-[32px] leading-[1.2] text-ink md:text-[42px]"
+          >
+            Dość odgrywania roli tej małej dziewczynki, którą nauczono, jak
+            zasługiwać na miłość, nie będąc sobą.
+          </EditableText>
+          <RainbowStroke className="w-[180px] md:w-[240px]" />
+          <EditableText
+            section={S}
+            fieldPath="girl.body"
+            as="p"
+            className={`${body} max-w-[640px]`}
+          >
+            Bo bycie sobą było dla innych niewygodne i wymagające. I nie wińmy
+            ich za to — byli tacy, jacy umieli być.
+          </EditableText>
+        </div>
+      </ScrollReveal>
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 6. Weź życie w swoje ręce — her message, the homework, and why it will work.
+// White. The ladybug walks from the orange blot (keep it top-right) to "ręce".
+// ---------------------------------------------------------------------------
 
 /**
  * Offer title with the client's ladybug walking from the orange blot at the
- * top of the section to the word "ręce" (client 2026-11-10, word updated with
- * the new title 2026-11-16). The title stays CMS-editable; the stop is
- * measured on the rendered text.
+ * top of the section to the word "ręce" (client 2026-11-10). The title stays
+ * CMS-editable; the stop is measured on the rendered text.
  */
 function OfferTitle() {
   const { ref, spot } = useWordSpot<HTMLDivElement>('ręce', 0.5, 0.42);
@@ -620,7 +493,7 @@ function OfferTitle() {
         as="h2"
         className={heading}
       >
-        Bierzesz życie w swoje ręce
+        Weź życie w swoje ręce
       </EditableText>
       {spot && <WalkingLadybug spot={spot} className="w-[34px] md:w-[44px]" />}
     </div>
@@ -638,7 +511,7 @@ function OfferSection() {
         tone="cool"
         className="-bottom-28 -left-24 w-[300px] opacity-25 md:w-[420px]"
       />
-      <div className="mx-auto grid max-w-[1120px] gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
+      <div className="mx-auto grid max-w-[1120px] items-center gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
         <ScrollReveal animation="fade-up">
           <div className="flex flex-col gap-5">
             <EditableText
@@ -647,7 +520,7 @@ function OfferSection() {
               as="p"
               className={eyebrow}
             >
-              Jak pracujemy razem
+              To, co chcę Tobie dziś powiedzieć
             </EditableText>
             <OfferTitle />
             <RainbowStroke className="-mt-2 w-[200px] md:w-[280px]" />
@@ -657,9 +530,8 @@ function OfferSection() {
               as="p"
               className={body}
             >
-              Nikt Ci nic nie zrobił. To Twoje przekonania materializują się w
-              codzienności — a skoro są Twoje, to Ty możesz je zmienić.
-              Wychodzisz z roli ofiary, bo żadną ofiarą już nie jesteś.
+              Zapanuj nad tym chaosem, który się obecnie wydarza, i dzień za
+              dniem zapraszaj spokój i harmonię.
             </EditableText>
             <EditableText
               section={S}
@@ -667,53 +539,119 @@ function OfferSection() {
               as="p"
               className={body}
             >
-              Nie musimy wywlekać wszystkich traum z przeszłości. Zajmujemy się
-              tym, co jest teraz na tapecie i Cię męczy. Każde cierpienie ma
-              swój początek w przeszłości — razem go odnajdujemy i uzdrawiamy,
-              żeby to, co tyle razy bolało, przestało wracać.
-            </EditableText>
-            <EditableText
-              section={S}
-              fieldPath="offer.body3"
-              as="p"
-              className={body}
-            >
-              Czy to magia? Pewnie, że tak — ale Twoja. Tylko Ty możesz działać
-              cuda dla siebie. Ja pokażę Ci krok po kroku, jak to robić.
+              I będzie to wymagało od Ciebie zaangażowania, bo nikt tu nic nie
+              zrobi za Ciebie. Ja pokażę Ci, co działa, a Ty wykonasz swoją
+              pracę domową.
             </EditableText>
           </div>
         </ScrollReveal>
 
-        <ul className="flex flex-col gap-5 self-center">
-          {OFFER_POINTS.map(({ key, dot, title, body: text }, i) => (
-            <ScrollReveal key={key} animation="fade-up" delay={stagger(i)}>
-              <li className="flex gap-4 rounded-[24px] bg-white p-6 shadow-[0_10px_34px_-22px_rgba(63,48,68,0.35)] md:p-7">
-                <span
-                  className={`mt-2 h-3 w-3 flex-shrink-0 rounded-full ${dot}`}
-                  aria-hidden="true"
-                />
-                <div className="flex flex-col gap-2">
-                  <EditableText
-                    section={S}
-                    fieldPath={`offer.${key}.title`}
-                    as="h3"
-                    className="font-['Cormorant_Garamond'] text-[24px] leading-tight text-ink md:text-[26px]"
-                  >
-                    {title}
-                  </EditableText>
-                  <EditableText
-                    section={S}
-                    fieldPath={`offer.${key}.body`}
-                    as="p"
-                    className="font-['Lato'] text-[16px] leading-[1.7] text-ink-soft"
-                  >
-                    {text}
-                  </EditableText>
-                </div>
-              </li>
-            </ScrollReveal>
-          ))}
-        </ul>
+        <ScrollReveal animation="fade-up" delay={200}>
+          <div className="flex flex-col gap-4 rounded-[28px] bg-surface p-7 md:p-9">
+            <EditableText
+              section={S}
+              fieldPath="offer.whyTitle"
+              as="h3"
+              className="font-['Cormorant_Garamond'] text-[28px] leading-tight text-ink md:text-[32px]"
+            >
+              I zrobisz to. Wiesz dlaczego?
+            </EditableText>
+            <EditableText
+              section={S}
+              fieldPath="offer.whyBody"
+              as="p"
+              className="font-['Lato'] text-[16px] leading-[1.7] text-ink-soft"
+            >
+              Bo tak, jak jest teraz — nie działa. Sprawia, że jesteś zwyczajnie
+              przytłoczona, zmartwiona, a Twoje wewnętrzne światło już nie
+              świeci jak wtedy, gdy życie cieszyło Cię.
+            </EditableText>
+            <EditableText
+              section={S}
+              fieldPath="offer.whyAccent"
+              as="p"
+              className="font-['Cormorant_Garamond'] text-[24px] italic leading-[1.3] text-brand-dark md:text-[28px]"
+            >
+              I znowu może Cię cieszyć.
+            </EditableText>
+          </div>
+        </ScrollReveal>
+      </div>
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 7. Gotowa? — let's get to the change; nobody is going to fix you. Cream.
+// ---------------------------------------------------------------------------
+
+function ReadySection() {
+  return (
+    <section className="relative isolate overflow-hidden bg-surface px-6 py-20 md:px-12 lg:px-[120px] md:py-28">
+      <WatercolorAccent
+        tone="warm"
+        className="-left-20 -top-24 w-[260px] opacity-30 md:w-[340px]"
+      />
+      <WatercolorAccent
+        tone="cool"
+        className="-bottom-28 -right-24 w-[300px] opacity-30 md:w-[400px]"
+      />
+      <div className="mx-auto flex max-w-[860px] flex-col items-center gap-10">
+        <ScrollReveal animation="fade-up">
+          <div className="flex flex-col items-center gap-2 text-center">
+            <EditableText
+              section={S}
+              fieldPath="ready.title"
+              as="h2"
+              className="font-['Cormorant_Garamond'] text-[46px] leading-[1.05] text-ink md:text-[64px]"
+            >
+              Gotowa?
+            </EditableText>
+            <EditableText
+              section={S}
+              fieldPath="ready.subtitle"
+              as="p"
+              className="font-['Cormorant_Garamond'] text-[28px] italic leading-[1.3] text-brand-dark md:text-[36px]"
+            >
+              To zabierajmy się do zmiany.
+            </EditableText>
+            <RainbowStroke className="mt-2 w-[180px] md:w-[240px]" />
+          </div>
+        </ScrollReveal>
+
+        <ScrollReveal animation="fade-up" delay={150}>
+          <div className="flex flex-col gap-5 rounded-[28px] bg-white p-7 shadow-[0_10px_34px_-22px_rgba(63,48,68,0.35)] md:p-10">
+            <EditableText
+              section={S}
+              fieldPath="ready.eyebrow"
+              as="p"
+              className="font-['Lato'] text-[12px] font-semibold uppercase tracking-[0.18em] text-spiral-blue"
+            >
+              I jeszcze jedna ważna rzecz
+            </EditableText>
+            <EditableText
+              section={S}
+              fieldPath="ready.accent"
+              as="p"
+              className="font-['Cormorant_Garamond'] text-[26px] italic leading-[1.3] text-ink md:text-[30px]"
+            >
+              My Ciebie nie będziemy naprawiać, bo taka, jaka jesteś, jesteś
+              najlepszą wersją siebie.
+            </EditableText>
+            <EditableText
+              section={S}
+              fieldPath="ready.body"
+              as="p"
+              className={body}
+            >
+              Pokażę Ci tylko możliwości, w których możesz kontynuować swoją
+              podróż. A to, co ciężkie i co upomina się o uzdrowienie — staniesz
+              do tego i uwolnisz się raz na zawsze od programów, które kierowały
+              Tobą, Twoimi decyzjami, które powodowały, że Twoje życie dziś
+              wygląda tak, jak Ty już nie chcesz.
+            </EditableText>
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   );
@@ -770,35 +708,79 @@ const invitePill =
 const inviteTitle =
   "font-['Cormorant_Garamond'] text-[30px] leading-[1.1] text-ink sm:text-[34px] md:text-[40px]";
 
+// "Jak mogę Cię wesprzeć?" — the guide on her new path: three things she
+// learns, then the two ways to start (events, a talk).
+const SUPPORT_POINTS = [
+  {
+    key: 'point1',
+    dot: 'bg-spiral-coral',
+    text: 'Pokażę Ci, jak uwolnić się od bycia w roli ofiary, zamartwiania się i negatywnego myślenia.',
+  },
+  {
+    key: 'point2',
+    dot: 'bg-spiral-gold',
+    text: 'Nauczysz się pracy ze swoją podświadomością, bo to w niej zapisane jest 95% Twoich automatycznych zachowań, które odpowiadają za Twoje niezadowolenie z życia.',
+  },
+  {
+    key: 'point3',
+    dot: 'bg-spiral-teal',
+    text: 'Czas wymazać stare programy i napisać je na nowo, ale ich treść zaczerpnięta będzie z mądrości Twojej, dorosłości i dojrzałości.',
+  },
+] as const;
+
+function SupportIntro() {
+  return (
+    <>
+      <ScrollReveal animation="fade-up">
+        <div className="mx-auto mb-10 flex max-w-[680px] flex-col items-center gap-4 text-center">
+          <EditableText
+            section={S}
+            fieldPath="support.title"
+            as="h2"
+            className={heading}
+          >
+            Jak mogę Cię wesprzeć?
+          </EditableText>
+          <RainbowStroke className="-mt-1 w-[180px] md:w-[240px]" />
+          <EditableText
+            section={S}
+            fieldPath="support.lead"
+            as="p"
+            className={body}
+          >
+            Jestem jak przewodnik na obranej przez Ciebie nowej ścieżce.
+          </EditableText>
+        </div>
+      </ScrollReveal>
+      <ul className="mb-14 grid gap-5 md:grid-cols-3">
+        {SUPPORT_POINTS.map(({ key, dot, text }, i) => (
+          <ScrollReveal key={key} animation="fade-up" delay={stagger(i)}>
+            <li className="flex h-full gap-4 rounded-[24px] border border-line bg-white p-6 md:p-7">
+              <span
+                className={`mt-2 h-3 w-3 flex-shrink-0 rounded-full ${dot}`}
+                aria-hidden="true"
+              />
+              <EditableText
+                section={S}
+                fieldPath={`support.${key}`}
+                as="p"
+                className="font-['Lato'] text-[16px] leading-[1.7] text-ink-soft"
+              >
+                {text}
+              </EditableText>
+            </li>
+          </ScrollReveal>
+        ))}
+      </ul>
+    </>
+  );
+}
+
 function InviteSection() {
   return (
-    <section className="relative isolate overflow-hidden bg-surface px-6 py-20 md:px-12 lg:px-[120px] md:py-28">
-      <WatercolorAccent
-        tone="warm"
-        className="-left-20 -top-24 w-[260px] opacity-30 md:w-[340px]"
-      />
+    <section className="relative isolate overflow-hidden bg-white px-6 py-20 md:px-12 lg:px-[120px] md:py-28">
       <div className="mx-auto max-w-[1040px]">
-        <ScrollReveal animation="fade-up">
-          <div className="mx-auto mb-12 flex max-w-[640px] flex-col items-center gap-4 text-center">
-            <EditableText
-              section={S}
-              fieldPath="invite.title"
-              as="h2"
-              className={heading}
-            >
-              Proste, prawda? To co, zaczynamy?
-            </EditableText>
-            <RainbowStroke className="-mt-1 w-[180px] md:w-[240px]" />
-            <EditableText
-              section={S}
-              fieldPath="invite.subtitle"
-              as="p"
-              className={body}
-            >
-              Dołącz do najbliższego spotkania albo porozmawiajmy indywidualnie.
-            </EditableText>
-          </div>
-        </ScrollReveal>
+        <SupportIntro />
 
         <div className="grid grid-cols-1 gap-7 md:grid-cols-2">
           {/* Events — painted lavender heart, warm blot, next event teaser */}
@@ -972,14 +954,15 @@ export default function HomeNow() {
       <SEO
         canonical="/"
         pathname="/"
-        description="Jak by to było czuć spokój? To, o czym myślisz, co mówisz i co robisz, wraca do Ciebie. Wyjdź z roli ofiary i weź życie w swoje ręce — Spirala, Aneta Mroczko."
+        description="Życie daje Ci w kość? Zmiana to jedyna stała w Twoim życiu. Weź życie w swoje ręce i uwolnij się od roli ofiary — Spirala, Aneta Mroczko."
       />
       <HeroSection />
       <HumanSection />
       <SecretSection />
       <QuoteSection />
-      <StepsSection />
+      <GirlSection />
       <OfferSection />
+      <ReadySection />
       <InviteSection />
     </main>
   );
