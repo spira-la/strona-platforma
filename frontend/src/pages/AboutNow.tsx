@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, HeartHandshake, Dog, Flower2, MapPin } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { SEO } from '@/components/shared/SEO';
 import { EditableText } from '@/components/cms/EditableText';
 import { EditableImage } from '@/components/cms/EditableImage';
@@ -13,7 +13,7 @@ import {
 } from '@/components/shared/LandingFriend';
 import { useInViewOnce } from '@/hooks/useInViewOnce';
 import { EditableButtonLink } from '@/components/cms/EditableButtonLink';
-import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
+import { ScrollReveal } from '@/components/shared/ScrollReveal';
 import portraitPhoto from '@/assets/Ane1.jpg';
 import profilePhoto from '@/assets/Ane3.jpg';
 import joyPhoto from '@/assets/Ane4.jpg';
@@ -22,7 +22,6 @@ import blueBlot from '@/assets/watercolor/blot-blue.webp';
 import aboutArt from '@/assets/watercolor/about-joy.webp';
 import aboutWreath from '@/assets/watercolor/about-wreath.webp';
 import lavenderArt from '@/assets/watercolor/lavender-heart.webp';
-import ladybugArt from '@/assets/watercolor/ladybug.webp';
 import { WatercolorNumber } from '@/components/shared/WatercolorNumber';
 import {
   RainbowStroke,
@@ -33,10 +32,11 @@ import {
 // ---------------------------------------------------------------------------
 // O mnie — 2026-11 redesign
 //
-// Light, personal page built from the client's own text (chapter "O mnie" of
-// her ebook, see plan/teksty-klientki/swiadomie-zyc-ebook.md; intro, journey
-// subtitle, quote and closing rewritten 2026-11-16 from her new text in
-// plan/teksty-klientki/o-mnie-notatki-2026-11-16.md). Rendered at
+// Light, personal page. Every text is the client's own of 2026-11-17, all of
+// it, in her order (plan/teksty-klientki/o-mnie-nowy-tekst-2026-11-17.md):
+// Kim jestem? · Jaki był tego efekt? + four stops on the painted trail ·
+// psychobiology and the ego · A co dokładnie? The former "A tak
+// przyziemnie…" facts section was dropped with that rewrite. Rendered at
 // /o-mnie while the `classicAbout` flag is off; pages/About.tsx is kept intact.
 // CMS section `aboutNow` is separate from `about`, so old saved text never
 // leaks in.
@@ -44,13 +44,12 @@ import {
 
 const S = 'aboutNow' as const;
 
-const eyebrow =
-  "font-['Lato'] text-[13px] uppercase tracking-[0.2em] text-brand-dark";
 const heading =
   "font-['Cormorant_Garamond'] text-[36px] md:text-[48px] leading-[1.15] text-ink";
 const body = "font-['Lato'] text-[17px] leading-[1.75] text-ink-soft";
-const cardTitle =
-  "font-['Cormorant_Garamond'] text-[26px] leading-tight text-ink";
+// journey stop titles are whole sentences of her text, so a little smaller
+const stopTitle =
+  "font-['Cormorant_Garamond'] text-[22px] leading-snug text-ink md:text-[24px]";
 const primaryBtn =
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-action px-9 py-4 font-['Lato'] text-[15px] font-semibold text-white transition-colors hover:bg-action-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2";
 const secondaryBtn =
@@ -102,9 +101,9 @@ function IntroSection() {
               section={S}
               fieldPath="intro.title"
               as="h1"
-              className="font-['Cormorant_Garamond'] text-[22px] md:text-[32px] leading-[1.15] text-ink"
+              className="font-['Cormorant_Garamond'] text-[40px] md:text-[56px] leading-[1.1] text-ink"
             >
-              Cześć, mam na imię Aneta
+              Kim jestem?
             </EditableText>
             <RainbowStroke className="-mt-3 w-[150px] md:w-[220px]" />
             <EditableText
@@ -113,10 +112,10 @@ function IntroSection() {
               as="p"
               className={body}
             >
-              Mam 44 lata i uwielbiam swój wiek. Lubię to, kim dziś jestem.
-              Droga do tego była kręta, czasem z wybojami — ale każdy wybój
-              pokazywał mi, co jest we mnie zapisane: jakie noszę programy i
-              przekonania.
+              Nazywam się Aneta i tak jak Ty około 15 lat nie umiałam wytrzymać
+              sama ze sobą. Niby wszystko było ok, ale całe moje ciało
+              krzyczało, że nie rozumiem siebie, nie rozumiem swoich emocji,
+              czemu nie mam tak jak inni.
             </EditableText>
             <EditableText
               section={S}
@@ -124,9 +123,8 @@ function IntroSection() {
               as="p"
               className={body}
             >
-              Zaczęłam w 2013 roku, kiedy zauważyłam, że nie lubię siebie jako
-              mamy dla mojej córki. Wiedziałam, że mogę być lepszą mamą — i tak
-              zaczęła się moja przygoda z poznawaniem siebie.
+              I zapętlałam się w narzekaniu, a to rodziło coraz większą we mnie
+              frustrację.
             </EditableText>
             <div className="mt-3 flex flex-col gap-3 sm:flex-row">
               <EditableButtonLink
@@ -214,29 +212,31 @@ const STOP_FRIENDS = [
   'butterflyYellow',
 ] as const;
 
+// The four stops hold the client's text of 2026-11-17, word for word, in her
+// order: each stop's first sentence is its title, the rest its body. (Before:
+// earth / psychobiology / mountains / guidance from her ebook.)
 const JOURNEY = [
   {
-    key: 'earth',
-    title: 'Ziemia i woda',
-    body: 'Fascynował mnie świat i ziemia, więc skończyłam geologię. Ponad 13 lat pracowałam przy wydobyciu wody głębinowej — dostarczałam innym coś, bez czego nie da się żyć.',
-  },
-  // order per the client (2026-11-10): water & earth, then psychobiology,
-  // then the Beskidy, and guidance last. Keys stay the same, so texts she
-  // already saved move with their stop.
-  {
-    key: 'psychobiology',
-    title: 'Psychobiologia',
-    body: 'Największym przełomem było poznanie psychobiologii. Przestałam się bać chorób i śmierci. Od 2016 roku dekoduję przekonania i programy, które sprawiały, że byłam zlękniona i zagubiona.',
+    key: 'alone',
+    title: 'Nikogo takiego nie spotkałam, zostałam sama sobie.',
+    body: 'Szukałam, próbowałam, uczyłam się kolejnych nowych rzeczy. Testowałam, coś raz działało, a czasem było totalną ściemą. Nie poddawałam się, jakbym miała wewnętrzne prowadzenie, że wreszcie mi się uda.',
   },
   {
-    key: 'mountains',
-    title: 'Beskidy',
-    body: 'Gdy formalności zaczęły mnie wypalać, „rzuciłam wszystko i pojechałam w Beskidy”. Wreszcie miałam czas i przestrzeń, by zaopiekować się sobą, odpuścić żal, złość i poczucie winy.',
+    key: 'lecture',
+    title:
+      'I tak też się stało, gdy w 2016 r. trafiłam na mój pierwszy wykład u dr Radziszewskiej o tym, jak powstają choroby.',
+    body: 'To były najlepiej wydane pieniądze w moim życiu. Poczułam dosłownie, że jestem uratowana, że nie umrę.',
   },
   {
-    key: 'guidance',
-    title: 'Prowadzenie',
-    body: 'Dziś wiem, że jestem prowadzona. A jednocześnie jest w tym przestrzeń na świadome decyzje i zmiany — i tym zajmuję się niezmiennie od wielu lat.',
+    key: 'testing',
+    title:
+      'Uczyłam się psychobiologii u dr Radziszewskiej i testowałam wszystko na sobie, na córce, czy to prawda.',
+    body: 'Czy prawdą jest, że jak córka wracała z gorączką ze szkoły, to coś się tam wydarzyło, co wpłynęło na jej samopoczucie. Rozmawiałyśmy o tym, jak się czuje, co się dzieje, czy ktoś sprawił jej przykrość, zawstydził, upokorzył… I tak zaczęła się moja przygoda w testowaniu psychobiologii na „żywych modelach”.',
+  },
+  {
+    key: 'passed',
+    title: 'I testy psychobiologia zdała na 5.',
+    body: 'Z córką przestałyśmy chorować, a drobne bakteryjne czy wirusowe ataki zduszałyśmy w zalążku, od razu opiekując się emocjonalnym konfliktem, który życie przynosiło, a jakże.',
   },
 ] as const;
 
@@ -358,33 +358,42 @@ function JourneySection() {
       />
       <div className="mx-auto max-w-[1120px]">
         <ScrollReveal animation="fade-up">
-          <div className="mx-auto mb-14 flex max-w-[640px] flex-col gap-4 text-center">
-            <EditableText
-              section={S}
-              fieldPath="journey.eyebrow"
-              as="p"
-              className={eyebrow}
-            >
-              Moja droga
-            </EditableText>
+          <div className="mx-auto mb-14 flex max-w-[680px] flex-col gap-4">
             <EditableText
               section={S}
               fieldPath="journey.title"
               as="h2"
-              className={heading}
+              className={`${heading} text-center`}
             >
-              Cierpienie było częścią mojej drogi
+              Jaki był tego efekt?
             </EditableText>
+            <RainbowStroke className="mx-auto -mt-1 w-[180px] md:w-[240px]" />
             <EditableText
               section={S}
               fieldPath="journey.subtitle"
               as="p"
               className={body}
             >
-              Stare przekonania sprawiały, że cierpiałam z odrzucenia, czułam
-              się niewystarczająca, nieważna, niewidzialna. Subtelnie — ale
-              bardzo boleśnie. Rok za rokiem poznawałam metody, które wspierały
-              moją zmianę, a spokój coraz częściej gościł w mojej codzienności.
+              Oczywiście choroba, problemy z kręgosłupem lędźwiowym, porażenie
+              stopy i człapanie. Co dla mnie – kobiety brzmiało jak wyrok.
+              Płakałam, a jakże, tygodniami, nawet nauczyłam się żyć w
+              permanentnym bólu i z czasem przyszła akceptacja, ja się
+              zwyczajnie poddałam i jednocześnie prosiłam, by pojawił się ktoś,
+              kto mi pokaże drogę inną niż ta, bym mogła wyjść z tego zaułku, w
+              którym czułam, że powoli umieram.
+            </EditableText>
+            <EditableText
+              section={S}
+              fieldPath="journey.body2"
+              as="p"
+              className={body}
+            >
+              Moje prośby zostały wysłuchane i trafiłam na moich pierwszych
+              nauczycieli, którzy pokazali mi, że to, gdzie obecnie jestem, to
+              mój wybór. Nijak tego nie rozumiałam, tak bardzo chciałam, by mnie
+              ktoś przez to wszystko przeprowadził, bo mój umysł wszystko
+              negował, a wszelkie próby zrobienia czegoś inaczej kończyły się
+              fiaskiem.
             </EditableText>
           </div>
         </ScrollReveal>
@@ -400,7 +409,7 @@ function JourneySection() {
                   section={S}
                   fieldPath={`journey.${key}.title`}
                   as="h3"
-                  className={cardTitle}
+                  className={stopTitle}
                 >
                   {title}
                 </EditableText>
@@ -456,25 +465,18 @@ function QuoteSection() {
           </div>
         </ScrollReveal>
         <ScrollReveal animation="blur" delay={200}>
+          {/* her text, then her line about the ego as the big quote */}
           <figure className="flex flex-col gap-6">
-            <EditableText
-              section={S}
-              fieldPath="quote.text"
-              as="blockquote"
-              className="font-['Cormorant_Garamond'] text-[30px] md:text-[36px] lg:text-[40px] italic leading-[1.3] text-ink"
-            >
-              Dziś to ja decyduję, jak się czuję. Nikt inny. Tylko ja.
-            </EditableText>
             <EditableText
               section={S}
               fieldPath="quote.body"
               as="p"
               className={body}
             >
-              Gdy życie znów wywraca się do góry nogami, wiem już, że to
-              przejściowe i że na wszystko jest jakieś rozwiązanie. „Nie da
-              się”, „to czyjaś wina”, „koniec świata” — to tylko głos ego. Srata
-              tata, żadnego końca świata nie będzie.
+              Dziś mamy 2026 r., kiedy to piszę, czyli przeszło 10 lat temu moja
+              przygoda z psychobiologią się zaczęła. I powiem Ci, że
+              psychobiologia to był początek, otwarcie nowych drzwi do
+              zrozumienia siebie, swojego życia, losu, którego doświadczałam.
             </EditableText>
             <EditableText
               section={S}
@@ -482,109 +484,23 @@ function QuoteSection() {
               as="p"
               className={body}
             >
-              Pilnuję tego, o czym myślę. A gdy zbłądzę, zauważam to i uzdrawiam
-              stare przekonania, które mnie umniejszały i sprawiały, że czułam
-              się bezwartościowa.
+              Zrozumienie ciała, dziedziczenia po przodkach, ale przede
+              wszystkim rozgryzienie największego centrum dowodzenia, jakim jest
+              podświadomość, i jak z nią pracować, jak ją przechytrzyć, gdy w
+              niej jest wszystko o mnie zapisane, gdzie na każdą próbę dostaję
+              odmowę, negację EGO.
+            </EditableText>
+            <EditableText
+              section={S}
+              fieldPath="quote.text"
+              as="blockquote"
+              className="font-['Cormorant_Garamond'] text-[28px] md:text-[34px] lg:text-[36px] italic leading-[1.3] text-ink"
+            >
+              No tak. Słodkie nieporadne EGO, które już dziś umiem zhakować i
+              również Ciebie tego nauczę.
             </EditableText>
           </figure>
         </ScrollReveal>
-      </div>
-    </section>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 4. Tak przyziemnie — personal facts
-// ---------------------------------------------------------------------------
-
-const FACTS = [
-  {
-    key: 'daughter',
-    Icon: HeartHandshake,
-    body: 'Jestem mamą dorosłej, wyjątkowej kobiety, która była i jest dla mnie najlepszym nauczycielem.',
-  },
-  {
-    key: 'dogs',
-    Icon: Dog,
-    body: 'Kocham psy. Uczę się od nich kochać tak, jak tylko one potrafią — bez warunków.',
-  },
-  {
-    key: 'partner',
-    Icon: Flower2,
-    body: 'Jestem w relacji partnerskiej, w której czuję się pełnią — kwitnącym nenufarem.',
-  },
-  {
-    key: 'places',
-    Icon: MapPin,
-    body: 'Raz mieszkam tu, raz tam. Wciąż szukam miejsca dla siebie, a może raczej próbuję je sobie „wyśpiewać”.',
-  },
-] as const;
-
-function FactsSection() {
-  return (
-    <section
-      className={`relative isolate overflow-hidden bg-white ${sectionPad} py-20 md:py-28`}
-    >
-      {/* mirrored blots (Start style) so the two cream sections differ */}
-      <WatercolorAccent
-        tone="warm"
-        className="-right-24 -top-24 w-[300px] opacity-40 md:w-[400px]"
-      />
-      <WatercolorAccent
-        tone="cool"
-        className="-bottom-28 -left-24 w-[300px] opacity-35 md:w-[420px]"
-      />
-      {/* the client's ladybug crossing the whole section along its top,
-          edge to edge and back (2026-11-10: "zamiast motyla daj biedronkę,
-          niech się porusza horyzontalnie… od brzegu do brzegu"); the
-          full-width track is the container the walk is measured on */}
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-6 block md:top-8"
-        style={{ containerType: 'inline-size' }}
-      >
-        <img
-          src={ladybugArt}
-          alt=""
-          loading="lazy"
-          decoding="async"
-          draggable={false}
-          className="block h-auto w-[36px] select-none animate-cross md:w-[48px]"
-          style={{ animationDelay: '0.5s' }}
-        />
-      </span>
-      <div className="mx-auto max-w-[1000px]">
-        <ScrollReveal animation="fade-up">
-          <EditableText
-            section={S}
-            fieldPath="facts.title"
-            as="h2"
-            className={`${heading} mb-12 text-center`}
-          >
-            A tak przyziemnie…
-          </EditableText>
-        </ScrollReveal>
-        <div className="grid gap-5 sm:grid-cols-2">
-          {FACTS.map(({ key, Icon, body: text }, i) => (
-            <ScrollReveal key={key} animation="fade-up" delay={stagger(i, 100)}>
-              <div className="flex h-full items-start gap-4 rounded-[20px] bg-surface p-6 shadow-[0_6px_24px_-16px_rgba(63,48,68,0.25)]">
-                <span
-                  className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-spiral-blue-soft ${i % 2 === 0 ? 'text-spiral-blue' : 'text-spiral-teal'}`}
-                >
-                  <Icon size={20} aria-hidden="true" />
-                </span>
-                <EditableText
-                  section={S}
-                  fieldPath={`facts.${key}`}
-                  as="p"
-                  className="font-['Lato'] text-[16px] leading-[1.7] text-ink-soft"
-                >
-                  {text}
-                </EditableText>
-              </div>
-            </ScrollReveal>
-          ))}
-        </div>
       </div>
     </section>
   );
@@ -619,7 +535,7 @@ function CreepingForgetMeNots() {
           on the photo (client 2026-11-10: "daj im pod spód niebieskie tło") */}
       {/* white base first, so the blot reads as the same pale blue as on
           Start's white background instead of a dark blue patch */}
-      <span className="absolute bottom-[2%] left-[2%] block aspect-square w-[96%] rounded-full bg-[radial-gradient(circle,rgba(255,251,239,0.95)_0%,rgba(255,251,239,0.8)_45%,transparent_70%)]" />
+      <span className="absolute bottom-[2%] left-[2%] block aspect-square w-[96%] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.95)_0%,rgba(255,255,255,0.8)_45%,transparent_70%)]" />
       <img
         src={blueBlot}
         alt=""
@@ -643,7 +559,7 @@ function CreepingForgetMeNots() {
 function ClosingSection() {
   return (
     <section
-      className={`overflow-hidden bg-surface ${sectionPad} py-20 md:py-28`}
+      className={`overflow-hidden bg-white ${sectionPad} py-20 md:py-28`}
     >
       <div className="mx-auto grid max-w-[1000px] items-center gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
         <ScrollReveal animation="fade-up">
@@ -664,11 +580,20 @@ function ClosingSection() {
           <div className="flex flex-col gap-5">
             <EditableText
               section={S}
+              fieldPath="closing.lead"
+              as="p"
+              className="font-['Cormorant_Garamond'] text-[22px] italic leading-[1.35] text-brand-dark md:text-[26px]"
+            >
+              Tak więc podchodzę do siebie holistycznie i to samo Tobie
+              proponuję.
+            </EditableText>
+            <EditableText
+              section={S}
               fieldPath="closing.title"
               as="h2"
               className={heading}
             >
-              Bo szkoda życia na smutek
+              A co dokładnie?
             </EditableText>
             <EditableText
               section={S}
@@ -676,11 +601,9 @@ function ClosingSection() {
               as="p"
               className={body}
             >
-              Uczyłam się wiele, sprawdzałam i testowałam na sobie. To, co
-              naprawdę działa, chcę dziś przekazać Tobie. Bo warto! Szkoda życia
-              na smutek, złość i ciągłe stawianie siebie na końcu. Jeśli Ty o
-              siebie nie zadbasz, nic nie wydarzy się dla Ciebie — tylko dla
-              innych.
+              Przeprowadzenie Ciebie przez tę zmianę za rękę, której mi nikt nie
+              podał i zajęło mi to tak wiele lat. Ale Tobie już nie musi, bo to,
+              co działa, podam Ci na tacy.
             </EditableText>
             <EditableText
               section={S}
@@ -688,21 +611,9 @@ function ClosingSection() {
               as="p"
               className={body}
             >
-              Zła, smutna, przemęczona, kłębek nerwów… Kto przy takiej Tobie
-              odpoczywa? Kto się Tobą inspiruje? Odpowiedz sobie szczerze. Ja,
-              nieszczęśliwa, byłam fatalną matką, żoną i kochanką, i dołującą
-              przyjaciółką. Co mogłam dać poza całą tą negatywną energią?
-              Niewiele.
-            </EditableText>
-            <EditableText
-              section={S}
-              fieldPath="closing.body3"
-              as="p"
-              className={body}
-            >
-              Dziś jest inaczej. I Ty też masz prawo czuć się ze sobą dobrze —
-              tak, by Twoje dzieci, Twój mąż, przyjaciele, rodzeństwo i ludzie w
-              pracy też czuli się dobrze przy Tobie.
+              Jeśli tylko tego chcesz, to jestem odpowiedzią na Twoje prośby i
+              jest mi niezmiernie miło, że mogę się moją wiedzą i doświadczeniem
+              z Tobą podzielić.
             </EditableText>
             <EditableText
               section={S}
@@ -710,7 +621,7 @@ function ClosingSection() {
               as="p"
               className="font-['Cormorant_Garamond'] text-[26px] italic leading-[1.3] text-ink md:text-[30px]"
             >
-              Bądź pięknem takim, jakim jesteś. Bo jesteś.
+              To nie przegadujmy więcej. Napisz do mnie i poznajmy się.
             </EditableText>
             <div className="mt-2 flex flex-col gap-3 sm:flex-row">
               <EditableButtonLink
@@ -746,14 +657,13 @@ export default function AboutNow() {
     <main>
       <SEO
         title="O mnie"
-        description="Cześć, mam na imię Aneta. Od 2013 roku poznaję siebie — od cierpienia do spokoju. Dziś to ja decyduję, jak się czuję, i pokazuję Ci, jak możesz poczuć się ze sobą dobrze."
+        description="Kim jestem? Nazywam się Aneta. Od 2016 roku uczę się psychobiologii i pracy z podświadomością — i przeprowadzę Cię przez tę zmianę za rękę."
         canonical="/o-mnie"
         pathname="/o-mnie"
       />
       <IntroSection />
       <JourneySection />
       <QuoteSection />
-      <FactsSection />
       <ClosingSection />
     </main>
   );
