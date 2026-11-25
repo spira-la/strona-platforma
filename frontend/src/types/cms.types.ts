@@ -30,6 +30,7 @@ export type CMSSectionKey =
   | 'events'
   | 'homeNow'
   | 'aboutNow'
+  | 'quiz'
   | 'roles';
 
 export interface CMSContentResponse {

@@ -939,6 +939,56 @@ function InviteSection() {
 // Page composition
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// 9. Quiz invitation — leads to /quiz ("W której roli się zagubiłaś?",
+// 2026-11-25). Lavender band so it stands apart from the white invite above.
+// ---------------------------------------------------------------------------
+
+function QuizTeaser() {
+  return (
+    <section className="relative isolate overflow-hidden bg-lavender-mist px-6 py-16 md:px-12 md:py-20 lg:px-[120px]">
+      <WatercolorAccent
+        tone="cool"
+        className="-right-20 -top-24 w-[260px] opacity-30 md:w-[360px]"
+      />
+      <ScrollReveal animation="fade-up">
+        <div className="mx-auto flex max-w-[720px] flex-col items-center gap-4 text-center">
+          <EditableText
+            section={S}
+            fieldPath="quiz.eyebrow"
+            as="p"
+            className="font-['Lato'] text-[13px] font-semibold uppercase tracking-[0.2em] text-lavender"
+          >
+            Matka. Żona. Kochanka.
+          </EditableText>
+          <EditableText
+            section={S}
+            fieldPath="quiz.title"
+            as="h2"
+            className={heading}
+          >
+            W której roli się zagubiłaś?
+          </EditableText>
+          <EditableText
+            section={S}
+            fieldPath="quiz.body"
+            as="p"
+            className={body}
+          >
+            8 szczerych pytań, około 2 minut. Sprawdź, gdzie dziś jesteś Ty.
+          </EditableText>
+          <Link to="/quiz" className={`${primaryBtn} mt-2`}>
+            <EditableText section={S} fieldPath="quiz.button">
+              Rozwiąż quiz
+            </EditableText>
+            <ArrowRight size={16} aria-hidden="true" />
+          </Link>
+        </div>
+      </ScrollReveal>
+    </section>
+  );
+}
+
 export default function HomeNow() {
   return (
     <main>
@@ -955,6 +1005,7 @@ export default function HomeNow() {
       <OfferSection />
       <ReadySection />
       <InviteSection />
+      <QuizTeaser />
     </main>
   );
 }

@@ -29,6 +29,7 @@ const MamyNastolatkowCoaching = lazy(
   () => import('@/pages/MamyNastolatkowCoaching'),
 );
 const KochankaCoaching = lazy(() => import('@/pages/KochankaCoaching'));
+const Quiz = lazy(() => import('@/pages/Quiz'));
 const Confirmation = lazy(() => import('@/pages/Confirmation'));
 const AuthCallback = lazy(() => import('@/pages/AuthCallback'));
 const PrivacyPolicy = lazy(() => import('@/pages/PrivacyPolicy'));
@@ -459,6 +460,14 @@ function AppRoutes() {
           element={
             <Suspense fallback={<LoadingFallback />}>
               <KochankaCoaching />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/quiz"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <Quiz />
             </Suspense>
           }
         />
