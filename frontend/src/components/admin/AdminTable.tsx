@@ -31,7 +31,7 @@ export function AdminTable<T>({
   ariaLabel,
 }: AdminTableProps<T>) {
   return (
-    <div className="bg-white border border-[#E8E4DF] rounded-xl overflow-hidden">
+    <div className="bg-white border border-line rounded-xl overflow-hidden">
       {isError ? (
         <div className="flex items-center justify-center py-12 px-6">
           <p className="font-['Inter'] text-[14px] text-red-500 text-center">
@@ -41,7 +41,7 @@ export function AdminTable<T>({
       ) : isLoading ? (
         <div className="flex items-center justify-center py-12">
           <Loader2
-            className="w-6 h-6 animate-spin text-[#B8963E]"
+            className="w-6 h-6 animate-spin text-brand"
             aria-label="Loading"
           />
         </div>
@@ -55,7 +55,7 @@ export function AdminTable<T>({
             />
           )}
           {emptyMessage && (
-            <p className="font-['Inter'] text-[14px] text-[#8A8A8A]">
+            <p className="font-['Inter'] text-[14px] text-ink-muted">
               {emptyMessage}
             </p>
           )}
@@ -64,13 +64,13 @@ export function AdminTable<T>({
         <div className="overflow-x-auto">
           <table className="w-full min-w-[640px]" aria-label={ariaLabel}>
             <thead>
-              <tr className="bg-[#F9F6F0]">
+              <tr className="bg-surface">
                 {columns.map((col) => (
                   <th
                     key={col.key}
                     scope="col"
                     className={[
-                      "px-4 py-3 text-left font-['Inter'] text-[11px] uppercase tracking-wider text-[#8A8A8A] font-semibold",
+                      "px-4 py-3 text-left font-['Inter'] text-[11px] uppercase tracking-wider text-ink-muted font-semibold",
                       col.className ?? '',
                     ].join(' ')}
                   >
@@ -83,7 +83,7 @@ export function AdminTable<T>({
               {data.map((item) => (
                 <tr
                   key={keyExtractor(item)}
-                  className="hover:bg-[#FDFCFA] transition-colors border-b border-[#F0EDE8] last:border-b-0"
+                  className="hover:bg-[#FDFCFA] transition-colors border-b border-line-soft last:border-b-0"
                 >
                   {columns.map((col) => (
                     <td

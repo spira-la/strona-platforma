@@ -13,6 +13,22 @@ interface CMSImageUploadResponse {
   version: number;
 }
 
+export interface CMSBackup {
+  id: string;
+  createdAt: string;
+  reason: string;
+}
+
+export interface CMSResetResponse {
+  success: boolean;
+  message: string;
+  backupId: string;
+  removed: number;
+  kept: number;
+  sections: Record<string, { removed: number; kept: number }>;
+  version: number;
+}
+
 async function getAuthHeader(): Promise<Record<string, string>> {
   if (!supabase) return {};
   const { data } = await supabase.auth.getSession();
@@ -151,6 +167,36 @@ export const cmsClient = {
     return api.post<{ success: boolean; seeded: number; message: string }>(
       '/cms/bulk-seed',
       { entries },
+    );
+  },
+
+  /**
+   * Admin — remove TEXT overrides from the selected sections (all languages)
+   * so the static EditableText defaults show again. Backs up first.
+   */
+  resetSections(
+    sections: string[],
+    keepMedia = true,
+  ): Promise<CMSResetResponse> {
+    return api.post<CMSResetResponse>('/cms/reset-sections', {
+      sections,
+      keepMedia,
+    });
+  },
+
+  /** Admin — latest CMS backups (newest first, max 20). */
+  async listBackups(): Promise<CMSBackup[]> {
+    const res = await api.get<{ success: boolean; data: CMSBackup[] }>(
+      '/cms/backups',
+    );
+    return res.data;
+  },
+
+  /** Admin — restore a backup (current state is backed up first). */
+  restoreBackup(id: string): Promise<{ success: boolean; backupId: string }> {
+    return api.post<{ success: boolean; backupId: string }>(
+      '/cms/restore-backup',
+      { id },
     );
   },
 };

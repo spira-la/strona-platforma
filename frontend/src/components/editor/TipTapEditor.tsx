@@ -98,7 +98,7 @@ function ToolbarButton({
         'disabled:opacity-40 disabled:cursor-not-allowed',
         active
           ? 'bg-[#0D9488]/10 text-[#0D9488]'
-          : 'text-[#6B6B6B] hover:bg-[#F0FDFA] hover:text-[#0D9488]',
+          : 'text-ink-soft hover:bg-[#F0FDFA] hover:text-[#0D9488]',
       ].join(' ')}
     >
       {children}
@@ -110,7 +110,7 @@ function ToolbarButton({
 
 function ToolbarSeparator() {
   return (
-    <span className="w-px h-5 bg-[#E8E4DF] mx-1 shrink-0" aria-hidden="true" />
+    <span className="w-px h-5 bg-line mx-1 shrink-0" aria-hidden="true" />
   );
 }
 
@@ -279,7 +279,7 @@ export function TipTapEditor({
           font-family: 'Inter', sans-serif;
           font-size: 15px;
           line-height: 1.7;
-          color: #2D2D2D;
+          color: var(--color-ink);
         }
         .tiptap-editor-content h1 { font-size: 2em; font-weight: 700; margin: 0.5em 0; font-family: 'Cormorant Garamond', serif; }
         .tiptap-editor-content h2 { font-size: 1.5em; font-weight: 700; margin: 0.5em 0; font-family: 'Cormorant Garamond', serif; }
@@ -290,14 +290,14 @@ export function TipTapEditor({
         .tiptap-editor-content ul ul { list-style: circle; }
         .tiptap-editor-content ul ul ul { list-style: square; }
         .tiptap-editor-content li { margin: 0.2em 0; }
-        .tiptap-editor-content li::marker { color: #B8944A; }
+        .tiptap-editor-content li::marker { color: var(--color-brand); }
         /* Task list overrides disc marker */
         .tiptap-editor-content ul[data-type='taskList'] { list-style: none; padding-left: 0; }
         .tiptap-editor-content ul[data-type='taskList'] li::marker { content: ''; }
         .tiptap-editor-content blockquote {
           border-left: 3px solid #0D9488;
           padding-left: 1em;
-          color: #6B6B6B;
+          color: var(--color-ink-soft);
           margin: 0.75em 0;
           font-style: italic;
         }
@@ -334,7 +334,7 @@ export function TipTapEditor({
         }
         .tiptap-editor-content hr {
           border: none;
-          border-top: 1px solid #E8E4DF;
+          border-top: 1px solid var(--color-line);
           margin: 1.5em 0;
         }
         .tiptap-editor-content p.is-editor-empty:first-child::before {
@@ -352,23 +352,23 @@ export function TipTapEditor({
         .tiptap-editor-content table {
           width: 100%;
           border-collapse: collapse;
-          border: 2px solid #b8944a;
+          border: 2px solid var(--color-brand);
         }
         .tiptap-editor-content table th,
         .tiptap-editor-content table td {
-          border: 1px solid #b8944a;
+          border: 1px solid var(--color-brand);
           padding: 0.5rem 0.75rem;
           vertical-align: top;
           text-align: left;
           min-width: 80px;
         }
         .tiptap-editor-content table th {
-          background: rgba(184, 148, 74, 0.12);
+          background: color-mix(in srgb, var(--color-brand) 12%, transparent);
           font-weight: 600;
-          color: #2D2D2D;
+          color: var(--color-ink);
         }
         .tiptap-editor-content table .selectedCell {
-          background: rgba(184, 148, 74, 0.15);
+          background: color-mix(in srgb, var(--color-brand) 15%, transparent);
         }
         .tiptap-editor-content table td p,
         .tiptap-editor-content table th p {
@@ -376,10 +376,10 @@ export function TipTapEditor({
         }
       `}</style>
 
-      <div className="border border-[#E8E4DF] rounded-xl bg-white">
+      <div className="border border-line rounded-xl bg-white">
         {/* Toolbar — sticky so it stays visible while scrolling through long posts */}
         <div
-          className="sticky top-0 z-20 flex flex-wrap items-center gap-0.5 px-3 py-2 border-b border-[#E8E4DF] bg-white/95 backdrop-blur-sm shadow-sm rounded-t-xl"
+          className="sticky top-0 z-20 flex flex-wrap items-center gap-0.5 px-3 py-2 border-b border-line bg-white/95 backdrop-blur-sm shadow-sm rounded-t-xl"
           role="toolbar"
           aria-label="Pasek narzędzi edytora"
         >
@@ -445,7 +445,7 @@ export function TipTapEditor({
                 editor.chain().focus().unsetFontSize().run();
               }
             }}
-            className="h-8 px-2 rounded text-[12px] font-['Inter'] text-[#3F3F3F] bg-white border border-[#E8E4DF] hover:border-[#0D9488] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488] transition-colors"
+            className="h-8 px-2 rounded text-[12px] font-['Inter'] text-[#3F3F3F] bg-white border border-line hover:border-[#0D9488] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488] transition-colors"
           >
             <option value="">Rozmiar</option>
             <option value="12px">Bardzo mały (12)</option>
@@ -677,7 +677,7 @@ export function TipTapEditor({
                     "px-2 h-8 flex items-center justify-center rounded font-['Inter'] text-[11px] font-semibold transition-colors",
                     editor.getAttributes('image').width === w
                       ? 'bg-[#0D9488]/10 text-[#0D9488]'
-                      : 'text-[#6B6B6B] hover:bg-[#F0FDFA] hover:text-[#0D9488]',
+                      : 'text-ink-soft hover:bg-[#F0FDFA] hover:text-[#0D9488]',
                   ].join(' ')}
                 >
                   {w}
@@ -773,7 +773,7 @@ export function TipTapEditor({
                 return true;
               }}
             >
-              <div className="flex items-center gap-0.5 bg-white rounded-lg shadow-lg border border-[#E8E4DF] p-1">
+              <div className="flex items-center gap-0.5 bg-white rounded-lg shadow-lg border border-line p-1">
                 <ToolbarButton
                   title="Pogrubienie"
                   active={editor.isActive('bold')}
@@ -815,7 +815,7 @@ export function TipTapEditor({
         </div>
 
         {/* Character count footer */}
-        <div className="flex justify-end px-4 py-2 border-t border-[#E8E4DF] bg-[#FDFCFA]">
+        <div className="flex justify-end px-4 py-2 border-t border-line bg-[#FDFCFA]">
           <span className="font-['Inter'] text-[12px] text-[#AAAAAA]">
             {characterCount} znaków
           </span>

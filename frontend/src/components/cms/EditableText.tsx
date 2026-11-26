@@ -195,7 +195,7 @@ function FormatPopover({
 
   return (
     <div
-      className="w-[240px] max-h-[calc(100vh-16px)] overflow-y-auto bg-white rounded-xl shadow-2xl border border-[#E8E4DF] p-3 flex flex-col gap-2.5"
+      className="w-[240px] max-h-[calc(100vh-16px)] overflow-y-auto bg-white rounded-xl shadow-2xl border border-line p-3 flex flex-col gap-2.5"
       onClick={(e) => e.stopPropagation()}
       onMouseDown={(e) => e.stopPropagation()}
     >
@@ -207,8 +207,8 @@ function FormatPopover({
           onClick={() => onPatch({ bold: !style.bold })}
           className={`w-7 h-7 flex items-center justify-center rounded text-[12px] font-bold transition-colors ${
             style.bold
-              ? 'bg-[#B8963E] text-white'
-              : 'bg-gray-100 text-[#6B6B6B] hover:bg-gray-200'
+              ? 'bg-action text-white'
+              : 'bg-gray-100 text-ink-soft hover:bg-gray-200'
           }`}
           title={l('bold', lang)}
         >
@@ -220,14 +220,14 @@ function FormatPopover({
           onClick={() => onPatch({ italic: !style.italic })}
           className={`w-7 h-7 flex items-center justify-center rounded transition-colors ${
             style.italic
-              ? 'bg-[#B8963E] text-white'
-              : 'bg-gray-100 text-[#6B6B6B] hover:bg-gray-200'
+              ? 'bg-action text-white'
+              : 'bg-gray-100 text-ink-soft hover:bg-gray-200'
           }`}
           title={l('italic', lang)}
         >
           <Italic size={13} />
         </button>
-        <span className="mx-1 w-px h-5 bg-[#E8E4DF]" aria-hidden="true" />
+        <span className="mx-1 w-px h-5 bg-line" aria-hidden="true" />
         {alignOptions.map(({ value, Icon, labelKey }) => (
           <button
             key={value}
@@ -238,8 +238,8 @@ function FormatPopover({
             }
             className={`w-7 h-7 flex items-center justify-center rounded transition-colors ${
               style.align === value
-                ? 'bg-[#B8963E] text-white'
-                : 'bg-gray-100 text-[#6B6B6B] hover:bg-gray-200'
+                ? 'bg-action text-white'
+                : 'bg-gray-100 text-ink-soft hover:bg-gray-200'
             }`}
             title={l(labelKey, lang)}
           >
@@ -251,10 +251,10 @@ function FormatPopover({
       {/* Size slider */}
       <div>
         <div className="flex items-center justify-between mb-1">
-          <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter']">
+          <p className="text-[10px] font-semibold text-ink-soft uppercase tracking-wider font-['Inter']">
             {l('size', lang)}
           </p>
-          <span className="text-[10px] text-[#8A8A8A] font-['Inter'] font-medium">
+          <span className="text-[10px] text-ink-muted font-['Inter'] font-medium">
             {Math.round(style.size * 100)}%
           </span>
         </div>
@@ -266,17 +266,17 @@ function FormatPopover({
           value={Math.round(style.size * 100)}
           onChange={(e) => onPatch({ size: Number(e.target.value) / 100 })}
           className="w-full h-1.5 rounded-full appearance-none bg-gray-200 cursor-pointer"
-          style={{ accentColor: '#B8963E' }}
+          style={{ accentColor: 'var(--color-brand)' }}
         />
       </div>
 
       {/* Max width */}
       <div>
         <div className="flex items-center justify-between mb-1">
-          <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter']">
+          <p className="text-[10px] font-semibold text-ink-soft uppercase tracking-wider font-['Inter']">
             {l('maxWidth', lang)}
           </p>
-          <span className="text-[10px] text-[#8A8A8A] font-['Inter'] font-medium">
+          <span className="text-[10px] text-ink-muted font-['Inter'] font-medium">
             {style.maxWidth > 0 ? `${style.maxWidth}px` : l('auto', lang)}
           </span>
         </div>
@@ -288,17 +288,17 @@ function FormatPopover({
           value={style.maxWidth}
           onChange={(e) => onPatch({ maxWidth: Number(e.target.value) })}
           className="w-full h-1.5 rounded-full appearance-none bg-gray-200 cursor-pointer"
-          style={{ accentColor: '#B8963E' }}
+          style={{ accentColor: 'var(--color-brand)' }}
         />
       </div>
 
       {/* Max height */}
       <div>
         <div className="flex items-center justify-between mb-1">
-          <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter']">
+          <p className="text-[10px] font-semibold text-ink-soft uppercase tracking-wider font-['Inter']">
             {l('maxHeight', lang)}
           </p>
-          <span className="text-[10px] text-[#8A8A8A] font-['Inter'] font-medium">
+          <span className="text-[10px] text-ink-muted font-['Inter'] font-medium">
             {style.maxHeight > 0 ? `${style.maxHeight}px` : l('auto', lang)}
           </span>
         </div>
@@ -310,13 +310,13 @@ function FormatPopover({
           value={style.maxHeight}
           onChange={(e) => onPatch({ maxHeight: Number(e.target.value) })}
           className="w-full h-1.5 rounded-full appearance-none bg-gray-200 cursor-pointer"
-          style={{ accentColor: '#B8963E' }}
+          style={{ accentColor: 'var(--color-brand)' }}
         />
       </div>
 
       {/* Color picker */}
       <div className="flex items-center justify-between">
-        <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter']">
+        <p className="text-[10px] font-semibold text-ink-soft uppercase tracking-wider font-['Inter']">
           {l('color', lang)}
         </p>
         <div className="flex items-center gap-1">
@@ -324,14 +324,14 @@ function FormatPopover({
             type="color"
             value={style.color || computedColor || '#2D2D2D'}
             onChange={(e) => onPatch({ color: e.target.value })}
-            className="w-7 h-7 rounded border border-[#E8E4DF] cursor-pointer bg-white p-0"
+            className="w-7 h-7 rounded border border-line cursor-pointer bg-white p-0"
             title={l('pickColor', lang)}
           />
           {style.color && (
             <button
               type="button"
               onClick={() => onPatch({ color: '' })}
-              className="px-1.5 py-0.5 text-[10px] text-[#6B6B6B] hover:text-[#B8963E]"
+              className="px-1.5 py-0.5 text-[10px] text-ink-soft hover:text-brand"
               title={l('defaultColor', lang)}
             >
               ✕
@@ -342,14 +342,14 @@ function FormatPopover({
 
       {/* Multiline toggle */}
       <div className="flex items-center justify-between">
-        <p className="text-[10px] font-semibold text-[#6B6B6B] uppercase tracking-wider font-['Inter']">
+        <p className="text-[10px] font-semibold text-ink-soft uppercase tracking-wider font-['Inter']">
           {l('multiline', lang)}
         </p>
         <button
           type="button"
           onClick={() => onPatch({ multiline: !style.multiline })}
           className={`relative w-9 h-5 rounded-full transition-colors ${
-            style.multiline ? 'bg-[#B8963E]' : 'bg-[#E8E4DF]'
+            style.multiline ? 'bg-brand' : 'bg-line'
           }`}
           title={
             style.multiline ? l('multilineOn', lang) : l('multilineOff', lang)
@@ -365,11 +365,11 @@ function FormatPopover({
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-between pt-1.5 border-t border-[#F0EDE8]">
+      <div className="flex items-center justify-between pt-1.5 border-t border-line-soft">
         <button
           type="button"
           onClick={onReset}
-          className="flex items-center gap-1 text-[10px] font-medium text-[#6B6B6B] hover:text-[#B8963E] transition-colors"
+          className="flex items-center gap-1 text-[10px] font-medium text-ink-soft hover:text-brand transition-colors"
         >
           <RotateCcw size={10} />
           {l('reset', lang)}
@@ -377,7 +377,7 @@ function FormatPopover({
         <button
           type="button"
           onClick={onClose}
-          className="px-3 py-1 rounded-md text-[11px] font-medium text-white bg-[#B8963E] hover:bg-[#8A6F2E] transition-colors font-['Inter']"
+          className="px-3 py-1 rounded-md text-[11px] font-medium text-white bg-action hover:bg-action-hover transition-colors font-['Inter']"
         >
           {l('done', lang)}
         </button>
@@ -700,8 +700,8 @@ export function EditableText({
                 }}
                 className={`fixed z-[9999] w-6 h-6 flex items-center justify-center rounded-full shadow-lg border border-white/20 backdrop-blur-sm transition-colors ${
                   showFormat
-                    ? 'bg-[#B8963E] text-white'
-                    : 'bg-black/70 text-white hover:bg-[#B8963E]'
+                    ? 'bg-action text-white'
+                    : 'bg-black/70 text-white hover:bg-brand'
                 }`}
                 style={{
                   top: rect.top - 28 < 4 ? rect.bottom + 4 : rect.top - 28,
@@ -740,7 +740,7 @@ export function EditableText({
               {/* Save/Cancel toolbar — shown only while actively editing */}
               {isEditing && (
                 <div
-                  className="fixed z-[9999] flex items-center gap-1.5 bg-white/95 backdrop-blur-sm rounded-lg shadow-xl border border-[#E8E4DF] px-2 py-1.5"
+                  className="fixed z-[9999] flex items-center gap-1.5 bg-white/95 backdrop-blur-sm rounded-lg shadow-xl border border-line px-2 py-1.5"
                   style={{
                     top: rect.bottom + 6,
                     left: Math.max(8, Math.min(rect.left, vw - 260)),
@@ -757,23 +757,23 @@ export function EditableText({
                   >
                     Reset
                   </button>
-                  <span className="w-px h-4 bg-[#E8E4DF]" />
+                  <span className="w-px h-4 bg-line" />
                   {isSaving && (
-                    <span className="text-[10px] text-[#B8963E] font-['Inter']">
+                    <span className="text-[10px] text-brand font-['Inter']">
                       ...
                     </span>
                   )}
                   <button
                     type="button"
                     onClick={cancelEditing}
-                    className="rounded px-2 py-0.5 text-[11px] font-medium text-[#6B6B6B] bg-gray-100 hover:bg-gray-200 transition-colors font-['Inter']"
+                    className="rounded px-2 py-0.5 text-[11px] font-medium text-ink-soft bg-gray-100 hover:bg-gray-200 transition-colors font-['Inter']"
                   >
                     Cancel
                   </button>
                   <button
                     type="button"
                     onClick={() => void saveEditing()}
-                    className="rounded px-2.5 py-0.5 text-[11px] font-medium text-white bg-[#B8963E] hover:bg-[#8A6F2E] transition-colors font-['Inter']"
+                    className="rounded px-2.5 py-0.5 text-[11px] font-medium text-white bg-action hover:bg-action-hover transition-colors font-['Inter']"
                   >
                     Save
                   </button>
@@ -794,10 +794,10 @@ export function EditableText({
             style: inlineStyle,
             className: `relative rounded transition-[outline,box-shadow,opacity] outline outline-1 ${
               isEditing
-                ? 'outline-[#B8963E]/70 shadow-[0_0_0_3px_rgba(184,150,62,0.18)]'
+                ? 'outline-brand/70 shadow-[0_0_0_3px_color-mix(in_srgb,var(--color-brand)_18%,transparent)]'
                 : isOtherActive
                   ? 'outline-transparent opacity-40 pointer-events-none'
-                  : 'outline-transparent cursor-pointer hover:outline-[#B8963E]/70 hover:shadow-[0_0_0_3px_rgba(184,150,62,0.12)]'
+                  : 'outline-transparent cursor-pointer hover:outline-brand/70 hover:shadow-[0_0_0_3px_color-mix(in_srgb,var(--color-brand)_12%,transparent)]'
             } ${resolvedClassName ?? ''}`,
             ...(isEditing
               ? {

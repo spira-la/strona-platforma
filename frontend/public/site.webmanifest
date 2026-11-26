@@ -4,8 +4,8 @@
   "description": "Coaching i terapia z Anetą — sesje indywidualne, pakiety, rozwój osobisty",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#F9F6F0",
-  "theme_color": "#B8963E",
+  "background_color": "#FFFBEF",
+  "theme_color": "#F06A2E",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",

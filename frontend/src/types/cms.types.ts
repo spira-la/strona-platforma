@@ -27,6 +27,10 @@ export type CMSSectionKey =
   | 'mamyNastolatkow'
   | 'motherWifeLover'
   | 'kochanka'
+  | 'events'
+  | 'homeNow'
+  | 'aboutNow'
+  | 'quiz'
   | 'roles';
 
 export interface CMSContentResponse {

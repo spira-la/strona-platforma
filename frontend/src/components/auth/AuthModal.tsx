@@ -55,7 +55,7 @@ export function AuthModal() {
           <button
             type="button"
             onClick={closeModals}
-            className="absolute top-4 right-4 text-[#8A8A8A] hover:text-[#2D2D2D] transition-colors"
+            className="absolute top-4 right-4 text-ink-muted hover:text-ink transition-colors"
             aria-label="Zamknij"
           >
             <X size={20} />
@@ -65,10 +65,10 @@ export function AuthModal() {
             alt=""
             className="w-20 h-20 mx-auto mb-4 object-contain"
           />
-          <h2 className="font-['Cormorant_Garamond'] text-[22px] font-bold text-[#2D2D2D] mb-2">
+          <h2 className="font-['Cormorant_Garamond'] text-[22px] font-bold text-ink mb-2">
             Konfiguracja w toku
           </h2>
-          <p className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-relaxed">
+          <p className="font-['Lato'] text-[14px] text-ink-soft leading-relaxed">
             System logowania jest w trakcie konfiguracji. Spróbuj ponownie za
             chwilę.
           </p>
@@ -97,7 +97,7 @@ export function AuthModal() {
         <button
           type="button"
           onClick={closeModals}
-          className="absolute top-4 right-4 text-[#8A8A8A] hover:text-[#2D2D2D] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] rounded"
+          className="absolute top-4 right-4 text-ink-muted hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded"
           aria-label="Zamknij"
         >
           <X size={20} />

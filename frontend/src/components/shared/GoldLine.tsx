@@ -38,7 +38,7 @@ export function GoldLine({
         style={{
           width: '100%',
           height: '100%',
-          background: 'linear-gradient(90deg, #D4B97A, #B8944A)',
+          background: 'linear-gradient(90deg, var(--color-brand-light), var(--color-brand))',
           borderRadius: height,
           transform: isVisible ? 'scaleX(1)' : 'scaleX(0)',
           transformOrigin: 'left center',

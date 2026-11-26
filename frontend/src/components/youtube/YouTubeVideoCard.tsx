@@ -73,7 +73,7 @@ function VideoModal({ video, locale, onClose }: VideoModalProps) {
           type="button"
           onClick={onClose}
           aria-label="Zamknij odtwarzacz"
-          className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-black/60 flex items-center justify-center text-white hover:bg-black/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
+          className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-black/60 flex items-center justify-center text-white hover:bg-black/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
           <X size={18} aria-hidden="true" />
         </button>
@@ -91,23 +91,23 @@ function VideoModal({ video, locale, onClose }: VideoModalProps) {
 
         {/* Info below player */}
         <div className="flex flex-col gap-3 p-5 md:p-6 overflow-y-auto">
-          <h2 className="font-['Cormorant_Garamond'] text-[20px] md:text-[22px] font-bold text-[#2D2D2D] leading-[1.25]">
+          <h2 className="font-['Cormorant_Garamond'] text-[20px] md:text-[22px] font-bold text-ink leading-[1.25]">
             {video.title}
           </h2>
 
           {/* Meta row */}
           <div className="flex flex-wrap items-center gap-3">
             {video.channelTitle && (
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold font-['Lato'] uppercase tracking-[0.06em] text-white bg-[#B8963E]">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold font-['Lato'] uppercase tracking-[0.06em] text-white bg-action">
                 {video.channelTitle}
               </span>
             )}
-            <span className="flex items-center gap-1 font-['Lato'] text-[12px] text-[#8A8A8A]">
+            <span className="flex items-center gap-1 font-['Lato'] text-[12px] text-ink-muted">
               <Calendar size={12} aria-hidden="true" />
               {formatDate(video.publishedAt, locale)}
             </span>
             {video.viewCount !== undefined && (
-              <span className="flex items-center gap-1 font-['Lato'] text-[12px] text-[#8A8A8A]">
+              <span className="flex items-center gap-1 font-['Lato'] text-[12px] text-ink-muted">
                 <Eye size={12} aria-hidden="true" />
                 {formatViews(video.viewCount)} {t('youtube.views')}
               </span>
@@ -115,7 +115,7 @@ function VideoModal({ video, locale, onClose }: VideoModalProps) {
           </div>
 
           {video.description && (
-            <p className="font-['Lato'] text-[13px] text-[#6B6B6B] leading-[1.6] line-clamp-4">
+            <p className="font-['Lato'] text-[13px] text-ink-soft leading-[1.6] line-clamp-4">
               {video.description}
             </p>
           )}
@@ -124,7 +124,7 @@ function VideoModal({ video, locale, onClose }: VideoModalProps) {
             href={`https://www.youtube.com/watch?v=${video.id}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="self-start inline-flex items-center gap-1.5 font-['Lato'] text-[13px] font-semibold text-[#B8963E] hover:text-[#8A6F2E] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E] rounded"
+            className="self-start inline-flex items-center gap-1.5 font-['Lato'] text-[13px] font-semibold text-brand hover:text-brand-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded"
           >
             {t('youtube.watchOnYouTube')}
             <ExternalLink size={13} aria-hidden="true" />
@@ -165,7 +165,7 @@ export function YouTubeVideoCard({
   return (
     <>
       <article
-        className="group flex flex-col bg-white border border-[#E8E4DF] rounded-[12px] overflow-hidden shadow-sm hover:shadow-md hover:border-[#B8963E] transition-all duration-300 cursor-pointer h-full"
+        className="group flex flex-col bg-white border border-line rounded-[12px] overflow-hidden shadow-sm hover:shadow-md hover:border-brand transition-all duration-300 cursor-pointer h-full"
         onClick={openModal}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
@@ -187,7 +187,7 @@ export function YouTubeVideoCard({
           />
           {/* Gold play button overlay */}
           <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors duration-300">
-            <div className="w-12 h-12 rounded-full bg-[#B8963E] flex items-center justify-center shadow-lg transform transition-transform duration-300 group-hover:scale-110">
+            <div className="w-12 h-12 rounded-full bg-brand flex items-center justify-center shadow-lg transform transition-transform duration-300 group-hover:scale-110">
               <Play
                 size={20}
                 fill="white"
@@ -209,14 +209,14 @@ export function YouTubeVideoCard({
         */}
         <div className="flex flex-col gap-2.5 p-5 flex-1">
           <h3
-            className="font-['Cormorant_Garamond'] text-[17px] font-bold text-[#2D2D2D] leading-[1.3] line-clamp-2"
+            className="font-['Cormorant_Garamond'] text-[17px] font-bold text-ink leading-[1.3] line-clamp-2"
             style={{ minHeight: '2.6em' }}
           >
             {video.title}
           </h3>
 
           <p
-            className={`font-['Lato'] text-[13px] text-[#6B6B6B] leading-[1.6] flex-1 ${descriptionClamp}`}
+            className={`font-['Lato'] text-[13px] text-ink-soft leading-[1.6] flex-1 ${descriptionClamp}`}
             style={{
               minHeight:
                 descriptionClamp === 'line-clamp-4' ? '6.4em' : '3.2em',
@@ -226,21 +226,21 @@ export function YouTubeVideoCard({
           </p>
 
           {/* Footer — fixed at the bottom; never wraps */}
-          <div className="flex flex-nowrap items-center justify-between gap-3 mt-auto pt-3 border-t border-[#F0EDE8]">
+          <div className="flex flex-nowrap items-center justify-between gap-3 mt-auto pt-3 border-t border-line-soft">
             <div className="flex items-center gap-3 min-w-0 flex-1">
-              <span className="inline-flex items-center gap-1 font-['Lato'] text-[11px] text-[#8A8A8A] whitespace-nowrap">
+              <span className="inline-flex items-center gap-1 font-['Lato'] text-[11px] text-ink-muted whitespace-nowrap">
                 <Calendar size={11} aria-hidden="true" />
                 {formatDate(video.publishedAt, locale)}
               </span>
               {video.viewCount !== undefined && (
-                <span className="inline-flex items-center gap-1 font-['Lato'] text-[11px] text-[#8A8A8A] whitespace-nowrap overflow-hidden">
+                <span className="inline-flex items-center gap-1 font-['Lato'] text-[11px] text-ink-muted whitespace-nowrap overflow-hidden">
                   <Eye size={11} aria-hidden="true" />
                   {formatViews(video.viewCount)}
                 </span>
               )}
             </div>
 
-            <span className="inline-flex items-center gap-1 font-['Lato'] text-[12px] font-semibold text-white bg-[#B8963E] group-hover:bg-[#8A6F2E] transition-colors rounded-full px-4 py-1.5 whitespace-nowrap flex-shrink-0">
+            <span className="inline-flex items-center gap-1 font-['Lato'] text-[12px] font-semibold text-white bg-action group-hover:bg-action-hover transition-colors rounded-full px-4 py-1.5 whitespace-nowrap flex-shrink-0">
               <Play size={11} fill="white" aria-hidden="true" />
               {t('youtube.play')}
             </span>

@@ -70,13 +70,13 @@ export default function CoachDashboard() {
       </div>
 
       {/* ── Quick link to sessions ────────────────────────────────────────────── */}
-      <div className="bg-white border border-[#E8E4DF] rounded-xl p-6">
+      <div className="bg-white border border-line rounded-xl p-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="font-['Cormorant_Garamond',serif] font-bold text-xl text-[#2D2D2D]">
+            <h2 className="font-['Cormorant_Garamond',serif] font-bold text-xl text-ink">
               {t('coach.nav.sessions')}
             </h2>
-            <p className="mt-1 font-['Inter'] text-[13px] text-[#6B6B6B]">
+            <p className="mt-1 font-['Inter'] text-[13px] text-ink-soft">
               {t('coach.sessions.description')}
             </p>
           </div>

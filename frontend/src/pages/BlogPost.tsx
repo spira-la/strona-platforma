@@ -122,8 +122,8 @@ function ShareBar({ url, title }: ShareBarProps) {
   ];
 
   return (
-    <div className="flex items-center justify-between flex-wrap gap-4 py-6 border-y border-[#E8E4DF]">
-      <span className="inline-flex items-center gap-2 font-['Lato'] text-[13px] font-semibold tracking-[0.15em] uppercase text-[#8A8A8A]">
+    <div className="flex items-center justify-between flex-wrap gap-4 py-6 border-y border-line">
+      <span className="inline-flex items-center gap-2 font-['Lato'] text-[13px] font-semibold tracking-[0.15em] uppercase text-ink-muted">
         <Share2 size={14} aria-hidden="true" />
         <EditableText
           section="blogPost"
@@ -140,10 +140,10 @@ function ShareBar({ url, title }: ShareBarProps) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Udostępnij na ${name}`}
-            className="group relative inline-flex items-center justify-center w-10 h-10 rounded-full border border-[#E8E4DF] text-[#6B6B6B] hover:text-[#B8963E] hover:border-[#B8963E] transition-colors"
+            className="group relative inline-flex items-center justify-center w-10 h-10 rounded-full border border-line text-ink-soft hover:text-brand hover:border-brand transition-colors"
           >
             <Icon size={15} aria-hidden="true" />
-            <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-[#2D2D2D] px-2.5 py-1 font-['Lato'] text-[11px] text-white opacity-0 group-hover:opacity-100 transition-opacity">
+            <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-ink px-2.5 py-1 font-['Lato'] text-[11px] text-white opacity-0 group-hover:opacity-100 transition-opacity">
               {name}
             </span>
           </a>
@@ -152,10 +152,10 @@ function ShareBar({ url, title }: ShareBarProps) {
           type="button"
           onClick={() => copyLinkToClipboard(url)}
           aria-label="Skopiuj link"
-          className="group relative inline-flex items-center justify-center w-10 h-10 rounded-full border border-[#E8E4DF] text-[#6B6B6B] hover:text-[#B8963E] hover:border-[#B8963E] transition-colors"
+          className="group relative inline-flex items-center justify-center w-10 h-10 rounded-full border border-line text-ink-soft hover:text-brand hover:border-brand transition-colors"
         >
           <Copy size={15} aria-hidden="true" />
-          <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-[#2D2D2D] px-2.5 py-1 font-['Lato'] text-[11px] text-white opacity-0 group-hover:opacity-100 transition-opacity">
+          <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-ink px-2.5 py-1 font-['Lato'] text-[11px] text-white opacity-0 group-hover:opacity-100 transition-opacity">
             Skopiuj link
           </span>
         </button>
@@ -180,28 +180,28 @@ function BlogCTA() {
   );
 
   return (
-    <div className="mt-12 rounded-2xl border border-[#E8E4DF] bg-gradient-to-br from-[#F9F6F0] to-[#EDE8DC] p-8 md:p-10 text-center">
+    <div className="mt-12 rounded-2xl border border-line bg-gradient-to-br from-surface to-[#EDE8DC] p-8 md:p-10 text-center">
       <EditableText
         section="blogPost"
         fieldPath="ctaHeading"
         as="h3"
-        className="font-['Playfair_Display'] text-[24px] md:text-[28px] font-normal text-[#2D2D2D] mb-3"
+        className="font-['Playfair_Display'] text-[24px] md:text-[28px] font-normal text-ink mb-3"
         placeholder="Gotowa na kolejny krok?"
       />
       <EditableText
         section="blogPost"
         fieldPath="ctaSubtitle"
         as="p"
-        className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7] max-w-[560px] mx-auto mb-7"
+        className="font-['Lato'] text-[15px] text-ink-soft leading-[1.7] max-w-[560px] mx-auto mb-7"
         placeholder="Umów indywidualną sesję lub napisz do mnie na WhatsApp — pierwsza rozmowa jest bez zobowiązań."
       />
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
         {/* Primary — book a regular session (Services page) */}
         <Link
           to="/uslugi"
-          className="inline-flex items-center justify-center gap-2 w-full sm:w-auto font-['Lato'] text-[14px] font-semibold text-white rounded-lg px-8 py-[14px] transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A]"
+          className="inline-flex items-center justify-center gap-2 w-full sm:w-auto font-['Lato'] text-[14px] font-semibold text-white rounded-lg px-8 py-[14px] transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand"
           style={{
-            background: 'linear-gradient(135deg, #B8944A 0%, #D4B97A 100%)',
+            background: 'linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-light) 100%)',
           }}
         >
           <EditableText
@@ -218,7 +218,7 @@ function BlogCTA() {
           href={calendlyUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-2 w-full sm:w-auto font-['Lato'] text-[14px] font-semibold text-[#B8963E] bg-white border border-[#B8963E] rounded-lg px-8 py-[14px] transition-colors hover:bg-[rgba(184,148,74,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A]"
+          className="inline-flex items-center justify-center gap-2 w-full sm:w-auto font-['Lato'] text-[14px] font-semibold text-brand bg-white border border-brand rounded-lg px-8 py-[14px] transition-colors hover:bg-brand/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand"
         >
           <CalendarCheck size={16} aria-hidden="true" />
           <EditableText
@@ -240,13 +240,13 @@ interface RelatedPostsProps {
 function RelatedPosts({ posts }: RelatedPostsProps) {
   if (posts.length === 0) return null;
   return (
-    <section className="bg-[#F5F3EF] py-16 md:py-20">
+    <section className="bg-surface-alt py-16 md:py-20">
       <div className="max-w-[1200px] mx-auto px-6 md:px-8">
         <div className="flex flex-col items-center text-center gap-3 mb-12">
-          <span className="font-['Lato'] text-[11px] font-semibold tracking-[0.25em] uppercase text-[#B8944A]">
+          <span className="font-['Lato'] text-[11px] font-semibold tracking-[0.25em] uppercase text-brand">
             Czytaj dalej
           </span>
-          <h2 className="font-['Playfair_Display'] text-[28px] md:text-[36px] font-normal text-[#2D2D2D] leading-[1.15]">
+          <h2 className="font-['Playfair_Display'] text-[28px] md:text-[36px] font-normal text-ink leading-[1.15]">
             Powiązane artykuły
           </h2>
         </div>
@@ -255,7 +255,7 @@ function RelatedPosts({ posts }: RelatedPostsProps) {
             <Link
               key={p.id}
               to={`/blog/${p.slug}`}
-              className="group flex flex-col bg-white rounded-lg overflow-hidden border border-[#F0EDE8] hover:shadow-md transition-shadow"
+              className="group flex flex-col bg-white rounded-lg overflow-hidden border border-line-soft hover:shadow-md transition-shadow"
             >
               <div className="h-48 overflow-hidden">
                 {p.coverImageUrl && (
@@ -268,14 +268,14 @@ function RelatedPosts({ posts }: RelatedPostsProps) {
               </div>
               <div className="flex flex-col gap-3 p-5">
                 {p.categories?.[0] && (
-                  <span className="inline-block self-start font-['Lato'] text-[10px] font-semibold tracking-[0.18em] uppercase text-[#B8944A]">
+                  <span className="inline-block self-start font-['Lato'] text-[10px] font-semibold tracking-[0.18em] uppercase text-brand">
                     {p.categories[0].name}
                   </span>
                 )}
-                <h3 className="font-['Playfair_Display'] text-[18px] font-normal text-[#2D2D2D] leading-snug line-clamp-2">
+                <h3 className="font-['Playfair_Display'] text-[18px] font-normal text-ink leading-snug line-clamp-2">
                   {p.title}
                 </h3>
-                <span className="font-['Lato'] text-[12px] text-[#8A8A8A] mt-auto">
+                <span className="font-['Lato'] text-[12px] text-ink-muted mt-auto">
                   {formatDate(p.publishedAt ?? p.createdAt)}
                 </span>
               </div>
@@ -294,11 +294,11 @@ function RelatedPosts({ posts }: RelatedPostsProps) {
 function PostSkeleton() {
   return (
     <div className="max-w-[820px] mx-auto px-6 py-20 animate-pulse">
-      <div className="h-4 bg-[#E8E4DF] rounded w-24 mb-10" />
-      <div className="h-3 bg-[#E8E4DF] rounded w-40 mx-auto mb-5" />
-      <div className="h-10 bg-[#E8E4DF] rounded w-full mb-4" />
-      <div className="h-10 bg-[#E8E4DF] rounded w-3/4 mx-auto mb-8" />
-      <div className="h-[420px] bg-[#E8E4DF] rounded-lg mt-10" />
+      <div className="h-4 bg-line rounded w-24 mb-10" />
+      <div className="h-3 bg-line rounded w-40 mx-auto mb-5" />
+      <div className="h-10 bg-line rounded w-full mb-4" />
+      <div className="h-10 bg-line rounded w-3/4 mx-auto mb-8" />
+      <div className="h-[420px] bg-line rounded-lg mt-10" />
     </div>
   );
 }
@@ -311,18 +311,18 @@ function PostNotFound() {
         description="Artykuł nie został znaleziony."
         noindex
       />
-      <p className="font-['Playfair_Display'] text-6xl font-normal text-[#B8963E] mb-4">
+      <p className="font-['Playfair_Display'] text-6xl font-normal text-brand mb-4">
         404
       </p>
-      <h1 className="font-['Playfair_Display'] text-2xl font-normal text-[#2D2D2D] mb-3">
+      <h1 className="font-['Playfair_Display'] text-2xl font-normal text-ink mb-3">
         Artykuł nie został znaleziony
       </h1>
-      <p className="font-['Lato'] text-[#6B6B6B] mb-8">
+      <p className="font-['Lato'] text-ink-soft mb-8">
         Sprawdź czy adres jest poprawny lub wróć do listy artykułów.
       </p>
       <Link
         to="/blog"
-        className="inline-flex items-center gap-2 font-['Lato'] font-semibold text-[#B8963E] hover:text-[#8A6F2E] transition-colors"
+        className="inline-flex items-center gap-2 font-['Lato'] font-semibold text-brand hover:text-brand-dark transition-colors"
       >
         <ArrowLeft size={16} aria-hidden="true" />
         Wróć do bloga
@@ -372,7 +372,7 @@ export default function BlogPost() {
 
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-[#FAF8F5]">
+      <main className="min-h-screen bg-surface">
         <PostSkeleton />
       </main>
     );
@@ -380,7 +380,7 @@ export default function BlogPost() {
 
   if (isError || !post || !displayedPost) {
     return (
-      <main className="min-h-screen bg-[#FAF8F5]">
+      <main className="min-h-screen bg-surface">
         <PostNotFound />
       </main>
     );
@@ -423,7 +423,7 @@ export default function BlogPost() {
   };
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5]">
+    <main className="min-h-screen bg-surface">
       <SEO
         title={displayedPost.title}
         description={displayedPost.excerpt ?? displayedPost.title}
@@ -460,23 +460,23 @@ export default function BlogPost() {
 
       {/* Article header — between image and body */}
       <section
-        className={`bg-[#FAF8F5] ${displayedPost.coverImageUrl ? 'pt-10 md:pt-12' : 'pt-14 md:pt-20'} pb-6 md:pb-8`}
+        className={`bg-surface ${displayedPost.coverImageUrl ? 'pt-10 md:pt-12' : 'pt-14 md:pt-20'} pb-6 md:pb-8`}
       >
         <div className="max-w-[1060px] mx-auto px-5 sm:px-6 md:px-8 flex flex-col items-center text-center gap-6">
           {/* Category */}
           {category && (
-            <span className="inline-block font-['Lato'] text-[11px] font-bold tracking-[0.25em] uppercase text-[#B8944A]">
+            <span className="inline-block font-['Lato'] text-[11px] font-bold tracking-[0.25em] uppercase text-brand">
               {category}
             </span>
           )}
 
           {/* Title */}
-          <h1 className="font-['Playfair_Display'] text-[34px] sm:text-[42px] md:text-[52px] font-normal text-[#2D2D2D] leading-[1.1] tracking-[-0.02em]">
+          <h1 className="font-['Playfair_Display'] text-[34px] sm:text-[42px] md:text-[52px] font-normal text-ink leading-[1.1] tracking-[-0.02em]">
             {displayedPost.title}
           </h1>
 
           {/* Divider */}
-          <div className="w-12 h-px bg-[#B8944A]" aria-hidden="true" />
+          <div className="w-12 h-px bg-brand" aria-hidden="true" />
 
           {/* Meta row: author + date + read time */}
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3">
@@ -484,21 +484,21 @@ export default function BlogPost() {
               <img
                 src={authorAvatar}
                 alt={authorName}
-                className="w-9 h-9 rounded-full object-cover border-2 border-[#F0EDE8]"
+                className="w-9 h-9 rounded-full object-cover border-2 border-line-soft"
               />
-              <span className="font-['Lato'] text-[13px] font-semibold text-[#2D2D2D]">
+              <span className="font-['Lato'] text-[13px] font-semibold text-ink">
                 {authorName}
               </span>
             </div>
             <span
-              className="hidden sm:block w-px h-5 bg-[#E8E4DF]"
+              className="hidden sm:block w-px h-5 bg-line"
               aria-hidden="true"
             />
-            <span className="inline-flex items-center gap-1.5 font-['Lato'] text-[13px] text-[#8A8A8A]">
+            <span className="inline-flex items-center gap-1.5 font-['Lato'] text-[13px] text-ink-muted">
               <Calendar size={12} aria-hidden="true" />
               {formatDate(displayedPost.publishedAt ?? displayedPost.createdAt)}
             </span>
-            <span className="inline-flex items-center gap-1.5 font-['Lato'] text-[13px] text-[#8A8A8A]">
+            <span className="inline-flex items-center gap-1.5 font-['Lato'] text-[13px] text-ink-muted">
               <Clock size={12} aria-hidden="true" />
               {readTime} min czytania
             </span>
@@ -511,21 +511,21 @@ export default function BlogPost() {
         <div className="max-w-[1060px] mx-auto px-5 sm:px-6 md:px-8">
           <article
             className="prose prose-base max-w-none
-              prose-headings:font-['Playfair_Display'] prose-headings:font-normal prose-headings:text-[#2D2D2D] prose-headings:tracking-[-0.01em]
+              prose-headings:font-['Playfair_Display'] prose-headings:font-normal prose-headings:text-ink prose-headings:tracking-[-0.01em]
               prose-h2:text-[22px] sm:prose-h2:text-[24px] md:prose-h2:text-[28px] prose-h2:mt-10 md:prose-h2:mt-12 prose-h2:mb-4
               prose-h3:text-[18px] sm:prose-h3:text-[20px] md:prose-h3:text-[22px] prose-h3:mt-8 prose-h3:mb-3
               prose-p:font-['Lato'] prose-p:text-[14px] sm:prose-p:text-[15px] md:prose-p:text-[16px] prose-p:text-[#3F3F3F] prose-p:leading-[1.8]
-              prose-a:text-[#B8963E] prose-a:no-underline prose-a:font-semibold hover:prose-a:text-[#8A6F2E]
-              prose-strong:text-[#2D2D2D] prose-strong:font-bold
-              prose-blockquote:border-l-4 prose-blockquote:border-[#B8963E] prose-blockquote:bg-[#F5F3EF]
+              prose-a:text-brand prose-a:no-underline prose-a:font-semibold hover:prose-a:text-brand-dark
+              prose-strong:text-ink prose-strong:font-bold
+              prose-blockquote:border-l-4 prose-blockquote:border-brand prose-blockquote:bg-surface-alt
               prose-blockquote:py-3 prose-blockquote:px-5 md:prose-blockquote:px-7 prose-blockquote:rounded-r-lg
-              prose-blockquote:not-italic prose-blockquote:font-['Playfair_Display'] prose-blockquote:text-[#2D2D2D]
+              prose-blockquote:not-italic prose-blockquote:font-['Playfair_Display'] prose-blockquote:text-ink
               prose-blockquote:text-[16px] md:prose-blockquote:text-[18px] prose-blockquote:leading-[1.6]
               prose-img:rounded-lg prose-img:mx-auto prose-img:my-8
               prose-ul:font-['Lato'] prose-ul:text-[14px] sm:prose-ul:text-[15px] md:prose-ul:text-[16px] prose-ul:text-[#3F3F3F] prose-ul:leading-[1.75]
               prose-ol:font-['Lato'] prose-ol:text-[14px] sm:prose-ol:text-[15px] md:prose-ol:text-[16px] prose-ol:text-[#3F3F3F] prose-ol:leading-[1.75]
               prose-li:my-1
-              prose-hr:border-[#E8E4DF] prose-hr:my-10 md:prose-hr:my-12
+              prose-hr:border-line prose-hr:my-10 md:prose-hr:my-12
             "
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(displayedPost.content ?? ''),
@@ -538,7 +538,7 @@ export default function BlogPost() {
               {displayedPost.categories.map((cat) => (
                 <span
                   key={cat.id}
-                  className="inline-block font-['Lato'] text-[12px] font-semibold tracking-[0.1em] uppercase text-[#B8944A] border border-[#B8944A]/40 rounded-full px-4 py-1.5"
+                  className="inline-block font-['Lato'] text-[12px] font-semibold tracking-[0.1em] uppercase text-brand border border-brand/40 rounded-full px-4 py-1.5"
                 >
                   {cat.name}
                 </span>
@@ -557,7 +557,7 @@ export default function BlogPost() {
 
           {/* Author bio card */}
           {(authorBio || displayedPost.author?.name) && (
-            <div className="mt-10 p-6 md:p-8 bg-[#F5F3EF] rounded-lg flex flex-col sm:flex-row items-start gap-5">
+            <div className="mt-10 p-6 md:p-8 bg-surface-alt rounded-lg flex flex-col sm:flex-row items-start gap-5">
               <img
                 src={authorAvatar}
                 alt={authorName}
@@ -568,25 +568,25 @@ export default function BlogPost() {
                   section="blogPost"
                   fieldPath="aboutAuthorLabel"
                   as="span"
-                  className="font-['Lato'] text-[11px] font-semibold tracking-[0.2em] uppercase text-[#B8944A]"
+                  className="font-['Lato'] text-[11px] font-semibold tracking-[0.2em] uppercase text-brand"
                   placeholder="O autorce"
                 />
-                <h3 className="font-['Playfair_Display'] text-[20px] font-normal text-[#2D2D2D]">
+                <h3 className="font-['Playfair_Display'] text-[20px] font-normal text-ink">
                   {authorName}
                 </h3>
                 {authorTitle && (
-                  <span className="font-['Lato'] text-[12px] text-[#8A8A8A]">
+                  <span className="font-['Lato'] text-[12px] text-ink-muted">
                     {authorTitle}
                   </span>
                 )}
                 {authorBio && (
-                  <p className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-[1.7] whitespace-pre-line">
+                  <p className="font-['Lato'] text-[14px] text-ink-soft leading-[1.7] whitespace-pre-line">
                     {authorBio}
                   </p>
                 )}
                 <Link
                   to="/o-mnie"
-                  className="inline-flex items-center gap-1.5 font-['Lato'] text-[13px] font-semibold text-[#B8963E] hover:text-[#8A6F2E] transition-colors mt-1"
+                  className="inline-flex items-center gap-1.5 font-['Lato'] text-[13px] font-semibold text-brand hover:text-brand-dark transition-colors mt-1"
                 >
                   <EditableText
                     section="blogPost"
@@ -604,7 +604,7 @@ export default function BlogPost() {
           <div className="mt-12 text-center">
             <Link
               to="/blog"
-              className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-[#B8963E] hover:text-white hover:bg-[#B8963E] border border-[#B8963E] rounded-md px-6 py-3 transition-colors"
+              className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-brand hover:text-white hover:bg-brand border border-brand rounded-md px-6 py-3 transition-colors"
             >
               <ArrowLeft size={15} aria-hidden="true" />
               <EditableText

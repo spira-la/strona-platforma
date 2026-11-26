@@ -22,7 +22,7 @@ import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
 
 function SectionBadge({ label }: { label: string }) {
   return (
-    <span className="inline-block font-['Lato'] text-[11px] font-semibold tracking-[0.1em] uppercase text-[#B8944A] bg-[#B8944A]/[0.1] rounded-full px-4 py-1.5">
+    <span className="inline-block font-['Lato'] text-[11px] font-semibold tracking-[0.1em] uppercase text-brand bg-brand/[0.1] rounded-full px-4 py-1.5">
       {label}
     </span>
   );
@@ -44,22 +44,22 @@ function FeatureCard({
   descPlaceholder,
 }: FeatureCardProps) {
   return (
-    <div className="flex flex-col gap-3 p-6 rounded-xl bg-white border border-[#E8E4DF] shadow-sm">
-      <div className="flex items-center justify-center w-11 h-11 rounded-lg bg-[#B8944A]/[0.1] text-[#B8944A]">
+    <div className="flex flex-col gap-3 p-6 rounded-xl bg-white border border-line shadow-sm">
+      <div className="flex items-center justify-center w-11 h-11 rounded-lg bg-brand/[0.1] text-brand">
         {icon}
       </div>
       <EditableText
         section="webDesign"
         fieldPath={titleField}
         as="h3"
-        className="font-['Cormorant_Garamond'] text-[18px] font-bold text-[#2D2D2D]"
+        className="font-['Cormorant_Garamond'] text-[18px] font-bold text-ink"
         placeholder={titlePlaceholder}
       />
       <EditableText
         section="webDesign"
         fieldPath={descField}
         as="p"
-        className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-relaxed"
+        className="font-['Lato'] text-[14px] text-ink-soft leading-relaxed"
         placeholder={descPlaceholder}
       />
     </div>
@@ -84,25 +84,25 @@ function StepCard({
   descPlaceholder,
 }: StepCardProps) {
   return (
-    <div className="flex flex-col items-center text-center px-6 py-8 rounded-xl bg-white border border-[#E8E4DF] shadow-sm relative">
-      <span className="absolute -top-3 left-6 font-['Lato'] text-[11px] font-bold text-[#B8944A] bg-white border border-[#E8E4DF] rounded-full px-2.5 py-0.5">
+    <div className="flex flex-col items-center text-center px-6 py-8 rounded-xl bg-white border border-line shadow-sm relative">
+      <span className="absolute -top-3 left-6 font-['Lato'] text-[11px] font-bold text-brand bg-white border border-line rounded-full px-2.5 py-0.5">
         {number}
       </span>
-      <div className="flex items-center justify-center w-14 h-14 rounded-full bg-[#B8944A]/[0.1] text-[#B8944A] mb-5">
+      <div className="flex items-center justify-center w-14 h-14 rounded-full bg-brand/[0.1] text-brand mb-5">
         {icon}
       </div>
       <EditableText
         section="webDesign"
         fieldPath={titleField}
         as="h3"
-        className="font-['Cormorant_Garamond'] text-[17px] font-bold text-[#2D2D2D] mb-3"
+        className="font-['Cormorant_Garamond'] text-[17px] font-bold text-ink mb-3"
         placeholder={titlePlaceholder}
       />
       <EditableText
         section="webDesign"
         fieldPath={descField}
         as="p"
-        className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-relaxed"
+        className="font-['Lato'] text-[14px] text-ink-soft leading-relaxed"
         placeholder={descPlaceholder}
       />
     </div>
@@ -156,7 +156,7 @@ function HeroSection() {
         <div className="flex flex-col sm:flex-row items-center gap-3 mt-2">
           <a
             href="#kontakt"
-            className="inline-flex items-center justify-center px-7 py-3 rounded-lg font-['Lato'] text-[14px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] transition-colors"
+            className="inline-flex items-center justify-center px-7 py-3 rounded-lg font-['Lato'] text-[14px] font-semibold text-white bg-action hover:bg-action-hover transition-colors"
           >
             <EditableText
               section="webDesign"
@@ -185,7 +185,7 @@ function HeroSection() {
 function FeaturesSection() {
   return (
     <section
-      className="bg-[#FAF8F5] py-16 md:py-24"
+      className="bg-surface py-16 md:py-24"
       aria-label="Co zawiera strona"
     >
       <div className="max-w-[1100px] mx-auto px-6">
@@ -196,10 +196,10 @@ function FeaturesSection() {
               section="webDesign"
               fieldPath="features.title"
               as="h2"
-              className="font-['Cormorant_Garamond'] text-[28px] md:text-[36px] font-bold text-[#2D2D2D]"
+              className="font-['Cormorant_Garamond'] text-[28px] md:text-[36px] font-bold text-ink"
               placeholder="Wszystko, czego potrzebujesz, żeby działać w sieci"
             />
-            <div className="w-10 h-0.5 bg-[#B8944A] mt-1" aria-hidden="true" />
+            <div className="w-10 h-0.5 bg-brand mt-1" aria-hidden="true" />
           </div>
         </ScrollReveal>
 
@@ -279,10 +279,10 @@ function ProcessSection() {
               section="webDesign"
               fieldPath="process.title"
               as="h2"
-              className="font-['Cormorant_Garamond'] text-[28px] md:text-[36px] font-bold text-[#2D2D2D]"
+              className="font-['Cormorant_Garamond'] text-[28px] md:text-[36px] font-bold text-ink"
               placeholder="Jak wygląda tworzenie Twojej strony?"
             />
-            <div className="w-10 h-0.5 bg-[#B8944A] mt-1" aria-hidden="true" />
+            <div className="w-10 h-0.5 bg-brand mt-1" aria-hidden="true" />
           </div>
         </ScrollReveal>
 
@@ -330,7 +330,7 @@ function PricingSection() {
       aria-label="Cennik"
       style={{
         background:
-          'linear-gradient(135deg, #B8944A 0%, #D4B97A 60%, #B8944A 100%)',
+          'linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-light) 60%, var(--color-brand) 100%)',
       }}
     >
       <div className="max-w-[1100px] mx-auto px-6 flex flex-col md:flex-row items-center gap-10 md:gap-16">
@@ -339,7 +339,7 @@ function PricingSection() {
           delay={200}
           className="flex-1 flex flex-col gap-5 text-center md:text-left"
         >
-          <span className="inline-block self-center md:self-start font-['Lato'] text-[11px] font-bold tracking-[0.1em] uppercase text-[#B8944A] bg-white rounded-full px-4 py-1.5">
+          <span className="inline-block self-center md:self-start font-['Lato'] text-[11px] font-bold tracking-[0.1em] uppercase text-brand bg-white rounded-full px-4 py-1.5">
             Oferta
           </span>
           <EditableText
@@ -374,7 +374,7 @@ function PricingSection() {
           </div>
           <a
             href="#kontakt"
-            className="inline-block self-center md:self-start font-['Lato'] text-[14px] font-semibold text-[#B8944A] bg-white hover:bg-[#FAF8F5] rounded-lg px-6 py-3 transition-colors"
+            className="inline-block self-center md:self-start font-['Lato'] text-[14px] font-semibold text-brand bg-white hover:bg-surface rounded-lg px-6 py-3 transition-colors"
           >
             <EditableText
               section="webDesign"
@@ -424,7 +424,7 @@ function CtaSection() {
   return (
     <section
       id="kontakt"
-      className="bg-[#FAF8F5] py-16 md:py-24"
+      className="bg-surface py-16 md:py-24"
       aria-label="Porozmawiajmy"
     >
       <div className="max-w-[720px] mx-auto px-6 text-center flex flex-col items-center gap-6">
@@ -433,20 +433,20 @@ function CtaSection() {
           section="webDesign"
           fieldPath="cta.title"
           as="h2"
-          className="font-['Cormorant_Garamond'] text-[28px] md:text-[36px] font-bold text-[#2D2D2D]"
+          className="font-['Cormorant_Garamond'] text-[28px] md:text-[36px] font-bold text-ink"
           placeholder="Masz pomysł? Zacznijmy od rozmowy"
         />
         <EditableText
           section="webDesign"
           fieldPath="cta.description"
           as="p"
-          className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7] max-w-[560px]"
+          className="font-['Lato'] text-[15px] text-ink-soft leading-[1.7] max-w-[560px]"
           placeholder="Napisz krótko, co chcesz osiągnąć. Odpowiem w ciągu 24 godzin i umówimy darmową konsultację."
         />
         <div className="flex flex-col sm:flex-row items-center gap-3 mt-1">
           <Link
             to="/kontakt"
-            className="inline-flex items-center justify-center px-7 py-3 rounded-lg font-['Lato'] text-[14px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] transition-colors"
+            className="inline-flex items-center justify-center px-7 py-3 rounded-lg font-['Lato'] text-[14px] font-semibold text-white bg-action hover:bg-action-hover transition-colors"
           >
             <EditableText
               section="webDesign"
@@ -457,7 +457,7 @@ function CtaSection() {
           </Link>
           <a
             href="mailto:contact@spira-la.com"
-            className="inline-flex items-center justify-center px-7 py-3 rounded-lg font-['Lato'] text-[14px] font-semibold text-[#B8944A] border border-[#B8944A] hover:bg-[#B8944A]/[0.06] transition-colors"
+            className="inline-flex items-center justify-center px-7 py-3 rounded-lg font-['Lato'] text-[14px] font-semibold text-brand border border-brand hover:bg-brand/[0.06] transition-colors"
           >
             <EditableText
               section="webDesign"

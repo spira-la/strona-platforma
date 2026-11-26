@@ -196,7 +196,7 @@ function DayCard({
     <div
       className={[
         'rounded-xl border bg-white p-4 transition-colors',
-        enabled ? 'border-[#0D9488]/30' : 'border-[#E8E4DF]',
+        enabled ? 'border-[#0D9488]/30' : 'border-line',
       ].join(' ')}
     >
       {/* Day header */}
@@ -260,7 +260,7 @@ function DayCard({
                 type="button"
                 onClick={() => onRemoveSlot(dayOfWeek, idx)}
                 aria-label={t('coach.availability.removeSlot')}
-                className="p-1 rounded text-[#8A8A8A] hover:text-red-500 hover:bg-red-50 transition-colors flex-shrink-0"
+                className="p-1 rounded text-ink-muted hover:text-red-500 hover:bg-red-50 transition-colors flex-shrink-0"
               >
                 <X size={14} />
               </button>
@@ -455,7 +455,7 @@ export default function CoachAvailability() {
         className="mb-10"
       >
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-['Inter'] text-[16px] font-semibold text-[#2D2D2D] flex items-center gap-2">
+          <h2 className="font-['Inter'] text-[16px] font-semibold text-ink flex items-center gap-2">
             <Clock size={18} style={{ color: TEAL }} aria-hidden="true" />
             {t('coach.availability.weeklySchedule')}
           </h2>
@@ -519,10 +519,10 @@ export default function CoachAvailability() {
       {/* Blocked dates */}
       <section aria-label={t('coach.availability.blockedDates')}>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-['Inter'] text-[16px] font-semibold text-[#2D2D2D] flex items-center gap-2">
+          <h2 className="font-['Inter'] text-[16px] font-semibold text-ink flex items-center gap-2">
             <CalendarOff
               size={18}
-              className="text-[#6B6B6B]"
+              className="text-ink-soft"
               aria-hidden="true"
             />
             {t('coach.availability.blockedDates')}
@@ -551,7 +551,7 @@ export default function CoachAvailability() {
             <Loader2 className="h-5 w-5 animate-spin text-[#AAAAAA]" />
           </div>
         ) : blocks.length === 0 ? (
-          <div className="rounded-xl bg-white border border-[#E8E4DF] p-8 text-center">
+          <div className="rounded-xl bg-white border border-line p-8 text-center">
             <CalendarOff
               size={32}
               className="mx-auto mb-2 text-[#DDDDDD]"
@@ -562,7 +562,7 @@ export default function CoachAvailability() {
             </p>
           </div>
         ) : (
-          <div className="rounded-xl bg-white border border-[#E8E4DF] overflow-hidden">
+          <div className="rounded-xl bg-white border border-line overflow-hidden">
             <ul role="list" className="divide-y divide-[#F0F0F0]">
               {blocks.map((block) => (
                 <li
@@ -570,12 +570,12 @@ export default function CoachAvailability() {
                   className="flex items-center justify-between px-5 py-3 hover:bg-[#FAFAFA] transition-colors"
                 >
                   <div>
-                    <div className="font-['Inter'] text-[14px] font-medium text-[#2D2D2D]">
+                    <div className="font-['Inter'] text-[14px] font-medium text-ink">
                       {formatDateTime(block.startAt)} —{' '}
                       {formatDateTime(block.endAt)}
                     </div>
                     {block.reason && (
-                      <div className="font-['Inter'] text-[12px] text-[#8A8A8A] mt-0.5">
+                      <div className="font-['Inter'] text-[12px] text-ink-muted mt-0.5">
                         {block.reason}
                       </div>
                     )}
@@ -584,7 +584,7 @@ export default function CoachAvailability() {
                     type="button"
                     onClick={() => setConfirmBlock(block)}
                     aria-label={t('coach.availability.blocks.delete')}
-                    className="p-1.5 rounded text-[#8A8A8A] hover:text-red-500 hover:bg-red-50 transition-colors"
+                    className="p-1.5 rounded text-ink-muted hover:text-red-500 hover:bg-red-50 transition-colors"
                   >
                     <X size={15} />
                   </button>

@@ -13,6 +13,7 @@ export * from './blog-translation.entity';
 export * from './newsletter.entity';
 export * from './contact.entity';
 export * from './cms-content.entity';
+export * from './cms-content-backup.entity';
 export * from './feature-flag.entity';
 export * from './product.entity';
 export * from './purchase.entity';
@@ -21,6 +22,7 @@ export * from './gift.entity';
 export * from './review.entity';
 export * from './language.entity';
 export * from './admin-email.entity';
+export * from './event.entity';
 
 import { ProfileEntity } from './profile.entity';
 import { CoachEntity } from './coach.entity';
@@ -39,6 +41,7 @@ import { BlogPostTranslationEntity } from './blog-translation.entity';
 import { NewsletterSubscriberEntity } from './newsletter.entity';
 import { ContactMessageEntity } from './contact.entity';
 import { CmsContentEntity } from './cms-content.entity';
+import { CmsContentBackupEntity } from './cms-content-backup.entity';
 import { FeatureFlagEntity } from './feature-flag.entity';
 import { CategoryEntity, ProductEntity } from './product.entity';
 import { PurchaseEntity, UserProgressEntity } from './purchase.entity';
@@ -51,6 +54,7 @@ import { GiftEntity } from './gift.entity';
 import { ReviewEntity } from './review.entity';
 import { LanguageEntity } from './language.entity';
 import { AdminEmailEntity } from './admin-email.entity';
+import { EventEntity, EventRegistrationEntity } from './event.entity';
 
 export const ALL_ENTITIES = [
   ProfileEntity,
@@ -69,6 +73,7 @@ export const ALL_ENTITIES = [
   NewsletterSubscriberEntity,
   ContactMessageEntity,
   CmsContentEntity,
+  CmsContentBackupEntity,
   FeatureFlagEntity,
   CategoryEntity,
   ProductEntity,
@@ -81,4 +86,6 @@ export const ALL_ENTITIES = [
   ReviewEntity,
   LanguageEntity,
   AdminEmailEntity,
+  EventEntity,
+  EventRegistrationEntity,
 ];

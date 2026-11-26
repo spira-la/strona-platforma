@@ -111,12 +111,12 @@ export default function CoachBlog() {
           <img
             src={post.coverImageUrl}
             alt=""
-            className="w-10 h-10 rounded-lg object-cover border border-[#E8E4DF]"
+            className="w-10 h-10 rounded-lg object-cover border border-line"
             aria-hidden="true"
           />
         ) : (
           <div
-            className="w-10 h-10 rounded-lg bg-[#F0FDFA] border border-[#E8E4DF] flex items-center justify-center"
+            className="w-10 h-10 rounded-lg bg-[#F0FDFA] border border-line flex items-center justify-center"
             aria-hidden="true"
           >
             <FileText size={16} className="text-[#CCCCCC]" />
@@ -128,11 +128,11 @@ export default function CoachBlog() {
       header: t('coach.blog.table.title'),
       render: (post) => (
         <div className="min-w-0">
-          <p className="font-['Inter'] text-[14px] font-medium text-[#2D2D2D] truncate max-w-[280px]">
+          <p className="font-['Inter'] text-[14px] font-medium text-ink truncate max-w-[280px]">
             {post.title}
           </p>
           {post.excerpt && (
-            <p className="font-['Inter'] text-[12px] text-[#8A8A8A] truncate max-w-[280px] mt-0.5">
+            <p className="font-['Inter'] text-[12px] text-ink-muted truncate max-w-[280px] mt-0.5">
               {post.excerpt}
             </p>
           )}
@@ -147,8 +147,8 @@ export default function CoachBlog() {
           post.status === 'published'
             ? 'text-[#0D9488] bg-[#F0FDFA] border border-[#0D9488]/20'
             : post.status === 'archived'
-              ? 'text-[#6B6B6B] bg-[#F5F5F5] border border-[#E8E4DF]'
-              : 'text-[#B8963E] bg-[#FDF8F0] border border-[#B8963E]/20';
+              ? 'text-ink-soft bg-[#F5F5F5] border border-line'
+              : 'text-brand bg-[#FDF8F0] border border-brand/20';
         const labelKey =
           post.status === 'published'
             ? 'coach.blog.status.published'
@@ -171,7 +171,7 @@ export default function CoachBlog() {
       key: 'date',
       header: t('coach.blog.table.date'),
       render: (post) => (
-        <span className="font-['Inter'] text-[13px] text-[#6B6B6B] whitespace-nowrap">
+        <span className="font-['Inter'] text-[13px] text-ink-soft whitespace-nowrap">
           {formatDate(
             post.status === 'published' && post.publishedAt
               ? post.publishedAt
@@ -190,7 +190,7 @@ export default function CoachBlog() {
             onClick={() => navigate(`/coach/blog/${post.id}/edit`)}
             title={t('common.edit', { defaultValue: 'Edytuj' })}
             aria-label={`${t('common.edit', { defaultValue: 'Edytuj' })}: ${post.title}`}
-            className="p-1.5 rounded text-[#8A8A8A] hover:text-[#0D9488] hover:bg-[#F0FDFA] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]"
+            className="p-1.5 rounded text-ink-muted hover:text-[#0D9488] hover:bg-[#F0FDFA] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]"
           >
             <Pencil size={15} />
           </button>
@@ -199,7 +199,7 @@ export default function CoachBlog() {
             onClick={() => setDeletingPost(post)}
             title={t('common.delete', { defaultValue: 'Usuń' })}
             aria-label={`${t('common.delete', { defaultValue: 'Usuń' })}: ${post.title}`}
-            className="p-1.5 rounded text-[#8A8A8A] hover:text-red-500 hover:bg-red-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
+            className="p-1.5 rounded text-ink-muted hover:text-red-500 hover:bg-red-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
           >
             <Trash2 size={15} />
           </button>
@@ -281,8 +281,8 @@ export default function CoachBlog() {
               placeholder={t('coach.blog.searchPlaceholder')}
               aria-label={t('coach.blog.searchPlaceholder')}
               className={[
-                'pl-9 pr-3 py-1.5 rounded-lg border border-[#E8E4DF] bg-white',
-                "font-['Inter'] text-[14px] text-[#2D2D2D] placeholder:text-[#AAAAAA]",
+                'pl-9 pr-3 py-1.5 rounded-lg border border-line bg-white',
+                "font-['Inter'] text-[14px] text-ink placeholder:text-[#AAAAAA]",
                 'focus:outline-none focus:ring-2 focus:ring-[#0D9488]/30 focus:border-[#0D9488]',
                 'transition-colors w-48',
               ].join(' ')}

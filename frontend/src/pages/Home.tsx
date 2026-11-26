@@ -42,7 +42,7 @@ interface SectionBadgeProps {
 
 function SectionBadge({ children }: SectionBadgeProps) {
   return (
-    <span className="inline-block font-['Lato'] text-[12px] font-semibold tracking-[0.08em] uppercase text-[#B8944A] bg-[#B8944A]/[0.125] rounded-full px-4 py-1.5">
+    <span className="inline-block font-['Lato'] text-[12px] font-semibold tracking-[0.08em] uppercase text-brand bg-brand/[0.125] rounded-full px-4 py-1.5">
       {children}
     </span>
   );
@@ -58,7 +58,7 @@ function renderAboutParagraph(content: string): React.ReactNode {
       return (
         <span
           key={i}
-          className="block font-['Cormorant_Garamond'] text-[22px] md:text-[26px] font-bold text-[#B8944A] mt-3 mb-1"
+          className="block font-['Cormorant_Garamond'] text-[22px] md:text-[26px] font-bold text-brand mt-3 mb-1"
         >
           {line.trim()}
         </span>
@@ -128,7 +128,7 @@ function HeroSection() {
               section="hero"
               fieldPath="ctaBtn1"
               defaultAction="calendly"
-              className="inline-flex items-center justify-center gap-2 font-['Lato'] text-[15px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-full px-10 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
+              className="inline-flex items-center justify-center gap-2 font-['Lato'] text-[15px] font-semibold text-white bg-action hover:bg-action-hover active:bg-action-hover transition-colors duration-200 rounded-full px-10 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
             >
               <EditableText
                 section="hero"
@@ -173,7 +173,7 @@ function AboutSection() {
             fieldPath="heading"
             as="h2"
             id="about-heading"
-            className="font-['Cormorant_Garamond'] text-[2rem] md:text-[2.25rem] font-bold text-[#2D2D2D] leading-[1.15] tracking-[-0.5px]"
+            className="font-['Cormorant_Garamond'] text-[2rem] md:text-[2.25rem] font-bold text-ink leading-[1.15] tracking-[-0.5px]"
             placeholder="CZEŚĆ. JESTEM ANETA"
           />
 
@@ -181,7 +181,7 @@ function AboutSection() {
             section="about"
             fieldPath="paragraph1"
             as="p"
-            className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7]"
+            className="font-['Lato'] text-[15px] text-ink-soft leading-[1.7]"
             placeholder="Jestem terapeutką i coachem z wieloletnim doświadczeniem. Pomagam osobom przejść przez trudne momenty życia, odnaleźć wewnętrzną siłę i zbudować głębszą relację ze sobą. Moja praca opiera się na szacunku, empatii i głębokim zrozumieniu ludzkiej natury."
             render={renderAboutParagraph}
           />
@@ -190,7 +190,7 @@ function AboutSection() {
             section="about"
             fieldPath="paragraph2"
             as="p"
-            className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7]"
+            className="font-['Lato'] text-[15px] text-ink-soft leading-[1.7]"
             placeholder="Wierzę, że każdy człowiek nosi w sobie ogromny potencjał. Moją rolą jest towarzyszenie w jego odkrywaniu — krok po kroku, w bezpiecznej przestrzeni, w rytmie natury."
             render={renderAboutParagraph}
           />
@@ -222,7 +222,7 @@ function AboutSection() {
               section="about"
               fieldPath="quote"
               as="blockquote"
-              className="font-['Cormorant_Garamond'] text-[18px] italic text-[#B8944A] leading-[1.5] border-l-2 border-[#B8944A] pl-4"
+              className="font-['Cormorant_Garamond'] text-[18px] italic text-brand leading-[1.5] border-l-2 border-brand pl-4"
               placeholder='"Prawdziwa zmiana zaczyna się od odwagi spotkania z samą sobą."'
             />
           </ScrollReveal>
@@ -262,20 +262,20 @@ function RoleCard({
   ctaAction,
 }: RoleCardProps) {
   return (
-    <div className="flex flex-col gap-4 p-8 rounded-xl bg-[#F9F6F0] border border-[#F0EDE8] h-full">
+    <div className="flex flex-col gap-4 p-8 rounded-xl bg-surface border border-line-soft h-full">
       <EditableText
         section="roles"
         fieldPath={titleField}
         as="h3"
         placeholder={titlePlaceholder}
-        className="text-2xl text-[#2D2D2D] font-['Cormorant_Garamond'] font-bold"
+        className="text-2xl text-ink font-['Cormorant_Garamond'] font-bold"
       />
       <EditableText
         section="roles"
         fieldPath={descField}
         as="p"
         placeholder={descPlaceholder}
-        className="text-sm leading-relaxed text-[#6B6B6B] font-['Lato']"
+        className="text-sm leading-relaxed text-ink-soft font-['Lato']"
       />
       <div className="mt-auto rounded-lg overflow-hidden">
         <EditableImage
@@ -292,7 +292,7 @@ function RoleCard({
           section="roles"
           fieldPath={ctaField}
           defaultAction={ctaAction}
-          className="inline-flex items-center justify-center gap-2 font-['Lato'] text-[13px] font-semibold text-[#B8944A] border border-[#B8944A] hover:bg-[#B8944A] hover:text-white transition-colors duration-200 rounded-full px-6 py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
+          className="inline-flex items-center justify-center gap-2 font-['Lato'] text-[13px] font-semibold text-brand border border-brand hover:bg-brand hover:text-white transition-colors duration-200 rounded-full px-6 py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
         >
           <EditableText
             section="roles"
@@ -325,14 +325,14 @@ function RolesSection() {
               section="roles"
               fieldPath="title"
               as="h2"
-              className="font-['Cormorant_Garamond'] text-[2rem] md:text-[2.25rem] font-bold text-[#2D2D2D] leading-[1.15] tracking-[-0.5px]"
+              className="font-['Cormorant_Garamond'] text-[2rem] md:text-[2.25rem] font-bold text-ink leading-[1.15] tracking-[-0.5px]"
               placeholder="Trzy role, jedna kobieta"
             />
             <EditableText
               section="roles"
               fieldPath="intro"
               as="p"
-              className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7]"
+              className="font-['Lato'] text-[15px] text-ink-soft leading-[1.7]"
               placeholder="Matka. Żona. Kochanka. Trzy role, w które wchodzi niejedna kobieta — rzadko pytając, na ile są jej własne, a na ile odziedziczone."
             />
           </div>
@@ -388,7 +388,7 @@ function RolesSection() {
             section="roles"
             fieldPath="cta"
             defaultAction="internal:/o-mnie"
-            className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-full px-8 py-[14px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-white bg-action hover:bg-action-hover active:bg-action-hover transition-colors duration-200 rounded-full px-8 py-[14px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
           >
             <EditableText section="roles" fieldPath="cta" placeholder="Czytam dalej" />
           </EditableButtonLink>
@@ -416,9 +416,9 @@ function WorkStepCard({
   defaultDescription,
 }: WorkStepProps) {
   return (
-    <article className="h-full border border-[#E8E4DF] rounded-[12px] p-8 flex flex-col gap-4">
+    <article className="h-full border border-line rounded-[12px] p-8 flex flex-col gap-4">
       <div
-        className="w-10 h-10 rounded-full bg-[#B8944A] flex items-center justify-center text-white font-['Lato'] text-[15px] font-bold flex-shrink-0"
+        className="w-10 h-10 rounded-full bg-action flex items-center justify-center text-white font-['Lato'] text-[15px] font-bold flex-shrink-0"
         aria-label={`Krok ${number}`}
       >
         {number}
@@ -428,7 +428,7 @@ function WorkStepCard({
         section="howIWork"
         fieldPath={`${fieldBase}Title`}
         as="h3"
-        className="font-['Cormorant_Garamond'] text-[18px] font-bold text-[#2D2D2D]"
+        className="font-['Cormorant_Garamond'] text-[18px] font-bold text-ink"
         placeholder={defaultTitle}
       />
 
@@ -436,7 +436,7 @@ function WorkStepCard({
         section="howIWork"
         fieldPath={`${fieldBase}Description`}
         as="p"
-        className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-[1.6]"
+        className="font-['Lato'] text-[14px] text-ink-soft leading-[1.6]"
         placeholder={defaultDescription}
       />
     </article>
@@ -477,7 +477,7 @@ const WORK_STEPS: WorkStepProps[] = [
 function HowIWorkSection() {
   return (
     <section
-      className="bg-[#F5F3EF] py-16 md:py-20 px-6 md:px-[120px]"
+      className="bg-surface-alt py-16 md:py-20 px-6 md:px-[120px]"
       aria-labelledby="how-i-work-heading"
     >
       <div className="max-w-[1200px] mx-auto flex flex-col items-center gap-10">
@@ -499,7 +499,7 @@ function HowIWorkSection() {
             fieldPath="heading"
             as="h2"
             id="how-i-work-heading"
-            className="font-['Cormorant_Garamond'] text-[2rem] md:text-[2.25rem] font-bold text-[#2D2D2D] leading-[1.15] tracking-[-0.5px]"
+            className="font-['Cormorant_Garamond'] text-[2rem] md:text-[2.25rem] font-bold text-ink leading-[1.15] tracking-[-0.5px]"
             placeholder="JAK PRACUJĘ"
           />
 
@@ -507,7 +507,7 @@ function HowIWorkSection() {
             section="howIWork"
             fieldPath="description"
             as="p"
-            className="font-['Lato'] text-[16px] text-[#6B6B6B] leading-[1.7] max-w-[640px]"
+            className="font-['Lato'] text-[16px] text-ink-soft leading-[1.7] max-w-[640px]"
             placeholder="Moja metoda pracy łączy różne podejścia terapeutyczne, dostosowane do Twoich indywidualnych potrzeb. Każda sesja to unikalny proces odkrywania."
           />
 
@@ -515,7 +515,7 @@ function HowIWorkSection() {
             section="howIWork"
             fieldPath="subdescription"
             as="p"
-            className="font-['Lato'] text-[14px] text-[#8A8A8A] leading-[1.7] max-w-[800px]"
+            className="font-['Lato'] text-[14px] text-ink-muted leading-[1.7] max-w-[800px]"
             placeholder="Niezależnie od tego, z czym przychodzisz — trudem w relacjach, poczuciem braku sensu, lękiem, czy pragnieniem głębszej zmiany — razem znajdziemy drogę, która jest właśnie Twoja."
           />
 
@@ -540,7 +540,7 @@ function HowIWorkSection() {
           section="howIWork"
           fieldPath="ctaLabel"
           defaultAction="internal:/jak-pracuje"
-          className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-full px-8 py-[14px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
+          className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-white bg-action hover:bg-action-hover active:bg-action-hover transition-colors duration-200 rounded-full px-8 py-[14px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
         >
           <EditableText
             section="howIWork"
@@ -582,7 +582,7 @@ function ServiceCard({
   href,
 }: ServiceCardProps) {
   return (
-    <article className="h-full flex flex-col border border-[#E8E4DF] rounded-[12px] overflow-hidden">
+    <article className="h-full flex flex-col border border-line rounded-[12px] overflow-hidden">
       <EditableImage
         section="home"
         fieldPath={imageField}
@@ -595,28 +595,28 @@ function ServiceCard({
           section="services"
           fieldPath={`${fieldBase}Title`}
           as="h3"
-          className="font-['Cormorant_Garamond'] text-[22px] font-bold text-[#2D2D2D] leading-[1.2]"
+          className="font-['Cormorant_Garamond'] text-[22px] font-bold text-ink leading-[1.2]"
           placeholder={defaultTitle}
         />
         <EditableText
           section="services"
           fieldPath={`${fieldBase}Description`}
           as="p"
-          className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-[1.7] flex-1"
+          className="font-['Lato'] text-[14px] text-ink-soft leading-[1.7] flex-1"
           placeholder={defaultDescription}
         />
         <EditableText
           section="services"
           fieldPath={`${fieldBase}Price`}
           as="p"
-          className="font-['Cormorant_Garamond'] text-[24px] font-bold text-[#B8944A]"
+          className="font-['Cormorant_Garamond'] text-[24px] font-bold text-brand"
           placeholder={defaultPrice}
         />
         <EditableButtonLink
           section="services"
           fieldPath={`${fieldBase}Cta`}
           defaultAction={`internal:${href}`}
-          className="mt-1 inline-flex items-center gap-2 font-['Lato'] text-[13px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-full px-6 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2 self-start"
+          className="mt-1 inline-flex items-center gap-2 font-['Lato'] text-[13px] font-semibold text-white bg-action hover:bg-action-hover active:bg-action-hover transition-colors duration-200 rounded-full px-6 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 self-start"
         >
           <EditableText
             section="services"
@@ -655,7 +655,7 @@ function ServicesSection() {
             fieldPath="heading"
             as="h2"
             id="services-heading"
-            className="font-['Cormorant_Garamond'] text-[2rem] md:text-[2.25rem] font-bold text-[#2D2D2D] leading-[1.15] tracking-[-0.5px]"
+            className="font-['Cormorant_Garamond'] text-[2rem] md:text-[2.25rem] font-bold text-ink leading-[1.15] tracking-[-0.5px]"
             placeholder="WYBIERZ SWOJĄ ŚCIEŻKĘ"
           />
 
@@ -663,7 +663,7 @@ function ServicesSection() {
             section="services"
             fieldPath="description"
             as="p"
-            className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7] max-w-[640px]"
+            className="font-['Lato'] text-[15px] text-ink-soft leading-[1.7] max-w-[640px]"
             placeholder="Oferuję dwie formy współpracy — dopasowane do Twoich potrzeb i tempa zmiany. Każda sesja jest przestrzenią tylko dla Ciebie."
           />
         </ScrollReveal>
@@ -702,7 +702,7 @@ function ServicesSection() {
         <div className="mt-4 flex flex-col items-center gap-4 text-center">
           <SplitText
             text="Chcesz mnie poznać?"
-            className="font-['Cormorant_Garamond'] text-[26px] md:text-[28px] italic text-[#2D2D2D]"
+            className="font-['Cormorant_Garamond'] text-[26px] md:text-[28px] italic text-ink"
             delay={0}
             staggerInterval={80}
             duration={900}
@@ -713,14 +713,14 @@ function ServicesSection() {
             section="services"
             fieldPath="bottomCtaDescription"
             as="p"
-            className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-[1.7] max-w-[480px]"
+            className="font-['Lato'] text-[14px] text-ink-soft leading-[1.7] max-w-[480px]"
             placeholder="Oferuję bezpłatną 20-minutową rozmowę wstępną. To dobry moment, aby sprawdzić, czy moje podejście jest tym, czego szukasz."
           />
           <EditableButtonLink
             section="services"
             fieldPath="bottomCtaLabel"
             defaultAction="internal:/kontakt"
-            className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-full px-8 py-[14px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-white bg-action hover:bg-action-hover active:bg-action-hover transition-colors duration-200 rounded-full px-8 py-[14px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
           >
             <EditableText
               section="services"
@@ -755,10 +755,10 @@ function TestimonialCard({
   avatarInitial,
 }: TestimonialProps) {
   return (
-    <article className="h-full flex flex-col gap-4 bg-[#FAF8F5] rounded-[8px] p-7">
+    <article className="h-full flex flex-col gap-4 bg-surface rounded-[8px] p-7">
       {/* Decorative quote mark */}
       <span
-        className="font-['Cormorant_Garamond'] text-[48px] text-[#B8944A] leading-none select-none"
+        className="font-['Cormorant_Garamond'] text-[48px] text-brand leading-none select-none"
         aria-hidden="true"
       >
         "
@@ -768,14 +768,14 @@ function TestimonialCard({
         section="testimonials"
         fieldPath={`${fieldBase}Quote`}
         as="p"
-        className="font-['Lato'] text-[15px] text-[#2D2D2D] leading-[1.6] flex-1"
+        className="font-['Lato'] text-[15px] text-ink leading-[1.6] flex-1"
         placeholder={defaultQuote}
       />
 
       {/* Author */}
       <div className="flex items-center gap-3 mt-2">
         <div
-          className="w-10 h-10 rounded-full bg-[#B8944A]/20 flex items-center justify-center text-[#B8944A] font-['Lato'] text-[14px] font-bold flex-shrink-0"
+          className="w-10 h-10 rounded-full bg-brand/20 flex items-center justify-center text-brand font-['Lato'] text-[14px] font-bold flex-shrink-0"
           aria-hidden="true"
         >
           {avatarInitial}
@@ -785,14 +785,14 @@ function TestimonialCard({
             section="testimonials"
             fieldPath={`${fieldBase}Author`}
             as="span"
-            className="font-['Lato'] text-[14px] font-semibold text-[#2D2D2D]"
+            className="font-['Lato'] text-[14px] font-semibold text-ink"
             placeholder={defaultAuthor}
           />
           <EditableText
             section="testimonials"
             fieldPath={`${fieldBase}Role`}
             as="span"
-            className="font-['Lato'] text-[12px] text-[#8A8A8A]"
+            className="font-['Lato'] text-[12px] text-ink-muted"
             placeholder={defaultRole}
           />
         </div>
@@ -831,7 +831,7 @@ const TESTIMONIALS: TestimonialProps[] = [
 function TestimonialsSection() {
   return (
     <section
-      className="bg-[#F5F3EF] py-16 md:py-20 px-6 md:px-[120px]"
+      className="bg-surface-alt py-16 md:py-20 px-6 md:px-[120px]"
       aria-labelledby="testimonials-heading"
     >
       <div className="max-w-[1200px] mx-auto flex flex-col items-center gap-10">
@@ -853,7 +853,7 @@ function TestimonialsSection() {
             fieldPath="heading"
             as="h2"
             id="testimonials-heading"
-            className="font-['Cormorant_Garamond'] text-[2rem] md:text-[2.25rem] font-bold text-[#2D2D2D] leading-[1.15] tracking-[-0.5px] text-center"
+            className="font-['Cormorant_Garamond'] text-[2rem] md:text-[2.25rem] font-bold text-ink leading-[1.15] tracking-[-0.5px] text-center"
             placeholder="CO MÓWIĄ OSOBY, Z KTÓRYMI PRACUJĘ"
           />
 
@@ -861,7 +861,7 @@ function TestimonialsSection() {
             section="testimonials"
             fieldPath="description"
             as="p"
-            className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7] max-w-[640px] text-center"
+            className="font-['Lato'] text-[15px] text-ink-soft leading-[1.7] max-w-[640px] text-center"
             placeholder="Każda historia jest wyjątkowa — ale łączy je jedno: odwaga, by zajrzeć w głąb siebie."
           />
         </ScrollReveal>
@@ -897,7 +897,7 @@ function FeaturedBlogCard({ post, locale }: FeaturedBlogCardProps) {
   return (
     <Link
       to={`/blog/${post.slug}`}
-      className="group flex flex-col md:flex-row border border-[#E8E4DF] rounded-[12px] overflow-hidden hover:shadow-md transition-shadow duration-300"
+      className="group flex flex-col md:flex-row border border-line rounded-[12px] overflow-hidden hover:shadow-md transition-shadow duration-300"
     >
       <img
         src={post.coverImageUrl ?? BLOG_DEFAULT_COVER}
@@ -907,23 +907,23 @@ function FeaturedBlogCard({ post, locale }: FeaturedBlogCardProps) {
       />
       <div className="flex flex-col gap-3 p-8 justify-center flex-1">
         {category && (
-          <span className="font-['Lato'] text-[11px] font-bold uppercase tracking-[0.1em] text-[#B8944A]">
+          <span className="font-['Lato'] text-[11px] font-bold uppercase tracking-[0.1em] text-brand">
             {category}
           </span>
         )}
-        <h3 className="font-['Cormorant_Garamond'] text-[22px] md:text-[26px] font-bold text-[#2D2D2D] leading-[1.25]">
+        <h3 className="font-['Cormorant_Garamond'] text-[22px] md:text-[26px] font-bold text-ink leading-[1.25]">
           {post.title}
         </h3>
         {post.excerpt && (
-          <p className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-[1.7]">
+          <p className="font-['Lato'] text-[14px] text-ink-soft leading-[1.7]">
             {post.excerpt}
           </p>
         )}
         <div className="flex items-center justify-between mt-2">
-          <time className="font-['Lato'] text-[12px] text-[#8A8A8A]">
+          <time className="font-['Lato'] text-[12px] text-ink-muted">
             {formatBlogDate(post.publishedAt ?? post.createdAt, locale)}
           </time>
-          <span className="inline-flex items-center gap-1.5 font-['Lato'] text-[13px] font-semibold text-[#B8944A] group-hover:text-[#8A6F2E] transition-colors duration-200">
+          <span className="inline-flex items-center gap-1.5 font-['Lato'] text-[13px] font-semibold text-brand group-hover:text-brand-dark transition-colors duration-200">
             <EditableText
               section="blog"
               fieldPath="readMoreFeatured"
@@ -947,7 +947,7 @@ function SmallBlogCard({ post, locale }: SmallBlogCardProps) {
   return (
     <Link
       to={`/blog/${post.slug}`}
-      className="group flex flex-col border border-[#E8E4DF] rounded-[12px] overflow-hidden hover:shadow-md transition-shadow duration-300 h-full"
+      className="group flex flex-col border border-line rounded-[12px] overflow-hidden hover:shadow-md transition-shadow duration-300 h-full"
     >
       <div className="w-full h-[180px] overflow-hidden">
         <img
@@ -959,23 +959,23 @@ function SmallBlogCard({ post, locale }: SmallBlogCardProps) {
       </div>
       <div className="flex flex-col gap-2.5 p-5 flex-1">
         {category && (
-          <span className="font-['Lato'] text-[11px] font-bold uppercase tracking-[0.1em] text-[#B8944A]">
+          <span className="font-['Lato'] text-[11px] font-bold uppercase tracking-[0.1em] text-brand">
             {category}
           </span>
         )}
-        <h3 className="font-['Cormorant_Garamond'] text-[17px] font-bold text-[#2D2D2D] leading-[1.3]">
+        <h3 className="font-['Cormorant_Garamond'] text-[17px] font-bold text-ink leading-[1.3]">
           {post.title}
         </h3>
         {post.excerpt && (
-          <p className="font-['Lato'] text-[13px] text-[#6B6B6B] leading-[1.6] flex-1 line-clamp-3">
+          <p className="font-['Lato'] text-[13px] text-ink-soft leading-[1.6] flex-1 line-clamp-3">
             {post.excerpt}
           </p>
         )}
         <div className="flex items-center justify-between mt-1">
-          <time className="font-['Lato'] text-[11px] text-[#8A8A8A]">
+          <time className="font-['Lato'] text-[11px] text-ink-muted">
             {formatBlogDate(post.publishedAt ?? post.createdAt, locale)}
           </time>
-          <span className="inline-flex items-center gap-1 font-['Lato'] text-[12px] font-semibold text-[#B8944A] group-hover:text-[#8A6F2E] transition-colors duration-200">
+          <span className="inline-flex items-center gap-1 font-['Lato'] text-[12px] font-semibold text-brand group-hover:text-brand-dark transition-colors duration-200">
             <EditableText
               section="blog"
               fieldPath="readMore"
@@ -992,24 +992,24 @@ function SmallBlogCard({ post, locale }: SmallBlogCardProps) {
 function BlogCardSkeleton({ featured = false }: { featured?: boolean }) {
   if (featured) {
     return (
-      <div className="flex flex-col md:flex-row border border-[#E8E4DF] rounded-[12px] overflow-hidden animate-pulse">
-        <div className="w-full md:w-[500px] h-[260px] md:h-[320px] bg-[#F0EDE8]" />
+      <div className="flex flex-col md:flex-row border border-line rounded-[12px] overflow-hidden animate-pulse">
+        <div className="w-full md:w-[500px] h-[260px] md:h-[320px] bg-line-soft" />
         <div className="flex flex-col gap-3 p-8 justify-center flex-1">
-          <div className="h-3 w-20 bg-[#F0EDE8] rounded" />
-          <div className="h-6 w-3/4 bg-[#F0EDE8] rounded" />
-          <div className="h-3 w-full bg-[#F0EDE8] rounded" />
-          <div className="h-3 w-5/6 bg-[#F0EDE8] rounded" />
+          <div className="h-3 w-20 bg-line-soft rounded" />
+          <div className="h-6 w-3/4 bg-line-soft rounded" />
+          <div className="h-3 w-full bg-line-soft rounded" />
+          <div className="h-3 w-5/6 bg-line-soft rounded" />
         </div>
       </div>
     );
   }
   return (
-    <div className="flex flex-col border border-[#E8E4DF] rounded-[12px] overflow-hidden h-full animate-pulse">
-      <div className="w-full h-[180px] bg-[#F0EDE8]" />
+    <div className="flex flex-col border border-line rounded-[12px] overflow-hidden h-full animate-pulse">
+      <div className="w-full h-[180px] bg-line-soft" />
       <div className="flex flex-col gap-2.5 p-5 flex-1">
-        <div className="h-3 w-16 bg-[#F0EDE8] rounded" />
-        <div className="h-4 w-full bg-[#F0EDE8] rounded" />
-        <div className="h-3 w-5/6 bg-[#F0EDE8] rounded" />
+        <div className="h-3 w-16 bg-line-soft rounded" />
+        <div className="h-4 w-full bg-line-soft rounded" />
+        <div className="h-3 w-5/6 bg-line-soft rounded" />
       </div>
     </div>
   );
@@ -1056,7 +1056,7 @@ function BlogSection() {
             fieldPath="heading"
             as="h2"
             id="blog-heading"
-            className="font-['Cormorant_Garamond'] text-[2rem] md:text-[2.25rem] font-bold text-[#2D2D2D] leading-[1.15] tracking-[-0.5px]"
+            className="font-['Cormorant_Garamond'] text-[2rem] md:text-[2.25rem] font-bold text-ink leading-[1.15] tracking-[-0.5px]"
             placeholder="INSPIRACJE I REFLEKSJE"
           />
 
@@ -1064,7 +1064,7 @@ function BlogSection() {
             section="blog"
             fieldPath="description"
             as="p"
-            className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7] max-w-[640px]"
+            className="font-['Lato'] text-[15px] text-ink-soft leading-[1.7] max-w-[640px]"
             placeholder="Dzielę się tu refleksjami o codziennym życiu, emocjach i wewnętrznym wzroście. Zapraszam do lektury."
           />
         </ScrollReveal>
@@ -1105,7 +1105,7 @@ function BlogSection() {
             section="blog"
             fieldPath="viewAllLabel"
             defaultAction="internal:/blog"
-            className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-[#B8944A] border border-[#B8944A] hover:bg-[#B8944A] hover:text-white active:bg-[#8A6F2E] active:border-[#8A6F2E] transition-colors duration-200 rounded-full px-8 py-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-brand border border-brand hover:bg-brand hover:text-white active:bg-brand-dark active:border-brand-dark transition-colors duration-200 rounded-full px-8 py-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
           >
             <EditableText
               section="blog"
@@ -1180,7 +1180,7 @@ function CtaSection() {
               section="cta"
               fieldPath="primaryCtaLabel"
               defaultAction="internal:/uslugi"
-              className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] active:bg-[#7A6028] transition-colors duration-200 rounded-lg px-8 py-[14px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
+              className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-white bg-action hover:bg-action-hover active:bg-action-hover transition-colors duration-200 rounded-lg px-8 py-[14px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
             >
               <EditableText
                 section="cta"
@@ -1196,7 +1196,7 @@ function CtaSection() {
               section="cta"
               fieldPath="secondaryCtaLabel"
               defaultAction="internal:/kontakt"
-              className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-[#B8944A] border-2 border-[#B8944A] hover:bg-[#B8944A] hover:text-white active:bg-[#8A6F2E] active:border-[#8A6F2E] transition-colors duration-200 rounded-lg px-8 py-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] focus-visible:ring-offset-2"
+              className="inline-flex items-center gap-2 font-['Lato'] text-[14px] font-semibold text-brand border-2 border-brand hover:bg-brand hover:text-white active:bg-brand-dark active:border-brand-dark transition-colors duration-200 rounded-lg px-8 py-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
             >
               <EditableText
                 section="cta"
@@ -1258,7 +1258,7 @@ function CtaSection() {
 function NewsletterBridge() {
   return (
     <div
-      className="bg-[#F5F3EF] h-20 flex items-center justify-center px-6"
+      className="bg-surface-alt h-20 flex items-center justify-center px-6"
       aria-hidden="true"
     />
   );
@@ -1270,6 +1270,7 @@ function NewsletterBridge() {
 
 export default function Home() {
   const showYouTube = useFeatureFlag('youtubeHomeSection');
+  const showBlog = useFeatureFlag('blog');
 
   return (
     <main>
@@ -1284,7 +1285,7 @@ export default function Home() {
       <HowIWorkSection />
       <ServicesSection />
       <TestimonialsSection />
-      <BlogSection />
+      {showBlog && <BlogSection />}
       {showYouTube && <YouTubeSection />}
       <CtaSection />
       <NewsletterBridge />

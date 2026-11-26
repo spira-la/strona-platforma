@@ -97,12 +97,12 @@ export function MultiSessionPicker({
         onSelectDate={(d) => setViewDate(d)}
       />
 
-      <div className="rounded-lg overflow-hidden border border-[#E8E4DF] bg-white shadow-sm">
+      <div className="rounded-lg overflow-hidden border border-line bg-white shadow-sm">
         <div
           className="px-6 py-5"
           style={{
             background:
-              'linear-gradient(135deg, #B8944A 0%, #D4B97A 50%, #8A6F2E 100%)',
+              'linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-light) 50%, var(--color-brand-dark) 100%)',
           }}
         >
           <p
@@ -131,7 +131,7 @@ export function MultiSessionPicker({
           {!viewDate && (
             <div className="flex items-center justify-center py-16 text-center">
               <p
-                className="text-sm text-[#8A8A8A] max-w-[220px]"
+                className="text-sm text-ink-muted max-w-[220px]"
                 style={{ fontFamily: "'Lato', sans-serif" }}
               >
                 Wybierz date z kalendarza, aby zobaczyc dostepne godziny
@@ -142,7 +142,7 @@ export function MultiSessionPicker({
           {viewDate && isLoading && (
             <div className="py-16 text-center">
               <p
-                className="text-sm text-[#8A8A8A]"
+                className="text-sm text-ink-muted"
                 style={{ fontFamily: "'Lato', sans-serif" }}
               >
                 Ladowanie dostepnych godzin…
@@ -153,7 +153,7 @@ export function MultiSessionPicker({
           {viewDate && !isLoading && (slots?.length ?? 0) === 0 && (
             <div className="py-16 text-center">
               <p
-                className="text-sm text-[#8A8A8A]"
+                className="text-sm text-ink-muted"
                 style={{ fontFamily: "'Lato', sans-serif" }}
               >
                 Brak dostepnych godzin w tym dniu
@@ -186,16 +186,16 @@ export function MultiSessionPicker({
         </div>
 
         {sessionCount > 1 && (
-          <div className="px-5 py-4 border-t border-[#F0EDE8] bg-[#FAF8F5]">
+          <div className="px-5 py-4 border-t border-line-soft bg-surface">
             <p
-              className="text-xs font-semibold uppercase tracking-wider text-[#6B6B6B] mb-2"
+              className="text-xs font-semibold uppercase tracking-wider text-ink-soft mb-2"
               style={{ fontFamily: "'Lato', sans-serif" }}
             >
               Wybrane terminy ({selected.length}/{sessionCount})
             </p>
             {selected.length === 0 ? (
               <p
-                className="text-xs text-[#8A8A8A]"
+                className="text-xs text-ink-muted"
                 style={{ fontFamily: "'Lato', sans-serif" }}
               >
                 Brak wybranych terminow
@@ -205,7 +205,7 @@ export function MultiSessionPicker({
                 {selected.map((s) => (
                   <li
                     key={s.startTime}
-                    className="flex items-center justify-between text-xs text-[#2D2D2D] bg-white px-3 py-2 rounded border border-[#E8E4DF]"
+                    className="flex items-center justify-between text-xs text-ink bg-white px-3 py-2 rounded border border-line"
                     style={{ fontFamily: "'Lato', sans-serif" }}
                   >
                     <span>
@@ -219,7 +219,7 @@ export function MultiSessionPicker({
                           selected.filter((x) => x.startTime !== s.startTime),
                         )
                       }
-                      className="p-1 rounded-full text-[#8A8A8A] hover:bg-[#F0EDE8]"
+                      className="p-1 rounded-full text-ink-muted hover:bg-line-soft"
                       aria-label="Usun termin"
                     >
                       <X size={14} />
@@ -231,15 +231,15 @@ export function MultiSessionPicker({
           </div>
         )}
 
-        <div className="px-5 py-5 border-t border-[#F0EDE8]">
+        <div className="px-5 py-5 border-t border-line-soft">
           <button
             type="button"
             onClick={onConfirm}
             disabled={!allChosen}
-            className="w-full py-3 rounded-lg text-sm font-semibold text-white transition-opacity disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A]"
+            className="w-full py-3 rounded-lg text-sm font-semibold text-white transition-opacity disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand"
             style={{
               background: allChosen
-                ? 'linear-gradient(135deg, #B8944A 0%, #D4B97A 100%)'
+                ? 'linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-light) 100%)'
                 : '#C0BDB9',
               fontFamily: "'Lato', sans-serif",
             }}
@@ -278,7 +278,7 @@ function SlotGroup({
   return (
     <div>
       <p
-        className="flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[#8A8A8A] mb-3"
+        className="flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-ink-muted mb-3"
         style={{ fontFamily: "'Lato', sans-serif" }}
       >
         <Clock size={12} /> {label}
@@ -289,16 +289,16 @@ function SlotGroup({
           const disabled =
             !slot.available || (disableUnselected && !isSelected);
           let classes =
-            'px-4 py-2 rounded-full text-sm font-medium border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A] ';
+            'px-4 py-2 rounded-full text-sm font-medium border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand ';
           if (!slot.available || (disabled && !isSelected)) {
             classes +=
-              'border-[#E8E4DF] text-[#C0BDB9] cursor-not-allowed bg-[#FAF8F5]';
+              'border-line text-[#C0BDB9] cursor-not-allowed bg-surface';
           } else if (isSelected) {
             classes +=
-              'border-[#B8944A] bg-[#B8944A] text-white cursor-pointer';
+              'border-brand bg-action text-white cursor-pointer';
           } else {
             classes +=
-              'border-[#E8E4DF] text-[#2D2D2D] bg-white hover:border-[#B8944A] hover:text-[#B8944A] cursor-pointer';
+              'border-line text-ink bg-white hover:border-brand hover:text-brand cursor-pointer';
           }
           return (
             <button

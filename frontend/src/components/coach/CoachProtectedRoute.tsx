@@ -4,14 +4,14 @@ import { CoachLayout } from './CoachLayout';
 
 function CoachLoadingSpinner() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F9F6F0]">
+    <div className="min-h-screen flex items-center justify-center bg-surface">
       <div className="flex flex-col items-center gap-4">
         <div
-          className="w-10 h-10 rounded-full border-4 border-[#E8E4DF] border-t-[#B8963E] animate-spin"
+          className="w-10 h-10 rounded-full border-4 border-line border-t-brand animate-spin"
           role="status"
           aria-label="Ładowanie..."
         />
-        <p className="font-['Inter'] text-[14px] text-[#8A8A8A]">
+        <p className="font-['Inter'] text-[14px] text-ink-muted">
           Weryfikacja uprawnień…
         </p>
       </div>

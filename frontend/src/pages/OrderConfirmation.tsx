@@ -62,7 +62,7 @@ export default function OrderConfirmation() {
   const order = orderQuery.data;
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] text-[#2D2D2D] pb-24">
+    <main className="min-h-screen bg-surface text-ink pb-24">
       <SEO
         title="Potwierdzenie zamowienia"
         canonical={`/zamowienie/${orderId}`}
@@ -84,7 +84,7 @@ export default function OrderConfirmation() {
             Dziekuje!
           </h1>
           <p
-            className="text-sm sm:text-base text-[#6B6B6B] max-w-[520px]"
+            className="text-sm sm:text-base text-ink-soft max-w-[520px]"
             style={{ fontFamily: "'Lato', sans-serif" }}
           >
             {paid
@@ -98,7 +98,7 @@ export default function OrderConfirmation() {
         <div className="max-w-[720px] mx-auto flex flex-col gap-5">
           {orderQuery.isLoading && (
             <p
-              className="text-sm text-[#8A8A8A] text-center"
+              className="text-sm text-ink-muted text-center"
               style={{ fontFamily: "'Lato', sans-serif" }}
             >
               Ladowanie…
@@ -106,23 +106,23 @@ export default function OrderConfirmation() {
           )}
 
           {order && (
-            <div className="rounded-2xl p-5 border border-[#E8E4DF] bg-white">
+            <div className="rounded-2xl p-5 border border-line bg-white">
               <div className="flex items-center justify-between mb-3">
                 <p
-                  className="text-xs font-semibold uppercase tracking-widest text-[#8A8A8A]"
+                  className="text-xs font-semibold uppercase tracking-widest text-ink-muted"
                   style={{ fontFamily: "'Lato', sans-serif" }}
                 >
                   Numer zamowienia
                 </p>
                 <p
-                  className="text-[11px] text-[#8A8A8A] font-mono"
+                  className="text-[11px] text-ink-muted font-mono"
                   style={{ letterSpacing: '0.05em' }}
                 >
                   {order.id.slice(0, 8)}…
                 </p>
               </div>
               <div
-                className="flex justify-between text-sm py-2 border-t border-[#F0EDE8]"
+                className="flex justify-between text-sm py-2 border-t border-line-soft"
                 style={{ fontFamily: "'Lato', sans-serif" }}
               >
                 <span>Status</span>
@@ -130,14 +130,14 @@ export default function OrderConfirmation() {
                   className={
                     order.status === 'paid'
                       ? 'text-[#4CAF50] font-semibold'
-                      : 'text-[#8A8A8A]'
+                      : 'text-ink-muted'
                   }
                 >
                   {order.status === 'paid' ? 'Oplacone' : 'Oczekujace'}
                 </span>
               </div>
               <div
-                className="flex justify-between text-sm py-2 border-t border-[#F0EDE8]"
+                className="flex justify-between text-sm py-2 border-t border-line-soft"
                 style={{ fontFamily: "'Lato', sans-serif" }}
               >
                 <span>Kwota</span>
@@ -147,7 +147,7 @@ export default function OrderConfirmation() {
               </div>
               {(order.customerEmail ?? '').length > 0 && (
                 <div
-                  className="flex justify-between text-sm py-2 border-t border-[#F0EDE8]"
+                  className="flex justify-between text-sm py-2 border-t border-line-soft"
                   style={{ fontFamily: "'Lato', sans-serif" }}
                 >
                   <span>E-mail</span>
@@ -159,7 +159,7 @@ export default function OrderConfirmation() {
 
           {paid && bookings.length === 0 && (
             <div
-              className="rounded-2xl p-5 border border-[#E8E4DF] bg-white text-sm text-[#6B6B6B]"
+              className="rounded-2xl p-5 border border-line bg-white text-sm text-ink-soft"
               style={{ fontFamily: "'Lato', sans-serif" }}
             >
               Przygotowujemy Twoje terminy…
@@ -177,24 +177,24 @@ export default function OrderConfirmation() {
               {bookings.map((b) => (
                 <div
                   key={b.id}
-                  className="rounded-2xl p-5 border border-[#E8E4DF] bg-white flex items-center justify-between gap-4"
+                  className="rounded-2xl p-5 border border-line bg-white flex items-center justify-between gap-4"
                 >
                   <div className="flex items-start gap-3">
                     <div
-                      className="flex items-center justify-center w-10 h-10 rounded-full bg-[rgba(184,148,74,0.1)] text-[#B8944A]"
+                      className="flex items-center justify-center w-10 h-10 rounded-full bg-brand/10 text-brand"
                       aria-hidden
                     >
                       <Calendar size={18} />
                     </div>
                     <div>
                       <p
-                        className="text-sm font-semibold text-[#2D2D2D]"
+                        className="text-sm font-semibold text-ink"
                         style={{ fontFamily: "'Lato', sans-serif" }}
                       >
                         {formatDateTime(b.startTime)}
                       </p>
                       <p
-                        className="text-xs text-[#8A8A8A] mt-0.5"
+                        className="text-xs text-ink-muted mt-0.5"
                         style={{ fontFamily: "'Lato', sans-serif" }}
                       >
                         {Math.round(
@@ -211,7 +211,7 @@ export default function OrderConfirmation() {
                     className="inline-flex items-center gap-1 px-4 py-2 rounded-lg text-xs font-semibold text-white hover:opacity-90"
                     style={{
                       background:
-                        'linear-gradient(135deg, #B8944A 0%, #D4B97A 100%)',
+                        'linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-light) 100%)',
                       fontFamily: "'Lato', sans-serif",
                     }}
                   >
@@ -223,7 +223,7 @@ export default function OrderConfirmation() {
           )}
 
           <div
-            className="flex items-center gap-2 text-xs text-[#8A8A8A] mt-2"
+            className="flex items-center gap-2 text-xs text-ink-muted mt-2"
             style={{ fontFamily: "'Lato', sans-serif" }}
           >
             <Mail size={14} />

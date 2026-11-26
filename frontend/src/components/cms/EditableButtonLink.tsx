@@ -395,13 +395,13 @@ function ActionPicker({
 
   return (
     <div
-      className="w-[300px] bg-white rounded-xl shadow-2xl border border-[#E8E4DF] overflow-hidden"
+      className="w-[300px] bg-white rounded-xl shadow-2xl border border-line overflow-hidden"
       onClick={(e) => e.stopPropagation()}
       onMouseDown={(e) => e.stopPropagation()}
     >
       {/* Header */}
-      <div className="px-4 pt-4 pb-3 border-b border-[#F0EDE8]">
-        <p className="text-[11px] font-semibold uppercase tracking-widest text-[#B8944A] font-['Lato']">
+      <div className="px-4 pt-4 pb-3 border-b border-line-soft">
+        <p className="text-[11px] font-semibold uppercase tracking-widest text-brand font-['Lato']">
           Akcja przycisku
         </p>
       </div>
@@ -409,18 +409,18 @@ function ActionPicker({
       <div className="p-4 flex flex-col gap-4">
         {/* Single destination selector */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-[11px] font-medium text-[#6B6B6B] uppercase tracking-wide font-['Lato']">
+          <label className="text-[11px] font-medium text-ink-soft uppercase tracking-wide font-['Lato']">
             Gdzie ma prowadzić ten przycisk?
           </label>
           <div className="relative">
             <OptionIcon
               size={14}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-[#B8944A] pointer-events-none"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-brand pointer-events-none"
             />
             <select
               value={key}
               onChange={(e) => handleKeyChange(e.target.value)}
-              className="w-full appearance-none pl-9 pr-8 py-2.5 rounded-lg border border-[#E0DBD5] text-[13px] text-[#2D2D2D] bg-white focus:outline-none focus:ring-2 focus:ring-[#B8944A] focus:border-transparent cursor-pointer font-['Lato']"
+              className="w-full appearance-none pl-9 pr-8 py-2.5 rounded-lg border border-[#E0DBD5] text-[13px] text-ink bg-white focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent cursor-pointer font-['Lato']"
             >
               <optgroup label="Rezerwacja">
                 {FLAT_OPTIONS.filter((o) => o.key === 'calendly').map((o) => (
@@ -477,12 +477,12 @@ function ActionPicker({
 
         {/* Phone auto-info */}
         {isPhoneAuto && (
-          <div className="flex items-start gap-2 px-3 py-2.5 bg-[#FAF8F5] rounded-lg border border-[#F0EDE8]">
-            <Info size={13} className="text-[#B8944A] mt-0.5 flex-shrink-0" />
-            <p className="text-[12px] text-[#6B6B6B] leading-relaxed font-['Lato']">
+          <div className="flex items-start gap-2 px-3 py-2.5 bg-surface rounded-lg border border-line-soft">
+            <Info size={13} className="text-brand mt-0.5 flex-shrink-0" />
+            <p className="text-[12px] text-ink-soft leading-relaxed font-['Lato']">
               Numer:{' '}
-              <strong className="text-[#2D2D2D]">
-                {phone || '+48 000 000 000'}
+              <strong className="text-ink">
+                {phone || '+48 666 692 990'}
               </strong>
               <br />
               <span className="text-[11px] text-[#9A9390]">
@@ -494,11 +494,11 @@ function ActionPicker({
 
         {/* Calendly auto-info */}
         {isCalendlyAuto && (
-          <div className="flex items-start gap-2 px-3 py-2.5 bg-[#FAF8F5] rounded-lg border border-[#F0EDE8]">
-            <Info size={13} className="text-[#B8944A] mt-0.5 flex-shrink-0" />
-            <p className="text-[12px] text-[#6B6B6B] leading-relaxed font-['Lato']">
+          <div className="flex items-start gap-2 px-3 py-2.5 bg-surface rounded-lg border border-line-soft">
+            <Info size={13} className="text-brand mt-0.5 flex-shrink-0" />
+            <p className="text-[12px] text-ink-soft leading-relaxed font-['Lato']">
               Link:{' '}
-              <strong className="text-[#2D2D2D] break-all">
+              <strong className="text-ink break-all">
                 {calendlyUrl || 'nie ustawiono'}
               </strong>
               <br />
@@ -512,7 +512,7 @@ function ActionPicker({
         {/* URL / email input — only when needed */}
         {opt.needsInput && (
           <div className="flex flex-col gap-1.5">
-            <label className="text-[11px] font-medium text-[#6B6B6B] uppercase tracking-wide font-['Lato']">
+            <label className="text-[11px] font-medium text-ink-soft uppercase tracking-wide font-['Lato']">
               {opt.inputLabel}
             </label>
             <input
@@ -520,7 +520,7 @@ function ActionPicker({
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder={opt.inputPlaceholder}
-              className="w-full px-3 py-2.5 rounded-lg border border-[#E0DBD5] text-[13px] text-[#2D2D2D] placeholder-[#C0B8B0] bg-white focus:outline-none focus:ring-2 focus:ring-[#B8944A] focus:border-transparent font-['Lato']"
+              className="w-full px-3 py-2.5 rounded-lg border border-[#E0DBD5] text-[13px] text-ink placeholder-[#C0B8B0] bg-white focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent font-['Lato']"
             />
           </div>
         )}
@@ -531,14 +531,14 @@ function ActionPicker({
         <button
           type="button"
           onClick={handleSave}
-          className="flex-1 px-4 py-2 rounded-lg text-[13px] font-semibold bg-[#B8944A] text-white hover:bg-[#8A6F2E] transition-colors font-['Lato']"
+          className="flex-1 px-4 py-2 rounded-lg text-[13px] font-semibold bg-action text-white hover:bg-action-hover transition-colors font-['Lato']"
         >
           Gotowe
         </button>
         <button
           type="button"
           onClick={onClose}
-          className="px-4 py-2 rounded-lg text-[13px] font-medium border border-[#E0DBD5] text-[#4A4A4A] hover:bg-[#FAF8F5] transition-colors font-['Lato']"
+          className="px-4 py-2 rounded-lg text-[13px] font-medium border border-[#E0DBD5] text-ink hover:bg-surface transition-colors font-['Lato']"
         >
           Anuluj
         </button>
@@ -547,7 +547,7 @@ function ActionPicker({
             type="button"
             onClick={onReset}
             title="Resetuj"
-            className="flex items-center justify-center w-9 h-9 rounded-lg border border-[#E0DBD5] text-[#9A9390] hover:text-[#B8944A] hover:border-[#B8944A] transition-colors flex-shrink-0"
+            className="flex items-center justify-center w-9 h-9 rounded-lg border border-[#E0DBD5] text-[#9A9390] hover:text-brand hover:border-brand transition-colors flex-shrink-0"
           >
             <RotateCcw size={14} />
           </button>
@@ -688,8 +688,8 @@ export function EditableButtonLink({
         }}
         className={`absolute -top-2.5 -left-2.5 z-[9998] flex items-center gap-1.5 pl-1.5 pr-2.5 py-1 rounded-full text-[10px] font-semibold shadow-lg border border-white/20 backdrop-blur-sm transition-colors font-['Lato'] ${
           showPicker
-            ? 'bg-[#B8963E] text-white'
-            : 'bg-black/75 text-white hover:bg-[#B8963E]'
+            ? 'bg-action text-white'
+            : 'bg-black/75 text-white hover:bg-brand'
         }`}
         title="Edytuj akcję przycisku"
         aria-label="Edytuj akcję przycisku"

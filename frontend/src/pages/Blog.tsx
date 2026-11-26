@@ -40,7 +40,7 @@ interface BlogCardProps {
 
 function BlogCard({ post }: BlogCardProps) {
   return (
-    <article className="flex flex-col h-full bg-white rounded-lg overflow-hidden shadow-sm border border-[#F0EDE8] hover:shadow-md transition-shadow duration-300">
+    <article className="flex flex-col h-full bg-white rounded-lg overflow-hidden shadow-sm border border-line-soft hover:shadow-md transition-shadow duration-300">
       <div className="relative overflow-hidden h-48">
         <img
           src={post.coverImageUrl ?? DEFAULT_COVER}
@@ -50,25 +50,25 @@ function BlogCard({ post }: BlogCardProps) {
         />
       </div>
       <div className="flex flex-col flex-1 p-5 gap-3">
-        <span className="inline-block self-start font-['Lato'] text-[11px] font-semibold tracking-[0.08em] uppercase text-[#B8944A] bg-[#B8944A]/[0.1] rounded-full px-3 py-1">
+        <span className="inline-block self-start font-['Lato'] text-[11px] font-semibold tracking-[0.08em] uppercase text-brand bg-brand/[0.1] rounded-full px-3 py-1">
           {getCategory(post)}
         </span>
-        <h3 className="font-['Cormorant_Garamond'] text-[17px] font-bold text-[#2D2D2D] leading-snug line-clamp-2">
+        <h3 className="font-['Cormorant_Garamond'] text-[17px] font-bold text-ink leading-snug line-clamp-2">
           {post.title}
         </h3>
         {post.excerpt && (
-          <p className="font-['Lato'] text-[14px] text-[#6B6B6B] leading-relaxed line-clamp-3">
+          <p className="font-['Lato'] text-[14px] text-ink-soft leading-relaxed line-clamp-3">
             {post.excerpt}
           </p>
         )}
-        <div className="flex items-center justify-between pt-2 border-t border-[#F0EDE8] mt-auto">
-          <span className="flex items-center gap-1.5 font-['Lato'] text-[13px] text-[#8A8A8A]">
+        <div className="flex items-center justify-between pt-2 border-t border-line-soft mt-auto">
+          <span className="flex items-center gap-1.5 font-['Lato'] text-[13px] text-ink-muted">
             <Calendar size={13} aria-hidden="true" />
             {formatDate(post.publishedAt ?? post.createdAt)}
           </span>
           <Link
             to={`/blog/${post.slug}`}
-            className="flex items-center gap-1 font-['Lato'] text-[13px] font-semibold text-[#B8944A] hover:text-[#D4B97A] transition-colors"
+            className="flex items-center gap-1 font-['Lato'] text-[13px] font-semibold text-brand hover:text-brand-light transition-colors"
             aria-label={`Czytaj wiecej: ${post.title}`}
           >
             <EditableText
@@ -140,12 +140,12 @@ function FeaturedPostSection({ post }: FeaturedPostSectionProps) {
   const category = post.categories?.[0]?.name;
   return (
     <section
-      className="bg-[#FAF8F5] pt-10 md:pt-16 pb-10 md:pb-16"
+      className="bg-surface pt-10 md:pt-16 pb-10 md:pb-16"
       aria-label="Wyrozniony artykul"
     >
       <div className="max-w-[1200px] mx-auto px-6 md:px-8">
         <ScrollReveal animation="fade-up">
-          <div className="flex flex-col md:flex-row gap-0 rounded-lg overflow-hidden bg-[#F5F3EF] md:h-[420px]">
+          <div className="flex flex-col md:flex-row gap-0 rounded-lg overflow-hidden bg-surface-alt md:h-[420px]">
             <div className="md:w-1/2 relative overflow-hidden h-[280px] md:h-full">
               <img
                 src={post.coverImageUrl ?? DEFAULT_COVER}
@@ -157,26 +157,26 @@ function FeaturedPostSection({ post }: FeaturedPostSectionProps) {
               {(category || post.publishedAt || post.createdAt) && (
                 <div className="flex flex-wrap items-center gap-4">
                   {category && (
-                    <span className="inline-block font-['Lato'] text-[11px] font-bold tracking-[0.2em] uppercase text-white bg-[#B8944A] rounded-md px-3 py-1.5">
+                    <span className="inline-block font-['Lato'] text-[11px] font-bold tracking-[0.2em] uppercase text-white bg-action rounded-md px-3 py-1.5">
                       {category}
                     </span>
                   )}
-                  <span className="font-['Lato'] text-[13px] text-[#8A8A8A]">
+                  <span className="font-['Lato'] text-[13px] text-ink-muted">
                     {formatDate(post.publishedAt ?? post.createdAt)}
                   </span>
                 </div>
               )}
-              <h2 className="font-['Playfair_Display'] text-[32px] md:text-[42px] font-normal text-[#2D2D2D] leading-[1.15] tracking-[-0.015em]">
+              <h2 className="font-['Playfair_Display'] text-[32px] md:text-[42px] font-normal text-ink leading-[1.15] tracking-[-0.015em]">
                 {post.title}
               </h2>
               {post.excerpt && (
-                <p className="font-['Lato'] text-[15px] md:text-[16px] text-[#6B6B6B] leading-[1.8]">
+                <p className="font-['Lato'] text-[15px] md:text-[16px] text-ink-soft leading-[1.8]">
                   {post.excerpt}
                 </p>
               )}
               <Link
                 to={`/blog/${post.slug}`}
-                className="inline-flex items-center gap-2 self-start font-['Lato'] text-[14px] font-semibold text-[#B8944A] hover:text-white hover:bg-[#B8944A] border border-[#B8944A] rounded px-6 py-3 transition-colors mt-2"
+                className="inline-flex items-center gap-2 self-start font-['Lato'] text-[14px] font-semibold text-brand hover:text-white hover:bg-brand border border-brand rounded px-6 py-3 transition-colors mt-2"
               >
                 <EditableText
                   section="blog"
@@ -202,7 +202,7 @@ interface ArticleGridSectionProps {
 function ArticleGridSection({ posts, isLoading }: ArticleGridSectionProps) {
   return (
     <section
-      className="bg-[#FAF8F5] py-14 md:py-20"
+      className="bg-surface py-14 md:py-20"
       aria-label="Artykuly i refleksje"
     >
       <div className="max-w-[1200px] mx-auto px-6 md:px-8">
@@ -212,14 +212,14 @@ function ArticleGridSection({ posts, isLoading }: ArticleGridSectionProps) {
               section="blog"
               fieldPath="grid.eyebrow"
               as="span"
-              className="font-['Lato'] text-[11px] font-semibold tracking-[0.25em] uppercase text-[#B8944A]"
+              className="font-['Lato'] text-[11px] font-semibold tracking-[0.25em] uppercase text-brand"
               placeholder="WSZYSTKIE WPISY"
             />
             <EditableText
               section="blog"
               fieldPath="grid.title"
               as="h2"
-              className="font-['Playfair_Display'] text-[32px] md:text-[40px] font-normal text-[#2D2D2D] leading-[1.1]"
+              className="font-['Playfair_Display'] text-[32px] md:text-[40px] font-normal text-ink leading-[1.1]"
               placeholder="Artykuły i refleksje"
             />
           </div>
@@ -230,12 +230,12 @@ function ArticleGridSection({ posts, isLoading }: ArticleGridSectionProps) {
             {Array.from({ length: 3 }).map((_, i) => (
               <div
                 key={i}
-                className="h-[380px] rounded-lg bg-white border border-[#F0EDE8] animate-pulse"
+                className="h-[380px] rounded-lg bg-white border border-line-soft animate-pulse"
               />
             ))}
           </div>
         ) : posts.length === 0 ? (
-          <p className="text-center font-['Lato'] text-[15px] text-[#8A8A8A] py-12">
+          <p className="text-center font-['Lato'] text-[15px] text-ink-muted py-12">
             Brak artykułów. Wkrótce pojawią się tu nowe wpisy.
           </p>
         ) : (
@@ -275,27 +275,27 @@ function NewsletterSection() {
     >
       <ScrollReveal animation="fade-up">
         <div className="max-w-[680px] mx-auto px-6 flex flex-col items-center text-center gap-6">
-          <div className="flex items-center justify-center w-14 h-14 rounded-full bg-[#B8944A]/[0.1] text-[#B8944A]">
+          <div className="flex items-center justify-center w-14 h-14 rounded-full bg-brand/[0.1] text-brand">
             <Mail size={24} aria-hidden="true" />
           </div>
           <EditableText
             section="blog"
             fieldPath="newsletter.title"
             as="h2"
-            className="font-['Cormorant_Garamond'] text-[26px] md:text-[32px] font-bold text-[#2D2D2D]"
+            className="font-['Cormorant_Garamond'] text-[26px] md:text-[32px] font-bold text-ink"
             placeholder="Refleksje prosto do Twojej skrzynki"
           />
           <EditableText
             section="blog"
             fieldPath="newsletter.description"
             as="p"
-            className="font-['Lato'] text-[15px] text-[#6B6B6B] leading-[1.7]"
+            className="font-['Lato'] text-[15px] text-ink-soft leading-[1.7]"
             placeholder="Co tydzien nowy artykul, praktyczne narzedzia i refleksje, ktore wspieraja Twoja droge. Bez spamu, tylko tresc z glebią."
           />
 
           {submitted ? (
-            <div className="w-full max-w-[480px] rounded-lg bg-[#B8944A]/[0.1] border border-[#B8944A]/30 px-6 py-4">
-              <p className="font-['Lato'] text-[15px] font-semibold text-[#B8944A]">
+            <div className="w-full max-w-[480px] rounded-lg bg-brand/[0.1] border border-brand/30 px-6 py-4">
+              <p className="font-['Lato'] text-[15px] font-semibold text-brand">
                 <EditableText
                   section="newsletter"
                   fieldPath="successMsg"
@@ -320,11 +320,11 @@ function NewsletterSection() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Twoj adres e-mail"
                 required
-                className="flex-1 font-['Lato'] text-[14px] text-[#2D2D2D] placeholder:text-[#8A8A8A] bg-[#FAF8F5] border border-[#E8E4DF] rounded-lg px-4 py-3 outline-none focus:border-[#B8944A] focus:ring-2 focus:ring-[#B8944A]/20 transition"
+                className="flex-1 font-['Lato'] text-[14px] text-ink placeholder:text-ink-muted bg-surface border border-line rounded-lg px-4 py-3 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition"
               />
               <button
                 type="submit"
-                className="font-['Lato'] text-[14px] font-semibold text-white bg-[#B8944A] hover:bg-[#D4B97A] rounded-lg px-6 py-3 transition-colors whitespace-nowrap"
+                className="font-['Lato'] text-[14px] font-semibold text-white bg-action hover:bg-action-hover rounded-lg px-6 py-3 transition-colors whitespace-nowrap"
               >
                 <EditableText
                   section="newsletter"

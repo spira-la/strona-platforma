@@ -15,7 +15,7 @@ export function WebDesignRibbon() {
     >
       <div className="max-w-[1100px] mx-auto px-6 py-14 md:py-20 flex flex-col items-center gap-6 text-center">
         <span
-          className="flex items-center justify-center w-12 h-12 rounded-full bg-[#B8944A]/[0.15] text-[#B8944A]"
+          className="flex items-center justify-center w-12 h-12 rounded-full bg-brand/[0.15] text-brand"
           aria-hidden="true"
         >
           <Sparkles size={22} />
@@ -25,7 +25,7 @@ export function WebDesignRibbon() {
           section="webDesign"
           fieldPath="ribbon.title"
           as="h2"
-          className="font-['Cormorant_Garamond'] text-[28px] md:text-[36px] font-bold text-[#2D2D2D] leading-tight"
+          className="font-['Cormorant_Garamond'] text-[28px] md:text-[36px] font-bold text-ink leading-tight"
           placeholder="Podoba Ci się ta strona?"
         />
 
@@ -33,13 +33,13 @@ export function WebDesignRibbon() {
           section="webDesign"
           fieldPath="ribbon.description"
           as="p"
-          className="font-['Lato'] text-[15px] md:text-[17px] text-[#6B6B6B] leading-[1.7] max-w-[600px]"
+          className="font-['Lato'] text-[15px] md:text-[17px] text-ink-soft leading-[1.7] max-w-[600px]"
           placeholder="Projektuję i wdrażam takie strony dla coachów, terapeutów i specjalistów — z panelem CMS, wielojęzycznością i pełnym wsparciem technicznym."
         />
 
         <Link
           to="/tworzenie-stron"
-          className="inline-flex items-center gap-2 mt-2 px-7 py-3 rounded-lg font-['Lato'] text-[14px] font-semibold text-white bg-[#B8944A] hover:bg-[#8A6F2E] transition-colors shadow-sm"
+          className="inline-flex items-center gap-2 mt-2 px-7 py-3 rounded-lg font-['Lato'] text-[14px] font-semibold text-white bg-action hover:bg-action-hover transition-colors shadow-sm"
         >
           <EditableText
             section="webDesign"

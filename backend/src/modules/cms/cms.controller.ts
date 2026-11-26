@@ -12,12 +12,20 @@ import {
   UploadedFile,
   BadRequestException,
   HttpStatus,
+  UseGuards,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { FileInterceptor } from '@nestjs/platform-express';
 import sharp from 'sharp';
 import { CloudflareCacheService } from '../../core/cloudflare-cache.service.js';
 import { CmsService } from './cms.service.js';
+import { SupabaseAuthGuard } from '../../common/guards/supabase-auth.guard.js';
+import { RolesGuard } from '../../common/guards/roles.guard.js';
+import { Roles } from '../../common/decorators/roles.decorator.js';
+import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
+import type { User } from '@supabase/supabase-js';
+import { CLEANABLE_SECTIONS } from './cms-reset.util.js';
 
 // ---------------------------------------------------------------------------
 // DTOs
@@ -43,6 +51,15 @@ interface InitializeDto {
 
 interface BulkSeedDto {
   entries: Array<{ section: string; fieldPath: string; value: string }>;
+}
+
+interface ResetSectionsDto {
+  sections: string[];
+  keepMedia?: boolean;
+}
+
+interface RestoreBackupDto {
+  id: string;
 }
 
 interface ImageUploadBody {
@@ -128,6 +145,8 @@ export class CmsController {
    * PUT /api/cms/field
    * Admin — update a single field by dot-notation path.
    */
+  @UseGuards(SupabaseAuthGuard, RolesGuard)
+  @Roles('admin')
   @Put('field')
   async updateField(@Body() body: UpdateFieldDto) {
     const { section, language, fieldPath, value } = body;
@@ -152,6 +171,8 @@ export class CmsController {
    * PUT /api/cms/section
    * Admin — replace an entire section for a language.
    */
+  @UseGuards(SupabaseAuthGuard, RolesGuard)
+  @Roles('admin')
   @Put('section')
   async updateSection(@Body() body: UpdateSectionDto) {
     const { section, language, content } = body;
@@ -183,6 +204,8 @@ export class CmsController {
    * Useful after switching translation provider or fixing bad auto-translations.
    * Returns 202 Accepted with the count of jobs enqueued; translation runs in background.
    */
+  @UseGuards(SupabaseAuthGuard, RolesGuard)
+  @Roles('admin')
   @Post('retranslate-all')
   @HttpCode(HttpStatus.ACCEPTED)
   async retranslateAll() {
@@ -201,6 +224,8 @@ export class CmsController {
    * have never been edited. Skips fields that already have a PL value.
    * Returns 200 with the count of newly seeded fields.
    */
+  @UseGuards(SupabaseAuthGuard, RolesGuard)
+  @Roles('admin')
   @Post('bulk-seed')
   @HttpCode(HttpStatus.OK)
   @Header('Cache-Control', 'no-store')
@@ -218,9 +243,80 @@ export class CmsController {
   }
 
   /**
+   * POST /api/cms/reset-sections
+   * Admin — remove TEXT overrides from the selected sections (all languages)
+   * so static EditableText defaults show again. Backs up first.
+   */
+  @UseGuards(SupabaseAuthGuard, RolesGuard)
+  @Roles('admin')
+  @Post('reset-sections')
+  @HttpCode(HttpStatus.OK)
+  @Header('Cache-Control', 'no-store')
+  async resetSections(
+    @Body() body: ResetSectionsDto,
+    @CurrentUser() user: User,
+  ) {
+    const sections = Array.isArray(body.sections)
+      ? body.sections.filter(
+          (s): s is string => typeof s === 'string' && s.trim().length > 0,
+        )
+      : [];
+    if (sections.length === 0) {
+      throw new BadRequestException('sections must be a non-empty array');
+    }
+    const notAllowed = sections.filter((s) => !CLEANABLE_SECTIONS.includes(s));
+    if (notAllowed.length > 0) {
+      throw new BadRequestException(
+        `These sections cannot be cleaned: ${notAllowed.join(', ')}`,
+      );
+    }
+    const result = await this.cms.resetSections(
+      sections,
+      body.keepMedia !== false,
+      user.id,
+    );
+    await this.purgeCmsContent();
+    return {
+      success: true,
+      message: `Removed ${result.removed} text fields, kept ${result.kept} media/link fields.`,
+      ...result,
+    };
+  }
+
+  /** GET /api/cms/backups — Admin — latest 20 backups (no content). */
+  @UseGuards(SupabaseAuthGuard, RolesGuard)
+  @Roles('admin')
+  @Get('backups')
+  @Header('Cache-Control', 'no-store')
+  async listBackups() {
+    const data = await this.cms.listBackups(20);
+    return { success: true, data };
+  }
+
+  /** POST /api/cms/restore-backup — Admin — restore a backup by id. */
+  @UseGuards(SupabaseAuthGuard, RolesGuard)
+  @Roles('admin')
+  @Post('restore-backup')
+  @HttpCode(HttpStatus.OK)
+  @Header('Cache-Control', 'no-store')
+  async restoreBackup(
+    @Body() body: RestoreBackupDto,
+    @CurrentUser() user: User,
+  ) {
+    const id = await new ParseUUIDPipe().transform(body?.id, {
+      type: 'body',
+    });
+    const result = await this.cms.restoreBackup(id, user.id);
+    await this.purgeCmsContent();
+    return { success: true, message: 'Backup restored', ...result };
+  }
+
+  /**
    * POST /api/cms/initialize
    * Admin — create or reset the CMS document.
    */
+  @UseGuards(SupabaseAuthGuard, RolesGuard)
+  @Roles('admin')
   @Post('initialize')
   @HttpCode(200)
   async initialize(@Body() body: InitializeDto) {
@@ -258,6 +354,8 @@ export class CmsController {
    *   - cms/{section}/{fieldPath}.webp
    *   - cms/{section}/{fieldPath}-thumb.webp
    */
+  @UseGuards(SupabaseAuthGuard, RolesGuard)
+  @Roles('admin')
   @Post('image')
   @UseInterceptors(FileInterceptor('file'))
   async uploadImage(
@@ -338,6 +436,8 @@ export class CmsController {
    *
    * Body: { section, fieldPath, language }
    */
+  @UseGuards(SupabaseAuthGuard, RolesGuard)
+  @Roles('admin')
   @Delete('image')
   async deleteImage(
     @Query('section') section: string,

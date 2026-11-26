@@ -19,14 +19,14 @@ function SectionBadge({
 }) {
   return gold ? (
     <span
-      className="inline-block px-4 py-1 text-xs font-bold uppercase tracking-widest rounded-full bg-[#B8944A] text-white"
+      className="inline-block px-4 py-1 text-xs font-bold uppercase tracking-widest rounded-full bg-action text-white"
       style={{ fontFamily: "'Lato', sans-serif" }}
     >
       {label}
     </span>
   ) : (
     <span
-      className="inline-block px-4 py-1 text-xs font-semibold uppercase tracking-widest rounded-full border border-[#D4B97A] text-[#B8944A] bg-[rgba(184,148,74,0.08)]"
+      className="inline-block px-4 py-1 text-xs font-semibold uppercase tracking-widest rounded-full border border-brand-light text-brand bg-brand/8"
       style={{ fontFamily: "'Lato', sans-serif" }}
     >
       {label}
@@ -40,7 +40,7 @@ function SectionBadge({
 
 export default function MotherWifeLover() {
   return (
-    <main className="min-h-screen bg-[#F9F6F0] text-[#2D2D2D]">
+    <main className="min-h-screen bg-surface text-ink">
       <SEO
         title="Matka, żona, kochanka — rozpoznaj wzorzec | Spirala"
         description="Role kobiece, które odtwarzamy bez pytania. Praca z wzorcami rodowymi w relacjach — sesje z Anetą, Spirala."
@@ -96,7 +96,7 @@ export default function MotherWifeLover() {
       {/* SECTION 1 — Role, które gramy bez pytania                        */}
       {/* ---------------------------------------------------------------- */}
       <section
-        className="px-6 py-16 sm:py-24 bg-[#F9F6F0]"
+        className="px-6 py-16 sm:py-24 bg-surface"
         aria-label="Role, które gramy bez pytania"
       >
         <div className="max-w-[700px] mx-auto flex flex-col gap-8">
@@ -108,7 +108,7 @@ export default function MotherWifeLover() {
                 fieldPath="s1Title"
                 as="h2"
                 placeholder="Role, które gramy bez pytania"
-                className="text-3xl sm:text-4xl font-normal tracking-[-0.5px] text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                className="text-3xl sm:text-4xl font-normal tracking-[-0.5px] text-ink [font-family:'Playfair_Display',serif]"
               />
             </div>
           </ScrollReveal>
@@ -120,28 +120,28 @@ export default function MotherWifeLover() {
                 fieldPath="s1P1"
                 as="p"
                 placeholder="Role, które pełnimy, nie zawsze wybieramy świadomie. Często nieświadomie realizujemy to, co kolektywnie nam podpowiada otoczenie, pokolenie, rodzina."
-                className="text-base leading-[1.85] text-[#2D2D2D] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-ink [font-family:'Lato',sans-serif]"
               />
               <EditableText
                 section="motherWifeLover"
                 fieldPath="s1P2"
                 as="p"
                 placeholder='Wychodzimy za mąż w „odpowiednim wieku", bo kiedyś najgorszą rzeczą było zostać starą panną. Czujemy presję, żeby być żoną. A jeśli związek — to pewnie kolejny krok to rodzina. Lecimy po schemacie, choć niejedna z nas nie ma na to stuprocentowej ochoty. Ale rodzina to świętość, więc spełniamy oczekiwania mamy, która marzy, by być babcią, albo wreszcie przynależeć do grupy, która ma tyle do powiedzenia o dzieciach.'
-                className="text-base leading-[1.85] text-[#5A5550] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-ink-soft [font-family:'Lato',sans-serif]"
               />
               <EditableText
                 section="motherWifeLover"
                 fieldPath="s1P3"
                 as="p"
                 placeholder="A życie płynie i wykolejasz się na pierwszym zakręcie, bo nikt nas nie nauczył, jak być matką. Więc robisz to, co znasz: jesteś matką taką samą, jaka była dla Ciebie Twoja mama. I są obszary, których nie chciałaś powielać, a w emocjach — stało się. Poczucie winy wchodzi jak burza."
-                className="text-base leading-[1.85] text-[#5A5550] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-ink-soft [font-family:'Lato',sans-serif]"
               />
               <EditableText
                 section="motherWifeLover"
                 fieldPath="s1P4"
                 as="p"
                 placeholder="Pogodzenie roli żony i matki to osobny temat, z którym boryka się większość kobiet. Bo gdzie tu znaleźć czas na bycie sobą?"
-                className="text-base leading-[1.85] italic text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] italic text-ink-soft [font-family:'Lato',sans-serif]"
               />
             </div>
           </ScrollReveal>
@@ -164,7 +164,7 @@ export default function MotherWifeLover() {
                 fieldPath="s2Title"
                 as="h2"
                 placeholder="Rola, o której się nie mówi"
-                className="text-3xl sm:text-4xl font-normal tracking-[-0.5px] text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                className="text-3xl sm:text-4xl font-normal tracking-[-0.5px] text-ink [font-family:'Playfair_Display',serif]"
               />
             </div>
           </ScrollReveal>
@@ -176,21 +176,21 @@ export default function MotherWifeLover() {
                 fieldPath="s2P1"
                 as="p"
                 placeholder="To jeszcze nie wszystko. Jest jedna rola, o której mówi się najmniej — rola kochanki. Temat tabu, zarezerwowany dla osądu, nie dla zrozumienia."
-                className="text-base leading-[1.85] text-[#2D2D2D] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-ink [font-family:'Lato',sans-serif]"
               />
               <EditableText
                 section="motherWifeLover"
                 fieldPath="s2P2"
                 as="p"
                 placeholder="Zdrady i bycie zdradzaną. Jeśli to Twoja historia, chcę, żebyś wiedziała jedno: to nie sprawia, że jesteś wyklęta. Ale jeśli ten wzorzec się powtarza, warto zapytać, skąd się bierze."
-                className="text-base leading-[1.85] text-[#5A5550] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-ink-soft [font-family:'Lato',sans-serif]"
               />
               <EditableText
                 section="motherWifeLover"
                 fieldPath="s2P3"
                 as="p"
                 placeholder="Nie znika z niczego. Często ma swój początek w historii rodziny, z której pochodzisz — w romansach, dramatach, zdradach, które kiedyś przyniosły wykluczenie, wstyd i odrzucenie temu, kto je przeżył."
-                className="text-base leading-[1.85] text-[#5A5550] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-ink-soft [font-family:'Lato',sans-serif]"
               />
               {/* NOTE: last sentence is ethically critical — do not remove per client brief */}
               <EditableText
@@ -198,7 +198,7 @@ export default function MotherWifeLover() {
                 fieldPath="s2P4"
                 as="p"
                 placeholder="To nie jest wyjaśnienie, które zwalnia z wyboru. To jest mechanizm, który — kiedy go zobaczysz — przestaje rządzić Tobą po cichu."
-                className="text-base leading-[1.85] font-medium text-[#2D2D2D] border-l-2 border-[#B8944A] pl-5 [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] font-medium text-ink border-l-2 border-brand pl-5 [font-family:'Lato',sans-serif]"
               />
             </div>
           </ScrollReveal>
@@ -238,7 +238,7 @@ export default function MotherWifeLover() {
                 fieldPath="s3Title"
                 as="h2"
                 placeholder="To da się odczarować"
-                className="text-3xl sm:text-4xl font-bold tracking-[-0.5px] text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                className="text-3xl sm:text-4xl font-bold tracking-[-0.5px] text-ink [font-family:'Playfair_Display',serif]"
               />
             </div>
           </ScrollReveal>
@@ -250,28 +250,28 @@ export default function MotherWifeLover() {
                 fieldPath="s3P1"
                 as="p"
                 placeholder="Dobra wiadomość: to da się zmienić."
-                className="text-xl leading-[1.7] font-medium text-[#B8944A] [font-family:'Lato',sans-serif]"
+                className="text-xl leading-[1.7] font-medium text-brand [font-family:'Lato',sans-serif]"
               />
               <EditableText
                 section="motherWifeLover"
                 fieldPath="s3P2"
                 as="p"
                 placeholder="Ja to zrobiłam. Jestem wolna od tych wzorców. Tworzę relacje pełne szacunku i miłości — nie czyniąc drugiemu tego, co mnie nie byłoby miłe."
-                className="text-base leading-[1.85] text-[#2D2D2D] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-ink [font-family:'Lato',sans-serif]"
               />
               <EditableText
                 section="motherWifeLover"
                 fieldPath="s3P3"
                 as="p"
                 placeholder="Jeśli to Twoja historia i chcesz napisać ją na nowo. Uwolnić się od poczucia winy, od wstydu — jesteś we właściwym miejscu. Pracuję metodą pracy z rodem: oddawania tym, do których coś należy, i odzyskiwania tego, co Twoje."
-                className="text-base leading-[1.85] text-[#5A5550] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-ink-soft [font-family:'Lato',sans-serif]"
               />
               <EditableText
                 section="motherWifeLover"
                 fieldPath="s3P4"
                 as="p"
                 placeholder="Twoje życie może być wolne od wstydu i poczucia winy."
-                className="text-base leading-[1.85] italic text-[#2D2D2D] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] italic text-ink [font-family:'Lato',sans-serif]"
               />
             </div>
           </ScrollReveal>
@@ -324,7 +324,7 @@ export default function MotherWifeLover() {
             section="motherWifeLover"
             fieldPath="ctaBtn"
             defaultAction="calendly"
-            className="mt-2 inline-flex items-center justify-center px-10 py-4 rounded-full bg-[#B8944A] text-white text-base font-bold transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A] [font-family:'Lato',sans-serif]"
+            className="mt-2 inline-flex items-center justify-center px-10 py-4 rounded-full bg-action text-white text-base font-bold transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand [font-family:'Lato',sans-serif]"
           >
             <EditableText
               section="motherWifeLover"

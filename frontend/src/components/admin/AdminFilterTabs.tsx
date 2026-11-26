@@ -19,7 +19,7 @@ export function AdminFilterTabs<T extends string>({
 }: AdminFilterTabsProps<T>) {
   return (
     <div
-      className="flex gap-1 bg-white border border-[#E8E4DF] rounded-lg p-1 w-fit"
+      className="flex gap-1 bg-white border border-line rounded-lg p-1 w-fit"
       role="tablist"
     >
       {tabs.map((tab) => {
@@ -34,8 +34,8 @@ export function AdminFilterTabs<T extends string>({
             className={[
               "flex items-center gap-1.5 px-4 py-1.5 rounded-md font-['Inter'] text-[13px] font-medium transition-colors duration-150",
               isActive
-                ? 'bg-[#B8963E]/10 text-[#B8963E]'
-                : 'text-[#6B6B6B] hover:text-[#2D2D2D] hover:bg-[#F9F6F0]',
+                ? 'bg-brand/10 text-brand'
+                : 'text-ink-soft hover:text-ink hover:bg-surface',
             ].join(' ')}
           >
             {tab.label}
@@ -44,8 +44,8 @@ export function AdminFilterTabs<T extends string>({
                 className={[
                   'text-[11px] px-1.5 py-0.5 rounded-full',
                   isActive
-                    ? 'bg-[#B8963E]/20 text-[#B8963E]'
-                    : 'bg-[#E8E4DF] text-[#8A8A8A]',
+                    ? 'bg-brand/20 text-brand'
+                    : 'bg-line text-ink-muted',
                 ].join(' ')}
               >
                 {isLoading ? '—' : tab.count}

@@ -7,14 +7,14 @@ export default function NotFound() {
   const { t } = useTranslation();
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-[#F9F6F0] px-4 text-center">
+    <main className="min-h-screen flex flex-col items-center justify-center bg-surface px-4 text-center">
       <SEO
         title="404"
         description="Strona nie została znaleziona."
         noindex={true}
       />
       <h1
-        className="text-8xl font-bold text-[#B8963E]"
+        className="text-8xl font-bold text-brand"
         style={{ fontFamily: "'Cormorant Garamond', serif" }}
       >
         404
@@ -34,7 +34,7 @@ export default function NotFound() {
       </p>
       <Link
         to="/"
-        className="mt-8 inline-block rounded px-6 py-3 bg-[#B8963E] text-white font-medium hover:bg-[#8A6F2E] transition-colors"
+        className="mt-8 inline-block rounded px-6 py-3 bg-action text-white font-medium hover:bg-action-hover transition-colors"
       >
         <EditableText section="notFound" fieldPath="backHome">
           {t('notFound.backHome')}

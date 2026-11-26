@@ -32,14 +32,14 @@ function SectionBadge({
 }) {
   return gold ? (
     <span
-      className="inline-block px-4 py-1 text-xs font-bold uppercase tracking-widest rounded-full bg-[#B8944A] text-white"
+      className="inline-block px-4 py-1 text-xs font-bold uppercase tracking-widest rounded-full bg-action text-white"
       style={{ fontFamily: "'Lato', sans-serif" }}
     >
       {label}
     </span>
   ) : (
     <span
-      className="inline-block px-4 py-1 text-xs font-semibold uppercase tracking-widest rounded-full border border-[#D4B97A] text-[#B8944A] bg-[rgba(184,148,74,0.08)]"
+      className="inline-block px-4 py-1 text-xs font-semibold uppercase tracking-widest rounded-full border border-brand-light text-brand bg-brand/8"
       style={{ fontFamily: "'Lato', sans-serif" }}
     >
       {label}
@@ -63,9 +63,9 @@ function PainCard({
   descPlaceholder,
 }: PainCardProps) {
   return (
-    <div className="flex flex-col gap-4 p-8 rounded-xl bg-[#F9F6F0] border border-[#F0EDE8] h-full">
+    <div className="flex flex-col gap-4 p-8 rounded-xl bg-surface border border-line-soft h-full">
       <div
-        className="flex items-center justify-center w-10 h-10 rounded-2xl bg-[rgba(184,148,74,0.1)] text-[#B8944A] flex-shrink-0"
+        className="flex items-center justify-center w-10 h-10 rounded-2xl bg-brand/10 text-brand flex-shrink-0"
         aria-hidden="true"
       >
         {icon}
@@ -75,14 +75,14 @@ function PainCard({
         fieldPath={titleField}
         as="h3"
         placeholder={titlePlaceholder}
-        className="text-xl text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+        className="text-xl text-ink [font-family:'Playfair_Display',serif]"
       />
       <EditableText
         section={SECTION}
         fieldPath={descField}
         as="p"
         placeholder={descPlaceholder}
-        className="text-sm leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+        className="text-sm leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
       />
     </div>
   );
@@ -99,9 +99,9 @@ function Checklist({ items, variant }: ChecklistProps) {
     variant === 'onDark'
       ? 'bg-white/15 text-white'
       : variant === 'muted'
-        ? 'bg-[rgba(184,148,74,0.1)] text-[#9B7A3A]'
-        : 'bg-[#B8944A] text-white';
-  const textColor = variant === 'onDark' ? 'text-white/85' : 'text-[#2D2D2D]';
+        ? 'bg-brand/10 text-brand-dark'
+        : 'bg-action text-white';
+  const textColor = variant === 'onDark' ? 'text-white/85' : 'text-ink';
 
   return (
     <ul className="flex flex-col gap-4">
@@ -134,7 +134,7 @@ function Checklist({ items, variant }: ChecklistProps) {
 
 export default function KochankaCoaching() {
   return (
-    <main className="min-h-screen bg-[#F9F6F0] text-[#2D2D2D]">
+    <main className="min-h-screen bg-surface text-ink">
       <SEO
         title="Dlaczego przyciągasz żonatych mężczyzn?"
         description="Pięciotygodniowy proces transformacji dla kobiet, które chcą porzucić rolę kochanki i wybrać relację opartą na szacunku i prawdzie. Sesje z Anetą, Spirala."
@@ -194,7 +194,7 @@ export default function KochankaCoaching() {
             section={SECTION}
             fieldPath="heroCTA"
             defaultAction="calendly"
-            className="mt-2 inline-flex items-center justify-center px-8 py-4 rounded-lg bg-[#B8944A] text-white text-sm font-normal transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A] [font-family:'Lato',sans-serif]"
+            className="mt-2 inline-flex items-center justify-center px-8 py-4 rounded-lg bg-action text-white text-sm font-normal transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand [font-family:'Lato',sans-serif]"
           >
             <EditableText
               section={SECTION}
@@ -222,14 +222,14 @@ export default function KochankaCoaching() {
                 fieldPath="painTitle"
                 as="h2"
                 placeholder="Ból, który znasz aż za dobrze"
-                className="text-3xl sm:text-4xl font-normal tracking-[-0.5px] text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                className="text-3xl sm:text-4xl font-normal tracking-[-0.5px] text-ink [font-family:'Playfair_Display',serif]"
               />
               <EditableText
                 section={SECTION}
                 fieldPath="painIntro"
                 as="p"
                 placeholder="Żyjesz w cieniu cudzego małżeństwa."
-                className="text-base leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                className="text-base leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
               />
             </div>
           </ScrollReveal>
@@ -301,7 +301,7 @@ export default function KochankaCoaching() {
               fieldPath="painClosing"
               as="p"
               placeholder="To nie jest przypadek. To wzorzec — i ma swoje źródło."
-              className="text-lg font-medium italic text-[#B8944A] text-center max-w-[700px] [font-family:'Cormorant_Garamond',serif]"
+              className="text-lg font-medium italic text-brand text-center max-w-[700px] [font-family:'Cormorant_Garamond',serif]"
             />
           </ScrollReveal>
         </div>
@@ -321,7 +321,7 @@ export default function KochankaCoaching() {
               fieldPath="beforeTitle"
               as="h2"
               placeholder="Zanim pójdziemy dalej"
-              className="text-3xl sm:text-4xl font-normal tracking-[-0.5px] text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+              className="text-3xl sm:text-4xl font-normal tracking-[-0.5px] text-ink [font-family:'Playfair_Display',serif]"
             />
           </ScrollReveal>
           <ScrollReveal animation="fade-up" delay={100}>
@@ -331,21 +331,21 @@ export default function KochankaCoaching() {
                 fieldPath="beforeP1"
                 as="p"
                 placeholder="To, co teraz przeżywasz, da się zmienić. Wybór żonatego mężczyzny i wejście w rolę kochanki nie jest „pechem do facetów” — to wzorzec, który ma swoje źródło. Razem to źródło znajdziemy i zmienimy zapis, program, który jest w Tobie i który Tobą rządzi."
-                className="text-base leading-[1.85] text-[#2D2D2D] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-ink [font-family:'Lato',sans-serif]"
               />
               <EditableText
                 section={SECTION}
                 fieldPath="beforeP2"
                 as="p"
                 placeholder="Przeprowadzę Cię przez proces zmiany tego wzorca — konkretną, świadomą pracę, dzięki której rola kochanki przestanie być Twoim automatycznym wyborem."
-                className="text-base leading-[1.85] text-[#5A5550] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-ink-soft [font-family:'Lato',sans-serif]"
               />
               <EditableText
                 section={SECTION}
                 fieldPath="beforeP3"
                 as="p"
                 placeholder="Po tej transformacji zaczniesz wybierać mężczyzn wolnych. Takich, którzy chcą budować prawdziwą relację partnerską — bez ograniczeń, bez ukrywania się, bez czekania w kolejce."
-                className="text-base leading-[1.85] italic text-[#2D2D2D] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] italic text-ink [font-family:'Lato',sans-serif]"
               />
             </div>
           </ScrollReveal>
@@ -368,16 +368,16 @@ export default function KochankaCoaching() {
                 fieldPath="processTitle"
                 as="h2"
                 placeholder="Jak przebiega proces — krok po kroku"
-                className="text-3xl sm:text-4xl font-bold text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                className="text-3xl sm:text-4xl font-bold text-ink [font-family:'Playfair_Display',serif]"
               />
             </div>
           </ScrollReveal>
 
           {/* Step A */}
           <ScrollReveal animation="fade-up" delay={stagger(0)}>
-            <div className="flex flex-col gap-4 pt-8 border-t border-[#E8E3DB]">
+            <div className="flex flex-col gap-4 pt-8 border-t border-line">
               <div className="flex items-center gap-3">
-                <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#B8944A] text-white text-sm font-bold flex-shrink-0 [font-family:'Playfair_Display',serif]">
+                <span className="flex items-center justify-center w-9 h-9 rounded-full bg-action text-white text-sm font-bold flex-shrink-0 [font-family:'Playfair_Display',serif]">
                   A
                 </span>
                 <EditableText
@@ -385,7 +385,7 @@ export default function KochankaCoaching() {
                   fieldPath="stepATitle"
                   as="h3"
                   placeholder="Twoja historia"
-                  className="text-xl font-semibold text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                  className="text-xl font-semibold text-ink [font-family:'Playfair_Display',serif]"
                 />
               </div>
               <EditableText
@@ -393,16 +393,16 @@ export default function KochankaCoaching() {
                 fieldPath="stepAP1"
                 as="p"
                 placeholder="Zaczynamy od Ciebie. Opowiesz mi, czego brakuje w Twoim życiu, czego naprawdę chcesz i o jakiej relacji marzysz w głębi siebie. Podczas indywidualnych sesji poznaję Twoją historię i Twoje doświadczenia, by znaleźć dynamiki, które obecnie rządzą Twoim życiem. To punkt wyjścia do odnalezienia wzorców, które podświadomie odtwarzasz."
-                className="text-[15px] leading-relaxed text-[#6B6B6B] pl-12 [font-family:'Lato',sans-serif]"
+                className="text-[15px] leading-relaxed text-ink-soft pl-12 [font-family:'Lato',sans-serif]"
               />
             </div>
           </ScrollReveal>
 
           {/* Step B */}
           <ScrollReveal animation="fade-up" delay={stagger(1)}>
-            <div className="flex flex-col gap-4 pt-8 border-t border-[#E8E3DB]">
+            <div className="flex flex-col gap-4 pt-8 border-t border-line">
               <div className="flex items-center gap-3">
-                <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#B8944A] text-white text-sm font-bold flex-shrink-0 [font-family:'Playfair_Display',serif]">
+                <span className="flex items-center justify-center w-9 h-9 rounded-full bg-action text-white text-sm font-bold flex-shrink-0 [font-family:'Playfair_Display',serif]">
                   B
                 </span>
                 <EditableText
@@ -410,7 +410,7 @@ export default function KochankaCoaching() {
                   fieldPath="stepBTitle"
                   as="h3"
                   placeholder="Praca ze wzorcami"
-                  className="text-xl font-semibold text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                  className="text-xl font-semibold text-ink [font-family:'Playfair_Display',serif]"
                 />
               </div>
               <div className="flex flex-col gap-4 pl-12">
@@ -419,21 +419,21 @@ export default function KochankaCoaching() {
                   fieldPath="stepBP1"
                   as="p"
                   placeholder="Wybór roli kochanki ma swój początek. Czasem sięga wzorców z dzieciństwa, czasem głębiej — bo ma korzenie w Twoim rodzie. Przyglądamy się temu uważnie, by znaleźć, skąd naprawdę biorą się Twoje decyzje. Tylko uświadomienie sobie źródła daje szansę, by przestać je odtwarzać."
-                  className="text-[15px] leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                  className="text-[15px] leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
                 />
                 <EditableText
                   section={SECTION}
                   fieldPath="stepBP2"
                   as="p"
                   placeholder="To nie będzie samo uświadomienie — to konkretna praca z rodem, z rodzicami, przywrócenie porządku, który gdzieś się zagubił. Tutaj każdy staje na swoim miejscu: córka wraca do bycia dzieckiem, matka — do bycia żoną. Zostałaś nauczona w przeszłości schematu, który nie musi być identyczny, ale jest analogiczny emocjonalnie: rywalizacja, napięcie, nieobecność, czekanie na to, by zostać wybraną."
-                  className="text-[15px] leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                  className="text-[15px] leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
                 />
                 <EditableText
                   section={SECTION}
                   fieldPath="stepBP3"
                   as="p"
                   placeholder="Tym wzorcem może być też odtwarzanie rodowej historii romansu, który sprawił wiele bólu, odrzucenia, a nawet wykluczenia. Sekrety rodzinne wracają jak bumerang w kolejnych pokoleniach — bo tam, gdzieś, wyrządzono komuś krzywdę, która domaga się zobaczenia. Może właśnie swoim zachowaniem odtwarzasz historię swoich przodków — i nieświadomie ona rządzi Twoimi wyborami podwójnego życia."
-                  className="text-[15px] leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                  className="text-[15px] leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
                 />
               </div>
             </div>
@@ -441,9 +441,9 @@ export default function KochankaCoaching() {
 
           {/* Step C */}
           <ScrollReveal animation="fade-up" delay={stagger(2)}>
-            <div className="flex flex-col gap-4 pt-8 border-t border-[#E8E3DB]">
+            <div className="flex flex-col gap-4 pt-8 border-t border-line">
               <div className="flex items-center gap-3">
-                <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#B8944A] text-white text-sm font-bold flex-shrink-0 [font-family:'Playfair_Display',serif]">
+                <span className="flex items-center justify-center w-9 h-9 rounded-full bg-action text-white text-sm font-bold flex-shrink-0 [font-family:'Playfair_Display',serif]">
                   C
                 </span>
                 <EditableText
@@ -451,7 +451,7 @@ export default function KochankaCoaching() {
                   fieldPath="stepCTitle"
                   as="h3"
                   placeholder="Praca z mindsetem"
-                  className="text-xl font-semibold text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                  className="text-xl font-semibold text-ink [font-family:'Playfair_Display',serif]"
                 />
               </div>
               <div className="flex flex-col gap-4 pl-12">
@@ -460,28 +460,28 @@ export default function KochankaCoaching() {
                   fieldPath="stepCP1"
                   as="p"
                   placeholder="Masz swój określony światopogląd — sposób myślenia, przez pryzmat którego wyświetla Ci się rzeczywistość. To on sprawia, że pewne zachowania są dla Ciebie dobre, właściwe, pożądane, a inne — nieakceptowane, destrukcyjne, których trzeba unikać. Ten całokształt zbudowany jest z tysięcy przekonań, które od narodzin wdrukowali w Ciebie rodzice, rodzina, nauczyciele i otoczenie, w którym się wychowałaś. One, jako „jedyna prawda”, sprawiają, że automatycznie reagujesz w określony sposób."
-                  className="text-[15px] leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                  className="text-[15px] leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
                 />
                 <EditableText
                   section={SECTION}
                   fieldPath="stepCP2"
                   as="p"
                   placeholder="Tak powstają połączenia neuronalne w mózgu, który jest bardzo ekonomiczny — nie traci czasu na analizę. Gdy coś jest wielokrotnie powtarzane, mózg uznaje to za daną bazową, a przypisane do niej słowa-klucze i emocje zawsze będą Cię kierować na tę samą, już wytworzoną ścieżkę neuronalną. To ona odpowiada za Twoje automatyczne reakcje."
-                  className="text-[15px] leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                  className="text-[15px] leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
                 />
                 <EditableText
                   section={SECTION}
                   fieldPath="stepCP3"
                   as="p"
                   placeholder="Przyjrzymy się przekonaniom, według których rola kochanki jest dla Ciebie „normalna”. Zrobimy pełną listę tych ograniczających i zamienimy je na wspierające. To tydzień, w którym przeprogramowujemy wszystko to, co sprawiło, że rola kochanki stała się dla Ciebie dopuszczalną normą — mimo że wywołuje poczucie braku spójności, które wyniszcza Cię od środka."
-                  className="text-[15px] leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                  className="text-[15px] leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
                 />
                 <EditableText
                   section={SECTION}
                   fieldPath="stepCP4"
                   as="p"
                   placeholder="Na świecie są miliardy mężczyzn, przy boku których możesz być tą jedyną — szanowaną, kochaną, zaopiekowaną. I na tej ścieżce niebawem się znajdziesz."
-                  className="text-[15px] leading-relaxed italic text-[#2D2D2D] [font-family:'Lato',sans-serif]"
+                  className="text-[15px] leading-relaxed italic text-ink [font-family:'Lato',sans-serif]"
                 />
               </div>
             </div>
@@ -502,9 +502,9 @@ export default function KochankaCoaching() {
 
           {/* Step D */}
           <ScrollReveal animation="fade-up" delay={stagger(0)}>
-            <div className="flex flex-col gap-4 pt-8 border-t border-[#E8E3DB]">
+            <div className="flex flex-col gap-4 pt-8 border-t border-line">
               <div className="flex items-center gap-3">
-                <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#B8944A] text-white text-sm font-bold flex-shrink-0 [font-family:'Playfair_Display',serif]">
+                <span className="flex items-center justify-center w-9 h-9 rounded-full bg-action text-white text-sm font-bold flex-shrink-0 [font-family:'Playfair_Display',serif]">
                   D
                 </span>
                 <EditableText
@@ -512,7 +512,7 @@ export default function KochankaCoaching() {
                   fieldPath="stepDTitle"
                   as="h3"
                   placeholder="Praca z emocjami"
-                  className="text-xl font-semibold text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                  className="text-xl font-semibold text-ink [font-family:'Playfair_Display',serif]"
                 />
               </div>
               <div className="flex flex-col gap-4 pl-12">
@@ -521,14 +521,14 @@ export default function KochankaCoaching() {
                   fieldPath="stepDP1"
                   as="p"
                   placeholder="Żeby to wszystko, co zrobiłyśmy do tej pory, było trwałe i skuteczne — czas na kolejny, bardzo ważny krok: uwolnienie emocji, które latami kumulowały się w Twoim ciele. To najczęściej smutek, żal, wstyd, poczucie winy, złość, niepewność, poczucie bycia niewystarczającą — emocje, które w roli kochanki towarzyszyły Ci niemal codziennie."
-                  className="text-[15px] leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                  className="text-[15px] leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
                 />
                 <EditableText
                   section={SECTION}
                   fieldPath="stepDP2"
                   as="p"
                   placeholder="Rozpoznamy je, jedną po drugiej, i damy im ostatni raz uwagę — tym razem świadomie wybierając, że więcej nie chcesz ich doświadczać. Użyjemy do tego sprawdzonych praktyk i technik uwalniania emocji, które od lat z powodzeniem stosuję z moimi klientkami. Cały proces przejdziemy razem, a Ty nauczysz się, jak robić to później samodzielnie, gdy tylko zajdzie taka potrzeba."
-                  className="text-[15px] leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                  className="text-[15px] leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
                 />
               </div>
             </div>
@@ -536,9 +536,9 @@ export default function KochankaCoaching() {
 
           {/* Step E */}
           <ScrollReveal animation="fade-up" delay={stagger(1)}>
-            <div className="flex flex-col gap-4 pt-8 border-t border-[#E8E3DB]">
+            <div className="flex flex-col gap-4 pt-8 border-t border-line">
               <div className="flex items-center gap-3">
-                <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#B8944A] text-white text-sm font-bold flex-shrink-0 [font-family:'Playfair_Display',serif]">
+                <span className="flex items-center justify-center w-9 h-9 rounded-full bg-action text-white text-sm font-bold flex-shrink-0 [font-family:'Playfair_Display',serif]">
                   E
                 </span>
                 <EditableText
@@ -546,7 +546,7 @@ export default function KochankaCoaching() {
                   fieldPath="stepETitle"
                   as="h3"
                   placeholder="Manifestacja nowej relacji"
-                  className="text-xl font-semibold text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                  className="text-xl font-semibold text-ink [font-family:'Playfair_Display',serif]"
                 />
               </div>
               <div className="flex flex-col gap-4 pl-12">
@@ -555,28 +555,28 @@ export default function KochankaCoaching() {
                   fieldPath="stepEP1"
                   as="p"
                   placeholder="Jesteś już gotowa, by głośno określić, jakiej relacji chcesz dzisiaj."
-                  className="text-[15px] leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                  className="text-[15px] leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
                 />
                 <EditableText
                   section={SECTION}
                   fieldPath="stepEP2"
                   as="p"
                   placeholder="Jakiego mężczyznę u swojego boku widzisz? Jakie jakości chcesz zaprosić do swojego życia? Czego pragniesz doświadczać, co chcesz współtworzyć i jak chcesz się czuć, gdy ten wymarzony mężczyzna jest przy Tobie?"
-                  className="text-[15px] leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                  className="text-[15px] leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
                 />
                 <EditableText
                   section={SECTION}
                   fieldPath="stepEP3"
                   as="p"
                   placeholder="Od teraz jesteś tą pierwszą. Tą jedyną. Zaopiekowaną, kochaną i szanowaną."
-                  className="text-[15px] leading-relaxed font-medium text-[#B8944A] [font-family:'Lato',sans-serif]"
+                  className="text-[15px] leading-relaxed font-medium text-brand [font-family:'Lato',sans-serif]"
                 />
                 <EditableText
                   section={SECTION}
                   fieldPath="stepEP4"
                   as="p"
                   placeholder="To jeden z przyjemniejszych etapów tego procesu — skupiamy się na tym, czego pragniesz. Zaczniemy od intencji, a poprzez techniki manifestacji zaczniesz świadomie kreować rzeczywistość, którą dziś wybierasz. Twoją. Nie mamy, nie babci. Twoją."
-                  className="text-[15px] leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                  className="text-[15px] leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
                 />
               </div>
             </div>
@@ -587,7 +587,7 @@ export default function KochankaCoaching() {
               section={SECTION}
               fieldPath="processCTA"
               defaultAction="calendly"
-              className="inline-flex items-center justify-center px-10 py-4 rounded-lg bg-[#B8944A] text-white text-sm font-normal transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A] [font-family:'Lato',sans-serif]"
+              className="inline-flex items-center justify-center px-10 py-4 rounded-lg bg-action text-white text-sm font-normal transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand [font-family:'Lato',sans-serif]"
             >
               <EditableText
                 section={SECTION}
@@ -604,7 +604,7 @@ export default function KochankaCoaching() {
       {/* ŻYCIE PO DRUGIEJ STRONIE                                            */}
       {/* ------------------------------------------------------------------ */}
       <section
-        className="px-6 py-16 sm:py-20 bg-[#F9F6F0]"
+        className="px-6 py-16 sm:py-20 bg-surface"
         aria-label="Życie, które Cię czeka po drugiej stronie"
       >
         <div className="max-w-[700px] mx-auto flex flex-col gap-8">
@@ -616,7 +616,7 @@ export default function KochankaCoaching() {
                 fieldPath="afterTitle"
                 as="h2"
                 placeholder="Życie, które Cię czeka po drugiej stronie"
-                className="text-3xl sm:text-4xl font-normal tracking-[-0.5px] text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                className="text-3xl sm:text-4xl font-normal tracking-[-0.5px] text-ink [font-family:'Playfair_Display',serif]"
               />
             </div>
           </ScrollReveal>
@@ -627,21 +627,21 @@ export default function KochankaCoaching() {
                 fieldPath="afterP1"
                 as="p"
                 placeholder="Ten proces to prosta droga do życia w prawdzie — pod warunkiem, że wiesz, jak to zrobić. A tym, by przeprowadzić Cię z punktu A (obecnej roli) do punktu B (wolności od życia w ukryciu), zajmę się ja."
-                className="text-base leading-[1.85] text-[#2D2D2D] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-ink [font-family:'Lato',sans-serif]"
               />
               <EditableText
                 section={SECTION}
                 fieldPath="afterP2"
                 as="p"
                 placeholder="Po tym procesie pozwalasz sobie na bycie tą jedyną dla swojego mężczyzny — takiego, z którym możesz pokazać się światu w mediach społecznościowych, planować wspólne święta, wakacje, spotkania z przyjaciółmi. Stajesz się kobietą, która pozwala sobie być kochaną, szanowaną i wybieraną — zawsze jako ta jedyna."
-                className="text-base leading-[1.85] text-[#5A5550] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-ink-soft [font-family:'Lato',sans-serif]"
               />
               <EditableText
                 section={SECTION}
                 fieldPath="afterP3"
                 as="p"
                 placeholder="Twoje życie staje się takie, o jakim marzyłaś, choć przez lata myślałaś, że nie jesteś tego warta. Czujesz się piękna, zaopiekowana, wystarczająca. Zakochujesz się w prawdzie i zapraszasz do swojego życia spokój i harmonię."
-                className="text-base leading-[1.85] italic text-[#2D2D2D] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] italic text-ink [font-family:'Lato',sans-serif]"
               />
             </div>
           </ScrollReveal>
@@ -664,7 +664,7 @@ export default function KochankaCoaching() {
                 fieldPath="credTitle"
                 as="h2"
                 placeholder="Skąd to wszystko wiem"
-                className="text-3xl sm:text-4xl font-bold text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                className="text-3xl sm:text-4xl font-bold text-ink [font-family:'Playfair_Display',serif]"
               />
             </div>
           </ScrollReveal>
@@ -691,28 +691,28 @@ export default function KochankaCoaching() {
                 fieldPath="credP1"
                 as="p"
                 placeholder="W ostatnich 6 latach poprowadziłam wiele warsztatów o kobiecości. Temat kochanki powracał nieśmiało, ale z rosnącą intensywnością — nie tylko w roli „tej drugiej”, ale też żon, które zdradzają. Skala tego zjawiska mnie zaskoczyła. Jeszcze bardziej zaskoczyło mnie to, jak wielkim tabu wciąż jest szczera rozmowa na ten temat."
-                className="text-base leading-[1.85] text-[#5A5550] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-ink-soft [font-family:'Lato',sans-serif]"
               />
               <EditableText
                 section={SECTION}
                 fieldPath="credP2"
                 as="p"
                 placeholder="Jest jakaś społeczna „tolerancja” dla zdrady mężczyzny, a kobietom przypisana jest rola „tej świętej”. Gdy kobieta z tej „świętości” rezygnuje, wkracza na ścieżkę oceny, ostracyzmu, wykluczenia. I najokrutniejsze w tym bywają inne kobiety."
-                className="text-base leading-[1.85] text-[#5A5550] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-ink-soft [font-family:'Lato',sans-serif]"
               />
               <EditableText
                 section={SECTION}
                 fieldPath="credP3"
                 as="p"
                 placeholder="Kobiety wstydzą się tego, co robią, nie rozumiejąc do końca, dlaczego właściwie tak postępują. Czują ogromną winę. Tkwią w takich relacjach latami. A wystarczy zadać sobie kilka pytań:"
-                className="text-base leading-[1.85] text-[#2D2D2D] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-ink [font-family:'Lato',sans-serif]"
               />
             </ScrollReveal>
           </div>
 
           <ScrollReveal
             animation="fade-up"
-            className="flex flex-col divide-y divide-[#E8E3DB] max-w-[900px]"
+            className="flex flex-col divide-y divide-line max-w-[900px]"
           >
             <div className="pb-7">
               <ul className="flex flex-col gap-3">
@@ -733,7 +733,7 @@ export default function KochankaCoaching() {
                 ].map(({ field, placeholder }) => (
                   <li key={field} className="flex items-start gap-3">
                     <span
-                      className="text-[#B8944A] text-lg leading-none mt-0.5 [font-family:'Cormorant_Garamond',serif]"
+                      className="text-brand text-lg leading-none mt-0.5 [font-family:'Cormorant_Garamond',serif]"
                       aria-hidden="true"
                     >
                       —
@@ -743,7 +743,7 @@ export default function KochankaCoaching() {
                       fieldPath={field}
                       as="span"
                       placeholder={placeholder}
-                      className="text-base italic text-[#2D2D2D] [font-family:'Lato',sans-serif]"
+                      className="text-base italic text-ink [font-family:'Lato',sans-serif]"
                     />
                   </li>
                 ))}
@@ -755,21 +755,21 @@ export default function KochankaCoaching() {
                 fieldPath="credP4"
                 as="p"
                 placeholder="Bo przecież robimy to z jakiegoś powodu — na pewno nie z nudów."
-                className="text-base leading-[1.85] italic text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] italic text-ink-soft [font-family:'Lato',sans-serif]"
               />
               <EditableText
                 section={SECTION}
                 fieldPath="credP5"
                 as="p"
                 placeholder="Przy mnie kobiety czują się bezpiecznie, bo ich nie oceniam. Wiem, że to, w czym obecnie tkwią, ma swój początek poza nimi — one to tylko odtwarzają, i to często nieświadomie."
-                className="text-base leading-[1.85] text-[#5A5550] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-ink-soft [font-family:'Lato',sans-serif]"
               />
               <EditableText
                 section={SECTION}
                 fieldPath="credP6"
                 as="p"
                 placeholder="Jeśli zdradzasz swojego partnera i nie chcesz tego robić, ale jakaś siła sprawia, że nie potrafisz przestać — dobrze trafiłaś. Wiem, jak skutecznie pracować ze wzorcami, programami i uwikłaniami. Nauczę Cię, jak pracować z przekonaniami i jak uwalniać stare emocje z ciała."
-                className="text-base leading-[1.85] font-medium text-[#2D2D2D] border-l-2 border-[#B8944A] pl-5 [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] font-medium text-ink border-l-2 border-brand pl-5 [font-family:'Lato',sans-serif]"
               />
             </div>
           </ScrollReveal>
@@ -792,7 +792,7 @@ export default function KochankaCoaching() {
                 fieldPath="collabTitle"
                 as="h2"
                 placeholder="Jak wygląda współpraca"
-                className="text-3xl sm:text-4xl font-normal tracking-[-0.5px] text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                className="text-3xl sm:text-4xl font-normal tracking-[-0.5px] text-ink [font-family:'Playfair_Display',serif]"
               />
             </div>
           </ScrollReveal>
@@ -804,21 +804,21 @@ export default function KochankaCoaching() {
                 fieldPath="collabP1"
                 as="p"
                 placeholder='Proces „Dlaczego przyciągasz żonatych mężczyzn?” to 5 tygodni intensywnej pracy.'
-                className="text-lg font-medium text-[#B8944A] [font-family:'Lato',sans-serif]"
+                className="text-lg font-medium text-brand [font-family:'Lato',sans-serif]"
               />
               <EditableText
                 section={SECTION}
                 fieldPath="collabP2"
                 as="p"
                 placeholder="Co tydzień spotykamy się na indywidualnej sesji 1 na 1, pracując nad kolejnym obszarem. Pracujemy zdalnie, minimum 4 godziny tygodniowo, a pomiędzy sesjami masz moje wsparcie na WhatsApp — bo przemyślenia i refleksje przychodzą właśnie wtedy, między spotkaniami. Dodatkowo otrzymujesz ode mnie materiały i ćwiczenia do wykonania między sesjami."
-                className="text-base leading-[1.85] text-[#2D2D2D] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-ink [font-family:'Lato',sans-serif]"
               />
               <EditableText
                 section={SECTION}
                 fieldPath="collabP3"
                 as="p"
                 placeholder="Zaczynasz patrzeć na swoje dotychczasowe życie jak obserwatorka — bez oceniania siebie, a ze zrozumieniem i miłością do tego, że to był po prostu program albo uwikłanie, które nieświadomie Tobą rządziło. Program, który właśnie w tym procesie dekodujesz, żegnasz i definitywnie zamykasz — jako stary rozdział swojego życia."
-                className="text-base leading-[1.85] text-[#5A5550] [font-family:'Lato',sans-serif]"
+                className="text-base leading-[1.85] text-ink-soft [font-family:'Lato',sans-serif]"
               />
             </div>
           </ScrollReveal>
@@ -830,7 +830,7 @@ export default function KochankaCoaching() {
                 fieldPath="gainsTitle"
                 as="h3"
                 placeholder="Co zyskujesz, decydując się na transformację ze mną:"
-                className="text-xl font-semibold text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+                className="text-xl font-semibold text-ink [font-family:'Playfair_Display',serif]"
               />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4">
                 <Checklist
@@ -902,7 +902,7 @@ export default function KochankaCoaching() {
               fieldPath="notForTitle"
               as="h2"
               placeholder="Ten program nie jest dla Ciebie, jeśli:"
-              className="text-2xl sm:text-3xl font-normal tracking-[-0.5px] text-[#2D2D2D] [font-family:'Playfair_Display',serif]"
+              className="text-2xl sm:text-3xl font-normal tracking-[-0.5px] text-ink [font-family:'Playfair_Display',serif]"
             />
           </ScrollReveal>
           <ScrollReveal animation="fade-up" delay={100}>
@@ -1061,7 +1061,7 @@ export default function KochankaCoaching() {
               section={SECTION}
               fieldPath="finalCTA"
               defaultAction="calendly"
-              className="inline-flex items-center justify-center px-10 py-4 rounded-full bg-[#B8944A] text-white text-base font-bold transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A] [font-family:'Lato',sans-serif]"
+              className="inline-flex items-center justify-center px-10 py-4 rounded-full bg-action text-white text-base font-bold transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand [font-family:'Lato',sans-serif]"
             >
               <EditableText
                 section={SECTION}

@@ -1,5 +1,11 @@
 import { Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Outlet,
+  Navigate,
+} from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from '@/contexts/AuthContext';
@@ -12,24 +18,29 @@ import { RouteTracker } from '@/components/shared/RouteTracker';
 
 // Eagerly loaded pages
 import Home from '@/pages/Home';
+import HomeNow from '@/pages/HomeNow';
 import NotFound from '@/pages/NotFound';
 
 // Lazy-loaded pages (code-split per route)
 const About = lazy(() => import('@/pages/About'));
+const AboutNow = lazy(() => import('@/pages/AboutNow'));
 const HowIWork = lazy(() => import('@/pages/HowIWork'));
 const Services = lazy(() => import('@/pages/Services'));
 const Blog = lazy(() => import('@/pages/Blog'));
 const BlogPost = lazy(() => import('@/pages/BlogPost'));
 const Contact = lazy(() => import('@/pages/Contact'));
+const Events = lazy(() => import('@/pages/Events'));
 const WebDesignOffer = lazy(() => import('@/pages/WebDesignOffer'));
 const MamyNastolatkowCoaching = lazy(
   () => import('@/pages/MamyNastolatkowCoaching'),
 );
 const KochankaCoaching = lazy(() => import('@/pages/KochankaCoaching'));
+const Quiz = lazy(() => import('@/pages/Quiz'));
 const Confirmation = lazy(() => import('@/pages/Confirmation'));
 const AuthCallback = lazy(() => import('@/pages/AuthCallback'));
 const PrivacyPolicy = lazy(() => import('@/pages/PrivacyPolicy'));
 const Terms = lazy(() => import('@/pages/Terms'));
+const PrivacyNote = lazy(() => import('@/pages/PrivacyNote'));
 
 // Feature-flagged pages — lazy only when flags are active
 const Webinars = lazy(() => import('@/pages/Webinars'));
@@ -78,6 +89,7 @@ const AdminSEO = lazy(() => import('@/pages/admin/SEO'));
 const AdminCategories = lazy(() => import('@/pages/admin/Categories'));
 const AdminLanguages = lazy(() => import('@/pages/admin/Languages'));
 const AdminContact = lazy(() => import('@/pages/admin/Contact'));
+const AdminEvents = lazy(() => import('@/pages/admin/Events'));
 const AdminCoaches = lazy(() => import('@/pages/admin/Coaches'));
 
 const queryClient = new QueryClient({
@@ -101,8 +113,8 @@ function PublicLayout() {
 function LoadingFallback() {
   const { t } = useTranslation();
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F9F6F0]">
-      <p className="text-[#B8963E] text-lg">{t('common.loading')}</p>
+    <div className="min-h-screen flex items-center justify-center bg-surface">
+      <p className="text-brand text-lg">{t('common.loading')}</p>
     </div>
   );
 }
@@ -113,6 +125,11 @@ function AppRoutes() {
   const showEbooks = useFeatureFlag('ebooks');
   const showPurchaseFlow = useFeatureFlag('purchaseFlow');
   const showYouTube = useFeatureFlag('youtubeContent');
+  const showClassicHome = useFeatureFlag('classicHome');
+  const showClassicAbout = useFeatureFlag('classicAbout');
+  // false: short "no data collected" note instead of the full privacy policy,
+  // and no regulamin (client 2026-11-26, site collects no personal data)
+  const showLegalDocs = useFeatureFlag('legalDocuments');
 
   return (
     <Routes>
@@ -329,6 +346,14 @@ function AppRoutes() {
           }
         />
         <Route
+          path="events"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <AdminEvents />
+            </Suspense>
+          }
+        />
+        <Route
           path="coaches"
           element={
             <Suspense fallback={<LoadingFallback />}>
@@ -367,12 +392,12 @@ function AppRoutes() {
 
       {/* Public routes — wrapped in the public Layout (Navbar, Footer, CMS toolbar) */}
       <Route element={<PublicLayout />}>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={showClassicHome ? <Home /> : <HomeNow />} />
         <Route
           path="/o-mnie"
           element={
             <Suspense fallback={<LoadingFallback />}>
-              <About />
+              {showClassicAbout ? <About /> : <AboutNow />}
             </Suspense>
           }
         />
@@ -417,6 +442,14 @@ function AppRoutes() {
           }
         />
         <Route
+          path="/wydarzenia"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <Events />
+            </Suspense>
+          }
+        />
+        <Route
           path="/tworzenie-stron"
           element={
             <Suspense fallback={<LoadingFallback />}>
@@ -437,6 +470,14 @@ function AppRoutes() {
           element={
             <Suspense fallback={<LoadingFallback />}>
               <KochankaCoaching />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/quiz"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <Quiz />
             </Suspense>
           }
         />
@@ -497,16 +538,20 @@ function AppRoutes() {
           path="/polityka-prywatnosci"
           element={
             <Suspense fallback={<LoadingFallback />}>
-              <PrivacyPolicy />
+              {showLegalDocs ? <PrivacyPolicy /> : <PrivacyNote />}
             </Suspense>
           }
         />
         <Route
           path="/regulamin"
           element={
-            <Suspense fallback={<LoadingFallback />}>
-              <Terms />
-            </Suspense>
+            showLegalDocs ? (
+              <Suspense fallback={<LoadingFallback />}>
+                <Terms />
+              </Suspense>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
 

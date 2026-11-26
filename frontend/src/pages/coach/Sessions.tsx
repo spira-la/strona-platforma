@@ -42,8 +42,8 @@ function SessionStatusBadge({ status }: SessionStatusBadgeProps) {
   const { t } = useTranslation();
   const styles = STATUS_STYLES[status] ?? {
     bg: '#F5F5F5',
-    text: '#6B6B6B',
-    border: '#E8E4DF',
+    text: 'var(--color-ink-soft)',
+    border: 'var(--color-line)',
   };
 
   const label = t(`coach.sessions.statusLabel.${status}`, {
@@ -134,10 +134,10 @@ export default function CoachSessions() {
       header: t('coach.sessions.table.client'),
       render: (s) => (
         <div>
-          <div className="font-['Inter'] text-[14px] font-medium text-[#2D2D2D]">
+          <div className="font-['Inter'] text-[14px] font-medium text-ink">
             {s.clientName}
           </div>
-          <div className="font-['Inter'] text-[12px] text-[#8A8A8A]">
+          <div className="font-['Inter'] text-[12px] text-ink-muted">
             {s.clientEmail}
           </div>
         </div>
@@ -147,7 +147,7 @@ export default function CoachSessions() {
       key: 'service',
       header: t('coach.sessions.table.service'),
       render: (s) => (
-        <span className="font-['Inter'] text-[13px] text-[#6B6B6B]">
+        <span className="font-['Inter'] text-[13px] text-ink-soft">
           {s.serviceName}
         </span>
       ),
@@ -156,7 +156,7 @@ export default function CoachSessions() {
       key: 'dateTime',
       header: t('coach.sessions.table.dateTime'),
       render: (s) => (
-        <span className="font-['Inter'] text-[13px] text-[#2D2D2D] whitespace-nowrap">
+        <span className="font-['Inter'] text-[13px] text-ink whitespace-nowrap">
           {formatDateTime(s.startAt)}
         </span>
       ),
@@ -165,7 +165,7 @@ export default function CoachSessions() {
       key: 'duration',
       header: t('coach.sessions.table.duration'),
       render: (s) => (
-        <span className="font-['Inter'] text-[13px] text-[#6B6B6B] whitespace-nowrap">
+        <span className="font-['Inter'] text-[13px] text-ink-soft whitespace-nowrap">
           {calcDurationMinutes(s.startAt, s.endAt)}{' '}
           {t('coach.sessions.durationUnit')}
         </span>

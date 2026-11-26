@@ -68,14 +68,14 @@ export function AdminFormDialog({
     >
       <div className="relative bg-white rounded-xl shadow-2xl w-full max-w-[500px] mx-4 max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#F0EDE8] shrink-0">
-          <h2 className="font-['Cormorant_Garamond'] font-bold text-[20px] text-[#2D2D2D]">
+        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-line-soft shrink-0">
+          <h2 className="font-['Cormorant_Garamond'] font-bold text-[20px] text-ink">
             {title}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            className="text-[#8A8A8A] hover:text-[#2D2D2D] transition-colors rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E]"
+            className="text-ink-muted hover:text-ink transition-colors rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             aria-label={resolvedCancelLabel}
           >
             <X size={20} />
@@ -96,14 +96,14 @@ export function AdminFormDialog({
               type="button"
               onClick={handleCancelClick}
               disabled={isLoading}
-              className="px-4 py-2 rounded-lg border border-[#E8E4DF] font-['Inter'] text-[14px] font-medium text-[#6B6B6B] hover:bg-[#F9F6F0] hover:text-[#2D2D2D] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E] disabled:opacity-50"
+              className="px-4 py-2 rounded-lg border border-line font-['Inter'] text-[14px] font-medium text-ink-soft hover:bg-surface hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand disabled:opacity-50"
             >
               {resolvedCancelLabel}
             </button>
             <button
               type="submit"
               disabled={isLoading}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#B8963E] hover:bg-[#8A6F2E] text-white font-['Inter'] text-[14px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8963E] focus-visible:ring-offset-2 disabled:opacity-60"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-action hover:bg-action-hover text-white font-['Inter'] text-[14px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:opacity-60"
             >
               {isLoading && (
                 <Loader2

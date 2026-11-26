@@ -20,7 +20,7 @@ import { ScrollReveal, stagger } from '@/components/shared/ScrollReveal';
 function SectionBadge({ label }: { label: string }) {
   return (
     <span
-      className="inline-block px-4 py-1 text-xs font-semibold uppercase tracking-widest rounded-full border border-[#D4B97A] text-[#B8944A] bg-[rgba(184,148,74,0.08)]"
+      className="inline-block px-4 py-1 text-xs font-semibold uppercase tracking-widest rounded-full border border-brand-light text-brand bg-brand/8"
       style={{ fontFamily: "'Lato', sans-serif" }}
     >
       {label}
@@ -83,8 +83,8 @@ function ServiceCard({
     <article
       className={`h-full flex flex-col rounded-2xl p-8 border transition-shadow hover:shadow-lg ${
         highlighted
-          ? 'border-[#B8944A] bg-white shadow-[0_4px_24px_rgba(184,148,74,0.12)]'
-          : 'border-[#E8E4DF] bg-white'
+          ? 'border-brand bg-white shadow-[0_4px_24px_color-mix(in_srgb,var(--color-brand)_12%,transparent)]'
+          : 'border-line bg-white'
       }`}
     >
       {eyebrowField && (
@@ -93,7 +93,7 @@ function ServiceCard({
           fieldPath={eyebrowField}
           as="p"
           placeholder={eyebrowPlaceholder}
-          className="text-xs font-semibold uppercase tracking-[0.2em] text-[#B8944A] mb-2 [font-family:'Lato',sans-serif]"
+          className="text-xs font-semibold uppercase tracking-[0.2em] text-brand mb-2 [font-family:'Lato',sans-serif]"
         />
       )}
 
@@ -102,7 +102,7 @@ function ServiceCard({
         fieldPath={titleField}
         as="h3"
         placeholder={titlePlaceholder}
-        className="text-2xl font-black uppercase tracking-tight text-[#2D2D2D] mb-4 [font-family:'Cormorant_Garamond',serif]"
+        className="text-2xl font-black uppercase tracking-tight text-ink mb-4 [font-family:'Cormorant_Garamond',serif]"
       />
 
       <div className="flex flex-col gap-3 flex-1">
@@ -111,21 +111,21 @@ function ServiceCard({
           fieldPath={desc1Field}
           as="p"
           placeholder={desc1Placeholder}
-          className="text-[15px] leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+          className="text-[15px] leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
         />
         <EditableText
           section="services"
           fieldPath={desc2Field}
           as="p"
           placeholder={desc2Placeholder}
-          className="text-[15px] leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+          className="text-[15px] leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
         />
         <EditableText
           section="services"
           fieldPath={desc3Field}
           as="p"
           placeholder={desc3Placeholder}
-          className="text-[15px] leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+          className="text-[15px] leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
         />
         {desc4Field && (
           <EditableText
@@ -133,7 +133,7 @@ function ServiceCard({
             fieldPath={desc4Field}
             as="p"
             placeholder={desc4Placeholder}
-            className="text-[15px] leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+            className="text-[15px] leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
           />
         )}
         {desc5Field && (
@@ -142,13 +142,13 @@ function ServiceCard({
             fieldPath={desc5Field}
             as="p"
             placeholder={desc5Placeholder}
-            className="text-[15px] leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+            className="text-[15px] leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
           />
         )}
 
         {forWhomField && (
-          <div className="mt-2 border-l-2 border-[#D4B97A] pl-4">
-            <p className="text-[13px] font-bold uppercase tracking-wide text-[#2D2D2D] mb-1 [font-family:'Lato',sans-serif]">
+          <div className="mt-2 border-l-2 border-brand-light pl-4">
+            <p className="text-[13px] font-bold uppercase tracking-wide text-ink mb-1 [font-family:'Lato',sans-serif]">
               Dla kogo?
             </p>
             <EditableText
@@ -156,27 +156,27 @@ function ServiceCard({
               fieldPath={forWhomField}
               as="p"
               placeholder={forWhomPlaceholder}
-              className="text-[15px] leading-relaxed text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+              className="text-[15px] leading-relaxed text-ink-soft [font-family:'Lato',sans-serif]"
             />
           </div>
         )}
       </div>
 
-      <div className="mt-6 pt-6 border-t border-[#F0EDE8] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="mt-6 pt-6 border-t border-line-soft flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <EditableText
           section="services"
           fieldPath={priceField}
           as="p"
           placeholder={pricePlaceholder}
-          className="text-xl font-bold text-[#B8944A] [font-family:'Lato',sans-serif]"
+          className="text-xl font-bold text-brand [font-family:'Lato',sans-serif]"
         />
 
         <button
           type="button"
           onClick={onCta}
-          className="inline-flex items-center justify-center px-7 py-2.5 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A] whitespace-nowrap"
+          className="inline-flex items-center justify-center px-7 py-2.5 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand whitespace-nowrap"
           style={{
-            background: 'linear-gradient(135deg, #B8944A 0%, #D4B97A 100%)',
+            background: 'linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-light) 100%)',
             fontFamily: "'Lato', sans-serif",
           }}
         >
@@ -250,7 +250,7 @@ function BookingSection() {
   return (
     <section
       id="rezerwacja"
-      className="px-6 py-16 sm:py-24 bg-[#FAF8F5]"
+      className="px-6 py-16 sm:py-24 bg-surface"
       aria-label="Wybierz termin sesji"
     >
       <div className="max-w-[1024px] mx-auto">
@@ -262,14 +262,14 @@ function BookingSection() {
             fieldPath="sectionTitle"
             as="h2"
             placeholder="WYBIERZ TERMIN"
-            className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
+            className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-ink [font-family:'Cormorant_Garamond',serif]"
           />
           <EditableText
             section="booking"
             fieldPath="sectionDesc"
             as="p"
             placeholder="Wybierz date i godzine, ktora Ci odpowiada. Sesja trwa 60 minut."
-            className="text-sm sm:text-base leading-relaxed max-w-[576px] text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+            className="text-sm sm:text-base leading-relaxed max-w-[576px] text-ink-soft [font-family:'Lato',sans-serif]"
           />
         </div>
 
@@ -277,21 +277,21 @@ function BookingSection() {
         <BookingTransition
           show={step === 'confirmed' && !!selectedDate && !!selectedTime}
         >
-          <div className="max-w-[448px] mx-auto text-center p-10 rounded-lg bg-white border border-[#E8E4DF] shadow-sm">
-            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-[rgba(184,148,74,0.1)] text-[#B8944A] mx-auto mb-5">
+          <div className="max-w-[448px] mx-auto text-center p-10 rounded-lg bg-white border border-line shadow-sm">
+            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-brand/10 text-brand mx-auto mb-5">
               <Calendar size={28} />
             </div>
-            <h3 className="text-xl font-black uppercase tracking-tight text-[#2D2D2D] mb-3 [font-family:'Cormorant_Garamond',serif]">
+            <h3 className="text-xl font-black uppercase tracking-tight text-ink mb-3 [font-family:'Cormorant_Garamond',serif]">
               Termin wybrany
             </h3>
-            <p className="text-sm text-[#6B6B6B] mb-6 [font-family:'Lato',sans-serif]">
+            <p className="text-sm text-ink-soft mb-6 [font-family:'Lato',sans-serif]">
               Twoja sesja zostala wstepnie zarezerwowana. Otrzymasz
               potwierdzenie na adres e-mail.
             </p>
             <button
               type="button"
               onClick={handleReset}
-              className="inline-flex items-center justify-center px-7 py-2.5 rounded-lg text-sm font-semibold border border-[#B8944A] text-[#B8944A] transition-colors hover:bg-[rgba(184,148,74,0.06)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B8944A]"
+              className="inline-flex items-center justify-center px-7 py-2.5 rounded-lg text-sm font-semibold border border-brand text-brand transition-colors hover:bg-brand/6 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand"
               style={{ fontFamily: "'Lato', sans-serif" }}
             >
               Zarezerwuj inny termin
@@ -312,7 +312,7 @@ function BookingSection() {
             <div className="relative">
               {/* Placeholder — fades out when time picker appears */}
               <div
-                className="absolute inset-0 flex items-center justify-center rounded-lg border border-dashed border-[#D4B97A] bg-[rgba(184,148,74,0.04)] p-10 text-center transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)]"
+                className="absolute inset-0 flex items-center justify-center rounded-lg border border-dashed border-brand-light bg-brand/4 p-10 text-center transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)]"
                 style={{
                   opacity: step === 'time' && selectedDate ? 0 : 1,
                   transform:
@@ -324,11 +324,11 @@ function BookingSection() {
                 }}
               >
                 <div className="flex flex-col items-center gap-3">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[rgba(184,148,74,0.1)] text-[#B8944A]">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-brand/10 text-brand">
                     <Calendar size={22} />
                   </div>
                   <p
-                    className="text-sm text-[#8A8A8A] max-w-[200px]"
+                    className="text-sm text-ink-muted max-w-[200px]"
                     style={{ fontFamily: "'Lato', sans-serif" }}
                   >
                     Najpierw wybierz date z kalendarza
@@ -380,7 +380,7 @@ export default function Services() {
   }
 
   return (
-    <main className="min-h-screen bg-white text-[#2D2D2D]">
+    <main className="min-h-screen bg-white text-ink">
       <SEO
         title="Usługi"
         description="Sesje coachingowe i pakiety online z Anetą — coaching mindsetu, wellbeing i rozwój osobisty. Sprawdź ofertę i wybierz formę współpracy odpowiednią dla Ciebie."
@@ -437,7 +437,7 @@ export default function Services() {
       {/* SERVICE CARDS                                                        */}
       {/* ------------------------------------------------------------------ */}
       <section
-        className="px-6 py-16 sm:py-24 bg-[#F5F3EF]"
+        className="px-6 py-16 sm:py-24 bg-surface-alt"
         aria-label="Oferta sesji"
       >
         <div className="max-w-[1024px] mx-auto">
@@ -449,14 +449,14 @@ export default function Services() {
                 fieldPath="offersTitle"
                 as="h2"
                 placeholder="CO OFERUJE"
-                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-[#2D2D2D] [font-family:'Cormorant_Garamond',serif]"
+                className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-ink [font-family:'Cormorant_Garamond',serif]"
               />
               <EditableText
                 section="services"
                 fieldPath="offersSubtitle"
                 as="p"
                 placeholder="Wybierz forme pracy, ktora najlepiej odpowiada Twoim potrzebom."
-                className="text-sm sm:text-base leading-relaxed max-w-[576px] text-[#6B6B6B] [font-family:'Lato',sans-serif]"
+                className="text-sm sm:text-base leading-relaxed max-w-[576px] text-ink-soft [font-family:'Lato',sans-serif]"
               />
             </div>
           </ScrollReveal>
@@ -532,7 +532,7 @@ export default function Services() {
               {/* Text column */}
               <div className="order-2 lg:order-1 flex flex-col gap-4">
                 <span
-                  className="inline-block self-start px-4 py-1 text-xs font-semibold uppercase tracking-widest rounded-full border border-[#D4B97A] text-[#D4B97A] bg-[rgba(212,185,122,0.1)]"
+                  className="inline-block self-start px-4 py-1 text-xs font-semibold uppercase tracking-widest rounded-full border border-brand-light text-brand-light bg-[rgba(212,185,122,0.1)]"
                   style={{ fontFamily: "'Lato', sans-serif" }}
                 >
                   <EditableText
@@ -555,7 +555,7 @@ export default function Services() {
                   fieldPath="compassSubtitle"
                   as="p"
                   placeholder="transformacja na beskidzkim szlaku"
-                  className="text-base sm:text-lg italic text-[#D4B97A] [font-family:'Lato',sans-serif]"
+                  className="text-base sm:text-lg italic text-brand-light [font-family:'Lato',sans-serif]"
                 />
 
                 <div className="flex flex-col gap-3 mt-2">
@@ -620,10 +620,10 @@ export default function Services() {
                 <button
                   type="button"
                   onClick={goToBookingFlow}
-                  className="inline-flex items-center justify-center self-start mt-4 px-7 py-2.5 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A]"
+                  className="inline-flex items-center justify-center self-start mt-4 px-7 py-2.5 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand"
                   style={{
                     background:
-                      'linear-gradient(135deg, #B8944A 0%, #D4B97A 100%)',
+                      'linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-light) 100%)',
                     fontFamily: "'Lato', sans-serif",
                   }}
                 >
@@ -706,9 +706,9 @@ export default function Services() {
             <button
               type="button"
               onClick={goToBookingFlow}
-              className="inline-flex items-center justify-center px-8 py-3 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#B8944A]"
+              className="inline-flex items-center justify-center px-8 py-3 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand"
               style={{
-                background: 'linear-gradient(135deg, #B8944A 0%, #D4B97A 100%)',
+                background: 'linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-light) 100%)',
                 fontFamily: "'Lato', sans-serif",
               }}
             >

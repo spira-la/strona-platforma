@@ -22,7 +22,7 @@ export function AdminPageHeader({
         <h1
           className={[
             "font-['Cormorant_Garamond',serif] font-bold text-2xl leading-tight",
-            'text-[#2D2D2D] truncate',
+            'text-ink truncate',
           ].join(' ')}
         >
           {title}
@@ -31,7 +31,7 @@ export function AdminPageHeader({
           <p
             className={[
               "mt-1 font-['Inter',sans-serif] text-sm leading-relaxed",
-              'text-[#6B6B6B]',
+              'text-ink-soft',
             ].join(' ')}
           >
             {description}
