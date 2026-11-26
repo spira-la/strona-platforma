@@ -26,6 +26,7 @@ import {
 } from '@/components/admin';
 import type { AdminTableColumn } from '@/components/admin';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { CleanCmsPanel } from '@/components/admin/CleanCmsPanel';
 import { toast } from '@/stores/toast.store';
 import {
   languagesClient,
@@ -715,6 +716,9 @@ export default function AdminLanguages() {
           </button>
         </div>
       </div>
+
+      {/* Clean CMS (reset texts to static defaults) + backups */}
+      <CleanCmsPanel />
 
       {/* Status filter tabs */}
       <div className="mb-4">

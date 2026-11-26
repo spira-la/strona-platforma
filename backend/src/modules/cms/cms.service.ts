@@ -1,10 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CacheService } from '../../core/cache.service.js';
 import { StorageService } from '../../core/storage.service.js';
 import { OpenRouterService } from '../../core/openrouter.service.js';
 import { CmsContentEntity } from '../../db/entities/cms-content.entity.js';
+import { CmsContentBackupEntity } from '../../db/entities/cms-content-backup.entity.js';
+import { pruneTextFields } from './cms-reset.util.js';
 
 const CACHE_KEY = 'cms:content:main_page';
 const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
@@ -42,6 +44,8 @@ export class CmsService {
   constructor(
     @InjectRepository(CmsContentEntity)
     private readonly repo: Repository<CmsContentEntity>,
+    @InjectRepository(CmsContentBackupEntity)
+    private readonly backupRepo: Repository<CmsContentBackupEntity>,
     private readonly cache: CacheService,
     private readonly storage: StorageService,
     private readonly openRouter: OpenRouterService,
@@ -234,6 +238,150 @@ export class CmsService {
     return { version: doc.version + 1, created: true };
   }
 
+  // ---------------------------------------------------------------------------
+  // Clean CMS — reset to static defaults, with backups
+  // ---------------------------------------------------------------------------
+
+  /** Persists a full snapshot of the current CMS document. Returns its id. */
+  private async createBackup(
+    reason: string,
+    userId?: string,
+  ): Promise<{ id: string; createdAt: Date }> {
+    const doc = await this.getContent();
+    const saved = await this.backupRepo.save(
+      this.backupRepo.create({
+        content: doc.content,
+        reason,
+        createdBy: userId ?? null,
+      }),
+    );
+    return { id: saved.id, createdAt: saved.createdAt };
+  }
+
+  /** Overwrites the document content, bumps version, invalidates cache. */
+  private async writeContent(
+    content: CMSContent,
+    userId?: string,
+  ): Promise<number> {
+    const doc = await this.getContent();
+    const newVersion = (doc.version || 0) + 1;
+    const now = new Date();
+
+    // save() upserts by primary key, so it covers both first insert and update.
+    await this.repo.save(
+      this.repo.create({
+        id: DOC_ID,
+        content,
+        version: newVersion,
+        updatedBy: userId ?? null,
+        updatedAt: now,
+      }),
+    );
+
+    this.cache.delete(CACHE_KEY);
+    return newVersion;
+  }
+
+  /**
+   * Removes TEXT fields from the selected sections (all languages) so the
+   * static EditableText fallbacks show again. Media/config fields are kept
+   * when keepMedia is true (see cms-reset.util.ts for the exact rule).
+   * Takes a backup first. Blogs live in their own tables and are untouched.
+   */
+  async resetSections(
+    sections: string[],
+    keepMedia = true,
+    userId?: string,
+  ): Promise<{
+    backupId: string;
+    removed: number;
+    kept: number;
+    sections: Record<string, { removed: number; kept: number }>;
+    version: number;
+  }> {
+    const doc = await this.getContent();
+    const content: CMSContent = { ...doc.content };
+    const perSection: Record<string, { removed: number; kept: number }> = {};
+    let removed = 0;
+    let kept = 0;
+
+    // Cancel pending background translations: they would re-write old data.
+    this.translateQueue.length = 0;
+
+    const backup = await this.createBackup(
+      `reset-sections: ${sections.join(',')} (keepMedia=${keepMedia})`,
+      userId,
+    );
+
+    for (const section of sections) {
+      const langMap = content[section];
+      if (!langMap) continue;
+      const newLangMap: Record<string, Record<string, unknown>> = {};
+      const stats = { removed: 0, kept: 0 };
+
+      for (const [lang, data] of Object.entries(langMap)) {
+        const res = pruneTextFields(data ?? {}, keepMedia);
+        stats.removed += res.removed;
+        stats.kept += res.kept;
+        if (Object.keys(res.value).length > 0) newLangMap[lang] = res.value;
+      }
+
+      if (Object.keys(newLangMap).length > 0) content[section] = newLangMap;
+      else delete content[section];
+
+      perSection[section] = stats;
+      removed += stats.removed;
+      kept += stats.kept;
+    }
+
+    const version = await this.writeContent(content, userId);
+    this.logger.log(
+      `CMS reset: ${sections.length} sections, removed ${removed}, kept ${kept}, backup ${backup.id}`,
+    );
+
+    return {
+      backupId: backup.id,
+      removed,
+      kept,
+      sections: perSection,
+      version,
+    };
+  }
+
+  /** Lists the latest backups (without content), newest first. */
+  async listBackups(
+    limit = 20,
+  ): Promise<Array<{ id: string; createdAt: Date; reason: string }>> {
+    const rows = await this.backupRepo.find({
+      select: { id: true, createdAt: true, reason: true },
+      order: { createdAt: 'DESC' },
+      take: limit,
+    });
+    return rows.map((r) => ({
+      id: r.id,
+      createdAt: r.createdAt,
+      reason: r.reason,
+    }));
+  }
+
+  /** Restores a backup; the current state is backed up first. */
+  async restoreBackup(
+    id: string,
+    userId?: string,
+  ): Promise<{ backupId: string; version: number }> {
+    const target = await this.backupRepo.findOne({ where: { id } });
+    if (!target) throw new NotFoundException('Backup not found');
+
+    this.translateQueue.length = 0;
+    const backup = await this.createBackup(`before restore of ${id}`, userId);
+    const version = await this.writeContent(
+      target.content as CMSContent,
+      userId,
+    );
+    this.logger.log(`CMS restored backup ${id} (safety backup ${backup.id})`);
+    return { backupId: backup.id, version };
+  }
+
   /** Returns the StorageService so the controller can access it without
    *  a separate injection (keeps the DI graph simple). */
   getStorage(): StorageService {
@@ -260,15 +408,13 @@ export class CmsService {
     const langData = sectionData[lang] ?? sectionData['pl'];
     if (!langData) return undefined;
 
-    const value = fieldPath
-      .split('.')
-      .reduce<unknown>(
-        (acc, key) =>
-          acc && typeof acc === 'object'
-            ? (acc as Record<string, unknown>)[key]
-            : undefined,
-        langData,
-      );
+    let value: unknown = langData;
+    for (const key of fieldPath.split('.')) {
+      value =
+        value && typeof value === 'object'
+          ? (value as Record<string, unknown>)[key]
+          : undefined;
+    }
 
     return typeof value === 'string' && value.trim() ? value : undefined;
   }

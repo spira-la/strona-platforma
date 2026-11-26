@@ -660,7 +660,28 @@
         "button": "Inicializar + traducir ({{count}})",
         "running": "Inicializando y traduciendo...",
         "success": "Se inicializaron {{seeded}} campos. Traducción en curso.",
-        "nothingNew": "Todos los campos ya están guardados en el CMS."
+        "nothingNew": "Todos los campos ya están guardados en el CMS.",
+      "clean": {
+        "title": "Limpiar CMS (restablecer textos por defecto)",
+        "description": "Elimina los textos guardados en el CMS de las páginas seleccionadas para que vuelvan los textos nuevos del código. El blog no se toca. Antes se crea una copia de seguridad.",
+        "sections": "Páginas / secciones",
+        "selectAll": "Seleccionar todo",
+        "selectNone": "Deseleccionar todo",
+        "keepMedia": "Conservar imágenes, fondos y enlaces (p. ej. Calendly)",
+        "keepMediaHint": "Desactivado = también se elimina todo lo demás en las secciones seleccionadas.",
+        "button": "Limpiar seleccionadas ({{count}})",
+        "running": "Limpiando...",
+        "confirmTitle": "¿Limpiar los textos del CMS?",
+        "confirmMessage": "Se eliminarán los textos de {{count}} secciones en todos los idiomas. Escribe CLEAN para confirmar.",
+        "confirmPlaceholder": "CLEAN",
+        "success": "Se eliminaron {{removed}} campos de texto y se conservaron {{kept}} (imágenes/enlaces). Ahora ejecuta \"Inicializar + traducir\" para regenerar EN/ES desde los nuevos textos PL. Copia: {{backupId}}.",
+        "backupsTitle": "Copias de seguridad del CMS",
+        "backupsEmpty": "Aún no hay copias de seguridad.",
+        "restore": "Restaurar",
+        "restoreTitle": "¿Restaurar la copia de seguridad?",
+        "restoreMessage": "El estado actual del CMS se reemplazará por la copia del {{date}} (antes se crea una copia nueva).",
+        "restoreSuccess": "Copia de seguridad restaurada."
+      }
       }
     },
     "contact": {
