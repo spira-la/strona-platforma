@@ -10,6 +10,7 @@ import {
 import { SEO } from '@/components/shared/SEO';
 import { EditableText } from '@/components/cms/EditableText';
 import { useCMS } from '@/contexts/CMSContext';
+import { useRoles } from '@/hooks/useRoles';
 import {
   RainbowStroke,
   WatercolorAccent,
@@ -587,7 +588,37 @@ function ResultScreen({
 // Page
 // ---------------------------------------------------------------------------
 
+const noop = () => {};
+
+/**
+ * The quiz shows one step at a time, so a normal visit only renders (and
+ * registers for "Seed + translate") the fields of the steps actually seen.
+ * For admins we also mount every step hidden, so one visit to /quiz
+ * registers all questions, answers and results and they all get seeded and
+ * translated. No side effects run on mount in these screens.
+ */
+function AllStepsForSeeding() {
+  return (
+    <div hidden aria-hidden="true">
+      <StartScreen onStart={noop} />
+      {QUESTIONS.map((question, i) => (
+        <QuestionScreen
+          key={question.q}
+          index={i}
+          chosen={undefined}
+          onAnswer={noop}
+          onBack={noop}
+        />
+      ))}
+      {RESULTS.map((result, i) => (
+        <ResultScreen key={result.key} resultIndex={i} onAgain={noop} />
+      ))}
+    </div>
+  );
+}
+
 export default function Quiz() {
+  const { isAdmin } = useRoles();
   const [phase, setPhase] = useState<Phase>('start');
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
@@ -660,6 +691,7 @@ export default function Quiz() {
               onAgain={() => goTo('start')}
             />
           )}
+          {isAdmin && <AllStepsForSeeding />}
           <EditableText
             section={S}
             fieldPath="note"
