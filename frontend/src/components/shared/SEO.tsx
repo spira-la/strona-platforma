@@ -24,7 +24,7 @@ const SITE_NAME = 'Spirala';
 const SITE_URL = 'https://spira-la.com';
 const DEFAULT_DESCRIPTION =
   'Coaching mindsetu i dobrostanu z Anetą — sesje indywidualne, pakiety, rozwój osobisty. Zarezerwuj sesję online.';
-const DEFAULT_OG_IMAGE = '/og-image.jpg';
+const DEFAULT_OG_IMAGE = '/og-image.jpg?v=2';
 
 export function SEO({
   title,
@@ -40,7 +40,7 @@ export function SEO({
 }: SEOProps) {
   const fullTitle = title
     ? `${title} — ${SITE_NAME}`
-    : `${SITE_NAME} — Mindset & Wellbeing Coaching`;
+    : `Spiralą w górę — ${SITE_NAME}`;
 
   // Normalize canonical: strip trailing slash for consistency, except empty root
   const canonicalUrl =

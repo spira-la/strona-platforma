@@ -1185,7 +1185,7 @@ export default function HomeNow() {
       <SEO
         canonical="/"
         pathname="/"
-        description="Niby nic złego się nie dzieje, a Ty jesteś ciągle zmęczona? Pomagam kobietom zrozumieć, skąd ta pustka, odnaleźć siebie i wybrać inaczej. Spirala, Aneta Mroczko."
+        description="Techniki tkania życia po swojemu. Wybierasz, że od teraz zrobisz to inaczej."
       />
       <HeroSection />
       <EmptinessSection />
