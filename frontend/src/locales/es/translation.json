@@ -660,7 +660,8 @@
         "button": "Inicializar + traducir ({{count}})",
         "running": "Inicializando y traduciendo...",
         "success": "Se inicializaron {{seeded}} campos. Traducción en curso.",
-        "nothingNew": "Todos los campos ya están guardados en el CMS.",
+        "nothingNew": "Todos los campos ya están guardados en el CMS."
+      },
       "clean": {
         "title": "Limpiar CMS (restablecer textos por defecto)",
         "description": "Elimina los textos guardados en el CMS de las páginas seleccionadas para que vuelvan los textos nuevos del código. El blog no se toca. Antes se crea una copia de seguridad.",
@@ -681,7 +682,6 @@
         "restoreTitle": "¿Restaurar la copia de seguridad?",
         "restoreMessage": "El estado actual del CMS se reemplazará por la copia del {{date}} (antes se crea una copia nueva).",
         "restoreSuccess": "Copia de seguridad restaurada."
-      }
       }
     },
     "contact": {

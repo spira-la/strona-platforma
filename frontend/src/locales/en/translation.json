@@ -712,7 +712,8 @@
         "button": "Seed + translate ({{count}})",
         "running": "Seeding and translating...",
         "success": "Seeded {{seeded}} fields. Translation in progress.",
-        "nothingNew": "All fields are already saved in CMS.",
+        "nothingNew": "All fields are already saved in CMS."
+      },
       "clean": {
         "title": "Clean CMS (reset texts to defaults)",
         "description": "Removes the texts saved in the CMS for the selected pages so the new texts from the code show again. Blog is never touched. A backup is created first.",
@@ -733,7 +734,6 @@
         "restoreTitle": "Restore backup?",
         "restoreMessage": "The current CMS state will be replaced with the backup from {{date}} (a new backup is taken first).",
         "restoreSuccess": "Backup restored."
-      }
       }
     },
     "contact": {

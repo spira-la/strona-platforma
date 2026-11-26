@@ -660,7 +660,8 @@
         "button": "Inicjuj + przetłumacz ({{count}})",
         "running": "Inicjalizacja i tłumaczenie...",
         "success": "Zainicjowano {{seeded}} pól. Tłumaczenie w toku.",
-        "nothingNew": "Wszystkie pola są już zapisane w CMS.",
+        "nothingNew": "Wszystkie pola są już zapisane w CMS."
+      },
       "clean": {
         "title": "Wyczyść CMS (przywróć teksty domyślne)",
         "description": "Usuwa zapisane w CMS teksty wybranych podstron, dzięki czemu wracają nowe teksty z kodu. Blog nie jest ruszany. Przed czyszczeniem powstaje kopia zapasowa.",
@@ -681,7 +682,6 @@
         "restoreTitle": "Przywrócić kopię zapasową?",
         "restoreMessage": "Aktualny stan CMS zostanie zastąpiony kopią z {{date}} (przed tym powstanie nowa kopia).",
         "restoreSuccess": "Kopia zapasowa przywrócona."
-      }
       }
     },
     "contact": {
