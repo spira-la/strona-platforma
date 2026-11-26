@@ -14,7 +14,8 @@ import { CmsService } from '../cms/cms.service.js';
 
 const SITE_URL = 'https://spira-la.com';
 const SITE_NAME = 'Spirala';
-const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
+// ?v= makes WhatsApp / Facebook fetch the image again after it changes
+const OG_IMAGE = `${SITE_URL}/og-image.jpg?v=2`;
 const CURRENT_YEAR = new Date().getFullYear();
 
 interface PageMeta {
@@ -153,11 +154,10 @@ export class PrerenderService {
   // Public page renderers
   // ---------------------------------------------------------------------------
 
-  async renderHome(): Promise<string> {
-    const image = await this.resolveHeroImage(
-      'hero',
-      'https://images.unsplash.com/photo-1744192876531-f00759ed9c57?q=80&w=2070&auto=format&fit=crop',
-    );
+  renderHome(): Promise<string> {
+    // Link previews of the home page show the logo card (public/og-image.jpg),
+    // not the old hero photo (client 2026-11-26).
+    const image = OG_IMAGE;
     const jsonLd = JSON.stringify([
       {
         '@context': 'https://schema.org',
@@ -209,16 +209,18 @@ export class PrerenderService {
     </ul>
     <p><a href="${escapeHtml(SITE_URL)}/kontakt">Zarezerwuj sesję</a></p>`;
 
-    return this.buildHtml({
-      title: 'Spirala — Mindset &amp; Wellbeing Coaching Online',
-      description:
-        'Coaching mindsetu i wellbeing online z Anetą — odkryj wewnętrzną siłę, odzyskaj energię i kierunek w życiu. Sesje indywidualne i pakiety. Zarezerwuj bezpłatną rozmowę wstępną.',
-      canonical: `${SITE_URL}/`,
-      path: '/',
-      jsonLd,
-      bodyContent,
-      image,
-    });
+    return Promise.resolve(
+      this.buildHtml({
+        title: 'Spiralą w górę',
+        description:
+          'Techniki tkania życia po swojemu. Wybierasz, że od teraz zrobisz to inaczej.',
+        canonical: `${SITE_URL}/`,
+        path: '/',
+        jsonLd,
+        bodyContent,
+        image,
+      }),
+    );
   }
 
   async renderAbout(): Promise<string> {
