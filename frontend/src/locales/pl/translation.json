@@ -664,7 +664,7 @@
       },
       "clean": {
         "title": "Wyczyść CMS (przywróć teksty domyślne)",
-        "description": "Usuwa zapisane w CMS teksty wybranych podstron, dzięki czemu wracają nowe teksty z kodu. Blog nie jest ruszany. Przed czyszczeniem powstaje kopia zapasowa.",
+        "description": "Usuwa zapisane w CMS teksty wybranych stron publicznych, dzięki czemu wracają nowe teksty z kodu. Blog, logowanie, rezerwacje i dokumenty prawne nie są ruszane. Przed czyszczeniem powstaje kopia zapasowa.",
         "sections": "Podstrony / sekcje",
         "selectAll": "Zaznacz wszystko",
         "selectNone": "Odznacz wszystko",
@@ -681,7 +681,33 @@
         "restore": "Przywróć",
         "restoreTitle": "Przywrócić kopię zapasową?",
         "restoreMessage": "Aktualny stan CMS zostanie zastąpiony kopią z {{date}} (przed tym powstanie nowa kopia).",
-        "restoreSuccess": "Kopia zapasowa przywrócona."
+        "restoreSuccess": "Kopia zapasowa przywrócona.",
+        "groups": {
+          "current": "Aktualne strony",
+          "layout": "Menu i stopka",
+          "classic": "Poprzednia wersja (ukryta)"
+        },
+        "sectionNames": {
+          "homeNow": "Strona główna",
+          "aboutNow": "O mnie",
+          "services": "Usługi",
+          "howIWork": "Jak pracuję",
+          "events": "Wydarzenia",
+          "contact": "Kontakt",
+          "quiz": "Quiz",
+          "kochanka": "Kochanka",
+          "motherWifeLover": "Matka, żona, kochanka",
+          "mamyNastolatkow": "Mamy nastolatków",
+          "youtube": "YouTube",
+          "navbar": "Menu",
+          "footer": "Stopka",
+          "hero": "Hero (stara strona główna)",
+          "home": "Stara strona główna",
+          "about": "Stare O mnie",
+          "roles": "Role (stara strona główna)",
+          "cta": "Wezwania do działania (stara strona główna)",
+          "testimonials": "Opinie (stara strona główna)"
+        }
       }
     },
     "contact": {

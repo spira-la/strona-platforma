@@ -716,7 +716,7 @@
       },
       "clean": {
         "title": "Clean CMS (reset texts to defaults)",
-        "description": "Removes the texts saved in the CMS for the selected pages so the new texts from the code show again. Blog is never touched. A backup is created first.",
+        "description": "Removes the CMS-saved texts of the selected public pages so the new texts from the code show again. Blog, login, booking and legal pages are never touched. A backup is created first.",
         "sections": "Pages / sections",
         "selectAll": "Select all",
         "selectNone": "Deselect all",
@@ -733,7 +733,33 @@
         "restore": "Restore",
         "restoreTitle": "Restore backup?",
         "restoreMessage": "The current CMS state will be replaced with the backup from {{date}} (a new backup is taken first).",
-        "restoreSuccess": "Backup restored."
+        "restoreSuccess": "Backup restored.",
+        "groups": {
+          "current": "Current pages",
+          "layout": "Menu and footer",
+          "classic": "Previous version (hidden)"
+        },
+        "sectionNames": {
+          "homeNow": "Home page",
+          "aboutNow": "About me",
+          "services": "Services",
+          "howIWork": "How I work",
+          "events": "Events",
+          "contact": "Contact",
+          "quiz": "Quiz",
+          "kochanka": "Lover",
+          "motherWifeLover": "Mother, wife, lover",
+          "mamyNastolatkow": "Mothers of teenagers",
+          "youtube": "YouTube",
+          "navbar": "Menu",
+          "footer": "Footer",
+          "hero": "Hero (old home page)",
+          "home": "Old home page",
+          "about": "Old About me",
+          "roles": "Roles (old home page)",
+          "cta": "Calls to action (old home page)",
+          "testimonials": "Testimonials (old home page)"
+        }
       }
     },
     "contact": {

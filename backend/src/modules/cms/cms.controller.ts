@@ -25,6 +25,7 @@ import { RolesGuard } from '../../common/guards/roles.guard.js';
 import { Roles } from '../../common/decorators/roles.decorator.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import type { User } from '@supabase/supabase-js';
+import { CLEANABLE_SECTIONS } from './cms-reset.util.js';
 
 // ---------------------------------------------------------------------------
 // DTOs
@@ -262,6 +263,12 @@ export class CmsController {
       : [];
     if (sections.length === 0) {
       throw new BadRequestException('sections must be a non-empty array');
+    }
+    const notAllowed = sections.filter((s) => !CLEANABLE_SECTIONS.includes(s));
+    if (notAllowed.length > 0) {
+      throw new BadRequestException(
+        `These sections cannot be cleaned: ${notAllowed.join(', ')}`,
+      );
     }
     const result = await this.cms.resetSections(
       sections,

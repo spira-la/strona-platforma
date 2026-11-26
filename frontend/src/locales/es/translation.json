@@ -664,7 +664,7 @@
       },
       "clean": {
         "title": "Limpiar CMS (restablecer textos por defecto)",
-        "description": "Elimina los textos guardados en el CMS de las páginas seleccionadas para que vuelvan los textos nuevos del código. El blog no se toca. Antes se crea una copia de seguridad.",
+        "description": "Borra los textos guardados en el CMS de las páginas públicas seleccionadas para que vuelvan a verse los textos nuevos del código. Nunca toca blog, login, reservas ni páginas legales. Antes se crea una copia de seguridad.",
         "sections": "Páginas / secciones",
         "selectAll": "Seleccionar todo",
         "selectNone": "Deseleccionar todo",
@@ -681,7 +681,33 @@
         "restore": "Restaurar",
         "restoreTitle": "¿Restaurar la copia de seguridad?",
         "restoreMessage": "El estado actual del CMS se reemplazará por la copia del {{date}} (antes se crea una copia nueva).",
-        "restoreSuccess": "Copia de seguridad restaurada."
+        "restoreSuccess": "Copia de seguridad restaurada.",
+        "groups": {
+          "current": "Páginas actuales",
+          "layout": "Menú y pie de página",
+          "classic": "Versión anterior (oculta)"
+        },
+        "sectionNames": {
+          "homeNow": "Página de inicio",
+          "aboutNow": "Sobre mí",
+          "services": "Servicios",
+          "howIWork": "Cómo trabajo",
+          "events": "Eventos",
+          "contact": "Contacto",
+          "quiz": "Quiz",
+          "kochanka": "Amante",
+          "motherWifeLover": "Madre, esposa, amante",
+          "mamyNastolatkow": "Madres de adolescentes",
+          "youtube": "YouTube",
+          "navbar": "Menú",
+          "footer": "Pie de página",
+          "hero": "Hero (inicio antiguo)",
+          "home": "Inicio antiguo",
+          "about": "Sobre mí antiguo",
+          "roles": "Roles (inicio antiguo)",
+          "cta": "Llamadas a la acción (inicio antiguo)",
+          "testimonials": "Testimonios (inicio antiguo)"
+        }
       }
     },
     "contact": {

@@ -26,6 +26,38 @@
  * `Multiline`), since they belong to the text.
  */
 
+/**
+ * Sections "Clean CMS" may touch: only the visual texts of public pages.
+ * System/flow texts (auth, booking, confirmation, newsletter, 404), blog UI
+ * texts, legal pages and the web-design ribbon are deliberately excluded.
+ * Keep in sync with CLEANABLE_GROUPS in
+ * frontend/src/components/admin/CleanCmsPanel.tsx.
+ */
+export const CLEANABLE_SECTIONS: readonly string[] = [
+  // Current pages
+  'homeNow',
+  'aboutNow',
+  'services',
+  'howIWork',
+  'events',
+  'contact',
+  'quiz',
+  'kochanka',
+  'motherWifeLover',
+  'mamyNastolatkow',
+  'youtube',
+  // Shared layout
+  'navbar',
+  'footer',
+  // Previous Start / O mnie (hidden behind classicHome / classicAbout)
+  'hero',
+  'home',
+  'about',
+  'roles',
+  'cta',
+  'testimonials',
+];
+
 const MEDIA_KEY_SUFFIXES = [
   'BgColor',
   'OverlayTop',

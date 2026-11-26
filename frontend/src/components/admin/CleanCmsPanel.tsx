@@ -8,40 +8,39 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { toast } from '@/stores/toast.store';
 import type { CMSSectionKey } from '@/types/cms.types';
 
-// Record<CMSSectionKey, true> makes TypeScript fail when a new section key is
-// added to the union but not listed here.
-const SECTION_MAP: Record<CMSSectionKey, true> = {
-  navbar: true,
-  hero: true,
-  home: true,
-  about: true,
-  howIWork: true,
-  services: true,
-  blog: true,
-  blogPost: true,
-  contact: true,
-  footer: true,
-  confirmation: true,
-  booking: true,
-  newsletter: true,
-  cta: true,
-  testimonials: true,
-  auth: true,
-  notFound: true,
-  webDesign: true,
-  privacy: true,
-  terms: true,
-  youtube: true,
-  mamyNastolatkow: true,
-  motherWifeLover: true,
-  kochanka: true,
-  events: true,
-  homeNow: true,
-  aboutNow: true,
-  quiz: true,
-  roles: true,
-};
-const ALL_SECTIONS = Object.keys(SECTION_MAP) as CMSSectionKey[];
+// Only the visual texts of public pages can be cleaned. System/flow texts
+// (auth, booking, confirmation, newsletter, 404), blog UI texts, legal pages
+// and the web-design ribbon are deliberately left out. The backend enforces
+// the same list (CLEANABLE_SECTIONS in backend/src/modules/cms/cms-reset.util.ts).
+const CLEANABLE_GROUPS = [
+  {
+    id: 'current',
+    sections: [
+      'homeNow',
+      'aboutNow',
+      'services',
+      'howIWork',
+      'events',
+      'contact',
+      'quiz',
+      'kochanka',
+      'motherWifeLover',
+      'mamyNastolatkow',
+      'youtube',
+    ],
+  },
+  { id: 'layout', sections: ['navbar', 'footer'] },
+  {
+    id: 'classic',
+    sections: ['hero', 'home', 'about', 'roles', 'cta', 'testimonials'],
+  },
+] as const satisfies readonly {
+  id: string;
+  sections: readonly CMSSectionKey[];
+}[];
+const ALL_SECTIONS: CMSSectionKey[] = CLEANABLE_GROUPS.flatMap((g) => [
+  ...g.sections,
+]);
 
 const CONFIRM_WORD = 'CLEAN';
 const BACKUPS_KEY = ['cms-backups'];
@@ -155,20 +154,29 @@ export function CleanCmsPanel() {
                 : t('admin.languages.clean.selectAll')}
             </button>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-1.5">
-            {ALL_SECTIONS.map((key) => (
-              <label
-                key={key}
-                className="flex items-center gap-2 font-['Inter'] text-[12px] text-ink cursor-pointer"
-              >
-                <input
-                  type="checkbox"
-                  checked={selected.has(key)}
-                  onChange={() => toggle(key)}
-                  className="accent-[var(--color-brand)]"
-                />
-                {key}
-              </label>
+          <div className="space-y-3">
+            {CLEANABLE_GROUPS.map((group) => (
+              <fieldset key={group.id}>
+                <legend className="font-['Inter'] text-[11px] font-medium uppercase tracking-wide text-ink-muted mb-1.5">
+                  {t(`admin.languages.clean.groups.${group.id}`)}
+                </legend>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-1.5">
+                  {group.sections.map((key) => (
+                    <label
+                      key={key}
+                      className="flex items-center gap-2 font-['Inter'] text-[12px] text-ink cursor-pointer"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selected.has(key)}
+                        onChange={() => toggle(key)}
+                        className="accent-[var(--color-brand)]"
+                      />
+                      {t(`admin.languages.clean.sectionNames.${key}`)}
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
             ))}
           </div>
         </div>
