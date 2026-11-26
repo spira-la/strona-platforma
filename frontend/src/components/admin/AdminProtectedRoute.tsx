@@ -1,5 +1,8 @@
+import { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useRoles } from '@/hooks/useRoles';
+import { useAuth } from '@/contexts/AuthContext';
+import { useAuthStore } from '@/stores/auth.store';
 import { AdminLayout } from './AdminLayout';
 
 function AdminLoadingSpinner() {
@@ -21,8 +24,18 @@ function AdminLoadingSpinner() {
 
 export default function AdminProtectedRoute() {
   const { isAdmin, isLoading } = useRoles();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
+  const { openLogin } = useAuthStore();
+  const needsLogin = !isLoading && !authLoading && !isAuthenticated;
 
-  if (isLoading) {
+  // Not logged in → go home with the login window open. This is how the
+  // admin logs in while the public "Zaloguj się" button is hidden
+  // (`publicAccounts` flag off): she opens spira-la.com/admin.
+  useEffect(() => {
+    if (needsLogin) openLogin();
+  }, [needsLogin, openLogin]);
+
+  if (isLoading || authLoading) {
     return <AdminLoadingSpinner />;
   }
 

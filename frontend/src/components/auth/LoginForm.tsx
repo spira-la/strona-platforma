@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAuthStore } from '@/stores/auth.store';
+import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 
 const loginSchema = z.object({
   email: z.string().email('Podaj poprawny adres e-mail'),
@@ -15,6 +16,8 @@ type LoginData = z.infer<typeof loginSchema>;
 export function LoginForm() {
   const { signIn, signInWithGoogle } = useAuth();
   const { openRegister, openForgotPassword, closeModals } = useAuthStore();
+  // no public sign-up while the site collects no data (`publicAccounts`)
+  const allowRegister = useFeatureFlag('publicAccounts');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
@@ -169,16 +172,18 @@ export function LoginForm() {
         </button>
       </div>
 
-      <p className="text-center font-['Lato'] text-[13px] text-ink-muted">
-        Nie masz konta?{' '}
-        <button
-          type="button"
-          onClick={openRegister}
-          className="text-brand font-semibold hover:underline focus-visible:outline-none focus-visible:underline"
-        >
-          Zarejestruj się
-        </button>
-      </p>
+      {allowRegister && (
+        <p className="text-center font-['Lato'] text-[13px] text-ink-muted">
+          Nie masz konta?{' '}
+          <button
+            type="button"
+            onClick={openRegister}
+            className="text-brand font-semibold hover:underline focus-visible:outline-none focus-visible:underline"
+          >
+            Zarejestruj się
+          </button>
+        </p>
+      )}
     </form>
   );
 }

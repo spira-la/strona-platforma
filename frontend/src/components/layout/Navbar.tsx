@@ -167,6 +167,9 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
   const showYouTube = useFeatureFlag('youtubeNavLink');
   const showBlog = useFeatureFlag('blog');
   const showExtendedNav = useFeatureFlag('extendedNav');
+  // "Zaloguj się" is hidden while the site collects no data; the admin logs
+  // in by opening /admin (see AdminProtectedRoute)
+  const showLogin = useFeatureFlag('publicAccounts');
   const { activeId } = useCMSFocus();
 
   const contentGroup: NavGroup = {
@@ -568,7 +571,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                   </div>
                 )}
               </div>
-            ) : (
+            ) : showLogin ? (
               <button
                 type="button"
                 onClick={openLogin}
@@ -583,7 +586,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                   Zaloguj się
                 </EditableText>
               </button>
-            )}
+            ) : null}
           </div>
 
           {/* Mobile: hamburger */}
@@ -772,7 +775,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                   </Link>
                 )}
               </div>
-            ) : (
+            ) : showLogin ? (
               <button
                 type="button"
                 onClick={() => {
@@ -786,7 +789,7 @@ export function Navbar({ transparent = false, darkHero = false }: NavbarProps) {
                   Zaloguj się
                 </EditableText>
               </button>
-            )}
+            ) : null}
           </li>
         </ul>
       </div>

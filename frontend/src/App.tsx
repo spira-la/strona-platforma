@@ -1,5 +1,11 @@
 import { Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Outlet,
+  Navigate,
+} from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from '@/contexts/AuthContext';
@@ -34,6 +40,7 @@ const Confirmation = lazy(() => import('@/pages/Confirmation'));
 const AuthCallback = lazy(() => import('@/pages/AuthCallback'));
 const PrivacyPolicy = lazy(() => import('@/pages/PrivacyPolicy'));
 const Terms = lazy(() => import('@/pages/Terms'));
+const PrivacyNote = lazy(() => import('@/pages/PrivacyNote'));
 
 // Feature-flagged pages — lazy only when flags are active
 const Webinars = lazy(() => import('@/pages/Webinars'));
@@ -120,6 +127,9 @@ function AppRoutes() {
   const showYouTube = useFeatureFlag('youtubeContent');
   const showClassicHome = useFeatureFlag('classicHome');
   const showClassicAbout = useFeatureFlag('classicAbout');
+  // false: short "no data collected" note instead of the full privacy policy,
+  // and no regulamin (client 2026-11-26, site collects no personal data)
+  const showLegalDocs = useFeatureFlag('legalDocuments');
 
   return (
     <Routes>
@@ -528,16 +538,20 @@ function AppRoutes() {
           path="/polityka-prywatnosci"
           element={
             <Suspense fallback={<LoadingFallback />}>
-              <PrivacyPolicy />
+              {showLegalDocs ? <PrivacyPolicy /> : <PrivacyNote />}
             </Suspense>
           }
         />
         <Route
           path="/regulamin"
           element={
-            <Suspense fallback={<LoadingFallback />}>
-              <Terms />
-            </Suspense>
+            showLegalDocs ? (
+              <Suspense fallback={<LoadingFallback />}>
+                <Terms />
+              </Suspense>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
 

@@ -76,11 +76,19 @@ const CONTACT_COLUMN: FooterColumn = {
   titleField: 'col3Title',
   titleDefault: 'Kontakt',
   links: [
-    {
-      href: '/kontakt',
-      fieldPath: 'col3Link1',
-      labelDefault: 'Formularz kontaktowy',
-    },
+    // While the contact form is off (`contactForm` flag) the link gets a new
+    // fieldPath, so the saved label "Formularz kontaktowy" isn't shown.
+    featureFlags.contactForm
+      ? {
+          href: '/kontakt',
+          fieldPath: 'col3Link1',
+          labelDefault: 'Formularz kontaktowy',
+        }
+      : {
+          href: '/kontakt',
+          fieldPath: 'col3Link1Direct',
+          labelDefault: 'Napisz do mnie',
+        },
     {
       href: 'mailto:contact@spira-la.com',
       fieldPath: 'col3Link2',
@@ -328,14 +336,18 @@ export function Footer() {
               {t('footer.privacy')}
             </EditableText>
           </Link>
-          <Link
-            to="/regulamin"
-            className="font-['Lato'] text-[13px] text-ink-muted hover:text-brand transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded"
-          >
-            <EditableText section="footer" fieldPath="terms">
-              {t('footer.terms')}
-            </EditableText>
-          </Link>
+          {/* regulamin hidden while the site collects no data
+              (`legalDocuments` flag) */}
+          {featureFlags.legalDocuments && (
+            <Link
+              to="/regulamin"
+              className="font-['Lato'] text-[13px] text-ink-muted hover:text-brand transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded"
+            >
+              <EditableText section="footer" fieldPath="terms">
+                {t('footer.terms')}
+              </EditableText>
+            </Link>
+          )}
         </nav>
       </div>
     </footer>

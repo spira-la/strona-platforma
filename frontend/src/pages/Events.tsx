@@ -28,6 +28,8 @@ import {
 import { LandingBee } from '@/components/shared/LandingFriend';
 import { useWordSpot } from '@/hooks/useWordSpot';
 import { CrawlingLadybug } from '@/components/shared/CrawlingLadybug';
+import { ContactChannels } from '@/components/shared/ContactChannels';
+import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 import {
   eventsClient,
   type PublicEvent,
@@ -342,6 +344,7 @@ function EventCard({ event, index }: { event: PublicEvent; index: number }) {
   const start = dateParts(event.startsAt, i18n.language);
   const full = event.spotsLeft === 0;
   const canSignUp = event.registrationOpen && !full;
+  const signUpForm = useFeatureFlag('eventSignUp');
   const longText = (event.description?.length ?? 0) > 320;
 
   return (
@@ -529,6 +532,24 @@ function EventCard({ event, index }: { event: PublicEvent; index: number }) {
                     </EditableText>
                   </p>
                 </div>
+              </div>
+            ) : canSignUp && !signUpForm ? (
+              // no e-mail form while the site collects no data (`eventSignUp`
+              // flag): she signs people up herself from their message
+              <div className="flex flex-col gap-3 rounded-[20px] bg-surface p-5">
+                <EditableText
+                  section={S}
+                  fieldPath="card.messageSignUp"
+                  as="p"
+                  className="font-['Lato'] text-[15px] font-semibold text-ink"
+                >
+                  Chcesz przyjść? Napisz do mnie, a zapiszę Cię:
+                </EditableText>
+                <ContactChannels
+                  section={S}
+                  fieldPrefix="card.channels"
+                  message={`Chcę zapisać się na: ${event.title} (${whenLabel(event, i18n.language)})`}
+                />
               </div>
             ) : canSignUp ? (
               open ? (
