@@ -248,56 +248,36 @@ export function CleanCmsPanel() {
         </div>
       </div>
 
-      {confirmOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
-          role="dialog"
-          aria-modal="true"
-        >
-          <div className="w-full max-w-md rounded-xl bg-white p-5 shadow-xl space-y-3">
-            <p className="font-['Inter'] text-[15px] font-semibold text-ink">
-              {t('admin.languages.clean.confirmTitle')}
-            </p>
-            <p className="font-['Inter'] text-[13px] text-ink-soft">
-              {t('admin.languages.clean.confirmMessage', {
-                count: selected.size,
-              })}
-            </p>
-            <input
-              type="text"
-              value={typed}
-              onChange={(e) => setTyped(e.target.value)}
-              placeholder={t('admin.languages.clean.confirmPlaceholder')}
-              autoFocus
-              className="w-full rounded-lg border border-[#EDE8DC] px-3 py-2 font-['Inter'] text-[14px]"
-            />
-            <div className="flex justify-end gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  setConfirmOpen(false);
-                  setTyped('');
-                }}
-                className="px-4 py-2 rounded-lg border border-[#EDE8DC] font-['Inter'] text-[13px]"
-              >
-                {t('common.cancel')}
-              </button>
-              <button
-                type="button"
-                onClick={() => resetMutation.mutate()}
-                disabled={typed !== CONFIRM_WORD || resetMutation.isPending}
-                className="px-4 py-2 rounded-lg bg-red-600 text-white font-['Inter'] text-[13px] font-medium hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {resetMutation.isPending
-                  ? t('admin.languages.clean.running')
-                  : t('admin.languages.clean.button', {
-                      count: selected.size,
-                    })}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmDialog
+        open={confirmOpen}
+        title={t('admin.languages.clean.confirmTitle')}
+        message={t('admin.languages.clean.confirmMessage', {
+          count: selected.size,
+        })}
+        confirmLabel={
+          resetMutation.isPending
+            ? t('admin.languages.clean.running')
+            : t('admin.languages.clean.button', { count: selected.size })
+        }
+        variant="danger"
+        isLoading={resetMutation.isPending}
+        confirmDisabled={typed !== CONFIRM_WORD}
+        onConfirm={() => resetMutation.mutate()}
+        onCancel={() => {
+          setConfirmOpen(false);
+          setTyped('');
+        }}
+      >
+        <input
+          type="text"
+          value={typed}
+          onChange={(e) => setTyped(e.target.value)}
+          placeholder={t('admin.languages.clean.confirmPlaceholder')}
+          aria-label={t('admin.languages.clean.confirmPlaceholder')}
+          autoFocus
+          className="w-full rounded-lg border border-line px-3 py-2 font-['Inter',sans-serif] text-[14px] text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+        />
+      </ConfirmDialog>
 
       <ConfirmDialog
         open={restoreId !== null}

@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Loader2 } from 'lucide-react';
 
@@ -12,6 +12,10 @@ export interface ConfirmDialogProps {
   cancelLabel?: string;
   variant?: 'danger' | 'warning' | 'default';
   isLoading?: boolean;
+  /** Disables the confirm button (e.g. until a confirmation word is typed). */
+  confirmDisabled?: boolean;
+  /** Extra content rendered between the message and the actions. */
+  children?: ReactNode;
   onConfirm: () => void;
   onCancel: () => void;
 }
@@ -39,6 +43,8 @@ export function ConfirmDialog({
   cancelLabel,
   variant = 'default',
   isLoading = false,
+  confirmDisabled = false,
+  children,
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
@@ -112,6 +118,8 @@ export function ConfirmDialog({
           {message}
         </p>
 
+        {children && <div className="-mt-3 mb-6">{children}</div>}
+
         {/* Actions */}
         <div className="flex justify-end gap-3">
           {/* Cancel */}
@@ -133,7 +141,7 @@ export function ConfirmDialog({
           {/* Confirm */}
           <button
             type="button"
-            disabled={isLoading}
+            disabled={isLoading || confirmDisabled}
             onClick={onConfirm}
             className={[
               'flex items-center gap-2 px-4 py-2 rounded-lg',
