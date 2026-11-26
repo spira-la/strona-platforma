@@ -1,8 +1,15 @@
 import { useCallback, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  Mail,
+  MessageCircle,
+  Phone,
+} from 'lucide-react';
 import { SEO } from '@/components/shared/SEO';
 import { EditableText } from '@/components/cms/EditableText';
+import { useCMS } from '@/contexts/CMSContext';
 import {
   RainbowStroke,
   WatercolorAccent,
@@ -20,6 +27,10 @@ import {
 
 const S = 'quiz' as const;
 const INSTAGRAM_URL = 'https://www.instagram.com/anetamroczkospirala/';
+const FACEBOOK_URL = 'https://www.facebook.com/AnetaMroczko.Spirala';
+// same fallbacks as the Kontakt page (pages/Contact.tsx)
+const PHONE_FALLBACK = '+48 666 692 990';
+const EMAIL_FALLBACK = 'contact@spira-la.com';
 
 /** Question text and its four answers, in role order: Matka, Żona, Kochanka, Ja. */
 const QUESTIONS = [
@@ -299,6 +310,136 @@ function QuestionScreen({
 // Result
 // ---------------------------------------------------------------------------
 
+function InstagramIcon() {
+  return (
+    <svg
+      width={18}
+      height={18}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+      <circle cx="12" cy="12" r="5" />
+      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+    </svg>
+  );
+}
+
+function FacebookIcon() {
+  return (
+    <svg
+      width={18}
+      height={18}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+    </svg>
+  );
+}
+
+/** A CMS value, or the fallback while the field is still unset. */
+function cmsOr(raw: string, fieldPath: string, fallback: string): string {
+  if (!raw || raw === fieldPath || raw.trim() === '') return fallback;
+  return raw.trim();
+}
+
+const channelBtn =
+  "inline-flex min-h-[44px] items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 font-['Lato'] text-[14px] font-semibold text-ink transition-colors hover:border-brand/50 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand";
+
+/**
+ * Every way to send her the keyword (client 2026-11-25: keep Instagram for
+ * followers, add the phone, e-mail and Facebook). Phone and e-mail come from
+ * the Kontakt page's CMS fields, so changing them there changes them here;
+ * WhatsApp and e-mail open with the keyword already typed in.
+ */
+function ContactOptions({ result }: { result: (typeof RESULTS)[number] }) {
+  const { getFieldValue } = useCMS();
+  const phone = cmsOr(
+    getFieldValue('contact', 'info.phone'),
+    'info.phone',
+    PHONE_FALLBACK,
+  );
+  const email = cmsOr(
+    getFieldValue('contact', 'info.email'),
+    'info.email',
+    EMAIL_FALLBACK,
+  );
+  const keywordPath = `result.${result.key}.keyword`;
+  const keyword = cmsOr(getFieldValue(S, keywordPath), keywordPath, result.kw);
+  const digits = phone.replaceAll(/\D/g, '');
+  const word = encodeURIComponent(keyword);
+
+  return (
+    <div className="mt-6 border-t border-line pt-5">
+      <EditableText
+        section={S}
+        fieldPath="result.channelsLead"
+        as="p"
+        className="mb-3 font-['Lato'] text-[15px] font-semibold text-ink"
+      >
+        Wolisz inaczej? Wyślij to słowo tam, gdzie Ci wygodnie:
+      </EditableText>
+      <div className="flex flex-wrap gap-2">
+        <a
+          href={INSTAGRAM_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={channelBtn}
+        >
+          <InstagramIcon />
+          <EditableText section={S} fieldPath="result.channelInstagram">
+            Instagram
+          </EditableText>
+        </a>
+        <a
+          href={FACEBOOK_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={channelBtn}
+        >
+          <FacebookIcon />
+          <EditableText section={S} fieldPath="result.channelFacebook">
+            Facebook
+          </EditableText>
+        </a>
+        <a
+          href={`https://wa.me/${digits}?text=${word}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={channelBtn}
+        >
+          <MessageCircle size={18} aria-hidden="true" />
+          <EditableText section={S} fieldPath="result.channelWhatsapp">
+            WhatsApp
+          </EditableText>
+        </a>
+        <a
+          href={`tel:${phone.replaceAll(/[^\d+]/g, '')}`}
+          className={channelBtn}
+        >
+          <Phone size={18} aria-hidden="true" />
+          {phone}
+        </a>
+        <a href={`mailto:${email}?subject=${word}`} className={channelBtn}>
+          <Mail size={18} aria-hidden="true" />
+          {email}
+        </a>
+      </div>
+    </div>
+  );
+}
+
 function KeywordBox({ result }: { result: (typeof RESULTS)[number] }) {
   const kwRef = useRef<HTMLSpanElement>(null);
   const [copied, setCopied] = useState<'idle' | 'ok' | 'fail'>('idle');
@@ -414,6 +555,7 @@ function ResultScreen({
         >
           {r.cta}
         </EditableText>
+        <ContactOptions result={r} />
       </div>
       <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
         <a
