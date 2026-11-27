@@ -812,6 +812,12 @@ export function EditableText({
                     e.preventDefault();
                     e.stopPropagation();
                   },
+                  // Inside a <button> (quiz answers, navbar, tabs) the browser
+                  // clicks the button on every Space keyup — typing a space
+                  // would pick the answer / toggle the menu. Text still types.
+                  onKeyUp: (e: React.KeyboardEvent) => {
+                    if (e.key === ' ') e.preventDefault();
+                  },
                   role: 'textbox',
                   'aria-label': `Edit ${section}.${fieldPath}`,
                 }
