@@ -746,6 +746,9 @@ export function EditableText({
                     left: Math.max(8, Math.min(rect.left, vw - 260)),
                   }}
                   onMouseDown={(e) => e.preventDefault()}
+                  // React events bubble out of portals to the React parent:
+                  // without this, Save inside a <Link> card also navigates.
+                  onClick={(e) => e.stopPropagation()}
                 >
                   <button
                     type="button"
@@ -804,6 +807,17 @@ export function EditableText({
                   contentEditable: true,
                   suppressContentEditableWarning: true,
                   onKeyDown: handleKeyDown,
+                  // Clicking to move the caret must not follow a parent link.
+                  onClick: (e: React.MouseEvent) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  },
+                  // Inside a <button> (quiz answers, navbar, tabs) the browser
+                  // clicks the button on every Space keyup — typing a space
+                  // would pick the answer / toggle the menu. Text still types.
+                  onKeyUp: (e: React.KeyboardEvent) => {
+                    if (e.key === ' ') e.preventDefault();
+                  },
                   role: 'textbox',
                   'aria-label': `Edit ${section}.${fieldPath}`,
                 }
